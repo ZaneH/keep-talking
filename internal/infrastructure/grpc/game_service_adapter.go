@@ -29,7 +29,7 @@ func (s *GameServiceAdapter) CreateGame(ctx context.Context, req *pb.CreateGameR
 	}
 
 	return &pb.CreateGameResponse{
-		SessionId: session.GetSessionId(),
+		SessionId: session.GetSessionID().String(),
 	}, nil
 }
 
@@ -43,7 +43,7 @@ func (s *GameServiceAdapter) SendInput(ctx context.Context, i *pb.PlayerInput) (
 	case *pb.PlayerInput_CutWire:
 		cmd = &command.CutWireCommand{
 			BaseModuleInputCommand: command.BaseModuleInputCommand{
-				SessionId:      sessionId,
+				SessionID:      sessionId,
 				ModulePosition: position,
 			},
 			WireIndex: int(input.CutWire.WireIndex),
@@ -51,7 +51,7 @@ func (s *GameServiceAdapter) SendInput(ctx context.Context, i *pb.PlayerInput) (
 	case *pb.PlayerInput_SubmitPassword:
 		cmd = &command.SubmitPasswordCommand{
 			BaseModuleInputCommand: command.BaseModuleInputCommand{
-				SessionId:      sessionId,
+				SessionID:      sessionId,
 				ModulePosition: position,
 			},
 			Password: input.SubmitPassword.Password,

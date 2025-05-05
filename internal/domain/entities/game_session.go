@@ -1,17 +1,13 @@
 package entities
 
-import (
-	"github.com/ZaneH/keep-talking/internal/domain/valueobject"
-)
+import "github.com/google/uuid"
 
 type GameSession struct {
-	SessionId string
-	Modules   map[valueobject.ModulePosition]Module
+	SessionID uuid.UUID
 }
 
-func NewGameSession(sessionId string) *GameSession {
+func NewGameSession(sessionID uuid.UUID) *GameSession {
 	return &GameSession{
-		SessionId: sessionId,
-		Modules:   make(map[valueobject.ModulePosition]Module),
+		SessionID: sessionID,
 	}
 }

@@ -29,8 +29,18 @@ func (s *GameService) CreateGameSession(ctx context.Context, cmd *command.Create
 	return session, nil
 }
 
+func (s *GameService) GetGameSession(ctx context.Context, sessionID uuid.UUID) (*actors.GameSessionActor, error) {
+	sessionActor, err := s.actorSystem.GetGameSession(sessionID)
+	if err != nil {
+		log.Printf("error retrieving game session: %v", err)
+		return nil, errors.New("game session not found")
+	}
+
+	return sessionActor, nil
+}
+
 func (s *GameService) ProcessModuleInput(ctx context.Context, cmd command.ModuleInputCommand) (interface{}, error) {
-	sessionActor, err := s.actorSystem.GetGameSession(cmd.GetSessionId())
+	sessionActor, err := s.actorSystem.GetGameSession(cmd.GetSessionID())
 	if err != nil {
 		log.Printf("error retrieving game session: %v", err)
 		return nil, errors.New("game session not found")

@@ -12,42 +12,58 @@ import (
 )
 
 type GameSessionActor struct {
-	sessionId    string
-	session      *entities.GameSession
-	moduleActors map[valueobject.ModulePosition]ModuleActor
-	mu           sync.RWMutex
+	session           *entities.GameSession
+	mu                sync.RWMutex
+	modules           map[uuid.UUID]ModuleActor
+	modulesByPosition map[valueobject.ModulePosition]uuid.UUID
 }
 
-func NewGameSessionActor(sessionId uuid.UUID) *GameSessionActor {
+func NewGameSessionActor(sessionID uuid.UUID) *GameSessionActor {
 	return &GameSessionActor{
-		sessionId:    sessionId.String(),
-		session:      entities.NewGameSession(sessionId.String()),
-		moduleActors: make(map[valueobject.ModulePosition]ModuleActor),
+		session:           entities.NewGameSession(sessionID),
+		modules:           make(map[uuid.UUID]ModuleActor),
+		modulesByPosition: make(map[valueobject.ModulePosition]uuid.UUID),
 	}
 }
 
-func (g *GameSessionActor) GetSessionId() string {
-	return g.sessionId
+func (g *GameSessionActor) AddModule(module ModuleActor, position valueobject.ModulePosition) {
+	g.mu.Lock()
+	defer g.mu.Unlock()
+
+	moduleId := module.GetModuleID()
+	g.modules[moduleId] = module
+	g.modulesByPosition[position] = moduleId
+}
+
+func (g *GameSessionActor) GetSessionID() uuid.UUID {
+	return g.session.SessionID
 }
 
 func (g *GameSessionActor) ProcessCommand(ctx context.Context, cmd interface{}) (interface{}, error) {
 	g.mu.Lock()
 	defer g.mu.Unlock()
 
+	var moduleId uuid.UUID
+	var position valueobject.ModulePosition
+
 	switch c := cmd.(type) {
 	case *command.CutWireCommand:
-		moduleActor, exists := g.moduleActors[c.ModulePosition]
-		if !exists {
-			return nil, errors.New("module not found")
-		}
-		return moduleActor.ProcessCommand(ctx, c)
+		position = c.ModulePosition
 	case *command.SubmitPasswordCommand:
-		moduleActor, exists := g.moduleActors[c.ModulePosition]
-		if !exists {
-			return nil, errors.New("module not found")
-		}
-		return moduleActor.ProcessCommand(ctx, c)
+		position = c.ModulePosition
 	default:
-		return nil, errors.New("unknown command type")
+		return nil, errors.New("unsupported command type")
 	}
+
+	moduleId, exists := g.modulesByPosition[position]
+	if !exists {
+		return nil, errors.New("module not found")
+	}
+
+	moduleActor, exists := g.modules[moduleId]
+	if !exists {
+		return nil, errors.New("module actor not found")
+	}
+
+	return moduleActor.ProcessCommand(ctx, cmd)
 }

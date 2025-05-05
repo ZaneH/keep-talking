@@ -6,17 +6,17 @@ import (
 )
 
 type ModuleInputCommand interface {
-	GetSessionId() uuid.UUID
+	GetSessionID() uuid.UUID
 	GetModulePosition() valueobject.ModulePosition
 }
 
 type BaseModuleInputCommand struct {
-	SessionId      uuid.UUID
+	SessionID      uuid.UUID
 	ModulePosition valueobject.ModulePosition
 }
 
-func (c *BaseModuleInputCommand) GetSessionId() uuid.UUID {
-	return c.SessionId
+func (c *BaseModuleInputCommand) GetSessionID() uuid.UUID {
+	return c.SessionID
 }
 
 func (c *BaseModuleInputCommand) GetModulePosition() valueobject.ModulePosition {

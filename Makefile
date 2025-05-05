@@ -7,3 +7,6 @@ gen-protobuf:
   	--go-grpc_opt=paths=source_relative \
 		proto/*proto
 	@echo "Protobuf files generated successfully."
+
+test:
+	@go test ./... -v

@@ -1,6 +1,7 @@
 package actors
 
 import (
+	"errors"
 	"sync"
 
 	"github.com/google/uuid"
@@ -17,26 +18,26 @@ func NewActorSystem() *ActorSystem {
 	}
 }
 
-func (s *ActorSystem) GetOrCreateGameSession(sessionId uuid.UUID) (*GameSessionActor, error) {
+func (s *ActorSystem) GetOrCreateGameSession(sessionID uuid.UUID) (*GameSessionActor, error) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
-	session, exists := s.gameSessions[sessionId]
+	session, exists := s.gameSessions[sessionID]
 	if !exists {
-		session = NewGameSessionActor(sessionId)
-		s.gameSessions[sessionId] = session
+		session = NewGameSessionActor(sessionID)
+		s.gameSessions[sessionID] = session
 	}
 
 	return session, nil
 }
 
-func (s *ActorSystem) GetGameSession(sessionId uuid.UUID) (*GameSessionActor, error) {
+func (s *ActorSystem) GetGameSession(sessionID uuid.UUID) (*GameSessionActor, error) {
 	s.mu.RLock()
 	defer s.mu.RUnlock()
 
-	session, exists := s.gameSessions[sessionId]
+	session, exists := s.gameSessions[sessionID]
 	if !exists {
-		return nil, nil
+		return nil, errors.New("game session not found")
 	}
 
 	return session, nil
