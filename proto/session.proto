@@ -1,0 +1,18 @@
+syntax = "proto3";
+package session;
+
+option go_package = "./proto";
+
+message GameStateRequest {
+  string session_id = 1;
+}
+
+message JoinResponse {
+  string session_id = 1;
+}
+
+message GameState {
+  string session_id = 1;
+  string status = 2;
+  repeated string active_modules = 3;
+}

@@ -1,0 +1,14 @@
+syntax = "proto3";
+package player;
+
+option go_package = "./proto";
+
+message JoinRequest {
+  string name = 1;
+}
+
+message PlayerInput {
+  string player_id = 1;
+  string module_id = 2;
+  string input = 3;
+}
