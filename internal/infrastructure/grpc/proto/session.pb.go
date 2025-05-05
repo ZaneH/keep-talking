@@ -21,27 +21,27 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-type GameStateRequest struct {
+type GameSessionRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	SessionId     string                 `protobuf:"bytes,1,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *GameStateRequest) Reset() {
-	*x = GameStateRequest{}
+func (x *GameSessionRequest) Reset() {
+	*x = GameSessionRequest{}
 	mi := &file_proto_session_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *GameStateRequest) String() string {
+func (x *GameSessionRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*GameStateRequest) ProtoMessage() {}
+func (*GameSessionRequest) ProtoMessage() {}
 
-func (x *GameStateRequest) ProtoReflect() protoreflect.Message {
+func (x *GameSessionRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_proto_session_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -53,39 +53,41 @@ func (x *GameStateRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use GameStateRequest.ProtoReflect.Descriptor instead.
-func (*GameStateRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use GameSessionRequest.ProtoReflect.Descriptor instead.
+func (*GameSessionRequest) Descriptor() ([]byte, []int) {
 	return file_proto_session_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *GameStateRequest) GetSessionId() string {
+func (x *GameSessionRequest) GetSessionId() string {
 	if x != nil {
 		return x.SessionId
 	}
 	return ""
 }
 
-type GameState struct {
+type GameSession struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	SessionId     string                 `protobuf:"bytes,1,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
+	StrikeCount   int32                  `protobuf:"varint,2,opt,name=strike_count,json=strikeCount,proto3" json:"strike_count,omitempty"`
+	MaxStrikes    int32                  `protobuf:"varint,3,opt,name=max_strikes,json=maxStrikes,proto3" json:"max_strikes,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *GameState) Reset() {
-	*x = GameState{}
+func (x *GameSession) Reset() {
+	*x = GameSession{}
 	mi := &file_proto_session_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *GameState) String() string {
+func (x *GameSession) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*GameState) ProtoMessage() {}
+func (*GameSession) ProtoMessage() {}
 
-func (x *GameState) ProtoReflect() protoreflect.Message {
+func (x *GameSession) ProtoReflect() protoreflect.Message {
 	mi := &file_proto_session_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -97,29 +99,46 @@ func (x *GameState) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use GameState.ProtoReflect.Descriptor instead.
-func (*GameState) Descriptor() ([]byte, []int) {
+// Deprecated: Use GameSession.ProtoReflect.Descriptor instead.
+func (*GameSession) Descriptor() ([]byte, []int) {
 	return file_proto_session_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *GameState) GetSessionId() string {
+func (x *GameSession) GetSessionId() string {
 	if x != nil {
 		return x.SessionId
 	}
 	return ""
+}
+
+func (x *GameSession) GetStrikeCount() int32 {
+	if x != nil {
+		return x.StrikeCount
+	}
+	return 0
+}
+
+func (x *GameSession) GetMaxStrikes() int32 {
+	if x != nil {
+		return x.MaxStrikes
+	}
+	return 0
 }
 
 var File_proto_session_proto protoreflect.FileDescriptor
 
 const file_proto_session_proto_rawDesc = "" +
 	"\n" +
-	"\x13proto/session.proto\x12\asession\"1\n" +
-	"\x10GameStateRequest\x12\x1d\n" +
+	"\x13proto/session.proto\x12\asession\"3\n" +
+	"\x12GameSessionRequest\x12\x1d\n" +
 	"\n" +
-	"session_id\x18\x01 \x01(\tR\tsessionId\"*\n" +
-	"\tGameState\x12\x1d\n" +
+	"session_id\x18\x01 \x01(\tR\tsessionId\"p\n" +
+	"\vGameSession\x12\x1d\n" +
 	"\n" +
-	"session_id\x18\x01 \x01(\tR\tsessionIdB\tZ\a./protob\x06proto3"
+	"session_id\x18\x01 \x01(\tR\tsessionId\x12!\n" +
+	"\fstrike_count\x18\x02 \x01(\x05R\vstrikeCount\x12\x1f\n" +
+	"\vmax_strikes\x18\x03 \x01(\x05R\n" +
+	"maxStrikesB\tZ\a./protob\x06proto3"
 
 var (
 	file_proto_session_proto_rawDescOnce sync.Once
@@ -135,8 +154,8 @@ func file_proto_session_proto_rawDescGZIP() []byte {
 
 var file_proto_session_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
 var file_proto_session_proto_goTypes = []any{
-	(*GameStateRequest)(nil), // 0: session.GameStateRequest
-	(*GameState)(nil),        // 1: session.GameState
+	(*GameSessionRequest)(nil), // 0: session.GameSessionRequest
+	(*GameSession)(nil),        // 1: session.GameSession
 }
 var file_proto_session_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for method output_type

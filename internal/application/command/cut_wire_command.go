@@ -9,7 +9,7 @@ import (
 type CutWireCommand struct {
 	SessionId      uuid.UUID
 	ModulePosition valueobject.ModulePosition
-	WireIndex      int32
+	WireIndex      int
 }
 
 type CutWireResult struct {

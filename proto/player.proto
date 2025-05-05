@@ -5,8 +5,7 @@ import "proto/modules.proto";
 
 option go_package = "./proto";
 
-message CreateGameRequest {
-}
+message CreateGameRequest {}
 
 message CreateGameResponse {
   string session_id = 1;

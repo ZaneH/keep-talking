@@ -30,7 +30,7 @@ const (
 type GameServiceClient interface {
 	CreateGame(ctx context.Context, in *CreateGameRequest, opts ...grpc.CallOption) (*CreateGameResponse, error)
 	SendInput(ctx context.Context, in *PlayerInput, opts ...grpc.CallOption) (*PlayerInputResult, error)
-	StreamGameState(ctx context.Context, in *GameStateRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[GameState], error)
+	StreamGameState(ctx context.Context, in *GameSessionRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[GameSession], error)
 }
 
 type gameServiceClient struct {
@@ -61,13 +61,13 @@ func (c *gameServiceClient) SendInput(ctx context.Context, in *PlayerInput, opts
 	return out, nil
 }
 
-func (c *gameServiceClient) StreamGameState(ctx context.Context, in *GameStateRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[GameState], error) {
+func (c *gameServiceClient) StreamGameState(ctx context.Context, in *GameSessionRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[GameSession], error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	stream, err := c.cc.NewStream(ctx, &GameService_ServiceDesc.Streams[0], GameService_StreamGameState_FullMethodName, cOpts...)
 	if err != nil {
 		return nil, err
 	}
-	x := &grpc.GenericClientStream[GameStateRequest, GameState]{ClientStream: stream}
+	x := &grpc.GenericClientStream[GameSessionRequest, GameSession]{ClientStream: stream}
 	if err := x.ClientStream.SendMsg(in); err != nil {
 		return nil, err
 	}
@@ -78,7 +78,7 @@ func (c *gameServiceClient) StreamGameState(ctx context.Context, in *GameStateRe
 }
 
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
-type GameService_StreamGameStateClient = grpc.ServerStreamingClient[GameState]
+type GameService_StreamGameStateClient = grpc.ServerStreamingClient[GameSession]
 
 // GameServiceServer is the server API for GameService service.
 // All implementations must embed UnimplementedGameServiceServer
@@ -86,7 +86,7 @@ type GameService_StreamGameStateClient = grpc.ServerStreamingClient[GameState]
 type GameServiceServer interface {
 	CreateGame(context.Context, *CreateGameRequest) (*CreateGameResponse, error)
 	SendInput(context.Context, *PlayerInput) (*PlayerInputResult, error)
-	StreamGameState(*GameStateRequest, grpc.ServerStreamingServer[GameState]) error
+	StreamGameState(*GameSessionRequest, grpc.ServerStreamingServer[GameSession]) error
 	mustEmbedUnimplementedGameServiceServer()
 }
 
@@ -103,7 +103,7 @@ func (UnimplementedGameServiceServer) CreateGame(context.Context, *CreateGameReq
 func (UnimplementedGameServiceServer) SendInput(context.Context, *PlayerInput) (*PlayerInputResult, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SendInput not implemented")
 }
-func (UnimplementedGameServiceServer) StreamGameState(*GameStateRequest, grpc.ServerStreamingServer[GameState]) error {
+func (UnimplementedGameServiceServer) StreamGameState(*GameSessionRequest, grpc.ServerStreamingServer[GameSession]) error {
 	return status.Errorf(codes.Unimplemented, "method StreamGameState not implemented")
 }
 func (UnimplementedGameServiceServer) mustEmbedUnimplementedGameServiceServer() {}
@@ -164,15 +164,15 @@ func _GameService_SendInput_Handler(srv interface{}, ctx context.Context, dec fu
 }
 
 func _GameService_StreamGameState_Handler(srv interface{}, stream grpc.ServerStream) error {
-	m := new(GameStateRequest)
+	m := new(GameSessionRequest)
 	if err := stream.RecvMsg(m); err != nil {
 		return err
 	}
-	return srv.(GameServiceServer).StreamGameState(m, &grpc.GenericServerStream[GameStateRequest, GameState]{ServerStream: stream})
+	return srv.(GameServiceServer).StreamGameState(m, &grpc.GenericServerStream[GameSessionRequest, GameSession]{ServerStream: stream})
 }
 
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
-type GameService_StreamGameStateServer = grpc.ServerStreamingServer[GameState]
+type GameService_StreamGameStateServer = grpc.ServerStreamingServer[GameSession]
 
 // GameService_ServiceDesc is the grpc.ServiceDesc for GameService service.
 // It's only intended for direct use with grpc.RegisterService,

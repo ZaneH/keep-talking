@@ -9,7 +9,7 @@ const (
 	PASSWORD
 )
 
-type GameState struct {
+type ModuleState struct {
 	ModuleId       uuid.UUID
 	ModuleType     ModuleType
 	ModulePosition ModulePosition

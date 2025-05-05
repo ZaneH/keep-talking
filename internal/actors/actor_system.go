@@ -29,3 +29,15 @@ func (s *ActorSystem) GetOrCreateGameSession(sessionId uuid.UUID) (*GameSessionA
 
 	return session, nil
 }
+
+func (s *ActorSystem) GetGameSession(sessionId uuid.UUID) (*GameSessionActor, error) {
+	s.mu.RLock()
+	defer s.mu.RUnlock()
+
+	session, exists := s.gameSessions[sessionId]
+	if !exists {
+		return nil, nil
+	}
+
+	return session, nil
+}

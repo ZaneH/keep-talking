@@ -14,25 +14,20 @@ import (
 )
 
 func main() {
-	// Create actor system
 	actorSystem := actors.NewActorSystem()
-
-	// Create application services
 	gameService := services.NewGameService(actorSystem)
+	grpcGameServiceServer := grpcServer.NewGameServiceAdapter(gameService)
 
-	// Create gRPC server
-	gameServer := grpcServer.NewGameServiceAdapter(gameService)
-
-	// Start gRPC server
 	lis, err := net.Listen("tcp", ":50051")
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
 
 	s := grpc.NewServer()
-	pb.RegisterGameServiceServer(s, gameServer)
+	pb.RegisterGameServiceServer(s, grpcGameServiceServer)
 
 	log.Printf("Server listening at %v", lis.Addr())
+	// TODO: Remove in production
 	reflection.Register(s)
 	if err := s.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)

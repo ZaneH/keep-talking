@@ -12,7 +12,7 @@ import (
 )
 
 type GameSessionActor struct {
-	sessionID    string
+	sessionId    string
 	session      *entities.GameSession
 	moduleActors map[valueobject.ModulePosition]ModuleActor
 	mu           sync.RWMutex
@@ -20,10 +20,14 @@ type GameSessionActor struct {
 
 func NewGameSessionActor(sessionId uuid.UUID) *GameSessionActor {
 	return &GameSessionActor{
-		sessionID:    sessionId.String(),
+		sessionId:    sessionId.String(),
 		session:      entities.NewGameSession(sessionId.String()),
 		moduleActors: make(map[valueobject.ModulePosition]ModuleActor),
 	}
+}
+
+func (g *GameSessionActor) GetSessionId() string {
+	return g.sessionId
 }
 
 func (g *GameSessionActor) ProcessCommand(ctx context.Context, cmd interface{}) (interface{}, error) {

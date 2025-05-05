@@ -4,9 +4,11 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/ZaneH/keep-talking/internal/application/command"
 	"github.com/ZaneH/keep-talking/internal/application/services"
+	"github.com/ZaneH/keep-talking/internal/domain/valueobject"
 	pb "github.com/ZaneH/keep-talking/internal/infrastructure/grpc/proto"
-	"google.golang.org/grpc"
+	"github.com/google/uuid"
 )
 
 type GameServiceAdapter struct {
@@ -18,31 +20,62 @@ func NewGameServiceAdapter(gameService *services.GameService) *GameServiceAdapte
 	return &GameServiceAdapter{gameService: gameService}
 }
 
-func (s *GameServiceAdapter) CreateGame(context.Context, *pb.CreateGameRequest) (*pb.CreateGameResponse, error) {
-	fmt.Println("CreateGame called")
-	return nil, nil
+func (s *GameServiceAdapter) CreateGame(ctx context.Context, req *pb.CreateGameRequest) (*pb.CreateGameResponse, error) {
+	createGameCmd := &command.CreateGameCommand{}
+
+	session, err := s.gameService.CreateGameSession(ctx, createGameCmd)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create game: %v", err)
+	}
+
+	return &pb.CreateGameResponse{
+		SessionId: session.GetSessionId(),
+	}, nil
 }
 
-func (s *GameServiceAdapter) SendInput(context context.Context, i *pb.PlayerInput) (*pb.PlayerInputResult, error) {
-	fmt.Println("SendInput called")
-	fmt.Println("Position:", i.GetModulePosition())
-	switch i.GetInput().(type) {
+func (s *GameServiceAdapter) SendInput(ctx context.Context, i *pb.PlayerInput) (*pb.PlayerInputResult, error) {
+	var cmd interface{}
+	position := i.GetModulePosition()
+
+	switch input := i.GetInput().(type) {
 	case *pb.PlayerInput_CutWire:
-		fmt.Println("CutWire command received")
-		fmt.Println("WireIndex: ", i.GetCutWire().WireIndex)
-	case *pb.PlayerInput_SubmitPassword:
-		fmt.Println("SubmitPassword command received")
-		fmt.Println("Password: ", i.GetSubmitPassword().Password)
+		cmd = &command.CutWireCommand{
+			SessionId:      uuid.MustParse(i.GetSessionId()),
+			ModulePosition: mapProtoPositionToDomain(position),
+			WireIndex:      int(input.CutWire.WireIndex),
+		}
 	default:
-		fmt.Println("Unknown command type")
+		return nil, fmt.Errorf("unknown input type: %T", input)
 	}
+
+	result, err := s.gameService.ProcessModuleInput(ctx, cmd)
+	if err != nil {
+		return nil, fmt.Errorf("failed to process input: %v", err)
+	}
+
+	fmt.Println("result:", result)
+
 	return &pb.PlayerInputResult{
-		ModuleId: "module-id",
+		ModuleId: "module-interacted-with",
 		Success:  true,
 	}, nil
 }
 
-func (s *GameServiceAdapter) StreamGameState(*pb.GameStateRequest, grpc.ServerStreamingServer[pb.GameState]) error {
-	fmt.Println("StreamGameState called")
-	return nil
+func mapProtoPositionToDomain(position *pb.ModulePosition) valueobject.ModulePosition {
+	var face valueobject.Face
+
+	switch position.Face {
+	case pb.BombFace_BACK:
+		face = valueobject.Back
+	case pb.BombFace_FRONT:
+		face = valueobject.Front
+	default:
+		panic(fmt.Sprintf("unknown face: %v", position.Face))
+	}
+
+	return valueobject.ModulePosition{
+		Face:   face,
+		Row:    int(position.Row),
+		Column: int(position.Col),
+	}
 }
