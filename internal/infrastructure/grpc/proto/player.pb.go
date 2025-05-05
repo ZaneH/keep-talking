@@ -66,10 +66,14 @@ func (x *JoinRequest) GetName() string {
 }
 
 type PlayerInput struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	PlayerId      string                 `protobuf:"bytes,1,opt,name=player_id,json=playerId,proto3" json:"player_id,omitempty"`
-	ModuleId      string                 `protobuf:"bytes,2,opt,name=module_id,json=moduleId,proto3" json:"module_id,omitempty"`
-	Input         string                 `protobuf:"bytes,3,opt,name=input,proto3" json:"input,omitempty"`
+	state    protoimpl.MessageState `protogen:"open.v1"`
+	PlayerId string                 `protobuf:"bytes,1,opt,name=player_id,json=playerId,proto3" json:"player_id,omitempty"`
+	ModuleId string                 `protobuf:"bytes,2,opt,name=module_id,json=moduleId,proto3" json:"module_id,omitempty"`
+	// Types that are valid to be assigned to Input:
+	//
+	//	*PlayerInput_CutWire
+	//	*PlayerInput_SubmitPassword
+	Input         isPlayerInput_Input `protobuf_oneof:"input"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -118,24 +122,60 @@ func (x *PlayerInput) GetModuleId() string {
 	return ""
 }
 
-func (x *PlayerInput) GetInput() string {
+func (x *PlayerInput) GetInput() isPlayerInput_Input {
 	if x != nil {
 		return x.Input
 	}
-	return ""
+	return nil
 }
+
+func (x *PlayerInput) GetCutWire() *CutWireInput {
+	if x != nil {
+		if x, ok := x.Input.(*PlayerInput_CutWire); ok {
+			return x.CutWire
+		}
+	}
+	return nil
+}
+
+func (x *PlayerInput) GetSubmitPassword() *SubmitPasswordInput {
+	if x != nil {
+		if x, ok := x.Input.(*PlayerInput_SubmitPassword); ok {
+			return x.SubmitPassword
+		}
+	}
+	return nil
+}
+
+type isPlayerInput_Input interface {
+	isPlayerInput_Input()
+}
+
+type PlayerInput_CutWire struct {
+	CutWire *CutWireInput `protobuf:"bytes,3,opt,name=cut_wire,json=cutWire,proto3,oneof"`
+}
+
+type PlayerInput_SubmitPassword struct {
+	SubmitPassword *SubmitPasswordInput `protobuf:"bytes,4,opt,name=submit_password,json=submitPassword,proto3,oneof"`
+}
+
+func (*PlayerInput_CutWire) isPlayerInput_Input() {}
+
+func (*PlayerInput_SubmitPassword) isPlayerInput_Input() {}
 
 var File_proto_player_proto protoreflect.FileDescriptor
 
 const file_proto_player_proto_rawDesc = "" +
 	"\n" +
-	"\x12proto/player.proto\x12\x06player\"!\n" +
+	"\x12proto/player.proto\x12\x06player\x1a\x13proto/modules.proto\"!\n" +
 	"\vJoinRequest\x12\x12\n" +
-	"\x04name\x18\x01 \x01(\tR\x04name\"]\n" +
+	"\x04name\x18\x01 \x01(\tR\x04name\"\xcd\x01\n" +
 	"\vPlayerInput\x12\x1b\n" +
 	"\tplayer_id\x18\x01 \x01(\tR\bplayerId\x12\x1b\n" +
-	"\tmodule_id\x18\x02 \x01(\tR\bmoduleId\x12\x14\n" +
-	"\x05input\x18\x03 \x01(\tR\x05inputB\tZ\a./protob\x06proto3"
+	"\tmodule_id\x18\x02 \x01(\tR\bmoduleId\x122\n" +
+	"\bcut_wire\x18\x03 \x01(\v2\x15.modules.CutWireInputH\x00R\acutWire\x12G\n" +
+	"\x0fsubmit_password\x18\x04 \x01(\v2\x1c.modules.SubmitPasswordInputH\x00R\x0esubmitPasswordB\a\n" +
+	"\x05inputB\tZ\a./protob\x06proto3"
 
 var (
 	file_proto_player_proto_rawDescOnce sync.Once
@@ -151,21 +191,30 @@ func file_proto_player_proto_rawDescGZIP() []byte {
 
 var file_proto_player_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
 var file_proto_player_proto_goTypes = []any{
-	(*JoinRequest)(nil), // 0: player.JoinRequest
-	(*PlayerInput)(nil), // 1: player.PlayerInput
+	(*JoinRequest)(nil),         // 0: player.JoinRequest
+	(*PlayerInput)(nil),         // 1: player.PlayerInput
+	(*CutWireInput)(nil),        // 2: modules.CutWireInput
+	(*SubmitPasswordInput)(nil), // 3: modules.SubmitPasswordInput
 }
 var file_proto_player_proto_depIdxs = []int32{
-	0, // [0:0] is the sub-list for method output_type
-	0, // [0:0] is the sub-list for method input_type
-	0, // [0:0] is the sub-list for extension type_name
-	0, // [0:0] is the sub-list for extension extendee
-	0, // [0:0] is the sub-list for field type_name
+	2, // 0: player.PlayerInput.cut_wire:type_name -> modules.CutWireInput
+	3, // 1: player.PlayerInput.submit_password:type_name -> modules.SubmitPasswordInput
+	2, // [2:2] is the sub-list for method output_type
+	2, // [2:2] is the sub-list for method input_type
+	2, // [2:2] is the sub-list for extension type_name
+	2, // [2:2] is the sub-list for extension extendee
+	0, // [0:2] is the sub-list for field type_name
 }
 
 func init() { file_proto_player_proto_init() }
 func file_proto_player_proto_init() {
 	if File_proto_player_proto != nil {
 		return
+	}
+	file_proto_modules_proto_init()
+	file_proto_player_proto_msgTypes[1].OneofWrappers = []any{
+		(*PlayerInput_CutWire)(nil),
+		(*PlayerInput_SubmitPassword)(nil),
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{

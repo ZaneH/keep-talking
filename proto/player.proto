@@ -1,6 +1,8 @@
 syntax = "proto3";
 package player;
 
+import "proto/modules.proto";
+
 option go_package = "./proto";
 
 message JoinRequest {
@@ -10,5 +12,8 @@ message JoinRequest {
 message PlayerInput {
   string player_id = 1;
   string module_id = 2;
-  string input = 3;
+  oneof input {
+    modules.CutWireInput cut_wire = 3;
+    modules.SubmitPasswordInput submit_password = 4;
+  }
 }

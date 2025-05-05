@@ -112,8 +112,6 @@ func (x *JoinResponse) GetSessionId() string {
 type GameState struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	SessionId     string                 `protobuf:"bytes,1,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
-	Status        string                 `protobuf:"bytes,2,opt,name=status,proto3" json:"status,omitempty"`
-	ActiveModules []string               `protobuf:"bytes,3,rep,name=active_modules,json=activeModules,proto3" json:"active_modules,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -155,20 +153,6 @@ func (x *GameState) GetSessionId() string {
 	return ""
 }
 
-func (x *GameState) GetStatus() string {
-	if x != nil {
-		return x.Status
-	}
-	return ""
-}
-
-func (x *GameState) GetActiveModules() []string {
-	if x != nil {
-		return x.ActiveModules
-	}
-	return nil
-}
-
 var File_proto_session_proto protoreflect.FileDescriptor
 
 const file_proto_session_proto_rawDesc = "" +
@@ -179,12 +163,10 @@ const file_proto_session_proto_rawDesc = "" +
 	"session_id\x18\x01 \x01(\tR\tsessionId\"-\n" +
 	"\fJoinResponse\x12\x1d\n" +
 	"\n" +
-	"session_id\x18\x01 \x01(\tR\tsessionId\"i\n" +
+	"session_id\x18\x01 \x01(\tR\tsessionId\"*\n" +
 	"\tGameState\x12\x1d\n" +
 	"\n" +
-	"session_id\x18\x01 \x01(\tR\tsessionId\x12\x16\n" +
-	"\x06status\x18\x02 \x01(\tR\x06status\x12%\n" +
-	"\x0eactive_modules\x18\x03 \x03(\tR\ractiveModulesB\tZ\a./protob\x06proto3"
+	"session_id\x18\x01 \x01(\tR\tsessionIdB\tZ\a./protob\x06proto3"
 
 var (
 	file_proto_session_proto_rawDescOnce sync.Once
