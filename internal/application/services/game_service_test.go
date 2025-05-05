@@ -51,7 +51,7 @@ func TestGameService_ProcessModuleInput(t *testing.T) {
 		Face:   valueobject.Front,
 	})
 
-	cmd := &command.CutWireCommand{
+	cmd := &command.SimpleWireInputCommand{
 		BaseModuleInputCommand: command.BaseModuleInputCommand{
 			SessionID: session.GetSessionID(),
 			ModulePosition: valueobject.ModulePosition{

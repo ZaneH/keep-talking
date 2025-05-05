@@ -32,10 +32,6 @@ func (m *SimpleWireModule) IsSolved() bool {
 	return true
 }
 
-func (m *SimpleWireModule) GetModuleID() uuid.UUID {
-	return m.ModuleID
-}
-
 func (m *SimpleWireModule) CutWire(wireIndex int) (bool, error) {
 	wire := &m.Wires[wireIndex]
 	if wire.IsCut {

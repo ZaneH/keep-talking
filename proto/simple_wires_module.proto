@@ -1,0 +1,8 @@
+syntax = "proto3";
+package modules;
+
+option go_package = "./proto";
+
+message SimpleWiresInput {
+  int32 wire_index = 1;
+}

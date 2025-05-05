@@ -4,11 +4,11 @@ import (
 	"github.com/ZaneH/keep-talking/internal/application/common"
 )
 
-type SubmitPasswordCommand struct {
+type SimpleWireInputCommand struct {
 	BaseModuleInputCommand
-	Password string
+	WireIndex int
 }
 
-type SubmitPasswordResult struct {
+type SimpleWireInputResult struct {
 	Result *common.InputResult
 }

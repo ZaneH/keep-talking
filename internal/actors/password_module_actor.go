@@ -6,26 +6,30 @@ import (
 
 	"github.com/ZaneH/keep-talking/internal/application/command"
 	"github.com/ZaneH/keep-talking/internal/domain/entities"
-	"github.com/google/uuid"
+	"github.com/ZaneH/keep-talking/internal/domain/valueobject"
 )
 
 type PasswordModuleActor struct {
-	module   *entities.PasswordModule
-	moduleId uuid.UUID
+	module *entities.PasswordModule
 }
 
 func NewPasswordModuleActor(module *entities.PasswordModule) *PasswordModuleActor {
 	return &PasswordModuleActor{
-		module:   module,
-		moduleId: module.ModuleId,
+		module: module,
 	}
 }
 
-func (w *PasswordModuleActor) ProcessCommand(ctx context.Context, cmd interface{}) (interface{}, error) {
+func (a *PasswordModuleActor) ProcessCommand(ctx context.Context, cmd command.ModuleInputCommand) error {
 	switch c := cmd.(type) {
-	case *command.SubmitPasswordCommand:
-		return w.module.CheckPassword(c.Password)
+	case *command.PasswordLetterChangeCommand:
+		if c.Direction == valueobject.Increment {
+			a.module.IncrementLetterOption(c.LetterIndex)
+		}
+	case *command.PasswordSubmitCommand:
+		a.module.CheckPassword()
 	default:
-		return nil, errors.New("unsupported command for wire module")
+		return errors.New("unsupported command for password module")
 	}
+
+	return nil
 }

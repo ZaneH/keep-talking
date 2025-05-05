@@ -20,17 +20,17 @@ func NewSimpleWireModuleActor(module *entities.SimpleWireModule) *SimpleWireModu
 	}
 }
 
-func (a *SimpleWireModuleActor) GetModule() common.Module {
-	return a.module
-}
-
 func (a *SimpleWireModuleActor) GetModuleID() uuid.UUID {
 	return a.module.ModuleID
 }
 
+func (a *SimpleWireModuleActor) GetModule() common.Module {
+	return a.module
+}
+
 func (a *SimpleWireModuleActor) ProcessCommand(ctx context.Context, cmd interface{}) (interface{}, error) {
 	switch c := cmd.(type) {
-	case *command.CutWireCommand:
+	case *command.SimpleWireInputCommand:
 		return a.module.CutWire(c.WireIndex)
 	default:
 		return nil, errors.New("unsupported command for wire module")

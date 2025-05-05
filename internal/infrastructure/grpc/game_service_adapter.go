@@ -3,6 +3,7 @@ package grpc
 import (
 	"context"
 	"fmt"
+	"log"
 
 	"github.com/ZaneH/keep-talking/internal/application/command"
 	"github.com/ZaneH/keep-talking/internal/application/services"
@@ -28,33 +29,48 @@ func (s *GameServiceAdapter) CreateGame(ctx context.Context, req *pb.CreateGameR
 		return nil, fmt.Errorf("failed to create game: %v", err)
 	}
 
+	log.Printf("Created game session with ID: %s\n", session.GetSessionID())
+
 	return &pb.CreateGameResponse{
 		SessionId: session.GetSessionID().String(),
 	}, nil
 }
 
 func (s *GameServiceAdapter) SendInput(ctx context.Context, i *pb.PlayerInput) (*pb.PlayerInputResult, error) {
-	sessionId := uuid.MustParse(i.GetSessionId())
+	sessionID := uuid.MustParse(i.GetSessionId())
 	position := mapProtoPositionToDomain(i.GetModulePosition())
 
 	var cmd command.ModuleInputCommand
 
 	switch input := i.GetInput().(type) {
-	case *pb.PlayerInput_CutWire:
-		cmd = &command.CutWireCommand{
+	case *pb.PlayerInput_SimpleWiresInput:
+		cmd = &command.SimpleWireInputCommand{
 			BaseModuleInputCommand: command.BaseModuleInputCommand{
-				SessionID:      sessionId,
+				SessionID:      sessionID,
 				ModulePosition: position,
 			},
-			WireIndex: int(input.CutWire.WireIndex),
+			WireIndex: int(input.SimpleWiresInput.WireIndex),
 		}
-	case *pb.PlayerInput_SubmitPassword:
-		cmd = &command.SubmitPasswordCommand{
-			BaseModuleInputCommand: command.BaseModuleInputCommand{
-				SessionID:      sessionId,
-				ModulePosition: position,
-			},
-			Password: input.SubmitPassword.Password,
+	case *pb.PlayerInput_PasswordInput:
+		switch pi := input.PasswordInput.Input.(type) {
+		case *pb.PasswordInput_LetterChange:
+			cmd = &command.PasswordLetterChangeCommand{
+				BaseModuleInputCommand: command.BaseModuleInputCommand{
+					SessionID:      sessionID,
+					ModulePosition: position,
+				},
+				LetterIndex: int(pi.LetterChange.LetterIndex),
+				Direction:   valueobject.IncrementDecrement(pi.LetterChange.Direction),
+			}
+		case *pb.PasswordInput_Submit:
+			cmd = &command.PasswordSubmitCommand{
+				BaseModuleInputCommand: command.BaseModuleInputCommand{
+					SessionID:      sessionID,
+					ModulePosition: position,
+				},
+			}
+		default:
+			return nil, fmt.Errorf("unknown password input type: %T", pi)
 		}
 	default:
 		return nil, fmt.Errorf("unknown input type: %T", input)

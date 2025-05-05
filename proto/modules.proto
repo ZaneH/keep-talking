@@ -3,11 +3,6 @@ package modules;
 
 option go_package = "./proto";
 
-enum ModuleType {
-  SIMPLE_WIRES = 0;
-  PASSWORD = 1;
-}
-
 enum BombFace {
   FRONT = 0;
   BACK = 1;
@@ -20,16 +15,13 @@ message ModulePosition {
 }
 
 message ModuleState {
+  enum ModuleType {
+    SIMPLE_WIRES = 0;
+    PASSWORD = 1;
+  }
+
   string module_id = 1;
   ModuleType type = 2;
   ModulePosition position = 3;
   bool solved = 4;
-}
-
-message CutWireInput {
-  int32 wire_index = 1;
-}
-
-message SubmitPasswordInput {
-  string password = 1;
 }

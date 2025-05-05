@@ -1,12 +1,9 @@
 package common
 
-import "github.com/google/uuid"
-
-type Solvable interface {
-	Module
+type Module interface {
 	IsSolved() bool
 }
 
-type Module interface {
-	GetModuleID() uuid.UUID
+type ModuleState struct {
+	IsSolved bool
 }

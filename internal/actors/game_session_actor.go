@@ -39,21 +39,12 @@ func (g *GameSessionActor) GetSessionID() uuid.UUID {
 	return g.session.SessionID
 }
 
-func (g *GameSessionActor) ProcessCommand(ctx context.Context, cmd interface{}) (interface{}, error) {
+func (g *GameSessionActor) ProcessCommand(ctx context.Context, cmd command.ModuleInputCommand) (interface{}, error) {
 	g.mu.Lock()
 	defer g.mu.Unlock()
 
 	var moduleId uuid.UUID
-	var position valueobject.ModulePosition
-
-	switch c := cmd.(type) {
-	case *command.CutWireCommand:
-		position = c.ModulePosition
-	case *command.SubmitPasswordCommand:
-		position = c.ModulePosition
-	default:
-		return nil, errors.New("unsupported command type")
-	}
+	var position = cmd.GetModulePosition()
 
 	moduleId, exists := g.modulesByPosition[position]
 	if !exists {

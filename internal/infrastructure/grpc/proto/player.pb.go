@@ -107,8 +107,8 @@ type PlayerInput struct {
 	ModulePosition *ModulePosition        `protobuf:"bytes,2,opt,name=module_position,json=modulePosition,proto3" json:"module_position,omitempty"`
 	// Types that are valid to be assigned to Input:
 	//
-	//	*PlayerInput_CutWire
-	//	*PlayerInput_SubmitPassword
+	//	*PlayerInput_SimpleWiresInput
+	//	*PlayerInput_PasswordInput
 	Input         isPlayerInput_Input `protobuf_oneof:"input"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -165,19 +165,19 @@ func (x *PlayerInput) GetInput() isPlayerInput_Input {
 	return nil
 }
 
-func (x *PlayerInput) GetCutWire() *CutWireInput {
+func (x *PlayerInput) GetSimpleWiresInput() *SimpleWiresInput {
 	if x != nil {
-		if x, ok := x.Input.(*PlayerInput_CutWire); ok {
-			return x.CutWire
+		if x, ok := x.Input.(*PlayerInput_SimpleWiresInput); ok {
+			return x.SimpleWiresInput
 		}
 	}
 	return nil
 }
 
-func (x *PlayerInput) GetSubmitPassword() *SubmitPasswordInput {
+func (x *PlayerInput) GetPasswordInput() *PasswordInput {
 	if x != nil {
-		if x, ok := x.Input.(*PlayerInput_SubmitPassword); ok {
-			return x.SubmitPassword
+		if x, ok := x.Input.(*PlayerInput_PasswordInput); ok {
+			return x.PasswordInput
 		}
 	}
 	return nil
@@ -187,17 +187,17 @@ type isPlayerInput_Input interface {
 	isPlayerInput_Input()
 }
 
-type PlayerInput_CutWire struct {
-	CutWire *CutWireInput `protobuf:"bytes,3,opt,name=cut_wire,json=cutWire,proto3,oneof"`
+type PlayerInput_SimpleWiresInput struct {
+	SimpleWiresInput *SimpleWiresInput `protobuf:"bytes,3,opt,name=simple_wires_input,json=simpleWiresInput,proto3,oneof"`
 }
 
-type PlayerInput_SubmitPassword struct {
-	SubmitPassword *SubmitPasswordInput `protobuf:"bytes,4,opt,name=submit_password,json=submitPassword,proto3,oneof"`
+type PlayerInput_PasswordInput struct {
+	PasswordInput *PasswordInput `protobuf:"bytes,4,opt,name=password_input,json=passwordInput,proto3,oneof"`
 }
 
-func (*PlayerInput_CutWire) isPlayerInput_Input() {}
+func (*PlayerInput_SimpleWiresInput) isPlayerInput_Input() {}
 
-func (*PlayerInput_SubmitPassword) isPlayerInput_Input() {}
+func (*PlayerInput_PasswordInput) isPlayerInput_Input() {}
 
 type PlayerInputResult struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -255,17 +255,17 @@ var File_proto_player_proto protoreflect.FileDescriptor
 
 const file_proto_player_proto_rawDesc = "" +
 	"\n" +
-	"\x12proto/player.proto\x12\x06player\x1a\x13proto/modules.proto\"\x13\n" +
+	"\x12proto/player.proto\x12\x06player\x1a\x13proto/modules.proto\x1a\x1fproto/simple_wires_module.proto\x1a\x1bproto/password_module.proto\"\x13\n" +
 	"\x11CreateGameRequest\"3\n" +
 	"\x12CreateGameResponse\x12\x1d\n" +
 	"\n" +
-	"session_id\x18\x01 \x01(\tR\tsessionId\"\xf4\x01\n" +
+	"session_id\x18\x01 \x01(\tR\tsessionId\"\x83\x02\n" +
 	"\vPlayerInput\x12\x1d\n" +
 	"\n" +
 	"session_id\x18\x01 \x01(\tR\tsessionId\x12@\n" +
-	"\x0fmodule_position\x18\x02 \x01(\v2\x17.modules.ModulePositionR\x0emodulePosition\x122\n" +
-	"\bcut_wire\x18\x03 \x01(\v2\x15.modules.CutWireInputH\x00R\acutWire\x12G\n" +
-	"\x0fsubmit_password\x18\x04 \x01(\v2\x1c.modules.SubmitPasswordInputH\x00R\x0esubmitPasswordB\a\n" +
+	"\x0fmodule_position\x18\x02 \x01(\v2\x17.modules.ModulePositionR\x0emodulePosition\x12I\n" +
+	"\x12simple_wires_input\x18\x03 \x01(\v2\x19.modules.SimpleWiresInputH\x00R\x10simpleWiresInput\x12?\n" +
+	"\x0epassword_input\x18\x04 \x01(\v2\x16.modules.PasswordInputH\x00R\rpasswordInputB\a\n" +
 	"\x05input\"J\n" +
 	"\x11PlayerInputResult\x12\x1b\n" +
 	"\tmodule_id\x18\x01 \x01(\tR\bmoduleId\x12\x18\n" +
@@ -285,18 +285,18 @@ func file_proto_player_proto_rawDescGZIP() []byte {
 
 var file_proto_player_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
 var file_proto_player_proto_goTypes = []any{
-	(*CreateGameRequest)(nil),   // 0: player.CreateGameRequest
-	(*CreateGameResponse)(nil),  // 1: player.CreateGameResponse
-	(*PlayerInput)(nil),         // 2: player.PlayerInput
-	(*PlayerInputResult)(nil),   // 3: player.PlayerInputResult
-	(*ModulePosition)(nil),      // 4: modules.ModulePosition
-	(*CutWireInput)(nil),        // 5: modules.CutWireInput
-	(*SubmitPasswordInput)(nil), // 6: modules.SubmitPasswordInput
+	(*CreateGameRequest)(nil),  // 0: player.CreateGameRequest
+	(*CreateGameResponse)(nil), // 1: player.CreateGameResponse
+	(*PlayerInput)(nil),        // 2: player.PlayerInput
+	(*PlayerInputResult)(nil),  // 3: player.PlayerInputResult
+	(*ModulePosition)(nil),     // 4: modules.ModulePosition
+	(*SimpleWiresInput)(nil),   // 5: modules.SimpleWiresInput
+	(*PasswordInput)(nil),      // 6: modules.PasswordInput
 }
 var file_proto_player_proto_depIdxs = []int32{
 	4, // 0: player.PlayerInput.module_position:type_name -> modules.ModulePosition
-	5, // 1: player.PlayerInput.cut_wire:type_name -> modules.CutWireInput
-	6, // 2: player.PlayerInput.submit_password:type_name -> modules.SubmitPasswordInput
+	5, // 1: player.PlayerInput.simple_wires_input:type_name -> modules.SimpleWiresInput
+	6, // 2: player.PlayerInput.password_input:type_name -> modules.PasswordInput
 	3, // [3:3] is the sub-list for method output_type
 	3, // [3:3] is the sub-list for method input_type
 	3, // [3:3] is the sub-list for extension type_name
@@ -310,9 +310,11 @@ func file_proto_player_proto_init() {
 		return
 	}
 	file_proto_modules_proto_init()
+	file_proto_simple_wires_module_proto_init()
+	file_proto_password_module_proto_init()
 	file_proto_player_proto_msgTypes[2].OneofWrappers = []any{
-		(*PlayerInput_CutWire)(nil),
-		(*PlayerInput_SubmitPassword)(nil),
+		(*PlayerInput_SimpleWiresInput)(nil),
+		(*PlayerInput_PasswordInput)(nil),
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
