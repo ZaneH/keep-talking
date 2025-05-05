@@ -34,15 +34,27 @@ func (s *GameServiceAdapter) CreateGame(ctx context.Context, req *pb.CreateGameR
 }
 
 func (s *GameServiceAdapter) SendInput(ctx context.Context, i *pb.PlayerInput) (*pb.PlayerInputResult, error) {
-	var cmd interface{}
-	position := i.GetModulePosition()
+	sessionId := uuid.MustParse(i.GetSessionId())
+	position := mapProtoPositionToDomain(i.GetModulePosition())
+
+	var cmd command.ModuleInputCommand
 
 	switch input := i.GetInput().(type) {
 	case *pb.PlayerInput_CutWire:
 		cmd = &command.CutWireCommand{
-			SessionId:      uuid.MustParse(i.GetSessionId()),
-			ModulePosition: mapProtoPositionToDomain(position),
-			WireIndex:      int(input.CutWire.WireIndex),
+			BaseModuleInputCommand: command.BaseModuleInputCommand{
+				SessionId:      sessionId,
+				ModulePosition: position,
+			},
+			WireIndex: int(input.CutWire.WireIndex),
+		}
+	case *pb.PlayerInput_SubmitPassword:
+		cmd = &command.SubmitPasswordCommand{
+			BaseModuleInputCommand: command.BaseModuleInputCommand{
+				SessionId:      sessionId,
+				ModulePosition: position,
+			},
+			Password: input.SubmitPassword.Password,
 		}
 	default:
 		return nil, fmt.Errorf("unknown input type: %T", input)

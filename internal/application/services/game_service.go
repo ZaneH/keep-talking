@@ -29,13 +29,8 @@ func (s *GameService) CreateGameSession(ctx context.Context, cmd *command.Create
 	return session, nil
 }
 
-func (s *GameService) ProcessModuleInput(ctx context.Context, cmd interface{}) (interface{}, error) {
-	sessionId, ok := cmd.(*command.CutWireCommand)
-	if !ok {
-		return nil, errors.New("invalid command type")
-	}
-
-	sessionActor, err := s.actorSystem.GetGameSession(sessionId.SessionId)
+func (s *GameService) ProcessModuleInput(ctx context.Context, cmd command.ModuleInputCommand) (interface{}, error) {
+	sessionActor, err := s.actorSystem.GetGameSession(cmd.GetSessionId())
 	if err != nil {
 		log.Printf("error retrieving game session: %v", err)
 		return nil, errors.New("game session not found")
