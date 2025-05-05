@@ -21,27 +21,26 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-type JoinRequest struct {
+type CreateGameRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *JoinRequest) Reset() {
-	*x = JoinRequest{}
+func (x *CreateGameRequest) Reset() {
+	*x = CreateGameRequest{}
 	mi := &file_proto_player_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *JoinRequest) String() string {
+func (x *CreateGameRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*JoinRequest) ProtoMessage() {}
+func (*CreateGameRequest) ProtoMessage() {}
 
-func (x *JoinRequest) ProtoReflect() protoreflect.Message {
+func (x *CreateGameRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_proto_player_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -53,22 +52,59 @@ func (x *JoinRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use JoinRequest.ProtoReflect.Descriptor instead.
-func (*JoinRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use CreateGameRequest.ProtoReflect.Descriptor instead.
+func (*CreateGameRequest) Descriptor() ([]byte, []int) {
 	return file_proto_player_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *JoinRequest) GetName() string {
+type CreateGameResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,1,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CreateGameResponse) Reset() {
+	*x = CreateGameResponse{}
+	mi := &file_proto_player_proto_msgTypes[1]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CreateGameResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateGameResponse) ProtoMessage() {}
+
+func (x *CreateGameResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_player_proto_msgTypes[1]
 	if x != nil {
-		return x.Name
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateGameResponse.ProtoReflect.Descriptor instead.
+func (*CreateGameResponse) Descriptor() ([]byte, []int) {
+	return file_proto_player_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *CreateGameResponse) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
 
 type PlayerInput struct {
-	state    protoimpl.MessageState `protogen:"open.v1"`
-	PlayerId string                 `protobuf:"bytes,1,opt,name=player_id,json=playerId,proto3" json:"player_id,omitempty"`
-	ModuleId string                 `protobuf:"bytes,2,opt,name=module_id,json=moduleId,proto3" json:"module_id,omitempty"`
+	state          protoimpl.MessageState `protogen:"open.v1"`
+	SessionId      string                 `protobuf:"bytes,1,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
+	ModulePosition *ModulePosition        `protobuf:"bytes,2,opt,name=module_position,json=modulePosition,proto3" json:"module_position,omitempty"`
 	// Types that are valid to be assigned to Input:
 	//
 	//	*PlayerInput_CutWire
@@ -80,7 +116,7 @@ type PlayerInput struct {
 
 func (x *PlayerInput) Reset() {
 	*x = PlayerInput{}
-	mi := &file_proto_player_proto_msgTypes[1]
+	mi := &file_proto_player_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -92,7 +128,7 @@ func (x *PlayerInput) String() string {
 func (*PlayerInput) ProtoMessage() {}
 
 func (x *PlayerInput) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_player_proto_msgTypes[1]
+	mi := &file_proto_player_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -105,21 +141,21 @@ func (x *PlayerInput) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PlayerInput.ProtoReflect.Descriptor instead.
 func (*PlayerInput) Descriptor() ([]byte, []int) {
-	return file_proto_player_proto_rawDescGZIP(), []int{1}
+	return file_proto_player_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *PlayerInput) GetPlayerId() string {
+func (x *PlayerInput) GetSessionId() string {
 	if x != nil {
-		return x.PlayerId
+		return x.SessionId
 	}
 	return ""
 }
 
-func (x *PlayerInput) GetModuleId() string {
+func (x *PlayerInput) GetModulePosition() *ModulePosition {
 	if x != nil {
-		return x.ModuleId
+		return x.ModulePosition
 	}
-	return ""
+	return nil
 }
 
 func (x *PlayerInput) GetInput() isPlayerInput_Input {
@@ -163,19 +199,77 @@ func (*PlayerInput_CutWire) isPlayerInput_Input() {}
 
 func (*PlayerInput_SubmitPassword) isPlayerInput_Input() {}
 
+type PlayerInputResult struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	ModuleId      string                 `protobuf:"bytes,1,opt,name=module_id,json=moduleId,proto3" json:"module_id,omitempty"`
+	Success       bool                   `protobuf:"varint,2,opt,name=success,proto3" json:"success,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *PlayerInputResult) Reset() {
+	*x = PlayerInputResult{}
+	mi := &file_proto_player_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PlayerInputResult) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PlayerInputResult) ProtoMessage() {}
+
+func (x *PlayerInputResult) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_player_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PlayerInputResult.ProtoReflect.Descriptor instead.
+func (*PlayerInputResult) Descriptor() ([]byte, []int) {
+	return file_proto_player_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *PlayerInputResult) GetModuleId() string {
+	if x != nil {
+		return x.ModuleId
+	}
+	return ""
+}
+
+func (x *PlayerInputResult) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
 var File_proto_player_proto protoreflect.FileDescriptor
 
 const file_proto_player_proto_rawDesc = "" +
 	"\n" +
-	"\x12proto/player.proto\x12\x06player\x1a\x13proto/modules.proto\"!\n" +
-	"\vJoinRequest\x12\x12\n" +
-	"\x04name\x18\x01 \x01(\tR\x04name\"\xcd\x01\n" +
-	"\vPlayerInput\x12\x1b\n" +
-	"\tplayer_id\x18\x01 \x01(\tR\bplayerId\x12\x1b\n" +
-	"\tmodule_id\x18\x02 \x01(\tR\bmoduleId\x122\n" +
+	"\x12proto/player.proto\x12\x06player\x1a\x13proto/modules.proto\"\x13\n" +
+	"\x11CreateGameRequest\"3\n" +
+	"\x12CreateGameResponse\x12\x1d\n" +
+	"\n" +
+	"session_id\x18\x01 \x01(\tR\tsessionId\"\xf4\x01\n" +
+	"\vPlayerInput\x12\x1d\n" +
+	"\n" +
+	"session_id\x18\x01 \x01(\tR\tsessionId\x12@\n" +
+	"\x0fmodule_position\x18\x02 \x01(\v2\x17.modules.ModulePositionR\x0emodulePosition\x122\n" +
 	"\bcut_wire\x18\x03 \x01(\v2\x15.modules.CutWireInputH\x00R\acutWire\x12G\n" +
 	"\x0fsubmit_password\x18\x04 \x01(\v2\x1c.modules.SubmitPasswordInputH\x00R\x0esubmitPasswordB\a\n" +
-	"\x05inputB\tZ\a./protob\x06proto3"
+	"\x05input\"J\n" +
+	"\x11PlayerInputResult\x12\x1b\n" +
+	"\tmodule_id\x18\x01 \x01(\tR\bmoduleId\x12\x18\n" +
+	"\asuccess\x18\x02 \x01(\bR\asuccessB\tZ\a./protob\x06proto3"
 
 var (
 	file_proto_player_proto_rawDescOnce sync.Once
@@ -189,21 +283,25 @@ func file_proto_player_proto_rawDescGZIP() []byte {
 	return file_proto_player_proto_rawDescData
 }
 
-var file_proto_player_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_proto_player_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
 var file_proto_player_proto_goTypes = []any{
-	(*JoinRequest)(nil),         // 0: player.JoinRequest
-	(*PlayerInput)(nil),         // 1: player.PlayerInput
-	(*CutWireInput)(nil),        // 2: modules.CutWireInput
-	(*SubmitPasswordInput)(nil), // 3: modules.SubmitPasswordInput
+	(*CreateGameRequest)(nil),   // 0: player.CreateGameRequest
+	(*CreateGameResponse)(nil),  // 1: player.CreateGameResponse
+	(*PlayerInput)(nil),         // 2: player.PlayerInput
+	(*PlayerInputResult)(nil),   // 3: player.PlayerInputResult
+	(*ModulePosition)(nil),      // 4: modules.ModulePosition
+	(*CutWireInput)(nil),        // 5: modules.CutWireInput
+	(*SubmitPasswordInput)(nil), // 6: modules.SubmitPasswordInput
 }
 var file_proto_player_proto_depIdxs = []int32{
-	2, // 0: player.PlayerInput.cut_wire:type_name -> modules.CutWireInput
-	3, // 1: player.PlayerInput.submit_password:type_name -> modules.SubmitPasswordInput
-	2, // [2:2] is the sub-list for method output_type
-	2, // [2:2] is the sub-list for method input_type
-	2, // [2:2] is the sub-list for extension type_name
-	2, // [2:2] is the sub-list for extension extendee
-	0, // [0:2] is the sub-list for field type_name
+	4, // 0: player.PlayerInput.module_position:type_name -> modules.ModulePosition
+	5, // 1: player.PlayerInput.cut_wire:type_name -> modules.CutWireInput
+	6, // 2: player.PlayerInput.submit_password:type_name -> modules.SubmitPasswordInput
+	3, // [3:3] is the sub-list for method output_type
+	3, // [3:3] is the sub-list for method input_type
+	3, // [3:3] is the sub-list for extension type_name
+	3, // [3:3] is the sub-list for extension extendee
+	0, // [0:3] is the sub-list for field type_name
 }
 
 func init() { file_proto_player_proto_init() }
@@ -212,7 +310,7 @@ func file_proto_player_proto_init() {
 		return
 	}
 	file_proto_modules_proto_init()
-	file_proto_player_proto_msgTypes[1].OneofWrappers = []any{
+	file_proto_player_proto_msgTypes[2].OneofWrappers = []any{
 		(*PlayerInput_CutWire)(nil),
 		(*PlayerInput_SubmitPassword)(nil),
 	}
@@ -222,7 +320,7 @@ func file_proto_player_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_player_proto_rawDesc), len(file_proto_player_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   2,
+			NumMessages:   4,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

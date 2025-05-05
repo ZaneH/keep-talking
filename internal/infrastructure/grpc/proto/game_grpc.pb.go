@@ -19,7 +19,7 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	GameService_JoinGame_FullMethodName        = "/game.GameService/JoinGame"
+	GameService_CreateGame_FullMethodName      = "/game.GameService/CreateGame"
 	GameService_SendInput_FullMethodName       = "/game.GameService/SendInput"
 	GameService_StreamGameState_FullMethodName = "/game.GameService/StreamGameState"
 )
@@ -28,8 +28,8 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type GameServiceClient interface {
-	JoinGame(ctx context.Context, in *JoinRequest, opts ...grpc.CallOption) (*JoinResponse, error)
-	SendInput(ctx context.Context, in *PlayerInput, opts ...grpc.CallOption) (*InputResult, error)
+	CreateGame(ctx context.Context, in *CreateGameRequest, opts ...grpc.CallOption) (*CreateGameResponse, error)
+	SendInput(ctx context.Context, in *PlayerInput, opts ...grpc.CallOption) (*PlayerInputResult, error)
 	StreamGameState(ctx context.Context, in *GameStateRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[GameState], error)
 }
 
@@ -41,19 +41,19 @@ func NewGameServiceClient(cc grpc.ClientConnInterface) GameServiceClient {
 	return &gameServiceClient{cc}
 }
 
-func (c *gameServiceClient) JoinGame(ctx context.Context, in *JoinRequest, opts ...grpc.CallOption) (*JoinResponse, error) {
+func (c *gameServiceClient) CreateGame(ctx context.Context, in *CreateGameRequest, opts ...grpc.CallOption) (*CreateGameResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(JoinResponse)
-	err := c.cc.Invoke(ctx, GameService_JoinGame_FullMethodName, in, out, cOpts...)
+	out := new(CreateGameResponse)
+	err := c.cc.Invoke(ctx, GameService_CreateGame_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *gameServiceClient) SendInput(ctx context.Context, in *PlayerInput, opts ...grpc.CallOption) (*InputResult, error) {
+func (c *gameServiceClient) SendInput(ctx context.Context, in *PlayerInput, opts ...grpc.CallOption) (*PlayerInputResult, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(InputResult)
+	out := new(PlayerInputResult)
 	err := c.cc.Invoke(ctx, GameService_SendInput_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -84,8 +84,8 @@ type GameService_StreamGameStateClient = grpc.ServerStreamingClient[GameState]
 // All implementations must embed UnimplementedGameServiceServer
 // for forward compatibility.
 type GameServiceServer interface {
-	JoinGame(context.Context, *JoinRequest) (*JoinResponse, error)
-	SendInput(context.Context, *PlayerInput) (*InputResult, error)
+	CreateGame(context.Context, *CreateGameRequest) (*CreateGameResponse, error)
+	SendInput(context.Context, *PlayerInput) (*PlayerInputResult, error)
 	StreamGameState(*GameStateRequest, grpc.ServerStreamingServer[GameState]) error
 	mustEmbedUnimplementedGameServiceServer()
 }
@@ -97,10 +97,10 @@ type GameServiceServer interface {
 // pointer dereference when methods are called.
 type UnimplementedGameServiceServer struct{}
 
-func (UnimplementedGameServiceServer) JoinGame(context.Context, *JoinRequest) (*JoinResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method JoinGame not implemented")
+func (UnimplementedGameServiceServer) CreateGame(context.Context, *CreateGameRequest) (*CreateGameResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateGame not implemented")
 }
-func (UnimplementedGameServiceServer) SendInput(context.Context, *PlayerInput) (*InputResult, error) {
+func (UnimplementedGameServiceServer) SendInput(context.Context, *PlayerInput) (*PlayerInputResult, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SendInput not implemented")
 }
 func (UnimplementedGameServiceServer) StreamGameState(*GameStateRequest, grpc.ServerStreamingServer[GameState]) error {
@@ -127,20 +127,20 @@ func RegisterGameServiceServer(s grpc.ServiceRegistrar, srv GameServiceServer) {
 	s.RegisterService(&GameService_ServiceDesc, srv)
 }
 
-func _GameService_JoinGame_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(JoinRequest)
+func _GameService_CreateGame_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateGameRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(GameServiceServer).JoinGame(ctx, in)
+		return srv.(GameServiceServer).CreateGame(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: GameService_JoinGame_FullMethodName,
+		FullMethod: GameService_CreateGame_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(GameServiceServer).JoinGame(ctx, req.(*JoinRequest))
+		return srv.(GameServiceServer).CreateGame(ctx, req.(*CreateGameRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -182,8 +182,8 @@ var GameService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*GameServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "JoinGame",
-			Handler:    _GameService_JoinGame_Handler,
+			MethodName: "CreateGame",
+			Handler:    _GameService_CreateGame_Handler,
 		},
 		{
 			MethodName: "SendInput",

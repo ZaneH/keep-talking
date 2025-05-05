@@ -3,12 +3,11 @@ package game;
 
 import "proto/player.proto";
 import "proto/session.proto";
-import "proto/modules.proto";
 
 option go_package = "./proto";
 
 service GameService {
-  rpc CreateGame(player.JoinRequest) returns (session.JoinResponse);
-  rpc SendInput(player.PlayerInput) returns (modules.InputResult);
+  rpc CreateGame(player.CreateGameRequest) returns (player.CreateGameResponse);
+  rpc SendInput(player.PlayerInput) returns (player.PlayerInputResult);
   rpc StreamGameState(session.GameStateRequest) returns (stream session.GameState);
 }

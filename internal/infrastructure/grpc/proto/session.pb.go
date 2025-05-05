@@ -65,50 +65,6 @@ func (x *GameStateRequest) GetSessionId() string {
 	return ""
 }
 
-type JoinResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	SessionId     string                 `protobuf:"bytes,1,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *JoinResponse) Reset() {
-	*x = JoinResponse{}
-	mi := &file_proto_session_proto_msgTypes[1]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *JoinResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*JoinResponse) ProtoMessage() {}
-
-func (x *JoinResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_session_proto_msgTypes[1]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use JoinResponse.ProtoReflect.Descriptor instead.
-func (*JoinResponse) Descriptor() ([]byte, []int) {
-	return file_proto_session_proto_rawDescGZIP(), []int{1}
-}
-
-func (x *JoinResponse) GetSessionId() string {
-	if x != nil {
-		return x.SessionId
-	}
-	return ""
-}
-
 type GameState struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	SessionId     string                 `protobuf:"bytes,1,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
@@ -118,7 +74,7 @@ type GameState struct {
 
 func (x *GameState) Reset() {
 	*x = GameState{}
-	mi := &file_proto_session_proto_msgTypes[2]
+	mi := &file_proto_session_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -130,7 +86,7 @@ func (x *GameState) String() string {
 func (*GameState) ProtoMessage() {}
 
 func (x *GameState) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_session_proto_msgTypes[2]
+	mi := &file_proto_session_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -143,7 +99,7 @@ func (x *GameState) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GameState.ProtoReflect.Descriptor instead.
 func (*GameState) Descriptor() ([]byte, []int) {
-	return file_proto_session_proto_rawDescGZIP(), []int{2}
+	return file_proto_session_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *GameState) GetSessionId() string {
@@ -159,9 +115,6 @@ const file_proto_session_proto_rawDesc = "" +
 	"\n" +
 	"\x13proto/session.proto\x12\asession\"1\n" +
 	"\x10GameStateRequest\x12\x1d\n" +
-	"\n" +
-	"session_id\x18\x01 \x01(\tR\tsessionId\"-\n" +
-	"\fJoinResponse\x12\x1d\n" +
 	"\n" +
 	"session_id\x18\x01 \x01(\tR\tsessionId\"*\n" +
 	"\tGameState\x12\x1d\n" +
@@ -180,11 +133,10 @@ func file_proto_session_proto_rawDescGZIP() []byte {
 	return file_proto_session_proto_rawDescData
 }
 
-var file_proto_session_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
+var file_proto_session_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
 var file_proto_session_proto_goTypes = []any{
 	(*GameStateRequest)(nil), // 0: session.GameStateRequest
-	(*JoinResponse)(nil),     // 1: session.JoinResponse
-	(*GameState)(nil),        // 2: session.GameState
+	(*GameState)(nil),        // 1: session.GameState
 }
 var file_proto_session_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for method output_type
@@ -205,7 +157,7 @@ func file_proto_session_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_session_proto_rawDesc), len(file_proto_session_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   3,
+			NumMessages:   2,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

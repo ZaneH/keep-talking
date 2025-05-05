@@ -13,24 +13,23 @@ enum BombFace {
   BACK = 1;
 }
 
+message ModulePosition {
+  BombFace face = 1;
+  int32 row = 2; // 0-indexed
+  int32 col = 3; // 0-indexed
+}
+
 message ModuleState {
   string module_id = 1;
   ModuleType type = 2;
-  BombFace face = 3;
+  ModulePosition position = 3;
   bool solved = 4;
 }
 
-message InputResult {
-  string module_id = 1;
-  bool success = 2;
-}
-
 message CutWireInput {
-  string module_id = 1;
-  int32 wire_index = 2;
+  int32 wire_index = 1;
 }
 
 message SubmitPasswordInput {
-  string module_id = 1;
-  string password = 2;
+  string password = 1;
 }

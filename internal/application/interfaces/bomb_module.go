@@ -1,7 +1,9 @@
-package module
+package interfaces
+
+import "github.com/google/uuid"
 
 type BombModule interface {
-	ID() string
+	Id() uuid.UUID
 	IsSolved() bool
 	ApplyInput(input any) error
 }

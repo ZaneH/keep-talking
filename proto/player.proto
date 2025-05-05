@@ -5,15 +5,23 @@ import "proto/modules.proto";
 
 option go_package = "./proto";
 
-message JoinRequest {
-  string name = 1;
+message CreateGameRequest {
+}
+
+message CreateGameResponse {
+  string session_id = 1;
 }
 
 message PlayerInput {
-  string player_id = 1;
-  string module_id = 2;
+  string session_id = 1;
+  modules.ModulePosition module_position = 2;
   oneof input {
     modules.CutWireInput cut_wire = 3;
     modules.SubmitPasswordInput submit_password = 4;
   }
+}
+
+message PlayerInputResult {
+  string module_id = 1;
+  bool success = 2;
 }

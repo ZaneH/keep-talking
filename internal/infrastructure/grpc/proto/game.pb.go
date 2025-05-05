@@ -24,26 +24,27 @@ var File_proto_game_proto protoreflect.FileDescriptor
 
 const file_proto_game_proto_rawDesc = "" +
 	"\n" +
-	"\x10proto/game.proto\x12\x04game\x1a\x12proto/player.proto\x1a\x13proto/session.proto\x1a\x13proto/modules.proto2\xc1\x01\n" +
-	"\vGameService\x126\n" +
-	"\bJoinGame\x12\x13.player.JoinRequest\x1a\x15.session.JoinResponse\x126\n" +
-	"\tSendInput\x12\x13.player.PlayerInput\x1a\x14.modules.InputResult\x12B\n" +
+	"\x10proto/game.proto\x12\x04game\x1a\x12proto/player.proto\x1a\x13proto/session.proto2\xd3\x01\n" +
+	"\vGameService\x12C\n" +
+	"\n" +
+	"CreateGame\x12\x19.player.CreateGameRequest\x1a\x1a.player.CreateGameResponse\x12;\n" +
+	"\tSendInput\x12\x13.player.PlayerInput\x1a\x19.player.PlayerInputResult\x12B\n" +
 	"\x0fStreamGameState\x12\x19.session.GameStateRequest\x1a\x12.session.GameState0\x01B\tZ\a./protob\x06proto3"
 
 var file_proto_game_proto_goTypes = []any{
-	(*JoinRequest)(nil),      // 0: player.JoinRequest
-	(*PlayerInput)(nil),      // 1: player.PlayerInput
-	(*GameStateRequest)(nil), // 2: session.GameStateRequest
-	(*JoinResponse)(nil),     // 3: session.JoinResponse
-	(*InputResult)(nil),      // 4: modules.InputResult
-	(*GameState)(nil),        // 5: session.GameState
+	(*CreateGameRequest)(nil),  // 0: player.CreateGameRequest
+	(*PlayerInput)(nil),        // 1: player.PlayerInput
+	(*GameStateRequest)(nil),   // 2: session.GameStateRequest
+	(*CreateGameResponse)(nil), // 3: player.CreateGameResponse
+	(*PlayerInputResult)(nil),  // 4: player.PlayerInputResult
+	(*GameState)(nil),          // 5: session.GameState
 }
 var file_proto_game_proto_depIdxs = []int32{
-	0, // 0: game.GameService.JoinGame:input_type -> player.JoinRequest
+	0, // 0: game.GameService.CreateGame:input_type -> player.CreateGameRequest
 	1, // 1: game.GameService.SendInput:input_type -> player.PlayerInput
 	2, // 2: game.GameService.StreamGameState:input_type -> session.GameStateRequest
-	3, // 3: game.GameService.JoinGame:output_type -> session.JoinResponse
-	4, // 4: game.GameService.SendInput:output_type -> modules.InputResult
+	3, // 3: game.GameService.CreateGame:output_type -> player.CreateGameResponse
+	4, // 4: game.GameService.SendInput:output_type -> player.PlayerInputResult
 	5, // 5: game.GameService.StreamGameState:output_type -> session.GameState
 	3, // [3:6] is the sub-list for method output_type
 	0, // [0:3] is the sub-list for method input_type
@@ -59,7 +60,6 @@ func file_proto_game_proto_init() {
 	}
 	file_proto_player_proto_init()
 	file_proto_session_proto_init()
-	file_proto_modules_proto_init()
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{

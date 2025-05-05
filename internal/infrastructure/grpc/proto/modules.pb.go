@@ -113,11 +113,71 @@ func (BombFace) EnumDescriptor() ([]byte, []int) {
 	return file_proto_modules_proto_rawDescGZIP(), []int{1}
 }
 
+type ModulePosition struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Face          BombFace               `protobuf:"varint,1,opt,name=face,proto3,enum=modules.BombFace" json:"face,omitempty"`
+	Row           int32                  `protobuf:"varint,2,opt,name=row,proto3" json:"row,omitempty"` // 0-indexed
+	Col           int32                  `protobuf:"varint,3,opt,name=col,proto3" json:"col,omitempty"` // 0-indexed
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ModulePosition) Reset() {
+	*x = ModulePosition{}
+	mi := &file_proto_modules_proto_msgTypes[0]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ModulePosition) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ModulePosition) ProtoMessage() {}
+
+func (x *ModulePosition) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_modules_proto_msgTypes[0]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ModulePosition.ProtoReflect.Descriptor instead.
+func (*ModulePosition) Descriptor() ([]byte, []int) {
+	return file_proto_modules_proto_rawDescGZIP(), []int{0}
+}
+
+func (x *ModulePosition) GetFace() BombFace {
+	if x != nil {
+		return x.Face
+	}
+	return BombFace_FRONT
+}
+
+func (x *ModulePosition) GetRow() int32 {
+	if x != nil {
+		return x.Row
+	}
+	return 0
+}
+
+func (x *ModulePosition) GetCol() int32 {
+	if x != nil {
+		return x.Col
+	}
+	return 0
+}
+
 type ModuleState struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	ModuleId      string                 `protobuf:"bytes,1,opt,name=module_id,json=moduleId,proto3" json:"module_id,omitempty"`
 	Type          ModuleType             `protobuf:"varint,2,opt,name=type,proto3,enum=modules.ModuleType" json:"type,omitempty"`
-	Face          BombFace               `protobuf:"varint,3,opt,name=face,proto3,enum=modules.BombFace" json:"face,omitempty"`
+	Position      *ModulePosition        `protobuf:"bytes,3,opt,name=position,proto3" json:"position,omitempty"`
 	Solved        bool                   `protobuf:"varint,4,opt,name=solved,proto3" json:"solved,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -125,7 +185,7 @@ type ModuleState struct {
 
 func (x *ModuleState) Reset() {
 	*x = ModuleState{}
-	mi := &file_proto_modules_proto_msgTypes[0]
+	mi := &file_proto_modules_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -137,7 +197,7 @@ func (x *ModuleState) String() string {
 func (*ModuleState) ProtoMessage() {}
 
 func (x *ModuleState) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_modules_proto_msgTypes[0]
+	mi := &file_proto_modules_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -150,7 +210,7 @@ func (x *ModuleState) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ModuleState.ProtoReflect.Descriptor instead.
 func (*ModuleState) Descriptor() ([]byte, []int) {
-	return file_proto_modules_proto_rawDescGZIP(), []int{0}
+	return file_proto_modules_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *ModuleState) GetModuleId() string {
@@ -167,11 +227,11 @@ func (x *ModuleState) GetType() ModuleType {
 	return ModuleType_SIMPLE_WIRES
 }
 
-func (x *ModuleState) GetFace() BombFace {
+func (x *ModuleState) GetPosition() *ModulePosition {
 	if x != nil {
-		return x.Face
+		return x.Position
 	}
-	return BombFace_FRONT
+	return nil
 }
 
 func (x *ModuleState) GetSolved() bool {
@@ -181,62 +241,9 @@ func (x *ModuleState) GetSolved() bool {
 	return false
 }
 
-type InputResult struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	ModuleId      string                 `protobuf:"bytes,1,opt,name=module_id,json=moduleId,proto3" json:"module_id,omitempty"`
-	Success       bool                   `protobuf:"varint,2,opt,name=success,proto3" json:"success,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *InputResult) Reset() {
-	*x = InputResult{}
-	mi := &file_proto_modules_proto_msgTypes[1]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *InputResult) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*InputResult) ProtoMessage() {}
-
-func (x *InputResult) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_modules_proto_msgTypes[1]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use InputResult.ProtoReflect.Descriptor instead.
-func (*InputResult) Descriptor() ([]byte, []int) {
-	return file_proto_modules_proto_rawDescGZIP(), []int{1}
-}
-
-func (x *InputResult) GetModuleId() string {
-	if x != nil {
-		return x.ModuleId
-	}
-	return ""
-}
-
-func (x *InputResult) GetSuccess() bool {
-	if x != nil {
-		return x.Success
-	}
-	return false
-}
-
 type CutWireInput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	ModuleId      string                 `protobuf:"bytes,1,opt,name=module_id,json=moduleId,proto3" json:"module_id,omitempty"`
-	WireIndex     int32                  `protobuf:"varint,2,opt,name=wire_index,json=wireIndex,proto3" json:"wire_index,omitempty"`
+	WireIndex     int32                  `protobuf:"varint,1,opt,name=wire_index,json=wireIndex,proto3" json:"wire_index,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -271,13 +278,6 @@ func (*CutWireInput) Descriptor() ([]byte, []int) {
 	return file_proto_modules_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *CutWireInput) GetModuleId() string {
-	if x != nil {
-		return x.ModuleId
-	}
-	return ""
-}
-
 func (x *CutWireInput) GetWireIndex() int32 {
 	if x != nil {
 		return x.WireIndex
@@ -287,8 +287,7 @@ func (x *CutWireInput) GetWireIndex() int32 {
 
 type SubmitPasswordInput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	ModuleId      string                 `protobuf:"bytes,1,opt,name=module_id,json=moduleId,proto3" json:"module_id,omitempty"`
-	Password      string                 `protobuf:"bytes,2,opt,name=password,proto3" json:"password,omitempty"`
+	Password      string                 `protobuf:"bytes,1,opt,name=password,proto3" json:"password,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -323,13 +322,6 @@ func (*SubmitPasswordInput) Descriptor() ([]byte, []int) {
 	return file_proto_modules_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *SubmitPasswordInput) GetModuleId() string {
-	if x != nil {
-		return x.ModuleId
-	}
-	return ""
-}
-
 func (x *SubmitPasswordInput) GetPassword() string {
 	if x != nil {
 		return x.Password
@@ -341,22 +333,21 @@ var File_proto_modules_proto protoreflect.FileDescriptor
 
 const file_proto_modules_proto_rawDesc = "" +
 	"\n" +
-	"\x13proto/modules.proto\x12\amodules\"\x92\x01\n" +
+	"\x13proto/modules.proto\x12\amodules\"[\n" +
+	"\x0eModulePosition\x12%\n" +
+	"\x04face\x18\x01 \x01(\x0e2\x11.modules.BombFaceR\x04face\x12\x10\n" +
+	"\x03row\x18\x02 \x01(\x05R\x03row\x12\x10\n" +
+	"\x03col\x18\x03 \x01(\x05R\x03col\"\xa0\x01\n" +
 	"\vModuleState\x12\x1b\n" +
 	"\tmodule_id\x18\x01 \x01(\tR\bmoduleId\x12'\n" +
-	"\x04type\x18\x02 \x01(\x0e2\x13.modules.ModuleTypeR\x04type\x12%\n" +
-	"\x04face\x18\x03 \x01(\x0e2\x11.modules.BombFaceR\x04face\x12\x16\n" +
-	"\x06solved\x18\x04 \x01(\bR\x06solved\"D\n" +
-	"\vInputResult\x12\x1b\n" +
-	"\tmodule_id\x18\x01 \x01(\tR\bmoduleId\x12\x18\n" +
-	"\asuccess\x18\x02 \x01(\bR\asuccess\"J\n" +
-	"\fCutWireInput\x12\x1b\n" +
-	"\tmodule_id\x18\x01 \x01(\tR\bmoduleId\x12\x1d\n" +
+	"\x04type\x18\x02 \x01(\x0e2\x13.modules.ModuleTypeR\x04type\x123\n" +
+	"\bposition\x18\x03 \x01(\v2\x17.modules.ModulePositionR\bposition\x12\x16\n" +
+	"\x06solved\x18\x04 \x01(\bR\x06solved\"-\n" +
+	"\fCutWireInput\x12\x1d\n" +
 	"\n" +
-	"wire_index\x18\x02 \x01(\x05R\twireIndex\"N\n" +
-	"\x13SubmitPasswordInput\x12\x1b\n" +
-	"\tmodule_id\x18\x01 \x01(\tR\bmoduleId\x12\x1a\n" +
-	"\bpassword\x18\x02 \x01(\tR\bpassword*,\n" +
+	"wire_index\x18\x01 \x01(\x05R\twireIndex\"1\n" +
+	"\x13SubmitPasswordInput\x12\x1a\n" +
+	"\bpassword\x18\x01 \x01(\tR\bpassword*,\n" +
 	"\n" +
 	"ModuleType\x12\x10\n" +
 	"\fSIMPLE_WIRES\x10\x00\x12\f\n" +
@@ -382,19 +373,20 @@ var file_proto_modules_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
 var file_proto_modules_proto_goTypes = []any{
 	(ModuleType)(0),             // 0: modules.ModuleType
 	(BombFace)(0),               // 1: modules.BombFace
-	(*ModuleState)(nil),         // 2: modules.ModuleState
-	(*InputResult)(nil),         // 3: modules.InputResult
+	(*ModulePosition)(nil),      // 2: modules.ModulePosition
+	(*ModuleState)(nil),         // 3: modules.ModuleState
 	(*CutWireInput)(nil),        // 4: modules.CutWireInput
 	(*SubmitPasswordInput)(nil), // 5: modules.SubmitPasswordInput
 }
 var file_proto_modules_proto_depIdxs = []int32{
-	0, // 0: modules.ModuleState.type:type_name -> modules.ModuleType
-	1, // 1: modules.ModuleState.face:type_name -> modules.BombFace
-	2, // [2:2] is the sub-list for method output_type
-	2, // [2:2] is the sub-list for method input_type
-	2, // [2:2] is the sub-list for extension type_name
-	2, // [2:2] is the sub-list for extension extendee
-	0, // [0:2] is the sub-list for field type_name
+	1, // 0: modules.ModulePosition.face:type_name -> modules.BombFace
+	0, // 1: modules.ModuleState.type:type_name -> modules.ModuleType
+	2, // 2: modules.ModuleState.position:type_name -> modules.ModulePosition
+	3, // [3:3] is the sub-list for method output_type
+	3, // [3:3] is the sub-list for method input_type
+	3, // [3:3] is the sub-list for extension type_name
+	3, // [3:3] is the sub-list for extension extendee
+	0, // [0:3] is the sub-list for field type_name
 }
 
 func init() { file_proto_modules_proto_init() }
