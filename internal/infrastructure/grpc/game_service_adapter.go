@@ -9,21 +9,21 @@ import (
 	"google.golang.org/grpc"
 )
 
-type GameServer struct {
+type GameServiceAdapter struct {
 	pb.UnimplementedGameServiceServer
 	gameService *services.GameService
 }
 
-func NewGameServiceAdapter(gameService *services.GameService) *GameServer {
-	return &GameServer{gameService: gameService}
+func NewGameServiceAdapter(gameService *services.GameService) *GameServiceAdapter {
+	return &GameServiceAdapter{gameService: gameService}
 }
 
-func (s *GameServer) CreateGame(context.Context, *pb.CreateGameRequest) (*pb.CreateGameResponse, error) {
+func (s *GameServiceAdapter) CreateGame(context.Context, *pb.CreateGameRequest) (*pb.CreateGameResponse, error) {
 	fmt.Println("CreateGame called")
 	return nil, nil
 }
 
-func (s *GameServer) SendInput(context context.Context, i *pb.PlayerInput) (*pb.PlayerInputResult, error) {
+func (s *GameServiceAdapter) SendInput(context context.Context, i *pb.PlayerInput) (*pb.PlayerInputResult, error) {
 	fmt.Println("SendInput called")
 	fmt.Println("Position:", i.GetModulePosition())
 	switch i.GetInput().(type) {
@@ -33,6 +33,8 @@ func (s *GameServer) SendInput(context context.Context, i *pb.PlayerInput) (*pb.
 	case *pb.PlayerInput_SubmitPassword:
 		fmt.Println("SubmitPassword command received")
 		fmt.Println("Password: ", i.GetSubmitPassword().Password)
+	default:
+		fmt.Println("Unknown command type")
 	}
 	return &pb.PlayerInputResult{
 		ModuleId: "module-id",
@@ -40,7 +42,7 @@ func (s *GameServer) SendInput(context context.Context, i *pb.PlayerInput) (*pb.
 	}, nil
 }
 
-func (s *GameServer) StreamGameState(*pb.GameStateRequest, grpc.ServerStreamingServer[pb.GameState]) error {
+func (s *GameServiceAdapter) StreamGameState(*pb.GameStateRequest, grpc.ServerStreamingServer[pb.GameState]) error {
 	fmt.Println("StreamGameState called")
 	return nil
 }
