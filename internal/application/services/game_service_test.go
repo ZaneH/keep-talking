@@ -1,4 +1,4 @@
-package services
+package services_test
 
 import (
 	"context"
@@ -6,14 +6,14 @@ import (
 
 	"github.com/ZaneH/keep-talking/internal/actors"
 	"github.com/ZaneH/keep-talking/internal/application/command"
+	"github.com/ZaneH/keep-talking/internal/application/services"
 	"github.com/ZaneH/keep-talking/internal/domain/valueobject"
-	"github.com/ZaneH/keep-talking/internal/testutils"
 )
 
 func TestGameService_CreateGameSession(t *testing.T) {
 	// Arrange
 	actorSystem := actors.NewActorSystem()
-	gameService := NewGameService(actorSystem)
+	gameService := services.NewGameService(actorSystem)
 	cmd := &command.CreateGameCommand{}
 
 	// Act
@@ -31,7 +31,7 @@ func TestGameService_CreateGameSession(t *testing.T) {
 func TestGameService_ProcessModuleInput(t *testing.T) {
 	// Arrange
 	actorSystem := actors.NewActorSystem()
-	gameService := NewGameService(actorSystem)
+	gameService := services.NewGameService(actorSystem)
 
 	createCmd := &command.CreateGameCommand{}
 	session, err := gameService.CreateGameSession(context.Background(), createCmd)
@@ -39,7 +39,7 @@ func TestGameService_ProcessModuleInput(t *testing.T) {
 		t.Fatalf("failed to create game session: %v", err)
 	}
 
-	wireModule := testutils.NewTestSimpleWireModule(t)
+	wireModule := actors.NewSimpleWiresModuleActor()
 
 	sessionActor, err := gameService.GetGameSession(context.Background(), session.GetSessionID())
 	if err != nil {

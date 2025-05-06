@@ -4,16 +4,16 @@ import (
 	"context"
 	"testing"
 
+	"github.com/ZaneH/keep-talking/internal/actors"
 	"github.com/ZaneH/keep-talking/internal/application/command"
 	"github.com/ZaneH/keep-talking/internal/domain/entities"
 	"github.com/ZaneH/keep-talking/internal/domain/valueobject"
-	"github.com/ZaneH/keep-talking/internal/testutils"
 	"github.com/google/uuid"
 )
 
 func TestSimpleWiresModuleActor_SolveBasic(t *testing.T) {
 	// Arrange
-	wireModule := testutils.NewTestSimpleWireModule(t)
+	wireModule := actors.NewSimpleWiresModuleActor()
 
 	testState := entities.SimpleWiresState{
 		Wires: []valueobject.SimpleWire{

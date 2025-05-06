@@ -39,6 +39,10 @@ func (m *PasswordModule) GetCurrentGuess() string {
 	return guess
 }
 
+func (m *PasswordModule) IsSolved() bool {
+	return m.state.solution == m.GetCurrentGuess()
+}
+
 func (m *PasswordModule) CheckPassword() (bool, error) {
 	if m.state.solution == "" {
 		return false, errors.New("solution not set")

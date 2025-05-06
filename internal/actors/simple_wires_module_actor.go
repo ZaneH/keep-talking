@@ -13,7 +13,8 @@ type SimpleWiresModuleActor struct {
 	module *entities.SimpleWiresModule
 }
 
-func NewSimpleWireModuleActor(module *entities.SimpleWiresModule) *SimpleWiresModuleActor {
+func NewSimpleWiresModuleActor() *SimpleWiresModuleActor {
+	module := entities.NewSimpleWiresModule()
 	return &SimpleWiresModuleActor{
 		module: module,
 	}

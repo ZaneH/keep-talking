@@ -3,6 +3,8 @@ package actors
 import (
 	"context"
 	"errors"
+	"fmt"
+	"strings"
 	"sync"
 
 	"github.com/ZaneH/keep-talking/internal/application/command"
@@ -17,6 +19,16 @@ type GameSessionActor struct {
 	modules           map[uuid.UUID]ModuleActor
 	modulesByPosition map[valueobject.ModulePosition]uuid.UUID
 	config            valueobject.GameConfig
+}
+
+func (a *GameSessionActor) String() string {
+	var sb strings.Builder
+	for _, module := range a.modules {
+		sb.WriteString(fmt.Sprintf("%+v", module.GetModule()))
+		sb.WriteString("\n")
+	}
+
+	return sb.String()
 }
 
 func NewGameSessionActor(sessionID uuid.UUID, config valueobject.GameConfig) *GameSessionActor {
