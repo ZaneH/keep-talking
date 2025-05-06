@@ -1,6 +1,7 @@
 package actors_test
 
 import (
+	"log"
 	"testing"
 	"time"
 
@@ -14,19 +15,17 @@ import (
 
 func TestPasswordModuleActor_LetterChange(t *testing.T) {
 	// Arrange
-	passwordModule := actors.NewPasswordModuleActor()
-	passwordModule.Start() // Start the actor to process messages
-	defer passwordModule.Stop()
+	passwordModuleActor := actors.NewPasswordModuleActor()
+	passwordModuleActor.Start() // Start the actor to process messages
+	defer passwordModuleActor.Stop()
 
-	// We need to cast to get access to the module for test setup
 	var specifiedModule *entities.PasswordModule
-	if module, ok := passwordModule.GetModule().(*entities.PasswordModule); ok {
+	if module, ok := passwordModuleActor.GetModule().(*entities.PasswordModule); ok {
 		specifiedModule = module
 	} else {
 		t.Fatal("Could not cast to PasswordModule")
 	}
 
-	// Session properties
 	sessionID := uuid.New()
 	modulePosition := valueobject.ModulePosition{
 		Row:    0,
@@ -34,7 +33,6 @@ func TestPasswordModuleActor_LetterChange(t *testing.T) {
 		Face:   valueobject.Front,
 	}
 
-	// Define test actions
 	actions := []struct {
 		desc      string
 		index     int
@@ -61,9 +59,9 @@ func TestPasswordModuleActor_LetterChange(t *testing.T) {
 		},
 	}
 
-	// Execute test actions
 	for i, action := range actions {
 		t.Run(action.desc, func(t *testing.T) {
+			// Act
 			cmd := &command.PasswordLetterChangeCommand{
 				BaseModuleInputCommand: command.BaseModuleInputCommand{
 					SessionID:      sessionID,
@@ -75,11 +73,12 @@ func TestPasswordModuleActor_LetterChange(t *testing.T) {
 
 			respChan := make(chan actors.Response, 1)
 
-			passwordModule.Send(actors.ModuleCommandMessage{
+			passwordModuleActor.Send(actors.ModuleCommandMessage{
 				Command:         cmd,
 				ResponseChannel: respChan,
 			})
 
+			// Assert
 			var resp actors.Response
 			select {
 			case resp = <-respChan:
@@ -100,12 +99,13 @@ func TestPasswordModuleActor_LetterChange(t *testing.T) {
 				result, ok := successResp.Data.(*command.SimpleWiresInputCommandResult)
 				assert.True(t, ok, "Expected SimpleWiresInputCommandResult type")
 
-				// Verify the result data
 				assert.Equal(t, specifiedModule.IsSolved(), result.Solved, "Solved state should match module state")
 				assert.False(t, result.Strike, "No strike should be issued for successful operations")
 			}
 		})
 	}
+
+	log.Printf("Final state: %v", passwordModuleActor.GetModule())
 
 	// Test with unsupported command type
 	t.Run("Unsupported command type", func(t *testing.T) {
@@ -120,7 +120,7 @@ func TestPasswordModuleActor_LetterChange(t *testing.T) {
 
 		respChan := make(chan actors.Response, 1)
 
-		passwordModule.Send(actors.ModuleCommandMessage{
+		passwordModuleActor.Send(actors.ModuleCommandMessage{
 			Command:         cmd,
 			ResponseChannel: respChan,
 		})

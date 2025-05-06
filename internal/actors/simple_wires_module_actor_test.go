@@ -14,19 +14,17 @@ import (
 
 func TestSimpleWiresModuleActor_SolveBasic(t *testing.T) {
 	// Arrange
-	wireModule := actors.NewSimpleWiresModuleActor()
-	wireModule.Start() // Start the actor to process messages
-	defer wireModule.Stop()
+	simpleWiresModuleActor := actors.NewSimpleWiresModuleActor()
+	simpleWiresModuleActor.Start() // Start the actor to process messages
+	defer simpleWiresModuleActor.Stop()
 
-	// We need to cast to get access to the module for test setup
 	var specifiedModule *entities.SimpleWiresModule
-	if module, ok := wireModule.GetModule().(*entities.SimpleWiresModule); ok {
+	if module, ok := simpleWiresModuleActor.GetModule().(*entities.SimpleWiresModule); ok {
 		specifiedModule = module
 	} else {
 		t.Fatal("Could not cast to SimpleWiresModule")
 	}
 
-	// Set up test state
 	testState := entities.SimpleWiresState{
 		Wires: []valueobject.SimpleWire{
 			{
@@ -51,7 +49,6 @@ func TestSimpleWiresModuleActor_SolveBasic(t *testing.T) {
 
 	specifiedModule.SetState(testState)
 
-	// Session properties - fixed for all tests
 	sessionID := uuid.New()
 	modulePosition := valueobject.ModulePosition{
 		Row:    0,
@@ -59,7 +56,6 @@ func TestSimpleWiresModuleActor_SolveBasic(t *testing.T) {
 		Face:   valueobject.Front,
 	}
 
-	// Define test actions
 	actions := []struct {
 		desc      string
 		wireIndex int
@@ -92,9 +88,9 @@ func TestSimpleWiresModuleActor_SolveBasic(t *testing.T) {
 		},
 	}
 
-	// Execute test actions
 	for i, action := range actions {
 		t.Run(action.desc, func(t *testing.T) {
+			// Act
 			cmd := &command.SimpleWiresInputCommand{
 				BaseModuleInputCommand: command.BaseModuleInputCommand{
 					SessionID:      sessionID,
@@ -105,11 +101,12 @@ func TestSimpleWiresModuleActor_SolveBasic(t *testing.T) {
 
 			respChan := make(chan actors.Response, 1)
 
-			wireModule.Send(actors.ModuleCommandMessage{
+			simpleWiresModuleActor.Send(actors.ModuleCommandMessage{
 				Command:         cmd,
 				ResponseChannel: respChan,
 			})
 
+			// Assert
 			var resp actors.Response
 			select {
 			case resp = <-respChan:
