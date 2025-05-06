@@ -16,13 +16,15 @@ type GameSessionActor struct {
 	mu                sync.RWMutex
 	modules           map[uuid.UUID]ModuleActor
 	modulesByPosition map[valueobject.ModulePosition]uuid.UUID
+	config            valueobject.GameConfig
 }
 
-func NewGameSessionActor(sessionID uuid.UUID) *GameSessionActor {
+func NewGameSessionActor(sessionID uuid.UUID, config valueobject.GameConfig) *GameSessionActor {
 	return &GameSessionActor{
 		session:           entities.NewGameSession(sessionID),
 		modules:           make(map[uuid.UUID]ModuleActor),
 		modulesByPosition: make(map[valueobject.ModulePosition]uuid.UUID),
+		config:            config,
 	}
 }
 

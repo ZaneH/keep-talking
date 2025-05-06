@@ -22,7 +22,11 @@ func NewGameServiceAdapter(gameService *services.GameService) *GameServiceAdapte
 }
 
 func (s *GameServiceAdapter) CreateGame(ctx context.Context, req *pb.CreateGameRequest) (*pb.CreateGameResponse, error) {
-	createGameCmd := &command.CreateGameCommand{}
+	config := buildGameConfigFromRequest(req)
+
+	createGameCmd := &command.CreateGameCommand{
+		Config: config,
+	}
 
 	session, err := s.gameService.CreateGameSession(ctx, createGameCmd)
 	if err != nil {
@@ -34,6 +38,20 @@ func (s *GameServiceAdapter) CreateGame(ctx context.Context, req *pb.CreateGameR
 	return &pb.CreateGameResponse{
 		SessionId: session.GetSessionID().String(),
 	}, nil
+}
+
+func buildGameConfigFromRequest(req *pb.CreateGameRequest) valueobject.GameConfig {
+	config := valueobject.NewDefaultGameConfig()
+
+	if req.ProbabilitySimpleWires != nil {
+		config.ProbabilitySimpleWires = *req.ProbabilitySimpleWires
+	}
+
+	if req.ProbabilityPassword != nil {
+		config.ProbabilityPassword = *req.ProbabilityPassword
+	}
+
+	return config
 }
 
 func (s *GameServiceAdapter) SendInput(ctx context.Context, i *pb.PlayerInput) (*pb.PlayerInputResult, error) {

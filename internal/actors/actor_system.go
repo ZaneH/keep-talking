@@ -4,6 +4,7 @@ import (
 	"errors"
 	"sync"
 
+	"github.com/ZaneH/keep-talking/internal/domain/valueobject"
 	"github.com/google/uuid"
 )
 
@@ -18,15 +19,13 @@ func NewActorSystem() *ActorSystem {
 	}
 }
 
-func (s *ActorSystem) GetOrCreateGameSession(sessionID uuid.UUID) (*GameSessionActor, error) {
+func (s *ActorSystem) CreateGameSession(config valueobject.GameConfig) (*GameSessionActor, error) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
-	session, exists := s.gameSessions[sessionID]
-	if !exists {
-		session = NewGameSessionActor(sessionID)
-		s.gameSessions[sessionID] = session
-	}
+	sessionID := uuid.New()
+	session := NewGameSessionActor(sessionID, config)
+	s.gameSessions[sessionID] = session
 
 	return session, nil
 }

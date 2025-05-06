@@ -19,8 +19,7 @@ func NewGameService(actorSystem *actors.ActorSystem) *GameService {
 }
 
 func (s *GameService) CreateGameSession(ctx context.Context, cmd *command.CreateGameCommand) (*actors.GameSessionActor, error) {
-	id := uuid.New()
-	session, err := s.actorSystem.GetOrCreateGameSession(id)
+	session, err := s.actorSystem.CreateGameSession(cmd.Config)
 	if err != nil {
 		log.Printf("error creating game session: %v", err)
 		return nil, errors.New("failed to create game session")

@@ -22,9 +22,11 @@ const (
 )
 
 type CreateGameRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state                  protoimpl.MessageState `protogen:"open.v1"`
+	ProbabilitySimpleWires *float32               `protobuf:"fixed32,1,opt,name=probability_simple_wires,json=probabilitySimpleWires,proto3,oneof" json:"probability_simple_wires,omitempty"`
+	ProbabilityPassword    *float32               `protobuf:"fixed32,2,opt,name=probability_password,json=probabilityPassword,proto3,oneof" json:"probability_password,omitempty"`
+	unknownFields          protoimpl.UnknownFields
+	sizeCache              protoimpl.SizeCache
 }
 
 func (x *CreateGameRequest) Reset() {
@@ -55,6 +57,20 @@ func (x *CreateGameRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use CreateGameRequest.ProtoReflect.Descriptor instead.
 func (*CreateGameRequest) Descriptor() ([]byte, []int) {
 	return file_proto_player_proto_rawDescGZIP(), []int{0}
+}
+
+func (x *CreateGameRequest) GetProbabilitySimpleWires() float32 {
+	if x != nil && x.ProbabilitySimpleWires != nil {
+		return *x.ProbabilitySimpleWires
+	}
+	return 0
+}
+
+func (x *CreateGameRequest) GetProbabilityPassword() float32 {
+	if x != nil && x.ProbabilityPassword != nil {
+		return *x.ProbabilityPassword
+	}
+	return 0
 }
 
 type CreateGameResponse struct {
@@ -255,8 +271,12 @@ var File_proto_player_proto protoreflect.FileDescriptor
 
 const file_proto_player_proto_rawDesc = "" +
 	"\n" +
-	"\x12proto/player.proto\x12\x06player\x1a\x13proto/modules.proto\x1a\x1fproto/simple_wires_module.proto\x1a\x1bproto/password_module.proto\"\x13\n" +
-	"\x11CreateGameRequest\"3\n" +
+	"\x12proto/player.proto\x12\x06player\x1a\x13proto/modules.proto\x1a\x1fproto/simple_wires_module.proto\x1a\x1bproto/password_module.proto\"\xc0\x01\n" +
+	"\x11CreateGameRequest\x12=\n" +
+	"\x18probability_simple_wires\x18\x01 \x01(\x02H\x00R\x16probabilitySimpleWires\x88\x01\x01\x126\n" +
+	"\x14probability_password\x18\x02 \x01(\x02H\x01R\x13probabilityPassword\x88\x01\x01B\x1b\n" +
+	"\x19_probability_simple_wiresB\x17\n" +
+	"\x15_probability_password\"3\n" +
 	"\x12CreateGameResponse\x12\x1d\n" +
 	"\n" +
 	"session_id\x18\x01 \x01(\tR\tsessionId\"\x83\x02\n" +
@@ -312,6 +332,7 @@ func file_proto_player_proto_init() {
 	file_proto_modules_proto_init()
 	file_proto_simple_wires_module_proto_init()
 	file_proto_password_module_proto_init()
+	file_proto_player_proto_msgTypes[0].OneofWrappers = []any{}
 	file_proto_player_proto_msgTypes[2].OneofWrappers = []any{
 		(*PlayerInput_SimpleWiresInput)(nil),
 		(*PlayerInput_PasswordInput)(nil),
