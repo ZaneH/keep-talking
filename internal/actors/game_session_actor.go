@@ -23,6 +23,7 @@ type GameSessionActor struct {
 
 func (a *GameSessionActor) String() string {
 	var sb strings.Builder
+	sb.WriteString(fmt.Sprintf("Session ID: %v\n", a.GetSessionID()))
 	for _, module := range a.modules {
 		sb.WriteString(fmt.Sprintf("%+v", module.GetModule()))
 		sb.WriteString("\n")
@@ -47,6 +48,30 @@ func (g *GameSessionActor) AddModule(module ModuleActor, position valueobject.Mo
 	moduleId := module.GetModuleID()
 	g.modules[moduleId] = module
 	g.modulesByPosition[position] = moduleId
+}
+
+func (g *GameSessionActor) GetModules() map[uuid.UUID]ModuleActor {
+	g.mu.RLock()
+	defer g.mu.RUnlock()
+
+	return g.modules
+}
+
+func (g *GameSessionActor) GetModuleByPosition(position valueobject.ModulePosition) (ModuleActor, error) {
+	g.mu.RLock()
+	defer g.mu.RUnlock()
+
+	moduleId, exists := g.modulesByPosition[position]
+	if !exists {
+		return nil, errors.New("module not found")
+	}
+
+	moduleActor, exists := g.modules[moduleId]
+	if !exists {
+		return nil, errors.New("module actor not found")
+	}
+
+	return moduleActor, nil
 }
 
 func (g *GameSessionActor) GetSessionID() uuid.UUID {
