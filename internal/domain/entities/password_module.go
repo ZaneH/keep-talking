@@ -20,13 +20,13 @@ type PasswordModule struct {
 	state    PasswordModuleState
 }
 
-func NewPasswordModule(solution string) *PasswordModule {
+func NewPasswordModule(solution *string) *PasswordModule {
 	return &PasswordModule{
 		ModuleID: uuid.New(),
 		state: PasswordModuleState{
-			Letters:   generateLetters(),
+			Letters:   generateLetters(solution),
 			Positions: [5]int{0, 0, 0, 0, 0},
-			solution:  solution,
+			solution:  *solution,
 		},
 	}
 }
@@ -43,16 +43,13 @@ func (m *PasswordModule) IsSolved() bool {
 	return m.state.solution == m.GetCurrentGuess()
 }
 
-func (m *PasswordModule) CheckPassword() (bool, error) {
-	if m.state.solution == "" {
-		return false, errors.New("solution not set")
+func (m *PasswordModule) CheckPassword() error {
+	if m.IsSolved() {
+		m.state.MarkSolved = true
+		return nil
 	}
 
-	if m.GetCurrentGuess() == m.state.solution {
-		return true, nil
-	}
-
-	return false, errors.New("incorrect password")
+	return errors.New("incorrect password")
 }
 
 func (m *PasswordModule) IncrementLetterOption(letterIndex int) {
@@ -69,8 +66,20 @@ func (m *PasswordModule) DecrementLetterOption(letterIndex int) {
 	}
 }
 
-func (m *PasswordModule) SetSolution(solution string) {
-	m.state.solution = solution
+func (m *PasswordModule) String() string {
+	var result string = "\n"
+	for i := 0; i < len(m.state.Letters); i++ {
+		result += "Letter " + string(rune('A'+i)) + ": "
+		for j := 0; j < len(m.state.Letters[i]); j++ {
+			if j == m.state.Positions[i] {
+				result += "[" + m.state.Letters[i][j] + "] "
+			} else {
+				result += m.state.Letters[i][j] + " "
+			}
+		}
+		result += "\n"
+	}
+	return result
 }
 
 var words = [...]string{
@@ -85,9 +94,13 @@ var words = [...]string{
 
 var commonLetters = "abcdefghijklmnopqrstuvwxyz"
 
-func generateLetters() [5][6]string {
+func generateLetters(solution *string) [5][6]string {
 	randIdx := rand.Intn(len(words))
 	word := words[randIdx]
+
+	if solution != nil {
+		word = *solution
+	}
 
 	var letters [5][6]string
 

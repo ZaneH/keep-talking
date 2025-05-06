@@ -5,5 +5,5 @@ type Module interface {
 }
 
 type ModuleState struct {
-	IsSolved bool
+	MarkSolved bool
 }

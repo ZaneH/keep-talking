@@ -74,7 +74,6 @@ func TestSimpleWiresModuleActor_SolveBasic(t *testing.T) {
 	}
 
 	for i, action := range actions {
-		t.Logf("Step %d: %s", i+1, action.desc)
 		cmd := &command.SimpleWiresInputCommand{
 			BaseModuleInputCommand: command.BaseModuleInputCommand{
 				SessionID: uuid.New(),
@@ -89,10 +88,6 @@ func TestSimpleWiresModuleActor_SolveBasic(t *testing.T) {
 
 		// Act
 		result, err := wireModule.ProcessCommand(context.Background(), cmd)
-		if specificModule, ok := wireModule.GetModule().(*entities.SimpleWiresModule); ok {
-			t.Logf("State after action: %+v", specificModule.State)
-		}
-
 		res := result.(*command.SimpleWiresInputCommandResult)
 
 		// Assert
@@ -110,4 +105,6 @@ func TestSimpleWiresModuleActor_SolveBasic(t *testing.T) {
 			}
 		}
 	}
+
+	t.Logf("Final state: %s", wireModule.GetModule())
 }

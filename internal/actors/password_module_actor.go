@@ -16,7 +16,7 @@ type PasswordModuleActor struct {
 }
 
 func NewPasswordModuleActor(solution string) *PasswordModuleActor {
-	module := entities.NewPasswordModule(solution)
+	module := entities.NewPasswordModule(&solution)
 	return &PasswordModuleActor{
 		module: module,
 	}
@@ -33,14 +33,36 @@ func (a *PasswordModuleActor) GetModuleID() uuid.UUID {
 func (a *PasswordModuleActor) ProcessCommand(ctx context.Context, cmd interface{}) (interface{}, error) {
 	switch c := cmd.(type) {
 	case *command.PasswordLetterChangeCommand:
+		var err error
 		if c.Direction == valueobject.Increment {
 			a.module.IncrementLetterOption(c.LetterIndex)
+		} else if c.Direction == valueobject.Decrement {
+			a.module.DecrementLetterOption(c.LetterIndex)
+		} else {
+			err = errors.New("invalid direction for letter change")
 		}
-	case *command.PasswordSubmitCommand:
-		a.module.CheckPassword()
-	default:
-		return nil, errors.New("unsupported command for password module")
-	}
 
-	return nil, nil
+		return &command.PasswordLetterChangeCommandResult{
+			BaseModuleInputCommandResult: command.BaseModuleInputCommandResult{
+				Solved: a.module.IsSolved(),
+				Strike: false,
+			},
+		}, err
+	case *command.PasswordSubmitCommand:
+		err := a.module.CheckPassword()
+
+		return &command.PasswordSubmitCommandResult{
+			BaseModuleInputCommandResult: command.BaseModuleInputCommandResult{
+				Solved: a.module.IsSolved(),
+				Strike: err != nil,
+			},
+		}, err
+	default:
+		return &command.PasswordSubmitCommandResult{
+			BaseModuleInputCommandResult: command.BaseModuleInputCommandResult{
+				Solved: a.module.IsSolved(),
+				Strike: false,
+			},
+		}, errors.New("unsupported command for password module")
+	}
 }

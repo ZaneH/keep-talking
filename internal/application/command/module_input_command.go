@@ -15,6 +15,11 @@ type BaseModuleInputCommand struct {
 	ModulePosition valueobject.ModulePosition
 }
 
+type BaseModuleInputCommandResult struct {
+	Solved bool
+	Strike bool
+}
+
 func (c *BaseModuleInputCommand) GetSessionID() uuid.UUID {
 	return c.SessionID
 }

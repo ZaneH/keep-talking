@@ -2,7 +2,7 @@ package entities
 
 import (
 	"errors"
-	"log"
+	"fmt"
 	"math/rand"
 
 	"github.com/ZaneH/keep-talking/internal/application/common"
@@ -29,8 +29,6 @@ func NewSimpleWiresState() SimpleWiresState {
 		}
 	}
 
-	log.Printf("Generated wires: %+v", wires)
-
 	return SimpleWiresState{
 		Wires:           wires,
 		SolutionIndices: solution,
@@ -51,6 +49,19 @@ func NewSimpleWiresModule() *SimpleWiresModule {
 
 func (m *SimpleWiresModule) SetState(state SimpleWiresState) {
 	m.State = state
+}
+
+func (m *SimpleWiresModule) String() string {
+	var result string = "\n"
+	for i, wire := range m.State.Wires {
+		if wire.IsCut {
+			result += fmt.Sprintf("Wire %d: %s (cut)\n", i, wire.WireColor)
+		} else {
+			result += fmt.Sprintf("Wire %d: %s\n", i, wire.WireColor)
+		}
+	}
+
+	return result
 }
 
 func buildSolution(wires []valueobject.SimpleWire) []int {
@@ -117,7 +128,7 @@ func (m *SimpleWiresModule) CutWire(wireIndex int) error {
 	}
 
 	if m.IsSolved() {
-		m.State.IsSolved = true
+		m.State.MarkSolved = true
 	}
 
 	return nil

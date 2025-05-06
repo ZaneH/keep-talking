@@ -6,6 +6,5 @@ type SimpleWiresInputCommand struct {
 }
 
 type SimpleWiresInputCommandResult struct {
-	Solved bool
-	Strike bool
+	BaseModuleInputCommandResult
 }

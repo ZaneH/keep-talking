@@ -2,6 +2,7 @@ package actors
 
 import (
 	"context"
+	"errors"
 
 	"github.com/ZaneH/keep-talking/internal/application/command"
 	"github.com/ZaneH/keep-talking/internal/application/common"
@@ -32,15 +33,13 @@ func (a *SimpleWiresModuleActor) ProcessCommand(ctx context.Context, cmd interfa
 	switch cmd := cmd.(type) {
 	case *command.SimpleWiresInputCommand:
 		err := a.module.CutWire(cmd.WireIndex)
-		if err != nil {
-			return &command.SimpleWiresInputCommandResult{
-				Solved: a.module.State.IsSolved,
-				Strike: true,
-			}, err
-		}
+		return &command.SimpleWiresInputCommandResult{
+			BaseModuleInputCommandResult: command.BaseModuleInputCommandResult{
+				Solved: a.module.IsSolved(),
+				Strike: err != nil,
+			},
+		}, err
+	default:
+		return nil, errors.New("unsupported command for simple wires module")
 	}
-
-	return &command.SimpleWiresInputCommandResult{
-		Solved: a.module.State.IsSolved,
-	}, nil
 }

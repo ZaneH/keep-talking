@@ -13,3 +13,11 @@ type PasswordLetterChangeCommand struct {
 type PasswordSubmitCommand struct {
 	BaseModuleInputCommand
 }
+
+type PasswordLetterChangeCommandResult struct {
+	BaseModuleInputCommandResult
+}
+
+type PasswordSubmitCommandResult struct {
+	BaseModuleInputCommandResult
+}
