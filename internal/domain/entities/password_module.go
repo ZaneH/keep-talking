@@ -5,6 +5,7 @@ import (
 	"math/rand"
 
 	"github.com/ZaneH/keep-talking/internal/application/common"
+	"github.com/ZaneH/keep-talking/internal/domain/valueobject"
 	"github.com/google/uuid"
 )
 
@@ -20,13 +21,20 @@ type PasswordModule struct {
 	state    PasswordModuleState
 }
 
-func NewPasswordModule(solution *string) *PasswordModule {
+func NewPasswordModule(providedSolution *string) *PasswordModule {
+	var solution string
+	if providedSolution == nil {
+		solution = generateWord()
+	} else {
+		solution = *providedSolution
+	}
+
 	return &PasswordModule{
 		ModuleID: uuid.New(),
 		state: PasswordModuleState{
-			Letters:   generateLetters(solution),
+			Letters:   generateLetters(&solution),
 			Positions: [5]int{0, 0, 0, 0, 0},
-			solution:  *solution,
+			solution:  solution,
 		},
 	}
 }
@@ -82,6 +90,14 @@ func (m *PasswordModule) String() string {
 	return result
 }
 
+func (m *PasswordModule) GetModuleID() uuid.UUID {
+	return m.ModuleID
+}
+
+func (m *PasswordModule) GetType() valueobject.ModuleType {
+	return valueobject.PASSWORD
+}
+
 var words = [...]string{
 	"three",
 	"apple",
@@ -94,12 +110,17 @@ var words = [...]string{
 
 var commonLetters = "abcdefghijklmnopqrstuvwxyz"
 
-func generateLetters(solution *string) [5][6]string {
+func generateWord() string {
 	randIdx := rand.Intn(len(words))
-	word := words[randIdx]
+	return words[randIdx]
+}
 
+func generateLetters(solution *string) [5][6]string {
+	var word string
 	if solution != nil {
 		word = *solution
+	} else {
+		word = generateWord()
 	}
 
 	var letters [5][6]string

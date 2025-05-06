@@ -4,9 +4,11 @@ import (
 	"context"
 	"errors"
 	"log"
+	"time"
 
 	"github.com/ZaneH/keep-talking/internal/actors"
 	"github.com/ZaneH/keep-talking/internal/application/command"
+	"github.com/ZaneH/keep-talking/internal/domain/valueobject"
 	"github.com/google/uuid"
 )
 
@@ -45,11 +47,54 @@ func (s *GameService) ProcessModuleInput(ctx context.Context, cmd command.Module
 		return nil, errors.New("game session not found")
 	}
 
-	res, err := sessionActor.ProcessModuleCommand(ctx, cmd)
+	respChan := make(chan actors.Response, 1)
+
+	sessionActor.Send(actors.ModuleCommandMessage{
+		Command:         cmd,
+		ResponseChannel: respChan,
+	})
+
+	select {
+	case resp := <-respChan:
+		if !resp.IsSuccess() {
+			return nil, resp.Error()
+		}
+		return resp.(actors.SuccessResponse).Data, nil
+
+	case <-time.After(5 * time.Second):
+		return nil, errors.New("timeout processing module command")
+
+	case <-ctx.Done():
+		return nil, ctx.Err()
+	}
+}
+
+func (s *GameService) AddModuleToSession(ctx context.Context, sessionID uuid.UUID, module actors.ModuleActor, position valueobject.ModulePosition) error {
+	sessionActor, err := s.actorSystem.GetGameSession(sessionID)
 	if err != nil {
-		log.Printf("error processing command: %v", err)
-		return nil, errors.New("failed to process command")
+		log.Printf("error retrieving game session: %v", err)
+		return errors.New("game session not found")
 	}
 
-	return res, err
+	respChan := make(chan actors.Response, 1)
+
+	sessionActor.Send(actors.AddModuleMessage{
+		Module:          module,
+		Position:        position,
+		ResponseChannel: respChan,
+	})
+
+	select {
+	case resp := <-respChan:
+		if !resp.IsSuccess() {
+			return resp.Error()
+		}
+		return nil
+
+	case <-time.After(5 * time.Second):
+		return errors.New("timeout adding module to session")
+
+	case <-ctx.Done():
+		return ctx.Err()
+	}
 }

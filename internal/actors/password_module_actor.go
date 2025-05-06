@@ -1,68 +1,79 @@
 package actors
 
 import (
-	"context"
 	"errors"
 
 	"github.com/ZaneH/keep-talking/internal/application/command"
-	"github.com/ZaneH/keep-talking/internal/application/common"
 	"github.com/ZaneH/keep-talking/internal/domain/entities"
 	"github.com/ZaneH/keep-talking/internal/domain/valueobject"
-	"github.com/google/uuid"
 )
 
 type PasswordModuleActor struct {
-	module *entities.PasswordModule
+	BaseModuleActor
 }
 
-func NewPasswordModuleActor(solution string) *PasswordModuleActor {
-	module := entities.NewPasswordModule(&solution)
-	return &PasswordModuleActor{
-		module: module,
+func NewPasswordModuleActor() *PasswordModuleActor {
+	module := entities.NewPasswordModule(nil)
+	actor := &PasswordModuleActor{
+		BaseModuleActor: NewBaseModuleActor(module, 50),
+	}
+
+	actor.SetMessageHandler(actor.handleMessage)
+
+	return actor
+}
+
+func (a *PasswordModuleActor) handleMessage(msg Message) {
+	switch m := msg.(type) {
+	case ModuleCommandMessage:
+		a.handleModuleCommand(m)
+	default:
+		a.BaseModuleActor.handleMessage(msg)
 	}
 }
 
-func (a *PasswordModuleActor) GetModule() common.Module {
-	return a.module
-}
+func (a *PasswordModuleActor) handleModuleCommand(msg ModuleCommandMessage) {
+	cmd := msg.Command
 
-func (a *PasswordModuleActor) GetModuleID() uuid.UUID {
-	return a.module.ModuleID
-}
-
-func (a *PasswordModuleActor) ProcessCommand(ctx context.Context, cmd interface{}) (interface{}, error) {
-	switch c := cmd.(type) {
+	switch typedCmd := cmd.(type) {
 	case *command.PasswordLetterChangeCommand:
-		var err error
-		if c.Direction == valueobject.Increment {
-			a.module.IncrementLetterOption(c.LetterIndex)
-		} else if c.Direction == valueobject.Decrement {
-			a.module.DecrementLetterOption(c.LetterIndex)
-		} else {
-			err = errors.New("invalid direction for letter change")
+		passwordModule, ok := a.module.(*entities.PasswordModule)
+		if !ok {
+			msg.GetResponseChannel() <- ErrorResponse{
+				Err: errors.New("invalid module type"),
+			}
+			return
 		}
 
-		return &command.PasswordLetterChangeCommandResult{
-			BaseModuleInputCommandResult: command.BaseModuleInputCommandResult{
-				Solved: a.module.IsSolved(),
-				Strike: false,
-			},
-		}, err
-	case *command.PasswordSubmitCommand:
-		err := a.module.CheckPassword()
+		var err error
+		if typedCmd.Direction == valueobject.Increment {
+			passwordModule.IncrementLetterOption(typedCmd.LetterIndex)
+		} else if typedCmd.Direction == valueobject.Decrement {
+			passwordModule.DecrementLetterOption(typedCmd.LetterIndex)
+		} else {
+			err = errors.New("unsupported letter change option")
+		}
 
-		return &command.PasswordSubmitCommandResult{
+		result := &command.SimpleWiresInputCommandResult{
 			BaseModuleInputCommandResult: command.BaseModuleInputCommandResult{
 				Solved: a.module.IsSolved(),
 				Strike: err != nil,
 			},
-		}, err
+		}
+
+		if err != nil {
+			msg.ResponseChannel <- ErrorResponse{
+				Err: err,
+			}
+		} else {
+			msg.ResponseChannel <- SuccessResponse{
+				Data: result,
+			}
+		}
+
 	default:
-		return &command.PasswordSubmitCommandResult{
-			BaseModuleInputCommandResult: command.BaseModuleInputCommandResult{
-				Solved: a.module.IsSolved(),
-				Strike: false,
-			},
-		}, errors.New("unsupported command for password module")
+		msg.ResponseChannel <- ErrorResponse{
+			Err: errors.New("unsupported command type for simple wires module"),
+		}
 	}
 }

@@ -1,99 +1,138 @@
 package actors
 
 import (
-	"context"
 	"errors"
 	"fmt"
+	"log"
 	"strings"
-	"sync"
 
-	"github.com/ZaneH/keep-talking/internal/application/command"
 	"github.com/ZaneH/keep-talking/internal/domain/entities"
 	"github.com/ZaneH/keep-talking/internal/domain/valueobject"
 	"github.com/google/uuid"
 )
 
 type GameSessionActor struct {
+	BaseActor
 	session           *entities.GameSession
-	mu                sync.RWMutex
 	modules           map[uuid.UUID]ModuleActor
 	modulesByPosition map[valueobject.ModulePosition]uuid.UUID
 	config            valueobject.GameConfig
 }
 
-func (a *GameSessionActor) String() string {
-	var sb strings.Builder
-	sb.WriteString(fmt.Sprintf("Session ID: %v\n", a.GetSessionID()))
-	for _, module := range a.modules {
-		sb.WriteString(fmt.Sprintf("%+v", module.GetModule()))
-		sb.WriteString("\n")
-	}
-
-	return sb.String()
-}
-
 func NewGameSessionActor(sessionID uuid.UUID, config valueobject.GameConfig) *GameSessionActor {
-	return &GameSessionActor{
+	actor := &GameSessionActor{
+		BaseActor:         NewBaseActor(100),
 		session:           entities.NewGameSession(sessionID),
 		modules:           make(map[uuid.UUID]ModuleActor),
 		modulesByPosition: make(map[valueobject.ModulePosition]uuid.UUID),
 		config:            config,
 	}
+
+	return actor
 }
 
-func (g *GameSessionActor) AddModule(module ModuleActor, position valueobject.ModulePosition) {
-	g.mu.Lock()
-	defer g.mu.Unlock()
-
-	moduleId := module.GetModuleID()
-	g.modules[moduleId] = module
-	g.modulesByPosition[position] = moduleId
-}
-
-func (g *GameSessionActor) GetModules() map[uuid.UUID]ModuleActor {
-	g.mu.RLock()
-	defer g.mu.RUnlock()
-
-	return g.modules
-}
-
-func (g *GameSessionActor) GetModuleByPosition(position valueobject.ModulePosition) (ModuleActor, error) {
-	g.mu.RLock()
-	defer g.mu.RUnlock()
-
-	moduleId, exists := g.modulesByPosition[position]
-	if !exists {
-		return nil, errors.New("module not found")
-	}
-
-	moduleActor, exists := g.modules[moduleId]
-	if !exists {
-		return nil, errors.New("module actor not found")
-	}
-
-	return moduleActor, nil
+func (g *GameSessionActor) Start() {
+	go g.processMessages()
 }
 
 func (g *GameSessionActor) GetSessionID() uuid.UUID {
 	return g.session.SessionID
 }
 
-func (g *GameSessionActor) ProcessModuleCommand(ctx context.Context, cmd command.ModuleInputCommand) (interface{}, error) {
-	g.mu.Lock()
-	defer g.mu.Unlock()
+func (g *GameSessionActor) String() string {
+	var sb strings.Builder
+	sb.WriteString(fmt.Sprintf("Session ID: %v\n", g.GetSessionID()))
+	for _, module := range g.modules {
+		sb.WriteString(fmt.Sprintf("%+v", module.GetModule()))
+		sb.WriteString("\n")
+	}
+	return sb.String()
+}
 
-	var moduleId uuid.UUID
-	var position = cmd.GetModulePosition()
+func (g *GameSessionActor) processMessages() {
+	for {
+		select {
+		case msg := <-g.Mailbox():
+			g.handleMessage(msg)
+		case <-g.Done():
+			// Stop all module actors
+			for _, module := range g.modules {
+				module.Stop()
+			}
+			return
+		}
+	}
+}
+
+func (g *GameSessionActor) handleMessage(msg Message) {
+	switch m := msg.(type) {
+	case AddModuleMessage:
+		g.handleAddModule(m)
+	case GetModuleMessage:
+		g.handleGetModule(m)
+	case ModuleCommandMessage:
+		g.handleModuleCommand(m)
+	default:
+		if m, ok := msg.(RequestMessage); ok {
+			m.GetResponseChannel() <- ErrorResponse{
+				Err: errors.New("unsupported message type"),
+			}
+		} else {
+			log.Printf("received unhandled message type: %T", msg)
+		}
+	}
+}
+
+func (g *GameSessionActor) handleAddModule(msg AddModuleMessage) {
+	moduleID := msg.Module.GetModuleID()
+	g.modules[moduleID] = msg.Module
+	g.modulesByPosition[msg.Position] = moduleID
+
+	msg.ResponseChannel <- SuccessResponse{}
+}
+
+func (g *GameSessionActor) handleGetModule(msg GetModuleMessage) {
+	moduleID, exists := g.modulesByPosition[msg.Position]
+	if !exists {
+		msg.GetResponseChannel() <- ErrorResponse{
+			Err: errors.New("module not found"),
+		}
+		return
+	}
+
+	moduleActor, exists := g.modules[moduleID]
+	if !exists {
+		msg.GetResponseChannel() <- ErrorResponse{
+			Err: errors.New("module actor not found"),
+		}
+		return
+	}
+
+	msg.GetResponseChannel() <- SuccessResponse{
+		Data: moduleActor,
+	}
+}
+
+func (g *GameSessionActor) handleModuleCommand(msg ModuleCommandMessage) {
+	cmd := msg.Command
+	position := cmd.GetModulePosition()
 
 	moduleId, exists := g.modulesByPosition[position]
 	if !exists {
-		return nil, errors.New("module not found")
+		msg.ResponseChannel <- ErrorResponse{
+			Err: errors.New("module not found"),
+		}
+		return
 	}
 
 	moduleActor, exists := g.modules[moduleId]
 	if !exists {
-		return nil, errors.New("module actor not found")
+		msg.ResponseChannel <- ErrorResponse{
+			Err: errors.New("module actor not found"),
+		}
+		return
 	}
 
-	return moduleActor.ProcessCommand(ctx, cmd)
+	// Forward the command to the module actor
+	moduleActor.Send(msg)
 }

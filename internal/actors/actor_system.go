@@ -9,35 +9,51 @@ import (
 )
 
 type ActorSystem struct {
-	gameSessions map[uuid.UUID]*GameSessionActor
-	mu           sync.RWMutex
+	sessions map[uuid.UUID]*GameSessionActor
+	mu       sync.RWMutex
 }
 
 func NewActorSystem() *ActorSystem {
 	return &ActorSystem{
-		gameSessions: make(map[uuid.UUID]*GameSessionActor),
+		sessions: make(map[uuid.UUID]*GameSessionActor),
 	}
 }
 
 func (s *ActorSystem) CreateGameSession(config valueobject.GameConfig) (*GameSessionActor, error) {
-	s.mu.Lock()
-	defer s.mu.Unlock()
-
 	sessionID := uuid.New()
-	session := NewGameSessionActor(sessionID, config)
-	s.gameSessions[sessionID] = session
+	sessionActor := NewGameSessionActor(sessionID, config)
+	sessionActor.Start()
 
-	return session, nil
+	s.mu.Lock()
+	s.sessions[sessionID] = sessionActor
+	s.mu.Unlock()
+
+	return sessionActor, nil
 }
 
 func (s *ActorSystem) GetGameSession(sessionID uuid.UUID) (*GameSessionActor, error) {
 	s.mu.RLock()
 	defer s.mu.RUnlock()
 
-	session, exists := s.gameSessions[sessionID]
+	session, exists := s.sessions[sessionID]
 	if !exists {
 		return nil, errors.New("game session not found")
 	}
 
 	return session, nil
+}
+
+func (s *ActorSystem) StopGameSession(sessionID uuid.UUID) error {
+	s.mu.Lock()
+	defer s.mu.Lock()
+
+	session, exists := s.sessions[sessionID]
+	if !exists {
+		return errors.New("game session not found")
+	}
+
+	session.Stop()
+	delete(s.sessions, sessionID)
+
+	return nil
 }

@@ -47,6 +47,14 @@ func NewSimpleWiresModule() *SimpleWiresModule {
 	}
 }
 
+func (m *SimpleWiresModule) GetModuleID() uuid.UUID {
+	return m.ModuleID
+}
+
+func (m *SimpleWiresModule) GetType() valueobject.ModuleType {
+	return valueobject.SIMPLE_WIRES
+}
+
 func (m *SimpleWiresModule) SetState(state SimpleWiresState) {
 	m.State = state
 }

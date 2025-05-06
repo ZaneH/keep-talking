@@ -1,20 +1,32 @@
 package actors_test
 
 import (
-	"context"
 	"testing"
+	"time"
 
 	"github.com/ZaneH/keep-talking/internal/actors"
 	"github.com/ZaneH/keep-talking/internal/application/command"
 	"github.com/ZaneH/keep-talking/internal/domain/entities"
 	"github.com/ZaneH/keep-talking/internal/domain/valueobject"
 	"github.com/google/uuid"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestSimpleWiresModuleActor_SolveBasic(t *testing.T) {
 	// Arrange
 	wireModule := actors.NewSimpleWiresModuleActor()
+	wireModule.Start() // Start the actor to process messages
+	defer wireModule.Stop()
 
+	// We need to cast to get access to the module for test setup
+	var specifiedModule *entities.SimpleWiresModule
+	if module, ok := wireModule.GetModule().(*entities.SimpleWiresModule); ok {
+		specifiedModule = module
+	} else {
+		t.Fatal("Could not cast to SimpleWiresModule")
+	}
+
+	// Set up test state
 	testState := entities.SimpleWiresState{
 		Wires: []valueobject.SimpleWire{
 			{
@@ -37,10 +49,17 @@ func TestSimpleWiresModuleActor_SolveBasic(t *testing.T) {
 		SolutionIndices: []int{0, 3},
 	}
 
-	if specifiedModule, ok := wireModule.GetModule().(*entities.SimpleWiresModule); ok {
-		specifiedModule.SetState(testState)
+	specifiedModule.SetState(testState)
+
+	// Session properties - fixed for all tests
+	sessionID := uuid.New()
+	modulePosition := valueobject.ModulePosition{
+		Row:    0,
+		Column: 0,
+		Face:   valueobject.Front,
 	}
 
+	// Define test actions
 	actions := []struct {
 		desc      string
 		wireIndex int
@@ -73,38 +92,51 @@ func TestSimpleWiresModuleActor_SolveBasic(t *testing.T) {
 		},
 	}
 
+	// Execute test actions
 	for i, action := range actions {
-		cmd := &command.SimpleWiresInputCommand{
-			BaseModuleInputCommand: command.BaseModuleInputCommand{
-				SessionID: uuid.New(),
-				ModulePosition: valueobject.ModulePosition{
-					Row:    0,
-					Column: 0,
-					Face:   valueobject.Front,
+		t.Run(action.desc, func(t *testing.T) {
+			cmd := &command.SimpleWiresInputCommand{
+				BaseModuleInputCommand: command.BaseModuleInputCommand{
+					SessionID:      sessionID,
+					ModulePosition: modulePosition,
 				},
-			},
-			WireIndex: action.wireIndex,
-		}
-
-		// Act
-		result, err := wireModule.ProcessCommand(context.Background(), cmd)
-		res := result.(*command.SimpleWiresInputCommandResult)
-
-		// Assert
-		if res.Solved != action.solved {
-			t.Fatalf("Step %d: expected solved to be %v, got %v", i+1, action.solved, res.Solved)
-		}
-
-		if res.Strike != action.strike {
-			t.Fatalf("Step %d: expected strike to be %v, got %v", i+1, action.strike, res.Strike)
-		}
-
-		if action.strike {
-			if err == nil {
-				t.Fatalf("Step %d: expected an error, got nil", i+1)
+				WireIndex: action.wireIndex,
 			}
-		}
+
+			respChan := make(chan actors.Response, 1)
+
+			wireModule.Send(actors.ModuleCommandMessage{
+				Command:         cmd,
+				ResponseChannel: respChan,
+			})
+
+			var resp actors.Response
+			select {
+			case resp = <-respChan:
+			case <-time.After(1 * time.Second):
+				t.Fatalf("Step %d: timeout waiting for response", i+1)
+			}
+
+			if action.strike {
+				assert.False(t, resp.IsSuccess(), "Step %d: expected error response for incorrect wire", i+1)
+			} else {
+				assert.True(t, resp.IsSuccess(), "Step %d: expected success response for correct wire", i+1)
+			}
+
+			if resp.IsSuccess() {
+				successResp, ok := resp.(actors.SuccessResponse)
+				assert.True(t, ok, "Expected SuccessResponse type")
+
+				result, ok := successResp.Data.(*command.SimpleWiresInputCommandResult)
+				assert.True(t, ok, "Expected SimpleWiresInputCommandResult type")
+
+				assert.Equal(t, action.solved, result.Solved, "Step %d: solved state mismatch", i+1)
+				assert.Equal(t, action.strike, result.Strike, "Step %d: strike state mismatch", i+1)
+			}
+		})
 	}
 
-	t.Logf("Final state: %s", wireModule.GetModule())
+	// Verify final state
+	assert.True(t, specifiedModule.IsSolved(), "Module should be solved at the end of the test")
+	t.Logf("Final state: %s", specifiedModule)
 }

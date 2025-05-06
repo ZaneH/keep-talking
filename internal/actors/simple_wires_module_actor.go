@@ -1,45 +1,70 @@
 package actors
 
 import (
-	"context"
 	"errors"
 
 	"github.com/ZaneH/keep-talking/internal/application/command"
-	"github.com/ZaneH/keep-talking/internal/application/common"
 	"github.com/ZaneH/keep-talking/internal/domain/entities"
-	"github.com/google/uuid"
 )
 
 type SimpleWiresModuleActor struct {
-	module *entities.SimpleWiresModule
+	BaseModuleActor
 }
 
 func NewSimpleWiresModuleActor() *SimpleWiresModuleActor {
 	module := entities.NewSimpleWiresModule()
-	return &SimpleWiresModuleActor{
-		module: module,
+	actor := &SimpleWiresModuleActor{
+		BaseModuleActor: NewBaseModuleActor(module, 50),
+	}
+
+	actor.SetMessageHandler(actor.handleMessage)
+
+	return actor
+}
+
+func (a *SimpleWiresModuleActor) handleMessage(msg Message) {
+	switch m := msg.(type) {
+	case ModuleCommandMessage:
+		a.handleModuleCommand(m)
+	default:
+		a.BaseModuleActor.handleMessage(msg)
 	}
 }
 
-func (a *SimpleWiresModuleActor) GetModuleID() uuid.UUID {
-	return a.module.ModuleID
-}
+func (a *SimpleWiresModuleActor) handleModuleCommand(msg ModuleCommandMessage) {
+	cmd := msg.Command
 
-func (a *SimpleWiresModuleActor) GetModule() common.Module {
-	return a.module
-}
-
-func (a *SimpleWiresModuleActor) ProcessCommand(ctx context.Context, cmd interface{}) (interface{}, error) {
-	switch cmd := cmd.(type) {
+	switch typedCmd := cmd.(type) {
 	case *command.SimpleWiresInputCommand:
-		err := a.module.CutWire(cmd.WireIndex)
-		return &command.SimpleWiresInputCommandResult{
+		wiresModule, ok := a.module.(*entities.SimpleWiresModule)
+		if !ok {
+			msg.GetResponseChannel() <- ErrorResponse{
+				Err: errors.New("invalid module type"),
+			}
+			return
+		}
+
+		err := wiresModule.CutWire(typedCmd.WireIndex)
+		result := &command.SimpleWiresInputCommandResult{
 			BaseModuleInputCommandResult: command.BaseModuleInputCommandResult{
 				Solved: a.module.IsSolved(),
 				Strike: err != nil,
 			},
-		}, err
+		}
+
+		if err != nil {
+			msg.ResponseChannel <- ErrorResponse{
+				Err: err,
+			}
+		} else {
+			msg.ResponseChannel <- SuccessResponse{
+				Data: result,
+			}
+		}
+
 	default:
-		return nil, errors.New("unsupported command for simple wires module")
+		msg.ResponseChannel <- ErrorResponse{
+			Err: errors.New("unsupported command type for simple wires module"),
+		}
 	}
 }
