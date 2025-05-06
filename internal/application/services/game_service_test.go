@@ -40,6 +40,7 @@ func TestGameService_ProcessModuleInput(t *testing.T) {
 	}
 
 	wireModule := testutils.NewTestSimpleWireModule(t)
+
 	sessionActor, err := gameService.GetGameSession(context.Background(), session.GetSessionID())
 	if err != nil {
 		t.Fatalf("failed to get game session actor")

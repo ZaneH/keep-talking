@@ -20,9 +20,9 @@ type PasswordModule struct {
 	state    PasswordModuleState
 }
 
-func NewPasswordModule(moduleId uuid.UUID, solution string) *PasswordModule {
+func NewPasswordModule(solution string) *PasswordModule {
 	return &PasswordModule{
-		ModuleID: moduleId,
+		ModuleID: uuid.New(),
 		state: PasswordModuleState{
 			Letters:   generateLetters(),
 			Positions: [5]int{0, 0, 0, 0, 0},

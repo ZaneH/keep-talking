@@ -32,14 +32,14 @@ func (a *SimpleWiresModuleActor) ProcessCommand(ctx context.Context, cmd interfa
 	case *command.SimpleWiresInputCommand:
 		err := a.module.CutWire(cmd.WireIndex)
 		if err != nil {
-			return nil, err
+			return &command.SimpleWiresInputCommandResult{
+				Solved: a.module.State.IsSolved,
+				Strike: true,
+			}, err
 		}
-
-		// TODO: Find a better spot to place this
-		// if a.module.IsSolved() {
-		// 	a.module.State.IsSolved = true
-		// }
 	}
 
-	return nil, nil
+	return &command.SimpleWiresInputCommandResult{
+		Solved: a.module.State.IsSolved,
+	}, nil
 }
