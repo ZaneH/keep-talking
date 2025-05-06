@@ -44,7 +44,7 @@ func (s *GameServiceAdapter) SendInput(ctx context.Context, i *pb.PlayerInput) (
 
 	switch input := i.GetInput().(type) {
 	case *pb.PlayerInput_SimpleWiresInput:
-		cmd = &command.SimpleWireInputCommand{
+		cmd = &command.SimpleWiresInputCommand{
 			BaseModuleInputCommand: command.BaseModuleInputCommand{
 				SessionID:      sessionID,
 				ModulePosition: position,
@@ -76,12 +76,12 @@ func (s *GameServiceAdapter) SendInput(ctx context.Context, i *pb.PlayerInput) (
 		return nil, fmt.Errorf("unknown input type: %T", input)
 	}
 
-	result, err := s.gameService.ProcessModuleInput(ctx, cmd)
+	res, err := s.gameService.ProcessModuleInput(ctx, cmd)
 	if err != nil {
 		return nil, fmt.Errorf("failed to process input: %v", err)
 	}
 
-	fmt.Println("result:", result)
+	fmt.Printf("Processed input for session %s: %v\n", sessionID, res)
 
 	return &pb.PlayerInputResult{
 		ModuleId: "module-interacted-with",

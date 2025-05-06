@@ -39,7 +39,7 @@ func (g *GameSessionActor) GetSessionID() uuid.UUID {
 	return g.session.SessionID
 }
 
-func (g *GameSessionActor) ProcessCommand(ctx context.Context, cmd command.ModuleInputCommand) (interface{}, error) {
+func (g *GameSessionActor) ProcessModuleCommand(ctx context.Context, cmd command.ModuleInputCommand) (interface{}, error) {
 	g.mu.Lock()
 	defer g.mu.Unlock()
 

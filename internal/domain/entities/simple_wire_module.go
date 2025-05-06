@@ -3,41 +3,50 @@ package entities
 import (
 	"errors"
 
+	"github.com/ZaneH/keep-talking/internal/application/common"
 	"github.com/ZaneH/keep-talking/internal/domain/valueobject"
 	"github.com/google/uuid"
 )
 
-type SimpleWireModule struct {
-	ModuleID        uuid.UUID
+type SimpleWiresState struct {
+	common.ModuleState
 	SolutionIndices []int
 	Wires           []valueobject.SimpleWire
 }
 
-func NewSimpleWireModule(wires []valueobject.SimpleWire, solutionIndices []int) *SimpleWireModule {
-	return &SimpleWireModule{
-		SolutionIndices: solutionIndices,
-		Wires:           wires,
+type SimpleWiresModule struct {
+	ModuleID uuid.UUID
+	State    SimpleWiresState
+}
+
+func NewSimpleWiresModule(wires []valueobject.SimpleWire, solutionIndices []int) *SimpleWiresModule {
+	return &SimpleWiresModule{
+		ModuleID: uuid.New(),
+		State: SimpleWiresState{
+			Wires:           wires,
+			SolutionIndices: solutionIndices,
+		},
 	}
 }
 
-func (m *SimpleWireModule) IsSolved() bool {
-	for _, index := range m.SolutionIndices {
-		if index < 0 || index >= len(m.Wires) {
+func (m *SimpleWiresModule) IsSolved() bool {
+	for _, index := range m.State.SolutionIndices {
+		if index < 0 || index >= len(m.State.Wires) {
 			return false
 		}
-		if !m.Wires[index].IsCut {
+		if !m.State.Wires[index].IsCut {
 			return false
 		}
 	}
 	return true
 }
 
-func (m *SimpleWireModule) CutWire(wireIndex int) (bool, error) {
-	wire := &m.Wires[wireIndex]
+func (m *SimpleWiresModule) CutWire(wireIndex int) error {
+	wire := &m.State.Wires[wireIndex]
 	if wire.IsCut {
-		return false, errors.New("wire already cut")
+		return errors.New("wire already cut")
 	}
 
 	wire.IsCut = true
-	return true, nil
+	return nil
 }

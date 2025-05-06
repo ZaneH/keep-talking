@@ -19,7 +19,7 @@ func NewPasswordModuleActor(module *entities.PasswordModule) *PasswordModuleActo
 	}
 }
 
-func (a *PasswordModuleActor) ProcessCommand(ctx context.Context, cmd command.ModuleInputCommand) error {
+func (a *PasswordModuleActor) ProcessCommand(ctx context.Context, cmd command.ModuleInputCommand) (interface{}, error) {
 	switch c := cmd.(type) {
 	case *command.PasswordLetterChangeCommand:
 		if c.Direction == valueobject.Increment {
@@ -28,8 +28,8 @@ func (a *PasswordModuleActor) ProcessCommand(ctx context.Context, cmd command.Mo
 	case *command.PasswordSubmitCommand:
 		a.module.CheckPassword()
 	default:
-		return errors.New("unsupported command for password module")
+		return nil, errors.New("unsupported command for password module")
 	}
 
-	return nil
+	return nil, nil
 }

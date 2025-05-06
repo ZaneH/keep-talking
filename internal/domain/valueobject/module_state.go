@@ -10,7 +10,7 @@ const (
 )
 
 type ModuleState struct {
-	ModuleId       uuid.UUID
+	ModuleID       uuid.UUID
 	ModuleType     ModuleType
 	ModulePosition ModulePosition
 	Solved         bool

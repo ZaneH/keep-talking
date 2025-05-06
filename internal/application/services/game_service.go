@@ -46,11 +46,11 @@ func (s *GameService) ProcessModuleInput(ctx context.Context, cmd command.Module
 		return nil, errors.New("game session not found")
 	}
 
-	result, err := sessionActor.ProcessCommand(ctx, cmd)
+	res, err := sessionActor.ProcessModuleCommand(ctx, cmd)
 	if err != nil {
 		log.Printf("error processing command: %v", err)
 		return nil, errors.New("failed to process command")
 	}
 
-	return result, nil
+	return res, err
 }

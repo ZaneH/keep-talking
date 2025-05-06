@@ -7,11 +7,11 @@ import (
 	"github.com/ZaneH/keep-talking/internal/domain/factories"
 )
 
-func NewTestSimpleWireModule(t *testing.T) *actors.SimpleWireModuleActor {
+func NewTestSimpleWireModule(t *testing.T) *actors.SimpleWiresModuleActor {
 	t.Helper()
 
 	factory := factories.NewModuleFactory()
-	module := factory.CreateSimpleWireModule(&factories.SimpleWireModuleConfig{
+	module := factory.CreateSimpleWiresModule(&factories.SimpleWiresModuleConfig{
 		WireCount:       3,
 		SolutionIndices: []int{1},
 	})

@@ -51,7 +51,7 @@ func TestGameService_ProcessModuleInput(t *testing.T) {
 		Face:   valueobject.Front,
 	})
 
-	cmd := &command.SimpleWireInputCommand{
+	cmd := &command.SimpleWiresInputCommand{
 		BaseModuleInputCommand: command.BaseModuleInputCommand{
 			SessionID: session.GetSessionID(),
 			ModulePosition: valueobject.ModulePosition{
@@ -64,13 +64,13 @@ func TestGameService_ProcessModuleInput(t *testing.T) {
 	}
 
 	// Act
-	result, err := gameService.ProcessModuleInput(context.Background(), cmd)
+	res, err := gameService.ProcessModuleInput(context.Background(), cmd)
 
 	// Assert
 	if err != nil {
 		t.Fatalf("expected no error, got %v", err)
 	}
-	if result == nil {
+	if res == nil {
 		t.Fatal("expected a result, got nil")
 	}
 }

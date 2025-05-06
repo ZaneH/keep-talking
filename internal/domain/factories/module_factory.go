@@ -13,9 +13,9 @@ func NewModuleFactory() *ModuleFactory {
 	return &ModuleFactory{}
 }
 
-func (mf *ModuleFactory) CreateSimpleWireModule(config *SimpleWireModuleConfig) *entities.SimpleWireModule {
+func (mf *ModuleFactory) CreateSimpleWiresModule(config *SimpleWiresModuleConfig) *entities.SimpleWiresModule {
 	if config == nil {
-		config = &SimpleWireModuleConfig{
+		config = &SimpleWiresModuleConfig{
 			WireCount: 4,
 			// TODO: Implement a better way to determine solution indices
 			SolutionIndices: []int{2},
@@ -31,18 +31,18 @@ func (mf *ModuleFactory) CreateSimpleWireModule(config *SimpleWireModuleConfig) 
 		}
 	}
 
-	return entities.NewSimpleWireModule(wires, config.SolutionIndices)
+	return entities.NewSimpleWiresModule(wires, config.SolutionIndices)
 }
 
 func (f *ModuleFactory) CreatePasswordModule() *entities.PasswordModule {
-	moduleId := uuid.New()
+	moduleID := uuid.New()
 	// TODO: Implement a real password logic
 	solution := "password123"
 
-	return entities.NewPasswordModule(moduleId, solution)
+	return entities.NewPasswordModule(moduleID, solution)
 }
 
-type SimpleWireModuleConfig struct {
+type SimpleWiresModuleConfig struct {
 	WireCount       int
 	SolutionIndices []int
 }
