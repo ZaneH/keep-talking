@@ -10,7 +10,7 @@ type BombConfig struct {
 	ModuleTypes       map[ModuleType]float32 // Module type to probability mapping
 	MinBatteries      int
 	MaxBatteries      int
-	IndicatorCount    int
+	MaxIndicatorCount int
 	PortCount         int
 }
 
@@ -24,9 +24,9 @@ func NewDefaultBombConfig() BombConfig {
 			SimpleWires: 0.24,
 			Password:    0.1,
 		},
-		MinBatteries:   1,
-		MaxBatteries:   4,
-		IndicatorCount: 2,
-		PortCount:      3,
+		MinBatteries:      1,
+		MaxBatteries:      4,
+		MaxIndicatorCount: 2,
+		PortCount:         3,
 	}
 }

@@ -36,7 +36,7 @@ func NewBomb(config valueobject.BombConfig) *Bomb {
 		MaxStrikes:    config.MaxStrikes,
 		Faces:         make(map[int]*BombFace),
 		Modules:       make(map[uuid.UUID]Module),
-		Indicators:    generateRandomIndicators(),
+		Indicators:    generateRandomIndicators(config.MaxIndicatorCount),
 		Batteries:     generateRandomBatteryCount(config.MinBatteries, config.MaxBatteries),
 		Ports:         generateRandomPorts(config.PortCount),
 	}
@@ -71,16 +71,16 @@ func generateSerialNumber() string {
 	return sb.String()
 }
 
-func generateRandomIndicators() []valueobject.Indicator {
+func generateRandomIndicators(count int) []valueobject.Indicator {
 	options := valueobject.AVAILABLE_INDICATOR_LABELS
-	var indicators []valueobject.Indicator
+	indicators := make([]valueobject.Indicator, 0, count)
+	if count == 0 {
+		return indicators
+	}
 
-	for range 5 {
-		// Will result in 2.5 indicators on average
-		if rand.Intn(2) == 1 {
-			continue
-		}
+	count = rand.Intn(count + 1)
 
+	for range count {
 		lit := rand.Intn(2) == 1
 		randIdx := rand.Intn(len(words))
 		indicators = append(indicators, valueobject.Indicator{
@@ -93,12 +93,15 @@ func generateRandomIndicators() []valueobject.Indicator {
 }
 
 func generateRandomBatteryCount(minBatteries int, maxBatteries int) int {
+	if minBatteries == maxBatteries {
+		return minBatteries
+	}
 	return rand.Intn(maxBatteries-minBatteries) + minBatteries
 }
 
 func generateRandomPorts(count int) []valueobject.Port {
 	options := valueobject.AVAILABLE_PORTS
-	var ports []valueobject.Port
+	ports := make([]valueobject.Port, 0, count)
 
 	for range count {
 		randIdx := rand.Intn(len(options))
