@@ -7,9 +7,9 @@ import (
 	"github.com/ZaneH/keep-talking/internal/domain/valueobject"
 )
 
-type BombFactory struct{}
+type BombFactoryImpl struct{}
 
-func (f *BombFactory) CreateBomb(config valueobject.BombConfig) *entities.Bomb {
+func (f *BombFactoryImpl) CreateBomb(config valueobject.BombConfig) *entities.Bomb {
 	bomb := entities.NewBomb(config)
 
 	totalModules := config.NumFaces * config.MaxModulesPerFace
@@ -35,7 +35,7 @@ func (f *BombFactory) CreateBomb(config valueobject.BombConfig) *entities.Bomb {
 	return bomb
 }
 
-func (f *BombFactory) placeModulesOnBomb(bomb *entities.Bomb, moduleTypes []valueobject.ModuleType, config valueobject.BombConfig) {
+func (f *BombFactoryImpl) placeModulesOnBomb(bomb *entities.Bomb, moduleTypes []valueobject.ModuleType, config valueobject.BombConfig) {
 	availablePositions := make([]struct {
 		face     int
 		position valueobject.ModulePosition
@@ -68,7 +68,7 @@ func (f *BombFactory) placeModulesOnBomb(bomb *entities.Bomb, moduleTypes []valu
 	}
 }
 
-func (f *BombFactory) createModule(moduleType valueobject.ModuleType) entities.Module {
+func (f *BombFactoryImpl) createModule(moduleType valueobject.ModuleType) entities.Module {
 	switch moduleType {
 	case valueobject.SIMPLE_WIRES:
 		return entities.NewSimpleWiresModule()

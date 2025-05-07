@@ -19,11 +19,16 @@ type GameSessionActor struct {
 
 func NewGameSessionActor(sessionID uuid.UUID, config valueobject.GameConfig) *GameSessionActor {
 	actor := &GameSessionActor{
-		BaseActor: NewBaseActor(100),
-		session:   entities.NewGameSession(sessionID, config),
+		BaseActor:  NewBaseActor(100),
+		bombActors: make(map[uuid.UUID]BombActor),
+		session:    entities.NewGameSession(sessionID, config),
 	}
 
 	return actor
+}
+
+func (g *GameSessionActor) GetBombs() map[uuid.UUID]BombActor {
+	return g.bombActors
 }
 
 func (g *GameSessionActor) Start() {
@@ -62,16 +67,27 @@ func (g *GameSessionActor) processMessages() {
 func (g *GameSessionActor) handleMessage(msg Message) {
 	switch m := msg.(type) {
 	case ModuleCommandMessage:
+		log.Printf("Handled")
 		g.handleModuleCommand(m)
+	case AddBombMessage:
+		g.handleAddBombCommand(m)
 	default:
+		log.Printf("received unhandled message type: %T", msg)
 		if m, ok := msg.(RequestMessage); ok {
 			m.GetResponseChannel() <- ErrorResponse{
 				Err: errors.New("unsupported message type"),
 			}
-		} else {
-			log.Printf("received unhandled message type: %T", msg)
 		}
 	}
+}
+
+func (g *GameSessionActor) handleAddBombCommand(msg AddBombMessage) {
+	bomb := msg.Bomb
+
+	bombActor := NewBombActor(bomb)
+	g.bombActors[bomb.ID] = *bombActor
+
+	msg.ResponseChannel <- &SuccessResponse{Data: bomb.ID}
 }
 
 func (g *GameSessionActor) handleModuleCommand(msg ModuleCommandMessage) {

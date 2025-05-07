@@ -21,49 +21,49 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-type ModuleState_ModuleType int32
+type Module_ModuleType int32
 
 const (
-	ModuleState_SIMPLE_WIRES ModuleState_ModuleType = 0
-	ModuleState_PASSWORD     ModuleState_ModuleType = 1
+	Module_SIMPLE_WIRES Module_ModuleType = 0
+	Module_PASSWORD     Module_ModuleType = 1
 )
 
-// Enum value maps for ModuleState_ModuleType.
+// Enum value maps for Module_ModuleType.
 var (
-	ModuleState_ModuleType_name = map[int32]string{
+	Module_ModuleType_name = map[int32]string{
 		0: "SIMPLE_WIRES",
 		1: "PASSWORD",
 	}
-	ModuleState_ModuleType_value = map[string]int32{
+	Module_ModuleType_value = map[string]int32{
 		"SIMPLE_WIRES": 0,
 		"PASSWORD":     1,
 	}
 )
 
-func (x ModuleState_ModuleType) Enum() *ModuleState_ModuleType {
-	p := new(ModuleState_ModuleType)
+func (x Module_ModuleType) Enum() *Module_ModuleType {
+	p := new(Module_ModuleType)
 	*p = x
 	return p
 }
 
-func (x ModuleState_ModuleType) String() string {
+func (x Module_ModuleType) String() string {
 	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
 }
 
-func (ModuleState_ModuleType) Descriptor() protoreflect.EnumDescriptor {
+func (Module_ModuleType) Descriptor() protoreflect.EnumDescriptor {
 	return file_proto_modules_proto_enumTypes[0].Descriptor()
 }
 
-func (ModuleState_ModuleType) Type() protoreflect.EnumType {
+func (Module_ModuleType) Type() protoreflect.EnumType {
 	return &file_proto_modules_proto_enumTypes[0]
 }
 
-func (x ModuleState_ModuleType) Number() protoreflect.EnumNumber {
+func (x Module_ModuleType) Number() protoreflect.EnumNumber {
 	return protoreflect.EnumNumber(x)
 }
 
-// Deprecated: Use ModuleState_ModuleType.Descriptor instead.
-func (ModuleState_ModuleType) EnumDescriptor() ([]byte, []int) {
+// Deprecated: Use Module_ModuleType.Descriptor instead.
+func (Module_ModuleType) EnumDescriptor() ([]byte, []int) {
 	return file_proto_modules_proto_rawDescGZIP(), []int{1, 0}
 }
 
@@ -127,30 +127,30 @@ func (x *ModulePosition) GetCol() int32 {
 	return 0
 }
 
-type ModuleState struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	ModuleId      string                 `protobuf:"bytes,1,opt,name=module_id,json=moduleId,proto3" json:"module_id,omitempty"`
-	Type          ModuleState_ModuleType `protobuf:"varint,2,opt,name=type,proto3,enum=modules.ModuleState_ModuleType" json:"type,omitempty"`
-	Position      *ModulePosition        `protobuf:"bytes,3,opt,name=position,proto3" json:"position,omitempty"`
-	Solved        bool                   `protobuf:"varint,4,opt,name=solved,proto3" json:"solved,omitempty"`
+type Module struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	Id    string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Type  Module_ModuleType      `protobuf:"varint,2,opt,name=type,proto3,enum=modules.Module_ModuleType" json:"type,omitempty"`
+	// ModulePosition position = 3;
+	Solved        bool `protobuf:"varint,4,opt,name=solved,proto3" json:"solved,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *ModuleState) Reset() {
-	*x = ModuleState{}
+func (x *Module) Reset() {
+	*x = Module{}
 	mi := &file_proto_modules_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *ModuleState) String() string {
+func (x *Module) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*ModuleState) ProtoMessage() {}
+func (*Module) ProtoMessage() {}
 
-func (x *ModuleState) ProtoReflect() protoreflect.Message {
+func (x *Module) ProtoReflect() protoreflect.Message {
 	mi := &file_proto_modules_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -162,33 +162,26 @@ func (x *ModuleState) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use ModuleState.ProtoReflect.Descriptor instead.
-func (*ModuleState) Descriptor() ([]byte, []int) {
+// Deprecated: Use Module.ProtoReflect.Descriptor instead.
+func (*Module) Descriptor() ([]byte, []int) {
 	return file_proto_modules_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *ModuleState) GetModuleId() string {
+func (x *Module) GetId() string {
 	if x != nil {
-		return x.ModuleId
+		return x.Id
 	}
 	return ""
 }
 
-func (x *ModuleState) GetType() ModuleState_ModuleType {
+func (x *Module) GetType() Module_ModuleType {
 	if x != nil {
 		return x.Type
 	}
-	return ModuleState_SIMPLE_WIRES
+	return Module_SIMPLE_WIRES
 }
 
-func (x *ModuleState) GetPosition() *ModulePosition {
-	if x != nil {
-		return x.Position
-	}
-	return nil
-}
-
-func (x *ModuleState) GetSolved() bool {
+func (x *Module) GetSolved() bool {
 	if x != nil {
 		return x.Solved
 	}
@@ -203,11 +196,10 @@ const file_proto_modules_proto_rawDesc = "" +
 	"\x0eModulePosition\x12\x12\n" +
 	"\x04face\x18\x01 \x01(\x05R\x04face\x12\x10\n" +
 	"\x03row\x18\x02 \x01(\x05R\x03row\x12\x10\n" +
-	"\x03col\x18\x03 \x01(\x05R\x03col\"\xda\x01\n" +
-	"\vModuleState\x12\x1b\n" +
-	"\tmodule_id\x18\x01 \x01(\tR\bmoduleId\x123\n" +
-	"\x04type\x18\x02 \x01(\x0e2\x1f.modules.ModuleState.ModuleTypeR\x04type\x123\n" +
-	"\bposition\x18\x03 \x01(\v2\x17.modules.ModulePositionR\bposition\x12\x16\n" +
+	"\x03col\x18\x03 \x01(\x05R\x03col\"\x8e\x01\n" +
+	"\x06Module\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12.\n" +
+	"\x04type\x18\x02 \x01(\x0e2\x1a.modules.Module.ModuleTypeR\x04type\x12\x16\n" +
 	"\x06solved\x18\x04 \x01(\bR\x06solved\",\n" +
 	"\n" +
 	"ModuleType\x12\x10\n" +
@@ -229,18 +221,17 @@ func file_proto_modules_proto_rawDescGZIP() []byte {
 var file_proto_modules_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
 var file_proto_modules_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
 var file_proto_modules_proto_goTypes = []any{
-	(ModuleState_ModuleType)(0), // 0: modules.ModuleState.ModuleType
-	(*ModulePosition)(nil),      // 1: modules.ModulePosition
-	(*ModuleState)(nil),         // 2: modules.ModuleState
+	(Module_ModuleType)(0), // 0: modules.Module.ModuleType
+	(*ModulePosition)(nil), // 1: modules.ModulePosition
+	(*Module)(nil),         // 2: modules.Module
 }
 var file_proto_modules_proto_depIdxs = []int32{
-	0, // 0: modules.ModuleState.type:type_name -> modules.ModuleState.ModuleType
-	1, // 1: modules.ModuleState.position:type_name -> modules.ModulePosition
-	2, // [2:2] is the sub-list for method output_type
-	2, // [2:2] is the sub-list for method input_type
-	2, // [2:2] is the sub-list for extension type_name
-	2, // [2:2] is the sub-list for extension extendee
-	0, // [0:2] is the sub-list for field type_name
+	0, // 0: modules.Module.type:type_name -> modules.Module.ModuleType
+	1, // [1:1] is the sub-list for method output_type
+	1, // [1:1] is the sub-list for method input_type
+	1, // [1:1] is the sub-list for extension type_name
+	1, // [1:1] is the sub-list for extension extendee
+	0, // [0:1] is the sub-list for field type_name
 }
 
 func init() { file_proto_modules_proto_init() }

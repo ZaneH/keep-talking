@@ -33,7 +33,7 @@ func (m ModuleCommandMessage) GetResponseChannel() chan Response {
 }
 
 type AddBombMessage struct {
-	Bomb            entities.Bomb
+	Bomb            *entities.Bomb
 	ResponseChannel chan Response
 }
 

@@ -40,6 +40,7 @@ func (s *GameServiceAdapter) CreateGame(ctx context.Context, req *pb.CreateGameR
 	}, nil
 }
 
+// TODO: Potentially remove/replace with GameConfig/BombConfig??
 func buildGameConfigFromRequest(req *pb.CreateGameRequest) valueobject.GameConfig {
 	config := valueobject.NewDefaultGameConfig()
 

@@ -9,13 +9,19 @@ import (
 
 	"github.com/ZaneH/keep-talking/internal/actors"
 	"github.com/ZaneH/keep-talking/internal/application/services"
+	domainServices "github.com/ZaneH/keep-talking/internal/domain/services"
+	"github.com/ZaneH/keep-talking/internal/infrastructure/adapters"
 	grpcServer "github.com/ZaneH/keep-talking/internal/infrastructure/grpc"
 	pb "github.com/ZaneH/keep-talking/internal/infrastructure/grpc/proto"
 )
 
 func main() {
 	actorSystem := actors.NewActorSystem()
-	gameService := services.NewGameService(actorSystem)
+	actorSystemAdapter := adapters.NewActorSystemAdapter(actorSystem)
+	bombFactory := &domainServices.BombFactoryImpl{}
+	bombService := services.NewBombService(actorSystemAdapter, bombFactory)
+
+	gameService := services.NewGameService(actorSystem, bombService)
 	grpcGameServiceServer := grpcServer.NewGameServiceAdapter(gameService)
 
 	lis, err := net.Listen("tcp", ":50051")

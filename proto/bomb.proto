@@ -1,0 +1,11 @@
+syntax = "proto3";
+package bomb;
+
+import "proto/modules.proto";
+
+option go_package = "./proto";
+
+message Bomb {
+  string id = 1;
+  repeated modules.Module modules = 2;
+}

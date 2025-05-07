@@ -279,7 +279,7 @@ var File_proto_player_proto protoreflect.FileDescriptor
 
 const file_proto_player_proto_rawDesc = "" +
 	"\n" +
-	"\x12proto/player.proto\x12\x06player\x1a\x1fproto/simple_wires_module.proto\x1a\x1bproto/password_module.proto\"\xc0\x01\n" +
+	"\x12proto/player.proto\x12\x06player\x1a\x1fproto/simple_wires_module.proto\x1a\x1bproto/password_module.proto\x1a\x10proto/bomb.proto\"\xc0\x01\n" +
 	"\x11CreateGameRequest\x12=\n" +
 	"\x18probability_simple_wires\x18\x01 \x01(\x02H\x00R\x16probabilitySimpleWires\x88\x01\x01\x126\n" +
 	"\x14probability_password\x18\x02 \x01(\x02H\x01R\x13probabilityPassword\x88\x01\x01B\x1b\n" +
@@ -339,6 +339,7 @@ func file_proto_player_proto_init() {
 	}
 	file_proto_simple_wires_module_proto_init()
 	file_proto_password_module_proto_init()
+	file_proto_bomb_proto_init()
 	file_proto_player_proto_msgTypes[0].OneofWrappers = []any{}
 	file_proto_player_proto_msgTypes[2].OneofWrappers = []any{
 		(*PlayerInput_SimpleWiresInput)(nil),

@@ -1,6 +1,7 @@
 package entities
 
 import (
+	"log"
 	"math/rand"
 	"strings"
 	"time"
@@ -32,6 +33,7 @@ func NewBomb(config valueobject.BombConfig) *Bomb {
 		StartingTime:  config.Timer,
 		StrikeCount:   0,
 		MaxStrikes:    config.MaxStrikes,
+		Faces:         make(map[int]*BombFace),
 		Modules:       make(map[uuid.UUID]Module),
 		Indicators:    generateRandomIndicators(),
 		Batteries:     generateRandomBatteryCount(config.MinBatteries, config.MaxBatteries),
@@ -50,6 +52,8 @@ func (b *Bomb) AddModule(module Module, faceIndex int, position valueobject.Modu
 	if err := face.AddModule(module, position); err != nil {
 		return err
 	}
+
+	log.Printf("adding module: %T", module)
 
 	b.Modules[module.GetModuleID()] = module
 	return nil

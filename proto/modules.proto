@@ -9,14 +9,14 @@ message ModulePosition {
   int32 col = 3;
 }
 
-message ModuleState {
+message Module {
   enum ModuleType {
     SIMPLE_WIRES = 0;
     PASSWORD = 1;
   }
 
-  string module_id = 1;
+  string id = 1;
   ModuleType type = 2;
-  ModulePosition position = 3;
+  // ModulePosition position = 3;
   bool solved = 4;
 }

@@ -8,15 +8,17 @@ import (
 
 	"github.com/ZaneH/keep-talking/internal/actors"
 	"github.com/ZaneH/keep-talking/internal/application/command"
+	"github.com/ZaneH/keep-talking/internal/domain/valueobject"
 	"github.com/google/uuid"
 )
 
 type GameService struct {
 	actorSystem *actors.ActorSystem
+	bombService *BombService
 }
 
-func NewGameService(actorSystem *actors.ActorSystem) *GameService {
-	return &GameService{actorSystem: actorSystem}
+func NewGameService(actorSystem *actors.ActorSystem, bombService *BombService) *GameService {
+	return &GameService{actorSystem: actorSystem, bombService: bombService}
 }
 
 func (s *GameService) CreateGameSession(ctx context.Context, cmd *command.CreateGameCommand) (*actors.GameSessionActor, error) {
@@ -25,6 +27,8 @@ func (s *GameService) CreateGameSession(ctx context.Context, cmd *command.Create
 		log.Printf("error creating game session: %v", err)
 		return nil, errors.New("failed to create game session")
 	}
+
+	s.bombService.CreateBombInSession(ctx, session.GetSessionID(), valueobject.NewDefaultBombConfig())
 
 	return session, nil
 }

@@ -32,7 +32,7 @@ func NewPasswordModule(providedSolution *string) *PasswordModule {
 	return &PasswordModule{
 		ModuleID: uuid.New(),
 		state: PasswordModuleState{
-			Letters:   generateLetters(&solution),
+			Letters:   generateLetters(solution),
 			Positions: [5]int{0, 0, 0, 0, 0},
 			solution:  solution,
 		},
@@ -113,18 +113,11 @@ func generateWord() string {
 	return words[randIdx]
 }
 
-func generateLetters(solution *string) [5][6]string {
-	var word string
-	if solution != nil {
-		word = *solution
-	} else {
-		word = generateWord()
-	}
-
+func generateLetters(solution string) [5][6]string {
 	var letters [5][6]string
 
-	for col := 0; col < len(word) && col < 5; col++ {
-		targetLetter := string(word[col])
+	for col := 0; col < len(solution) && col < 5; col++ {
+		targetLetter := string(solution[col])
 		targetPos := rand.Intn(6)
 
 		// Track used letters in this column
@@ -150,7 +143,7 @@ func generateLetters(solution *string) [5][6]string {
 	}
 
 	// Fill remaining columns with unique random letters
-	for col := len(word); col < 5; col++ {
+	for col := len(solution); col < 5; col++ {
 		usedLetters := make(map[string]bool)
 
 		for row := 0; row < 6; row++ {

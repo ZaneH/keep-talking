@@ -73,6 +73,42 @@ func (x *LetterChange) GetDirection() IncrementDecrement {
 	return IncrementDecrement_INCREMENT
 }
 
+type PasswordSubmit struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *PasswordSubmit) Reset() {
+	*x = PasswordSubmit{}
+	mi := &file_proto_password_module_proto_msgTypes[1]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PasswordSubmit) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PasswordSubmit) ProtoMessage() {}
+
+func (x *PasswordSubmit) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_password_module_proto_msgTypes[1]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PasswordSubmit.ProtoReflect.Descriptor instead.
+func (*PasswordSubmit) Descriptor() ([]byte, []int) {
+	return file_proto_password_module_proto_rawDescGZIP(), []int{1}
+}
+
 type PasswordInput struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Types that are valid to be assigned to Input:
@@ -86,7 +122,7 @@ type PasswordInput struct {
 
 func (x *PasswordInput) Reset() {
 	*x = PasswordInput{}
-	mi := &file_proto_password_module_proto_msgTypes[1]
+	mi := &file_proto_password_module_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -98,7 +134,7 @@ func (x *PasswordInput) String() string {
 func (*PasswordInput) ProtoMessage() {}
 
 func (x *PasswordInput) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_password_module_proto_msgTypes[1]
+	mi := &file_proto_password_module_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -111,7 +147,7 @@ func (x *PasswordInput) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PasswordInput.ProtoReflect.Descriptor instead.
 func (*PasswordInput) Descriptor() ([]byte, []int) {
-	return file_proto_password_module_proto_rawDescGZIP(), []int{1}
+	return file_proto_password_module_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *PasswordInput) GetInput() isPasswordInput_Input {
@@ -130,13 +166,13 @@ func (x *PasswordInput) GetLetterChange() *LetterChange {
 	return nil
 }
 
-func (x *PasswordInput) GetSubmit() bool {
+func (x *PasswordInput) GetSubmit() *PasswordSubmit {
 	if x != nil {
 		if x, ok := x.Input.(*PasswordInput_Submit); ok {
 			return x.Submit
 		}
 	}
-	return false
+	return nil
 }
 
 type isPasswordInput_Input interface {
@@ -148,7 +184,7 @@ type PasswordInput_LetterChange struct {
 }
 
 type PasswordInput_Submit struct {
-	Submit bool `protobuf:"varint,2,opt,name=submit,proto3,oneof"`
+	Submit *PasswordSubmit `protobuf:"bytes,2,opt,name=submit,proto3,oneof"`
 }
 
 func (*PasswordInput_LetterChange) isPasswordInput_Input() {}
@@ -162,10 +198,11 @@ const file_proto_password_module_proto_rawDesc = "" +
 	"\x1bproto/password_module.proto\x12\amodules\x1a\x12proto/common.proto\"k\n" +
 	"\fLetterChange\x12!\n" +
 	"\fletter_index\x18\x01 \x01(\x05R\vletterIndex\x128\n" +
-	"\tdirection\x18\x02 \x01(\x0e2\x1a.common.IncrementDecrementR\tdirection\"p\n" +
+	"\tdirection\x18\x02 \x01(\x0e2\x1a.common.IncrementDecrementR\tdirection\"\x10\n" +
+	"\x0ePasswordSubmit\"\x89\x01\n" +
 	"\rPasswordInput\x12<\n" +
-	"\rletter_change\x18\x01 \x01(\v2\x15.modules.LetterChangeH\x00R\fletterChange\x12\x18\n" +
-	"\x06submit\x18\x02 \x01(\bH\x00R\x06submitB\a\n" +
+	"\rletter_change\x18\x01 \x01(\v2\x15.modules.LetterChangeH\x00R\fletterChange\x121\n" +
+	"\x06submit\x18\x02 \x01(\v2\x17.modules.PasswordSubmitH\x00R\x06submitB\a\n" +
 	"\x05inputB\tZ\a./protob\x06proto3"
 
 var (
@@ -180,20 +217,22 @@ func file_proto_password_module_proto_rawDescGZIP() []byte {
 	return file_proto_password_module_proto_rawDescData
 }
 
-var file_proto_password_module_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_proto_password_module_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
 var file_proto_password_module_proto_goTypes = []any{
 	(*LetterChange)(nil),    // 0: modules.LetterChange
-	(*PasswordInput)(nil),   // 1: modules.PasswordInput
-	(IncrementDecrement)(0), // 2: common.IncrementDecrement
+	(*PasswordSubmit)(nil),  // 1: modules.PasswordSubmit
+	(*PasswordInput)(nil),   // 2: modules.PasswordInput
+	(IncrementDecrement)(0), // 3: common.IncrementDecrement
 }
 var file_proto_password_module_proto_depIdxs = []int32{
-	2, // 0: modules.LetterChange.direction:type_name -> common.IncrementDecrement
+	3, // 0: modules.LetterChange.direction:type_name -> common.IncrementDecrement
 	0, // 1: modules.PasswordInput.letter_change:type_name -> modules.LetterChange
-	2, // [2:2] is the sub-list for method output_type
-	2, // [2:2] is the sub-list for method input_type
-	2, // [2:2] is the sub-list for extension type_name
-	2, // [2:2] is the sub-list for extension extendee
-	0, // [0:2] is the sub-list for field type_name
+	1, // 2: modules.PasswordInput.submit:type_name -> modules.PasswordSubmit
+	3, // [3:3] is the sub-list for method output_type
+	3, // [3:3] is the sub-list for method input_type
+	3, // [3:3] is the sub-list for extension type_name
+	3, // [3:3] is the sub-list for extension extendee
+	0, // [0:3] is the sub-list for field type_name
 }
 
 func init() { file_proto_password_module_proto_init() }
@@ -202,7 +241,7 @@ func file_proto_password_module_proto_init() {
 		return
 	}
 	file_proto_common_proto_init()
-	file_proto_password_module_proto_msgTypes[1].OneofWrappers = []any{
+	file_proto_password_module_proto_msgTypes[2].OneofWrappers = []any{
 		(*PasswordInput_LetterChange)(nil),
 		(*PasswordInput_Submit)(nil),
 	}
@@ -212,7 +251,7 @@ func file_proto_password_module_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_password_module_proto_rawDesc), len(file_proto_password_module_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   2,
+			NumMessages:   3,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
