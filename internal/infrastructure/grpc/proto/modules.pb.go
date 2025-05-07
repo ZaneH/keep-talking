@@ -21,52 +21,6 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-type BombFace int32
-
-const (
-	BombFace_FRONT BombFace = 0
-	BombFace_BACK  BombFace = 1
-)
-
-// Enum value maps for BombFace.
-var (
-	BombFace_name = map[int32]string{
-		0: "FRONT",
-		1: "BACK",
-	}
-	BombFace_value = map[string]int32{
-		"FRONT": 0,
-		"BACK":  1,
-	}
-)
-
-func (x BombFace) Enum() *BombFace {
-	p := new(BombFace)
-	*p = x
-	return p
-}
-
-func (x BombFace) String() string {
-	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
-}
-
-func (BombFace) Descriptor() protoreflect.EnumDescriptor {
-	return file_proto_modules_proto_enumTypes[0].Descriptor()
-}
-
-func (BombFace) Type() protoreflect.EnumType {
-	return &file_proto_modules_proto_enumTypes[0]
-}
-
-func (x BombFace) Number() protoreflect.EnumNumber {
-	return protoreflect.EnumNumber(x)
-}
-
-// Deprecated: Use BombFace.Descriptor instead.
-func (BombFace) EnumDescriptor() ([]byte, []int) {
-	return file_proto_modules_proto_rawDescGZIP(), []int{0}
-}
-
 type ModuleState_ModuleType int32
 
 const (
@@ -97,11 +51,11 @@ func (x ModuleState_ModuleType) String() string {
 }
 
 func (ModuleState_ModuleType) Descriptor() protoreflect.EnumDescriptor {
-	return file_proto_modules_proto_enumTypes[1].Descriptor()
+	return file_proto_modules_proto_enumTypes[0].Descriptor()
 }
 
 func (ModuleState_ModuleType) Type() protoreflect.EnumType {
-	return &file_proto_modules_proto_enumTypes[1]
+	return &file_proto_modules_proto_enumTypes[0]
 }
 
 func (x ModuleState_ModuleType) Number() protoreflect.EnumNumber {
@@ -115,9 +69,9 @@ func (ModuleState_ModuleType) EnumDescriptor() ([]byte, []int) {
 
 type ModulePosition struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Face          BombFace               `protobuf:"varint,1,opt,name=face,proto3,enum=modules.BombFace" json:"face,omitempty"`
-	Row           int32                  `protobuf:"varint,2,opt,name=row,proto3" json:"row,omitempty"` // 0-indexed
-	Col           int32                  `protobuf:"varint,3,opt,name=col,proto3" json:"col,omitempty"` // 0-indexed
+	Face          int32                  `protobuf:"varint,1,opt,name=face,proto3" json:"face,omitempty"`
+	Row           int32                  `protobuf:"varint,2,opt,name=row,proto3" json:"row,omitempty"`
+	Col           int32                  `protobuf:"varint,3,opt,name=col,proto3" json:"col,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -152,11 +106,11 @@ func (*ModulePosition) Descriptor() ([]byte, []int) {
 	return file_proto_modules_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *ModulePosition) GetFace() BombFace {
+func (x *ModulePosition) GetFace() int32 {
 	if x != nil {
 		return x.Face
 	}
-	return BombFace_FRONT
+	return 0
 }
 
 func (x *ModulePosition) GetRow() int32 {
@@ -245,9 +199,9 @@ var File_proto_modules_proto protoreflect.FileDescriptor
 
 const file_proto_modules_proto_rawDesc = "" +
 	"\n" +
-	"\x13proto/modules.proto\x12\amodules\"[\n" +
-	"\x0eModulePosition\x12%\n" +
-	"\x04face\x18\x01 \x01(\x0e2\x11.modules.BombFaceR\x04face\x12\x10\n" +
+	"\x13proto/modules.proto\x12\amodules\"H\n" +
+	"\x0eModulePosition\x12\x12\n" +
+	"\x04face\x18\x01 \x01(\x05R\x04face\x12\x10\n" +
 	"\x03row\x18\x02 \x01(\x05R\x03row\x12\x10\n" +
 	"\x03col\x18\x03 \x01(\x05R\x03col\"\xda\x01\n" +
 	"\vModuleState\x12\x1b\n" +
@@ -258,10 +212,7 @@ const file_proto_modules_proto_rawDesc = "" +
 	"\n" +
 	"ModuleType\x12\x10\n" +
 	"\fSIMPLE_WIRES\x10\x00\x12\f\n" +
-	"\bPASSWORD\x10\x01*\x1f\n" +
-	"\bBombFace\x12\t\n" +
-	"\x05FRONT\x10\x00\x12\b\n" +
-	"\x04BACK\x10\x01B\tZ\a./protob\x06proto3"
+	"\bPASSWORD\x10\x01B\tZ\a./protob\x06proto3"
 
 var (
 	file_proto_modules_proto_rawDescOnce sync.Once
@@ -275,23 +226,21 @@ func file_proto_modules_proto_rawDescGZIP() []byte {
 	return file_proto_modules_proto_rawDescData
 }
 
-var file_proto_modules_proto_enumTypes = make([]protoimpl.EnumInfo, 2)
+var file_proto_modules_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
 var file_proto_modules_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
 var file_proto_modules_proto_goTypes = []any{
-	(BombFace)(0),               // 0: modules.BombFace
-	(ModuleState_ModuleType)(0), // 1: modules.ModuleState.ModuleType
-	(*ModulePosition)(nil),      // 2: modules.ModulePosition
-	(*ModuleState)(nil),         // 3: modules.ModuleState
+	(ModuleState_ModuleType)(0), // 0: modules.ModuleState.ModuleType
+	(*ModulePosition)(nil),      // 1: modules.ModulePosition
+	(*ModuleState)(nil),         // 2: modules.ModuleState
 }
 var file_proto_modules_proto_depIdxs = []int32{
-	0, // 0: modules.ModulePosition.face:type_name -> modules.BombFace
-	1, // 1: modules.ModuleState.type:type_name -> modules.ModuleState.ModuleType
-	2, // 2: modules.ModuleState.position:type_name -> modules.ModulePosition
-	3, // [3:3] is the sub-list for method output_type
-	3, // [3:3] is the sub-list for method input_type
-	3, // [3:3] is the sub-list for extension type_name
-	3, // [3:3] is the sub-list for extension extendee
-	0, // [0:3] is the sub-list for field type_name
+	0, // 0: modules.ModuleState.type:type_name -> modules.ModuleState.ModuleType
+	1, // 1: modules.ModuleState.position:type_name -> modules.ModulePosition
+	2, // [2:2] is the sub-list for method output_type
+	2, // [2:2] is the sub-list for method input_type
+	2, // [2:2] is the sub-list for extension type_name
+	2, // [2:2] is the sub-list for extension extendee
+	0, // [0:2] is the sub-list for field type_name
 }
 
 func init() { file_proto_modules_proto_init() }
@@ -304,7 +253,7 @@ func file_proto_modules_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_modules_proto_rawDesc), len(file_proto_modules_proto_rawDesc)),
-			NumEnums:      2,
+			NumEnums:      1,
 			NumMessages:   2,
 			NumExtensions: 0,
 			NumServices:   0,

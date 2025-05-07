@@ -118,9 +118,10 @@ func (x *CreateGameResponse) GetSessionId() string {
 }
 
 type PlayerInput struct {
-	state          protoimpl.MessageState `protogen:"open.v1"`
-	SessionId      string                 `protobuf:"bytes,1,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
-	ModulePosition *ModulePosition        `protobuf:"bytes,2,opt,name=module_position,json=modulePosition,proto3" json:"module_position,omitempty"`
+	state     protoimpl.MessageState `protogen:"open.v1"`
+	SessionId string                 `protobuf:"bytes,1,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
+	BombId    string                 `protobuf:"bytes,2,opt,name=bomb_id,json=bombId,proto3" json:"bomb_id,omitempty"`
+	ModuleId  string                 `protobuf:"bytes,3,opt,name=module_id,json=moduleId,proto3" json:"module_id,omitempty"`
 	// Types that are valid to be assigned to Input:
 	//
 	//	*PlayerInput_SimpleWiresInput
@@ -167,11 +168,18 @@ func (x *PlayerInput) GetSessionId() string {
 	return ""
 }
 
-func (x *PlayerInput) GetModulePosition() *ModulePosition {
+func (x *PlayerInput) GetBombId() string {
 	if x != nil {
-		return x.ModulePosition
+		return x.BombId
 	}
-	return nil
+	return ""
+}
+
+func (x *PlayerInput) GetModuleId() string {
+	if x != nil {
+		return x.ModuleId
+	}
+	return ""
 }
 
 func (x *PlayerInput) GetInput() isPlayerInput_Input {
@@ -204,11 +212,11 @@ type isPlayerInput_Input interface {
 }
 
 type PlayerInput_SimpleWiresInput struct {
-	SimpleWiresInput *SimpleWiresInput `protobuf:"bytes,3,opt,name=simple_wires_input,json=simpleWiresInput,proto3,oneof"`
+	SimpleWiresInput *SimpleWiresInput `protobuf:"bytes,10,opt,name=simple_wires_input,json=simpleWiresInput,proto3,oneof"`
 }
 
 type PlayerInput_PasswordInput struct {
-	PasswordInput *PasswordInput `protobuf:"bytes,4,opt,name=password_input,json=passwordInput,proto3,oneof"`
+	PasswordInput *PasswordInput `protobuf:"bytes,11,opt,name=password_input,json=passwordInput,proto3,oneof"`
 }
 
 func (*PlayerInput_SimpleWiresInput) isPlayerInput_Input() {}
@@ -271,7 +279,7 @@ var File_proto_player_proto protoreflect.FileDescriptor
 
 const file_proto_player_proto_rawDesc = "" +
 	"\n" +
-	"\x12proto/player.proto\x12\x06player\x1a\x13proto/modules.proto\x1a\x1fproto/simple_wires_module.proto\x1a\x1bproto/password_module.proto\"\xc0\x01\n" +
+	"\x12proto/player.proto\x12\x06player\x1a\x1fproto/simple_wires_module.proto\x1a\x1bproto/password_module.proto\"\xc0\x01\n" +
 	"\x11CreateGameRequest\x12=\n" +
 	"\x18probability_simple_wires\x18\x01 \x01(\x02H\x00R\x16probabilitySimpleWires\x88\x01\x01\x126\n" +
 	"\x14probability_password\x18\x02 \x01(\x02H\x01R\x13probabilityPassword\x88\x01\x01B\x1b\n" +
@@ -279,13 +287,15 @@ const file_proto_player_proto_rawDesc = "" +
 	"\x15_probability_password\"3\n" +
 	"\x12CreateGameResponse\x12\x1d\n" +
 	"\n" +
-	"session_id\x18\x01 \x01(\tR\tsessionId\"\x83\x02\n" +
+	"session_id\x18\x01 \x01(\tR\tsessionId\"\xf7\x01\n" +
 	"\vPlayerInput\x12\x1d\n" +
 	"\n" +
-	"session_id\x18\x01 \x01(\tR\tsessionId\x12@\n" +
-	"\x0fmodule_position\x18\x02 \x01(\v2\x17.modules.ModulePositionR\x0emodulePosition\x12I\n" +
-	"\x12simple_wires_input\x18\x03 \x01(\v2\x19.modules.SimpleWiresInputH\x00R\x10simpleWiresInput\x12?\n" +
-	"\x0epassword_input\x18\x04 \x01(\v2\x16.modules.PasswordInputH\x00R\rpasswordInputB\a\n" +
+	"session_id\x18\x01 \x01(\tR\tsessionId\x12\x17\n" +
+	"\abomb_id\x18\x02 \x01(\tR\x06bombId\x12\x1b\n" +
+	"\tmodule_id\x18\x03 \x01(\tR\bmoduleId\x12I\n" +
+	"\x12simple_wires_input\x18\n" +
+	" \x01(\v2\x19.modules.SimpleWiresInputH\x00R\x10simpleWiresInput\x12?\n" +
+	"\x0epassword_input\x18\v \x01(\v2\x16.modules.PasswordInputH\x00R\rpasswordInputB\a\n" +
 	"\x05input\"J\n" +
 	"\x11PlayerInputResult\x12\x1b\n" +
 	"\tmodule_id\x18\x01 \x01(\tR\bmoduleId\x12\x18\n" +
@@ -309,19 +319,17 @@ var file_proto_player_proto_goTypes = []any{
 	(*CreateGameResponse)(nil), // 1: player.CreateGameResponse
 	(*PlayerInput)(nil),        // 2: player.PlayerInput
 	(*PlayerInputResult)(nil),  // 3: player.PlayerInputResult
-	(*ModulePosition)(nil),     // 4: modules.ModulePosition
-	(*SimpleWiresInput)(nil),   // 5: modules.SimpleWiresInput
-	(*PasswordInput)(nil),      // 6: modules.PasswordInput
+	(*SimpleWiresInput)(nil),   // 4: modules.SimpleWiresInput
+	(*PasswordInput)(nil),      // 5: modules.PasswordInput
 }
 var file_proto_player_proto_depIdxs = []int32{
-	4, // 0: player.PlayerInput.module_position:type_name -> modules.ModulePosition
-	5, // 1: player.PlayerInput.simple_wires_input:type_name -> modules.SimpleWiresInput
-	6, // 2: player.PlayerInput.password_input:type_name -> modules.PasswordInput
-	3, // [3:3] is the sub-list for method output_type
-	3, // [3:3] is the sub-list for method input_type
-	3, // [3:3] is the sub-list for extension type_name
-	3, // [3:3] is the sub-list for extension extendee
-	0, // [0:3] is the sub-list for field type_name
+	4, // 0: player.PlayerInput.simple_wires_input:type_name -> modules.SimpleWiresInput
+	5, // 1: player.PlayerInput.password_input:type_name -> modules.PasswordInput
+	2, // [2:2] is the sub-list for method output_type
+	2, // [2:2] is the sub-list for method input_type
+	2, // [2:2] is the sub-list for extension type_name
+	2, // [2:2] is the sub-list for extension extendee
+	0, // [0:2] is the sub-list for field type_name
 }
 
 func init() { file_proto_player_proto_init() }
@@ -329,7 +337,6 @@ func file_proto_player_proto_init() {
 	if File_proto_player_proto != nil {
 		return
 	}
-	file_proto_modules_proto_init()
 	file_proto_simple_wires_module_proto_init()
 	file_proto_password_module_proto_init()
 	file_proto_player_proto_msgTypes[0].OneofWrappers = []any{}

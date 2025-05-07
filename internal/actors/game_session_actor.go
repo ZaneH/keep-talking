@@ -13,19 +13,16 @@ import (
 
 type GameSessionActor struct {
 	BaseActor
-	session           *entities.GameSession
-	modules           map[uuid.UUID]ModuleActor
-	modulesByPosition map[valueobject.ModulePosition]uuid.UUID
-	config            valueobject.GameConfig
+	session    *entities.GameSession
+	bombActors map[uuid.UUID]BombActor
+	config     valueobject.GameConfig
 }
 
 func NewGameSessionActor(sessionID uuid.UUID, config valueobject.GameConfig) *GameSessionActor {
 	actor := &GameSessionActor{
-		BaseActor:         NewBaseActor(100),
-		session:           entities.NewGameSession(sessionID),
-		modules:           make(map[uuid.UUID]ModuleActor),
-		modulesByPosition: make(map[valueobject.ModulePosition]uuid.UUID),
-		config:            config,
+		BaseActor: NewBaseActor(100),
+		session:   entities.NewGameSession(sessionID),
+		config:    config,
 	}
 
 	return actor
@@ -42,8 +39,8 @@ func (g *GameSessionActor) GetSessionID() uuid.UUID {
 func (g *GameSessionActor) String() string {
 	var sb strings.Builder
 	sb.WriteString(fmt.Sprintf("Session ID: %v\n", g.GetSessionID()))
-	for _, module := range g.modules {
-		sb.WriteString(fmt.Sprintf("%+v", module.GetModule()))
+	for _, actor := range g.bombActors {
+		sb.WriteString(fmt.Sprintf("%+v", actor))
 		sb.WriteString("\n")
 	}
 	return sb.String()
@@ -56,8 +53,8 @@ func (g *GameSessionActor) processMessages() {
 			g.handleMessage(msg)
 		case <-g.Done():
 			// Stop all module actors
-			for _, module := range g.modules {
-				module.Stop()
+			for _, actor := range g.bombActors {
+				actor.Stop()
 			}
 			return
 		}
@@ -66,10 +63,6 @@ func (g *GameSessionActor) processMessages() {
 
 func (g *GameSessionActor) handleMessage(msg Message) {
 	switch m := msg.(type) {
-	case AddModuleMessage:
-		g.handleAddModule(m)
-	case GetModuleMessage:
-		g.handleGetModule(m)
 	case ModuleCommandMessage:
 		g.handleModuleCommand(m)
 	default:
@@ -83,49 +76,12 @@ func (g *GameSessionActor) handleMessage(msg Message) {
 	}
 }
 
-func (g *GameSessionActor) handleAddModule(msg AddModuleMessage) {
-	moduleID := msg.Module.GetModuleID()
-	g.modules[moduleID] = msg.Module
-	g.modulesByPosition[msg.Position] = moduleID
-
-	msg.ResponseChannel <- SuccessResponse{}
-}
-
-func (g *GameSessionActor) handleGetModule(msg GetModuleMessage) {
-	moduleID, exists := g.modulesByPosition[msg.Position]
-	if !exists {
-		msg.GetResponseChannel() <- ErrorResponse{
-			Err: errors.New("module not found"),
-		}
-		return
-	}
-
-	moduleActor, exists := g.modules[moduleID]
-	if !exists {
-		msg.GetResponseChannel() <- ErrorResponse{
-			Err: errors.New("module actor not found"),
-		}
-		return
-	}
-
-	msg.GetResponseChannel() <- SuccessResponse{
-		Data: moduleActor,
-	}
-}
-
 func (g *GameSessionActor) handleModuleCommand(msg ModuleCommandMessage) {
 	cmd := msg.Command
-	position := cmd.GetModulePosition()
+	bombID := cmd.GetBombID()
+	moduleID := cmd.GetModuleID()
 
-	moduleId, exists := g.modulesByPosition[position]
-	if !exists {
-		msg.ResponseChannel <- ErrorResponse{
-			Err: errors.New("module not found"),
-		}
-		return
-	}
-
-	moduleActor, exists := g.modules[moduleId]
+	moduleActor, exists := g.bombActors[bombID].moduleActors[moduleID]
 	if !exists {
 		msg.ResponseChannel <- ErrorResponse{
 			Err: errors.New("module actor not found"),

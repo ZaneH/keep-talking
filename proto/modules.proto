@@ -3,15 +3,10 @@ package modules;
 
 option go_package = "./proto";
 
-enum BombFace {
-  FRONT = 0;
-  BACK = 1;
-}
-
 message ModulePosition {
-  BombFace face = 1;
-  int32 row = 2; // 0-indexed
-  int32 col = 3; // 0-indexed
+  int32 face = 1;
+  int32 row = 2;
+  int32 col = 3;
 }
 
 message ModuleState {

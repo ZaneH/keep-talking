@@ -50,11 +50,8 @@ func TestSimpleWiresModuleActor_SolveBasic(t *testing.T) {
 	specifiedModule.SetState(testState)
 
 	sessionID := uuid.New()
-	modulePosition := valueobject.ModulePosition{
-		Row:    0,
-		Column: 0,
-		Face:   valueobject.Front,
-	}
+	bombID := uuid.New()
+	moduleID := uuid.New()
 
 	actions := []struct {
 		desc      string
@@ -93,8 +90,9 @@ func TestSimpleWiresModuleActor_SolveBasic(t *testing.T) {
 			// Act
 			cmd := &command.SimpleWiresInputCommand{
 				BaseModuleInputCommand: command.BaseModuleInputCommand{
-					SessionID:      sessionID,
-					ModulePosition: modulePosition,
+					SessionID: sessionID,
+					BombID:    bombID,
+					ModuleID:  moduleID,
 				},
 				WireIndex: action.wireIndex,
 			}

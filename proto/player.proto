@@ -1,7 +1,6 @@
 syntax = "proto3";
 package player;
 
-import "proto/modules.proto";
 import "proto/simple_wires_module.proto";
 import "proto/password_module.proto";
 
@@ -18,10 +17,11 @@ message CreateGameResponse {
 
 message PlayerInput {
   string session_id = 1;
-  modules.ModulePosition module_position = 2;
+  string bomb_id = 2;
+  string module_id = 3;
   oneof input {
-    modules.SimpleWiresInput simple_wires_input = 3;
-    modules.PasswordInput password_input = 4;
+    modules.SimpleWiresInput simple_wires_input = 10;
+    modules.PasswordInput password_input = 11;
   }
 }
 

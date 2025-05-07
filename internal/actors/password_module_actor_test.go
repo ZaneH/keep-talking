@@ -27,11 +27,8 @@ func TestPasswordModuleActor_LetterChange(t *testing.T) {
 	}
 
 	sessionID := uuid.New()
-	modulePosition := valueobject.ModulePosition{
-		Row:    0,
-		Column: 0,
-		Face:   valueobject.Front,
-	}
+	bombID := uuid.New()
+	moduleID := uuid.New()
 
 	actions := []struct {
 		desc      string
@@ -64,8 +61,9 @@ func TestPasswordModuleActor_LetterChange(t *testing.T) {
 			// Act
 			cmd := &command.PasswordLetterChangeCommand{
 				BaseModuleInputCommand: command.BaseModuleInputCommand{
-					SessionID:      sessionID,
-					ModulePosition: modulePosition,
+					SessionID: sessionID,
+					BombID:    bombID,
+					ModuleID:  moduleID,
 				},
 				LetterIndex: action.index,
 				Direction:   action.direction,
@@ -112,8 +110,9 @@ func TestPasswordModuleActor_LetterChange(t *testing.T) {
 		// Using a command type that's not supported by this module
 		cmd := &command.SimpleWiresInputCommand{
 			BaseModuleInputCommand: command.BaseModuleInputCommand{
-				SessionID:      sessionID,
-				ModulePosition: modulePosition,
+				SessionID: sessionID,
+				BombID:    bombID,
+				ModuleID:  moduleID,
 			},
 			WireIndex: 0,
 		}

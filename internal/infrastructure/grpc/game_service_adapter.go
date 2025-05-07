@@ -56,7 +56,8 @@ func buildGameConfigFromRequest(req *pb.CreateGameRequest) valueobject.GameConfi
 
 func (s *GameServiceAdapter) SendInput(ctx context.Context, i *pb.PlayerInput) (*pb.PlayerInputResult, error) {
 	sessionID := uuid.MustParse(i.GetSessionId())
-	position := mapProtoPositionToDomain(i.GetModulePosition())
+	bombID := uuid.MustParse(i.GetBombId())
+	moduleID := uuid.MustParse(i.GetModuleId())
 
 	var cmd command.ModuleInputCommand
 
@@ -64,8 +65,9 @@ func (s *GameServiceAdapter) SendInput(ctx context.Context, i *pb.PlayerInput) (
 	case *pb.PlayerInput_SimpleWiresInput:
 		cmd = &command.SimpleWiresInputCommand{
 			BaseModuleInputCommand: command.BaseModuleInputCommand{
-				SessionID:      sessionID,
-				ModulePosition: position,
+				SessionID: sessionID,
+				BombID:    bombID,
+				ModuleID:  moduleID,
 			},
 			WireIndex: int(input.SimpleWiresInput.WireIndex),
 		}
@@ -74,8 +76,9 @@ func (s *GameServiceAdapter) SendInput(ctx context.Context, i *pb.PlayerInput) (
 		case *pb.PasswordInput_LetterChange:
 			cmd = &command.PasswordLetterChangeCommand{
 				BaseModuleInputCommand: command.BaseModuleInputCommand{
-					SessionID:      sessionID,
-					ModulePosition: position,
+					SessionID: sessionID,
+					BombID:    bombID,
+					ModuleID:  moduleID,
 				},
 				LetterIndex: int(pi.LetterChange.LetterIndex),
 				Direction:   valueobject.IncrementDecrement(pi.LetterChange.Direction),
@@ -83,8 +86,9 @@ func (s *GameServiceAdapter) SendInput(ctx context.Context, i *pb.PlayerInput) (
 		case *pb.PasswordInput_Submit:
 			cmd = &command.PasswordSubmitCommand{
 				BaseModuleInputCommand: command.BaseModuleInputCommand{
-					SessionID:      sessionID,
-					ModulePosition: position,
+					SessionID: sessionID,
+					BombID:    bombID,
+					ModuleID:  moduleID,
 				},
 			}
 		default:
@@ -108,20 +112,9 @@ func (s *GameServiceAdapter) SendInput(ctx context.Context, i *pb.PlayerInput) (
 }
 
 func mapProtoPositionToDomain(position *pb.ModulePosition) valueobject.ModulePosition {
-	var face valueobject.BombFace
-
-	switch position.Face {
-	case pb.BombFace_BACK:
-		face = valueobject.Back
-	case pb.BombFace_FRONT:
-		face = valueobject.Front
-	default:
-		panic(fmt.Sprintf("unknown face: %v", position.Face))
-	}
-
 	return valueobject.ModulePosition{
-		Face:   face,
 		Row:    int(position.Row),
 		Column: int(position.Col),
+		Face:   int(position.Face),
 	}
 }

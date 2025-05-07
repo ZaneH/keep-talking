@@ -17,6 +17,7 @@ type Bomb struct {
 	StartingTime  time.Duration
 	StrikeCount   int
 	MaxStrikes    int
+	Faces         map[int]*BombFace
 	Modules       map[uuid.UUID]Module
 	Indicators    []valueobject.Indicator
 	Batteries     int
@@ -38,7 +39,21 @@ func NewBomb(config valueobject.BombConfig) *Bomb {
 	}
 }
 
-// func (b *Bomb) AddModule(module Module)
+func (b *Bomb) AddModule(module Module, faceIndex int, position valueobject.ModulePosition) error {
+	face, exists := b.Faces[faceIndex]
+
+	if !exists {
+		face = NewBombFace()
+		b.Faces[faceIndex] = face
+	}
+
+	if err := face.AddModule(module, position); err != nil {
+		return err
+	}
+
+	b.Modules[module.GetModuleID()] = module
+	return nil
+}
 
 func generateSerialNumber() string {
 	var sb strings.Builder

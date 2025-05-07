@@ -2,7 +2,7 @@ package actors
 
 import (
 	"github.com/ZaneH/keep-talking/internal/application/command"
-	"github.com/ZaneH/keep-talking/internal/domain/valueobject"
+	"github.com/ZaneH/keep-talking/internal/domain/entities"
 )
 
 type Message interface {
@@ -32,26 +32,16 @@ func (m ModuleCommandMessage) GetResponseChannel() chan Response {
 	return m.ResponseChannel
 }
 
-type AddModuleMessage struct {
-	Module          ModuleActor
-	Position        valueobject.ModulePosition
+type AddBombMessage struct {
+	Bomb            entities.Bomb
 	ResponseChannel chan Response
 }
 
-func (m AddModuleMessage) MessageType() string {
-	return "AddModule"
+func (m AddBombMessage) MessageType() string {
+	return "AddBomb"
 }
 
-type GetModuleMessage struct {
-	Position        valueobject.ModulePosition
-	ResponseChannel chan Response
-}
-
-func (m GetModuleMessage) MessageType() string {
-	return "GetModule"
-}
-
-func (m GetModuleMessage) GetResponseChannel() chan Response {
+func (m AddBombMessage) GetResponseChannel() chan Response {
 	return m.ResponseChannel
 }
 

@@ -1,18 +1,19 @@
 package command
 
 import (
-	"github.com/ZaneH/keep-talking/internal/domain/valueobject"
 	"github.com/google/uuid"
 )
 
 type ModuleInputCommand interface {
 	GetSessionID() uuid.UUID
-	GetModulePosition() valueobject.ModulePosition
+	GetBombID() uuid.UUID
+	GetModuleID() uuid.UUID
 }
 
 type BaseModuleInputCommand struct {
-	SessionID      uuid.UUID
-	ModulePosition valueobject.ModulePosition
+	SessionID uuid.UUID
+	BombID    uuid.UUID
+	ModuleID  uuid.UUID
 }
 
 type BaseModuleInputCommandResult struct {
@@ -24,6 +25,10 @@ func (c *BaseModuleInputCommand) GetSessionID() uuid.UUID {
 	return c.SessionID
 }
 
-func (c *BaseModuleInputCommand) GetModulePosition() valueobject.ModulePosition {
-	return c.ModulePosition
+func (c *BaseModuleInputCommand) GetModuleID() uuid.UUID {
+	return c.SessionID
+}
+
+func (c *BaseModuleInputCommand) GetBombID() uuid.UUID {
+	return c.BombID
 }
