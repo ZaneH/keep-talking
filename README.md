@@ -1,14 +1,10 @@
 # Keep Talking
 
-Keep Talking is an open-source gRPC implementation of the popular game "Keep Talking and Nobody Explodes". The game is designed for two or more players, where one player (the "Defuser") is tasked with defusing a bomb while the other players (the "Experts") provide instructions from a bomb defusal manual. The catch is that the Defuser cannot see the manual, and the Experts cannot see the bomb.
+Keep Talking is an open-source re-implementation of one of my favorite games: "Keep Talking and Nobody Explodes".
 
-## Features
+The game is designed for two or more players, where one player (the "Defuser") is tasked with defusing a bomb while the other players (the "Experts") provide instructions from a bomb defusal manual. The catch is that the Defuser cannot see the manual, and the Experts cannot see the bomb.
 
-- **gRPC Communication**: The game uses gRPC for communication between the Defuser and Experts, allowing for real-time interaction.
-- **DDD Architecture**: The code is organized using Domain-Driven Design principles, making it easy to understand and extend.
-- **Well Tested**: The code is thoroughly tested, ensuring that the game runs smoothly and without bugs.
-
-- **Easy to Extend**: The game is designed to be easily extendable, allowing for new features and game modes to be added in the future.
+This repo is a practical exercise in DDD (Domain-Driven Design) and the actor model. The game is implemented in Go and uses gRPC for interaction.
 
 ## Setup
 
