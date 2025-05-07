@@ -3,7 +3,6 @@ package player;
 
 import "proto/simple_wires_module.proto";
 import "proto/password_module.proto";
-import "proto/bomb.proto";
 
 option go_package = "./proto";
 

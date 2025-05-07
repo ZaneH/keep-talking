@@ -2,12 +2,10 @@ syntax = "proto3";
 package game;
 
 import "proto/player.proto";
-import "proto/session.proto";
 
 option go_package = "./proto";
 
 service GameService {
   rpc CreateGame(player.CreateGameRequest) returns (player.CreateGameResponse);
   rpc SendInput(player.PlayerInput) returns (player.PlayerInputResult);
-  rpc StreamGameState(session.GameSessionRequest) returns (stream session.GameSession);
 }

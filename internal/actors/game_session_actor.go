@@ -7,7 +7,6 @@ import (
 	"strings"
 
 	"github.com/ZaneH/keep-talking/internal/domain/entities"
-	"github.com/ZaneH/keep-talking/internal/domain/valueobject"
 	"github.com/google/uuid"
 )
 
@@ -17,11 +16,11 @@ type GameSessionActor struct {
 	bombActors map[uuid.UUID]BombActor
 }
 
-func NewGameSessionActor(sessionID uuid.UUID, config valueobject.GameConfig) *GameSessionActor {
+func NewGameSessionActor(sessionID uuid.UUID) *GameSessionActor {
 	actor := &GameSessionActor{
 		BaseActor:  NewBaseActor(100),
 		bombActors: make(map[uuid.UUID]BombActor),
-		session:    entities.NewGameSession(sessionID, config),
+		session:    entities.NewGameSession(sessionID),
 	}
 
 	return actor
