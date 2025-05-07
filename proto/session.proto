@@ -1,6 +1,8 @@
 syntax = "proto3";
 package session;
 
+import "proto/bomb.proto";
+
 option go_package = "./proto";
 
 message GameSessionRequest {
@@ -11,4 +13,12 @@ message GameSession {
   string session_id = 1;
   int32 strike_count = 2;
   int32 max_strikes = 3;
+}
+
+message GetBombsRequest {
+  string session_id = 1;
+}
+
+message GetBombsResponse {
+  repeated bomb.Bomb bombs = 1;
 }

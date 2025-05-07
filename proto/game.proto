@@ -2,10 +2,12 @@ syntax = "proto3";
 package game;
 
 import "proto/player.proto";
+import "proto/session.proto";
 
 option go_package = "./proto";
 
 service GameService {
   rpc CreateGame(player.CreateGameRequest) returns (player.CreateGameResponse);
+  rpc GetBombs(session.GetBombsRequest) returns (session.GetBombsResponse);
   rpc SendInput(player.PlayerInput) returns (player.PlayerInputResult);
 }

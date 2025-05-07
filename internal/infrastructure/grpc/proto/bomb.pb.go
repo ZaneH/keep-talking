@@ -24,7 +24,7 @@ const (
 type Bomb struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	Modules       []*Module              `protobuf:"bytes,2,rep,name=modules,proto3" json:"modules,omitempty"`
+	Modules       map[string]*Module     `protobuf:"bytes,2,rep,name=modules,proto3" json:"modules,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -66,7 +66,7 @@ func (x *Bomb) GetId() string {
 	return ""
 }
 
-func (x *Bomb) GetModules() []*Module {
+func (x *Bomb) GetModules() map[string]*Module {
 	if x != nil {
 		return x.Modules
 	}
@@ -77,10 +77,13 @@ var File_proto_bomb_proto protoreflect.FileDescriptor
 
 const file_proto_bomb_proto_rawDesc = "" +
 	"\n" +
-	"\x10proto/bomb.proto\x12\x04bomb\x1a\x13proto/modules.proto\"A\n" +
+	"\x10proto/bomb.proto\x12\x04bomb\x1a\x13proto/modules.proto\"\x96\x01\n" +
 	"\x04Bomb\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\tR\x02id\x12)\n" +
-	"\amodules\x18\x02 \x03(\v2\x0f.modules.ModuleR\amodulesB\tZ\a./protob\x06proto3"
+	"\x02id\x18\x01 \x01(\tR\x02id\x121\n" +
+	"\amodules\x18\x02 \x03(\v2\x17.bomb.Bomb.ModulesEntryR\amodules\x1aK\n" +
+	"\fModulesEntry\x12\x10\n" +
+	"\x03key\x18\x01 \x01(\tR\x03key\x12%\n" +
+	"\x05value\x18\x02 \x01(\v2\x0f.modules.ModuleR\x05value:\x028\x01B\tZ\a./protob\x06proto3"
 
 var (
 	file_proto_bomb_proto_rawDescOnce sync.Once
@@ -94,18 +97,20 @@ func file_proto_bomb_proto_rawDescGZIP() []byte {
 	return file_proto_bomb_proto_rawDescData
 }
 
-var file_proto_bomb_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
+var file_proto_bomb_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
 var file_proto_bomb_proto_goTypes = []any{
 	(*Bomb)(nil),   // 0: bomb.Bomb
-	(*Module)(nil), // 1: modules.Module
+	nil,            // 1: bomb.Bomb.ModulesEntry
+	(*Module)(nil), // 2: modules.Module
 }
 var file_proto_bomb_proto_depIdxs = []int32{
-	1, // 0: bomb.Bomb.modules:type_name -> modules.Module
-	1, // [1:1] is the sub-list for method output_type
-	1, // [1:1] is the sub-list for method input_type
-	1, // [1:1] is the sub-list for extension type_name
-	1, // [1:1] is the sub-list for extension extendee
-	0, // [0:1] is the sub-list for field type_name
+	1, // 0: bomb.Bomb.modules:type_name -> bomb.Bomb.ModulesEntry
+	2, // 1: bomb.Bomb.ModulesEntry.value:type_name -> modules.Module
+	2, // [2:2] is the sub-list for method output_type
+	2, // [2:2] is the sub-list for method input_type
+	2, // [2:2] is the sub-list for extension type_name
+	2, // [2:2] is the sub-list for extension extendee
+	0, // [0:2] is the sub-list for field type_name
 }
 
 func init() { file_proto_bomb_proto_init() }
@@ -120,7 +125,7 @@ func file_proto_bomb_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_bomb_proto_rawDesc), len(file_proto_bomb_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   1,
+			NumMessages:   2,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

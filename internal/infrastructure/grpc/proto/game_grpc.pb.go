@@ -20,6 +20,7 @@ const _ = grpc.SupportPackageIsVersion9
 
 const (
 	GameService_CreateGame_FullMethodName = "/game.GameService/CreateGame"
+	GameService_GetBombs_FullMethodName   = "/game.GameService/GetBombs"
 	GameService_SendInput_FullMethodName  = "/game.GameService/SendInput"
 )
 
@@ -28,6 +29,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type GameServiceClient interface {
 	CreateGame(ctx context.Context, in *CreateGameRequest, opts ...grpc.CallOption) (*CreateGameResponse, error)
+	GetBombs(ctx context.Context, in *GetBombsRequest, opts ...grpc.CallOption) (*GetBombsResponse, error)
 	SendInput(ctx context.Context, in *PlayerInput, opts ...grpc.CallOption) (*PlayerInputResult, error)
 }
 
@@ -49,6 +51,16 @@ func (c *gameServiceClient) CreateGame(ctx context.Context, in *CreateGameReques
 	return out, nil
 }
 
+func (c *gameServiceClient) GetBombs(ctx context.Context, in *GetBombsRequest, opts ...grpc.CallOption) (*GetBombsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetBombsResponse)
+	err := c.cc.Invoke(ctx, GameService_GetBombs_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *gameServiceClient) SendInput(ctx context.Context, in *PlayerInput, opts ...grpc.CallOption) (*PlayerInputResult, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(PlayerInputResult)
@@ -64,6 +76,7 @@ func (c *gameServiceClient) SendInput(ctx context.Context, in *PlayerInput, opts
 // for forward compatibility.
 type GameServiceServer interface {
 	CreateGame(context.Context, *CreateGameRequest) (*CreateGameResponse, error)
+	GetBombs(context.Context, *GetBombsRequest) (*GetBombsResponse, error)
 	SendInput(context.Context, *PlayerInput) (*PlayerInputResult, error)
 	mustEmbedUnimplementedGameServiceServer()
 }
@@ -77,6 +90,9 @@ type UnimplementedGameServiceServer struct{}
 
 func (UnimplementedGameServiceServer) CreateGame(context.Context, *CreateGameRequest) (*CreateGameResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateGame not implemented")
+}
+func (UnimplementedGameServiceServer) GetBombs(context.Context, *GetBombsRequest) (*GetBombsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetBombs not implemented")
 }
 func (UnimplementedGameServiceServer) SendInput(context.Context, *PlayerInput) (*PlayerInputResult, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SendInput not implemented")
@@ -120,6 +136,24 @@ func _GameService_CreateGame_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
+func _GameService_GetBombs_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetBombsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(GameServiceServer).GetBombs(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: GameService_GetBombs_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(GameServiceServer).GetBombs(ctx, req.(*GetBombsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _GameService_SendInput_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(PlayerInput)
 	if err := dec(in); err != nil {
@@ -148,6 +182,10 @@ var GameService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CreateGame",
 			Handler:    _GameService_CreateGame_Handler,
+		},
+		{
+			MethodName: "GetBombs",
+			Handler:    _GameService_GetBombs_Handler,
 		},
 		{
 			MethodName: "SendInput",

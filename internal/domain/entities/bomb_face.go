@@ -25,3 +25,11 @@ func (f *BombFace) AddModule(module Module, position valueobject.ModulePosition)
 	f.ModulesByPosition[position] = module.GetModuleID()
 	return nil
 }
+
+func (f *BombFace) String() string {
+	var result string
+	for position, moduleID := range f.ModulesByPosition {
+		result += position.String() + ": " + moduleID.String() + "\n"
+	}
+	return result
+}

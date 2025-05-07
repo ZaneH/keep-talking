@@ -45,6 +45,18 @@ func (m AddBombMessage) GetResponseChannel() chan Response {
 	return m.ResponseChannel
 }
 
+type GetBombsMessage struct {
+	ResponseChannel chan Response
+}
+
+func (m GetBombsMessage) MessageType() string {
+	return "GetBombs"
+}
+
+func (m GetBombsMessage) GetResponseChannel() chan Response {
+	return m.ResponseChannel
+}
+
 type SuccessResponse struct {
 	Data interface{}
 }

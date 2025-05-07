@@ -7,8 +7,6 @@ import "proto/password_module.proto";
 option go_package = "./proto";
 
 message CreateGameRequest {
-  optional float probability_simple_wires = 1;
-  optional float probability_password = 2;
 }
 
 message CreateGameResponse {

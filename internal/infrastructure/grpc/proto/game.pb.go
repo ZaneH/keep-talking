@@ -24,25 +24,30 @@ var File_proto_game_proto protoreflect.FileDescriptor
 
 const file_proto_game_proto_rawDesc = "" +
 	"\n" +
-	"\x10proto/game.proto\x12\x04game\x1a\x12proto/player.proto2\x8f\x01\n" +
+	"\x10proto/game.proto\x12\x04game\x1a\x12proto/player.proto\x1a\x13proto/session.proto2\xd0\x01\n" +
 	"\vGameService\x12C\n" +
 	"\n" +
-	"CreateGame\x12\x19.player.CreateGameRequest\x1a\x1a.player.CreateGameResponse\x12;\n" +
+	"CreateGame\x12\x19.player.CreateGameRequest\x1a\x1a.player.CreateGameResponse\x12?\n" +
+	"\bGetBombs\x12\x18.session.GetBombsRequest\x1a\x19.session.GetBombsResponse\x12;\n" +
 	"\tSendInput\x12\x13.player.PlayerInput\x1a\x19.player.PlayerInputResultB\tZ\a./protob\x06proto3"
 
 var file_proto_game_proto_goTypes = []any{
 	(*CreateGameRequest)(nil),  // 0: player.CreateGameRequest
-	(*PlayerInput)(nil),        // 1: player.PlayerInput
-	(*CreateGameResponse)(nil), // 2: player.CreateGameResponse
-	(*PlayerInputResult)(nil),  // 3: player.PlayerInputResult
+	(*GetBombsRequest)(nil),    // 1: session.GetBombsRequest
+	(*PlayerInput)(nil),        // 2: player.PlayerInput
+	(*CreateGameResponse)(nil), // 3: player.CreateGameResponse
+	(*GetBombsResponse)(nil),   // 4: session.GetBombsResponse
+	(*PlayerInputResult)(nil),  // 5: player.PlayerInputResult
 }
 var file_proto_game_proto_depIdxs = []int32{
 	0, // 0: game.GameService.CreateGame:input_type -> player.CreateGameRequest
-	1, // 1: game.GameService.SendInput:input_type -> player.PlayerInput
-	2, // 2: game.GameService.CreateGame:output_type -> player.CreateGameResponse
-	3, // 3: game.GameService.SendInput:output_type -> player.PlayerInputResult
-	2, // [2:4] is the sub-list for method output_type
-	0, // [0:2] is the sub-list for method input_type
+	1, // 1: game.GameService.GetBombs:input_type -> session.GetBombsRequest
+	2, // 2: game.GameService.SendInput:input_type -> player.PlayerInput
+	3, // 3: game.GameService.CreateGame:output_type -> player.CreateGameResponse
+	4, // 4: game.GameService.GetBombs:output_type -> session.GetBombsResponse
+	5, // 5: game.GameService.SendInput:output_type -> player.PlayerInputResult
+	3, // [3:6] is the sub-list for method output_type
+	0, // [0:3] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
 	0, // [0:0] is the sub-list for extension extendee
 	0, // [0:0] is the sub-list for field type_name
@@ -54,6 +59,7 @@ func file_proto_game_proto_init() {
 		return
 	}
 	file_proto_player_proto_init()
+	file_proto_session_proto_init()
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{

@@ -43,6 +43,10 @@ func (b *BombActor) GetBombID() uuid.UUID {
 	return b.bomb.ID
 }
 
+func (b *BombActor) GetBomb() *entities.Bomb {
+	return b.bomb
+}
+
 func (b *BombActor) GetModuleActors() map[uuid.UUID]ModuleActor {
 	return b.moduleActors
 }

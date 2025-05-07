@@ -1,6 +1,7 @@
 package entities
 
 import (
+	"fmt"
 	"log"
 	"math/rand"
 	"strings"
@@ -105,4 +106,21 @@ func generateRandomPorts(count int) []valueobject.Port {
 	}
 
 	return ports
+}
+
+func (b *Bomb) String() string {
+	var sb strings.Builder
+	sb.WriteString("Bomb ID: " + b.ID.String() + "\n")
+	sb.WriteString("Serial Number: " + b.SerialNumber + "\n")
+	sb.WriteString("Time Remaining: " + b.TimeRemaining.String() + "\n")
+	sb.WriteString("Strike Count: " + fmt.Sprint(b.StrikeCount) + "\n")
+	sb.WriteString("Max Strikes: " + fmt.Sprint(b.MaxStrikes) + "\n")
+	sb.WriteString("Batteries: " + fmt.Sprint(b.Batteries) + "\n")
+	sb.WriteString("Ports: " + fmt.Sprintf("%+v", b.Ports) + "\n")
+
+	for faceIndex, face := range b.Faces {
+		sb.WriteString("Face " + fmt.Sprint(faceIndex) + ":\n" + face.String() + "\n")
+	}
+
+	return sb.String()
 }

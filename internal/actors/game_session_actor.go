@@ -26,7 +26,7 @@ func NewGameSessionActor(sessionID uuid.UUID) *GameSessionActor {
 	return actor
 }
 
-func (g *GameSessionActor) GetBombs() map[uuid.UUID]BombActor {
+func (g *GameSessionActor) GetBombActors() map[uuid.UUID]BombActor {
 	return g.bombActors
 }
 
@@ -70,6 +70,8 @@ func (g *GameSessionActor) handleMessage(msg Message) {
 		g.handleModuleCommand(m)
 	case AddBombMessage:
 		g.handleAddBombCommand(m)
+	case GetBombsMessage:
+		g.handleGetBombsCommand(m)
 	default:
 		log.Printf("received unhandled message type: %T", msg)
 		if m, ok := msg.(RequestMessage); ok {
@@ -84,9 +86,14 @@ func (g *GameSessionActor) handleAddBombCommand(msg AddBombMessage) {
 	bomb := msg.Bomb
 
 	bombActor := NewBombActor(bomb)
+	bombActor.Start() // TODO: Find a better place to start the actor
 	g.bombActors[bomb.ID] = *bombActor
 
 	msg.ResponseChannel <- &SuccessResponse{Data: bomb.ID}
+}
+
+func (g *GameSessionActor) handleGetBombsCommand(msg GetBombsMessage) {
+	msg.ResponseChannel <- &SuccessResponse{Data: &g.bombActors}
 }
 
 func (g *GameSessionActor) handleModuleCommand(msg ModuleCommandMessage) {
