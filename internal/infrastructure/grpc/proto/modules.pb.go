@@ -24,19 +24,22 @@ const (
 type Module_ModuleType int32
 
 const (
-	Module_SIMPLE_WIRES Module_ModuleType = 0
-	Module_PASSWORD     Module_ModuleType = 1
+	Module_UNKNOWN      Module_ModuleType = 0
+	Module_SIMPLE_WIRES Module_ModuleType = 1
+	Module_PASSWORD     Module_ModuleType = 2
 )
 
 // Enum value maps for Module_ModuleType.
 var (
 	Module_ModuleType_name = map[int32]string{
-		0: "SIMPLE_WIRES",
-		1: "PASSWORD",
+		0: "UNKNOWN",
+		1: "SIMPLE_WIRES",
+		2: "PASSWORD",
 	}
 	Module_ModuleType_value = map[string]int32{
-		"SIMPLE_WIRES": 0,
-		"PASSWORD":     1,
+		"UNKNOWN":      0,
+		"SIMPLE_WIRES": 1,
+		"PASSWORD":     2,
 	}
 )
 
@@ -178,7 +181,7 @@ func (x *Module) GetType() Module_ModuleType {
 	if x != nil {
 		return x.Type
 	}
-	return Module_SIMPLE_WIRES
+	return Module_UNKNOWN
 }
 
 func (x *Module) GetSolved() bool {
@@ -196,15 +199,16 @@ const file_proto_modules_proto_rawDesc = "" +
 	"\x0eModulePosition\x12\x12\n" +
 	"\x04face\x18\x01 \x01(\x05R\x04face\x12\x10\n" +
 	"\x03row\x18\x02 \x01(\x05R\x03row\x12\x10\n" +
-	"\x03col\x18\x03 \x01(\x05R\x03col\"\x8e\x01\n" +
+	"\x03col\x18\x03 \x01(\x05R\x03col\"\x9b\x01\n" +
 	"\x06Module\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12.\n" +
 	"\x04type\x18\x02 \x01(\x0e2\x1a.modules.Module.ModuleTypeR\x04type\x12\x16\n" +
-	"\x06solved\x18\x04 \x01(\bR\x06solved\",\n" +
+	"\x06solved\x18\x04 \x01(\bR\x06solved\"9\n" +
 	"\n" +
-	"ModuleType\x12\x10\n" +
-	"\fSIMPLE_WIRES\x10\x00\x12\f\n" +
-	"\bPASSWORD\x10\x01B\tZ\a./protob\x06proto3"
+	"ModuleType\x12\v\n" +
+	"\aUNKNOWN\x10\x00\x12\x10\n" +
+	"\fSIMPLE_WIRES\x10\x01\x12\f\n" +
+	"\bPASSWORD\x10\x02B\tZ\a./protob\x06proto3"
 
 var (
 	file_proto_modules_proto_rawDescOnce sync.Once

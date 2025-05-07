@@ -8,9 +8,9 @@ import (
 
 func CreateModuleActor(moduleType valueobject.ModuleType) (ModuleActor, error) {
 	switch moduleType {
-	case valueobject.SIMPLE_WIRES:
+	case valueobject.SimpleWires:
 		return NewSimpleWiresModuleActor(), nil
-	case valueobject.PASSWORD:
+	case valueobject.Password:
 		return NewPasswordModuleActor(), nil
 	default:
 		return nil, fmt.Errorf("unsupported module type: %v", moduleType)

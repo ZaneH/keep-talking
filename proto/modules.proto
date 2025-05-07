@@ -11,8 +11,9 @@ message ModulePosition {
 
 message Module {
   enum ModuleType {
-    SIMPLE_WIRES = 0;
-    PASSWORD = 1;
+    UNKNOWN = 0;
+    SIMPLE_WIRES = 1;
+    PASSWORD = 2;
   }
 
   string id = 1;

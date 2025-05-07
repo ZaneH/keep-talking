@@ -95,7 +95,7 @@ func (m *PasswordModule) GetModuleID() uuid.UUID {
 }
 
 func (m *PasswordModule) GetType() valueobject.ModuleType {
-	return valueobject.PASSWORD
+	return valueobject.Password
 }
 
 var words = [...]string{

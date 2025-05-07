@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/ZaneH/keep-talking/internal/actors"
 	"github.com/ZaneH/keep-talking/internal/application/command"
+	"github.com/ZaneH/keep-talking/internal/application/query"
 	"github.com/ZaneH/keep-talking/internal/application/services"
 	"github.com/ZaneH/keep-talking/internal/domain/valueobject"
 	pb "github.com/ZaneH/keep-talking/internal/infrastructure/grpc/proto"
@@ -95,50 +95,10 @@ func (s *GameServiceAdapter) SendInput(ctx context.Context, i *pb.PlayerInput) (
 }
 
 func (s *GameServiceAdapter) GetBombs(ctx context.Context, req *pb.GetBombsRequest) (*pb.GetBombsResponse, error) {
-	sessionID := uuid.MustParse(req.GetSessionId())
-
-	sessionActor, err := s.gameService.GetGameSession(ctx, sessionID)
+	gameState, err := s.gameService.GetGameSession(ctx, uuid.MustParse(req.GetSessionId()))
 	if err != nil {
 		return nil, fmt.Errorf("failed to get game session: %v", err)
 	}
 
-	respChannel := make(chan actors.Response, 1)
-	defer close(respChannel)
-
-	sessionActor.Send(actors.GetBombsMessage{
-		ResponseChannel: respChannel,
-	})
-
-	select {
-	case resp := <-respChannel:
-		if !resp.IsSuccess() {
-			return nil, resp.Error()
-		}
-
-		bombActors := resp.(*actors.SuccessResponse).Data.(*map[uuid.UUID]actors.BombActor)
-		var bombsList []*pb.Bomb
-		for _, bomb := range *bombActors {
-			modules := make(map[string]*pb.Module, len(bomb.GetModuleActors()))
-			for j, module := range bomb.GetBomb().Modules {
-				modules[j.String()] = &pb.Module{
-					Id:     module.GetModuleID().String(),
-					Type:   pb.Module_ModuleType(module.GetType()),
-					Solved: module.IsSolved(),
-				}
-			}
-
-			bombsList = append(bombsList, &pb.Bomb{
-				Id:      bomb.GetBombID().String(),
-				Modules: modules,
-			})
-		}
-
-		return &pb.GetBombsResponse{
-			Bombs: bombsList,
-		}, nil
-	case <-ctx.Done():
-		return nil, ctx.Err()
-	case <-sessionActor.Done():
-		return nil, fmt.Errorf("session actor is done")
-	}
+	return query.MapGameSessionActorToProto(gameState), nil
 }

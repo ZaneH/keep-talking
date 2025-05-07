@@ -70,9 +70,9 @@ func (f *BombFactoryImpl) placeModulesOnBomb(bomb *entities.Bomb, moduleTypes []
 
 func (f *BombFactoryImpl) createModule(moduleType valueobject.ModuleType) entities.Module {
 	switch moduleType {
-	case valueobject.SIMPLE_WIRES:
+	case valueobject.SimpleWires:
 		return entities.NewSimpleWiresModule()
-	case valueobject.PASSWORD:
+	case valueobject.Password:
 		return entities.NewPasswordModule(nil)
 	default:
 		return nil
