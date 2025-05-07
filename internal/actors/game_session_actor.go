@@ -15,14 +15,12 @@ type GameSessionActor struct {
 	BaseActor
 	session    *entities.GameSession
 	bombActors map[uuid.UUID]BombActor
-	config     valueobject.GameConfig
 }
 
 func NewGameSessionActor(sessionID uuid.UUID, config valueobject.GameConfig) *GameSessionActor {
 	actor := &GameSessionActor{
 		BaseActor: NewBaseActor(100),
-		session:   entities.NewGameSession(sessionID),
-		config:    config,
+		session:   entities.NewGameSession(sessionID, config),
 	}
 
 	return actor
