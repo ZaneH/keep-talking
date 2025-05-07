@@ -26,7 +26,7 @@ func (c *BaseModuleInputCommand) GetSessionID() uuid.UUID {
 }
 
 func (c *BaseModuleInputCommand) GetModuleID() uuid.UUID {
-	return c.SessionID
+	return c.ModuleID
 }
 
 func (c *BaseModuleInputCommand) GetBombID() uuid.UUID {

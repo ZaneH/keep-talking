@@ -89,8 +89,8 @@ func (s *GameServiceAdapter) SendInput(ctx context.Context, i *pb.PlayerInput) (
 	fmt.Printf("Processed input for session %s: %v\n", sessionID, res)
 
 	return &pb.PlayerInputResult{
-		ModuleId: "module-interacted-with",
-		Success:  true,
+		ModuleId: i.GetModuleId(),
+		Success:  res != nil && !res.(command.BaseModuleInputCommandResult).Strike,
 	}, nil
 }
 

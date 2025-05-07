@@ -44,7 +44,7 @@ func (s *ActorSystem) GetGameSession(sessionID uuid.UUID) (*GameSessionActor, er
 
 func (s *ActorSystem) StopGameSession(sessionID uuid.UUID) error {
 	s.mu.Lock()
-	defer s.mu.Lock()
+	defer s.mu.Unlock()
 
 	session, exists := s.sessions[sessionID]
 	if !exists {

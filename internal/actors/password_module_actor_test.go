@@ -94,8 +94,8 @@ func TestPasswordModuleActor_LetterChange(t *testing.T) {
 				successResp, ok := resp.(actors.SuccessResponse)
 				assert.True(t, ok, "Expected SuccessResponse type")
 
-				result, ok := successResp.Data.(*command.SimpleWiresInputCommandResult)
-				assert.True(t, ok, "Expected SimpleWiresInputCommandResult type")
+				result, ok := successResp.Data.(*command.PasswordLetterChangeCommandResult)
+				assert.True(t, ok, "Expected PasswordLetterChangeCommandResult type")
 
 				assert.Equal(t, specifiedModule.IsSolved(), result.Solved, "Solved state should match module state")
 				assert.False(t, result.Strike, "No strike should be issued for successful operations")

@@ -54,7 +54,34 @@ func (a *PasswordModuleActor) handleModuleCommand(msg ModuleCommandMessage) {
 			err = errors.New("unsupported letter change option")
 		}
 
-		result := &command.SimpleWiresInputCommandResult{
+		result := &command.PasswordLetterChangeCommandResult{
+			BaseModuleInputCommandResult: command.BaseModuleInputCommandResult{
+				Solved: a.module.IsSolved(),
+				Strike: err != nil,
+			},
+		}
+
+		if err != nil {
+			msg.ResponseChannel <- ErrorResponse{
+				Err: err,
+			}
+		} else {
+			msg.ResponseChannel <- SuccessResponse{
+				Data: result,
+			}
+		}
+
+	case *command.PasswordSubmitCommand:
+		passwordModule, ok := a.module.(*entities.PasswordModule)
+		if !ok {
+			msg.GetResponseChannel() <- ErrorResponse{
+				Err: errors.New("invalid module type"),
+			}
+			return
+		}
+
+		err := passwordModule.CheckPassword()
+		result := &command.PasswordSubmitCommandResult{
 			BaseModuleInputCommandResult: command.BaseModuleInputCommandResult{
 				Solved: a.module.IsSolved(),
 				Strike: err != nil,
@@ -73,7 +100,7 @@ func (a *PasswordModuleActor) handleModuleCommand(msg ModuleCommandMessage) {
 
 	default:
 		msg.ResponseChannel <- ErrorResponse{
-			Err: errors.New("unsupported command type for simple wires module"),
+			Err: errors.New("unsupported command type for password module"),
 		}
 	}
 }

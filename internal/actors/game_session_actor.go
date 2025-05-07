@@ -99,9 +99,17 @@ func (g *GameSessionActor) handleGetBombsCommand(msg GetBombsMessage) {
 func (g *GameSessionActor) handleModuleCommand(msg ModuleCommandMessage) {
 	cmd := msg.Command
 	bombID := cmd.GetBombID()
+	
+	bombActor, exists := g.bombActors[bombID]
+	if !exists {
+		msg.ResponseChannel <- ErrorResponse{
+			Err: errors.New("bomb not found in session"),
+		}
+		return
+	}
+	
 	moduleID := cmd.GetModuleID()
-
-	moduleActor, exists := g.bombActors[bombID].moduleActors[moduleID]
+	moduleActor, exists := bombActor.moduleActors[moduleID]
 	if !exists {
 		msg.ResponseChannel <- ErrorResponse{
 			Err: errors.New("module actor not found"),

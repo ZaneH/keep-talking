@@ -98,6 +98,10 @@ func (m *PasswordModule) GetType() valueobject.ModuleType {
 	return valueobject.Password
 }
 
+func (m *PasswordModule) GetState() PasswordModuleState {
+	return m.state
+}
+
 var words = [...]string{
 	"three",
 	"apple",
