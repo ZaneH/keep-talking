@@ -3,12 +3,12 @@ package actors
 import (
 	"errors"
 
-	"github.com/ZaneH/keep-talking/internal/application/common"
+	"github.com/ZaneH/keep-talking/internal/domain/entities"
 	"github.com/google/uuid"
 )
 
 type ModuleEntity interface {
-	common.Module
+	entities.Module
 	GetModuleID() uuid.UUID
 }
 
@@ -32,7 +32,7 @@ func (a *BaseModuleActor) GetModuleID() uuid.UUID {
 	return a.module.GetModuleID()
 }
 
-func (a *BaseModuleActor) GetModule() common.Module {
+func (a *BaseModuleActor) GetModule() entities.Module {
 	return a.module
 }
 

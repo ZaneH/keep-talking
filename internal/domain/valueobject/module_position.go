@@ -1,14 +1,14 @@
 package valueobject
 
-type Face int
+type BombFace int
 
 const (
-	Front Face = iota
+	Front BombFace = iota
 	Back
 )
 
 type ModulePosition struct {
 	Row    int
 	Column int
-	Face   Face
+	Face   BombFace
 }

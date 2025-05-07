@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"math/rand"
 
-	"github.com/ZaneH/keep-talking/internal/application/common"
 	"github.com/ZaneH/keep-talking/internal/domain/valueobject"
 	"github.com/google/uuid"
 )
@@ -13,7 +12,7 @@ import (
 const WIRE_POSITIONS = 6
 
 type SimpleWiresState struct {
-	common.ModuleState
+	ModuleState
 	SolutionIndices []int
 	Wires           []valueobject.SimpleWire
 }

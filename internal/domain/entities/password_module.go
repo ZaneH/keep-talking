@@ -13,7 +13,7 @@ type PasswordModuleState struct {
 	Letters   [5][6]string // 5 letters, 6 options each
 	Positions [5]int       // positions of the letters
 	solution  string
-	common.ModuleState
+	ModuleState
 }
 
 type PasswordModule struct {
@@ -108,8 +108,6 @@ var words = [...]string{
 	"chair",
 }
 
-var commonLetters = "abcdefghijklmnopqrstuvwxyz"
-
 func generateWord() string {
 	randIdx := rand.Intn(len(words))
 	return words[randIdx]
@@ -140,7 +138,7 @@ func generateLetters(solution *string) [5][6]string {
 				// Generate unique letter for this column
 				var randomLetter string
 				for {
-					randomLetter = string(commonLetters[rand.Intn(len(commonLetters))])
+					randomLetter = string(common.ALPHABET[rand.Intn(len(common.ALPHABET))])
 					if !usedLetters[randomLetter] {
 						usedLetters[randomLetter] = true
 						break
@@ -158,7 +156,7 @@ func generateLetters(solution *string) [5][6]string {
 		for row := 0; row < 6; row++ {
 			var randomLetter string
 			for {
-				randomLetter = string(commonLetters[rand.Intn(len(commonLetters))])
+				randomLetter = string(common.ALPHABET[rand.Intn(len(common.ALPHABET))])
 				if !usedLetters[randomLetter] {
 					usedLetters[randomLetter] = true
 					break

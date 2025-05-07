@@ -1,7 +1,7 @@
 package actors
 
 import (
-	"github.com/ZaneH/keep-talking/internal/application/common"
+	"github.com/ZaneH/keep-talking/internal/domain/entities"
 	"github.com/google/uuid"
 )
 
@@ -14,7 +14,7 @@ type Actor interface {
 type ModuleActor interface {
 	Actor
 	GetModuleID() uuid.UUID
-	GetModule() common.Module
+	GetModule() entities.Module
 }
 
 type BaseActor struct {

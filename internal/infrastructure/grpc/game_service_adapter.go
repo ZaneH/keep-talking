@@ -108,7 +108,7 @@ func (s *GameServiceAdapter) SendInput(ctx context.Context, i *pb.PlayerInput) (
 }
 
 func mapProtoPositionToDomain(position *pb.ModulePosition) valueobject.ModulePosition {
-	var face valueobject.Face
+	var face valueobject.BombFace
 
 	switch position.Face {
 	case pb.BombFace_BACK:

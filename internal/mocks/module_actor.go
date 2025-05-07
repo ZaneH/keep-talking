@@ -3,7 +3,7 @@ package mocks
 import (
 	"context"
 
-	"github.com/ZaneH/keep-talking/internal/application/common"
+	"github.com/ZaneH/keep-talking/internal/domain/entities"
 	"github.com/google/uuid"
 )
 
@@ -14,7 +14,7 @@ type MockModuleActor struct {
 	LastCommand  interface{}
 	ReturnValue  interface{}
 	ReturnError  error
-	Module       common.Module
+	Module       entities.Module
 }
 
 func NewMockModuleActor() *MockModuleActor {
@@ -27,7 +27,7 @@ func (m *MockModuleActor) GetModuleID() uuid.UUID {
 	return m.ModuleID
 }
 
-func (m *MockModuleActor) GetModule() common.Module {
+func (m *MockModuleActor) GetModule() entities.Module {
 	return m.Module
 }
 
