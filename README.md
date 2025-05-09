@@ -48,6 +48,8 @@ $ go run cmd/server/main.go
 
 - [ ] Implement more bomb modules (Keypads, Button, Morse Code, etc.)
 - [ ] Add config for game settings
+  - [ ] Difficulty levels
+  - [ ] Seeds for module generation
 - [ ] Implement bomb timer and strike system
 - [ ] Create comprehensive test suite
 - [ ] Add game statistics and leaderboards
