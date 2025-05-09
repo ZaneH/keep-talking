@@ -1,7 +1,8 @@
 package services
 
 import (
-	"math/rand/v2"
+	"log"
+	rand "math/rand/v2"
 
 	"github.com/ZaneH/keep-talking/internal/domain/entities"
 	"github.com/ZaneH/keep-talking/internal/domain/valueobject"
@@ -64,7 +65,11 @@ func (f *BombFactoryImpl) placeModulesOnBomb(bomb *entities.Bomb, moduleTypes []
 
 		location := availablePositions[i]
 		module := f.createModule(moduleType)
-		bomb.AddModule(module, location.face, location.position)
+		err := bomb.AddModule(module, location.face, location.position)
+		if err != nil {
+			log.Printf("error adding module to bomb: %v. skipping...", err)
+			continue
+		}
 	}
 }
 

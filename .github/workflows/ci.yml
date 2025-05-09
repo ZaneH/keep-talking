@@ -14,7 +14,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v4
         with:
-          go-version: '1.21'
+          go-version: '1.23'
 
       - name: Tidy
         run: go mod tidy && git diff --exit-code
@@ -23,9 +23,9 @@ jobs:
         run: test -z "$(gofmt -l .)"
 
       - name: Lint
-        uses: golangci/golangci-lint-action@v3
+        uses: golangci/golangci-lint-action@v8
         with:
-          version: v1.55.0
+          version: v2.1
 
       - name: Test
         run: go test ./... -v -race

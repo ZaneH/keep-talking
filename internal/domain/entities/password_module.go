@@ -75,7 +75,7 @@ func (m *PasswordModule) DecrementLetterOption(letterIndex int) {
 }
 
 func (m *PasswordModule) String() string {
-	var result string = "\n"
+	var result = "\n"
 	for i := 0; i < len(m.state.Letters); i++ {
 		result += "Letter " + string(rune('A'+i)) + ": "
 		for j := 0; j < len(m.state.Letters[i]); j++ {

@@ -59,7 +59,7 @@ func (m *SimpleWiresModule) SetState(state SimpleWiresState) {
 }
 
 func (m *SimpleWiresModule) String() string {
-	var result string = "\n"
+	var result = "\n"
 	for i, wire := range m.State.Wires {
 		if wire.IsCut {
 			result += fmt.Sprintf("Wire %d: %s (cut)\n", i, wire.WireColor)

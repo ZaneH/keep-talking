@@ -2,6 +2,7 @@ package services
 
 import (
 	"context"
+	"log"
 
 	"github.com/ZaneH/keep-talking/internal/application/ports"
 	"github.com/ZaneH/keep-talking/internal/domain/entities"
@@ -33,6 +34,7 @@ func (s *BombService) CreateBombInSession(
 
 	bomb := s.bombFactory.CreateBomb(config)
 	if err := sessionActor.AddBomb(bomb); err != nil {
+		log.Printf("error adding bomb to session: %v", err)
 		return nil, err
 	}
 

@@ -66,7 +66,7 @@ func (b *Bomb) GetTimeLeft() time.Duration {
 func generateSerialNumber() string {
 	var sb strings.Builder
 	options := common.ALPHABET_UPPERCASE
-	for range 6 {
+	for i := 0; i < 6; i++ {
 		randIdx := rand.Intn(len(options))
 		sb.WriteByte(options[randIdx])
 	}
@@ -83,7 +83,7 @@ func generateRandomIndicators(count int) map[string]valueobject.Indicator {
 
 	count = rand.Intn(count + 1)
 
-	for range count {
+	for i := 0; i < count; i++ {
 		lit := rand.Intn(2) == 1
 		randIdx := rand.Intn(len(options))
 		label := options[randIdx]
@@ -107,7 +107,7 @@ func generateRandomPorts(count int) []valueobject.Port {
 	options := valueobject.AVAILABLE_PORTS
 	ports := make([]valueobject.Port, 0, count)
 
-	for range count {
+	for i := 0; i < count; i++ {
 		randIdx := rand.Intn(len(options))
 		ports = append(ports, options[randIdx])
 	}

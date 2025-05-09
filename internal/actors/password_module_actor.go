@@ -45,11 +45,12 @@ func (a *PasswordModuleActor) handleModuleCommand(msg ModuleCommandMessage) {
 		}
 
 		var err error
-		if typedCmd.Direction == valueobject.Increment {
+		switch typedCmd.Direction {
+		case valueobject.Increment:
 			passwordModule.IncrementLetterOption(typedCmd.LetterIndex)
-		} else if typedCmd.Direction == valueobject.Decrement {
+		case valueobject.Decrement:
 			passwordModule.DecrementLetterOption(typedCmd.LetterIndex)
-		} else {
+		default:
 			err = errors.New("unsupported letter change option")
 		}
 

@@ -1,0 +1,13 @@
+version: "2"
+linters:
+  exclusions:
+    generated: lax
+    rules:
+      - linters:
+          - errcheck
+          - govet
+        path: _test\.go$
+formatters:
+  settings:
+    gofmt:
+      simplify: true

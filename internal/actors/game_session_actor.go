@@ -86,7 +86,7 @@ func (g *GameSessionActor) handleAddBombCommand(msg AddBombMessage) {
 	bomb := msg.Bomb
 
 	bombActor := NewBombActor(bomb)
-	bombActor.Start() // TODO: Find a better place to start the actor
+	bombActor.Start() // TODO: Consider finding a better place to start the actor
 	g.bombActors[bomb.ID] = *bombActor
 
 	msg.ResponseChannel <- &SuccessResponse{Data: bomb.ID}

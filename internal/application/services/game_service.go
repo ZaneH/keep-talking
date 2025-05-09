@@ -28,7 +28,10 @@ func (s *GameService) CreateGameSession(ctx context.Context, cmd *command.Create
 		return nil, errors.New("failed to create game session")
 	}
 
-	s.bombService.CreateBombInSession(ctx, session.GetSessionID(), valueobject.NewDefaultBombConfig())
+	_, err = s.bombService.CreateBombInSession(ctx, session.GetSessionID(), valueobject.NewDefaultBombConfig())
+	if err != nil {
+		return nil, errors.New("failed to create bomb in session")
+	}
 
 	return session, nil
 }
