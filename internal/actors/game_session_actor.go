@@ -99,7 +99,7 @@ func (g *GameSessionActor) handleGetBombsCommand(msg GetBombsMessage) {
 func (g *GameSessionActor) handleModuleCommand(msg ModuleCommandMessage) {
 	cmd := msg.Command
 	bombID := cmd.GetBombID()
-	
+
 	bombActor, exists := g.bombActors[bombID]
 	if !exists {
 		msg.ResponseChannel <- ErrorResponse{
@@ -107,7 +107,7 @@ func (g *GameSessionActor) handleModuleCommand(msg ModuleCommandMessage) {
 		}
 		return
 	}
-	
+
 	moduleID := cmd.GetModuleID()
 	moduleActor, exists := bombActor.moduleActors[moduleID]
 	if !exists {
