@@ -4,7 +4,23 @@ Keep Talking is an open-source re-implementation of one of my favorite games: "K
 
 The game is designed for two or more players, where one player (the "Defuser") is tasked with defusing a bomb while the other players (the "Experts") provide instructions from a bomb defusal manual. The catch is that the Defuser cannot see the manual, and the Experts cannot see the bomb.
 
-This repo is a practical exercise in DDD (Domain-Driven Design) and the actor model. The game is implemented in Go and uses gRPC for interaction.
+This repo is a practical exercise in DDD (Domain-Driven Design) and the actor model.
+
+## Architecture
+
+The project follows a hexagonal architecture with clear separation of concerns:
+
+- **Domain Layer**: Core game logic and entities
+- **Application Layer**: Use cases and application services
+- **Infrastructure Layer**: External adapters and implementations
+
+The bomb defusal logic is implemented using the actor model, where different components of the game (bombs, modules, etc.) are represented as actors that communicate via messages. Multiple game sessions can run concurrently, each with its own state and actors.
+
+## API Design
+
+The server exposes a gRPC API, making it easy for clients to interact with the game. Protocol Buffers (protobuf) are used for efficient, language-agnostic data serialization. This design allows developers to build their own game clients in any language that supports gRPC.
+
+While this implementation focuses on gRPC, the Domain-Driven Design approach means that alternative interfaces (like REST or WebSockets) could be implemented without modifying the core game logic.
 
 ## Setup
 
@@ -27,3 +43,25 @@ $ go mod tidy
 ```bash
 $ go run cmd/server/main.go
 ```
+
+## TODO List
+
+- [ ] Implement more bomb modules (Keypads, Button, Morse Code, etc.)
+- [ ] Add config for game settings
+- [ ] Implement bomb timer and strike system
+- [ ] Create comprehensive test suite
+- [ ] Add game statistics and leaderboards
+- [ ] Document gRPC API for client developers
+- [ ] Create a simple demo client
+- [ ] Add CI/CD pipeline
+- [ ] Implement session management for multiplayer games
+
+## Contributing
+
+Contributions are welcome. If you'd like to add a new module, fix a bug, or improve the codebase, feel free to open a pull request.
+
+## License
+
+This project is open-source under the MIT license.
+
+**Note:** This project is an unofficial educational implementation inspired by "Keep Talking and Nobody Explodes" by Steel Crate Games. It is not affiliated with, endorsed by, or connected to Steel Crate Games in any way. All trademarks, game mechanics, and concepts belong to their respective owners. This implementation is created for educational purposes to explore software design patterns and architecture.
