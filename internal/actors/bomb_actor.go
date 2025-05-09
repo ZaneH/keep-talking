@@ -26,7 +26,7 @@ func NewBombActor(bomb *entities.Bomb) *BombActor {
 
 func (b *BombActor) Start() {
 	for moduleID, module := range b.bomb.Modules {
-		moduleActor, err := CreateModuleActor(module.GetType())
+		moduleActor, err := CreateModuleActor(b.bomb, module)
 		if err != nil {
 			log.Println("error creating module actor, skipped")
 			continue

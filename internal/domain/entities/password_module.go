@@ -102,7 +102,7 @@ func (m *PasswordModule) GetState() PasswordModuleState {
 	return m.state
 }
 
-var words = [...]string{
+var availablePasswordList = [...]string{
 	"three",
 	"apple",
 	"world",
@@ -113,8 +113,8 @@ var words = [...]string{
 }
 
 func generateWord() string {
-	randIdx := rand.Intn(len(words))
-	return words[randIdx]
+	randIdx := rand.Intn(len(availablePasswordList))
+	return availablePasswordList[randIdx]
 }
 
 func generateLetters(solution string) [5][6]string {

@@ -14,7 +14,8 @@ import (
 
 func TestSimpleWiresModuleActor_SolveBasic(t *testing.T) {
 	// Arrange
-	simpleWiresModuleActor := actors.NewSimpleWiresModuleActor()
+	simpleWiresModule := entities.NewSimpleWiresModule()
+	simpleWiresModuleActor := actors.NewSimpleWiresModuleActor(simpleWiresModule)
 	simpleWiresModuleActor.Start() // Start the actor to process messages
 	defer simpleWiresModuleActor.Stop()
 

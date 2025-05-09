@@ -14,6 +14,7 @@ var AVAILABLE_INDICATOR_LABELS = []string{
 	"KPR",
 	"OSR",
 	"BPM",
+	"FRK",
 	"JFK",
 	"MTV",
 	"RKG",

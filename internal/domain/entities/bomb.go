@@ -13,32 +13,30 @@ import (
 )
 
 type Bomb struct {
-	ID            uuid.UUID
-	SerialNumber  string
-	TimeRemaining time.Duration
-	StartingTime  time.Duration
-	StrikeCount   int
-	MaxStrikes    int
-	Faces         map[int]*BombFace
-	Modules       map[uuid.UUID]Module
-	Indicators    []valueobject.Indicator
-	Batteries     int
-	Ports         []valueobject.Port
+	ID           uuid.UUID
+	SerialNumber string
+	StartingTime time.Duration
+	StrikeCount  int
+	MaxStrikes   int
+	Faces        map[int]*BombFace
+	Modules      map[uuid.UUID]Module
+	Indicators   map[string]valueobject.Indicator
+	Batteries    int
+	Ports        []valueobject.Port
 }
 
 func NewBomb(config valueobject.BombConfig) *Bomb {
 	return &Bomb{
-		ID:            uuid.New(),
-		SerialNumber:  generateSerialNumber(),
-		TimeRemaining: config.Timer,
-		StartingTime:  config.Timer,
-		StrikeCount:   0,
-		MaxStrikes:    config.MaxStrikes,
-		Faces:         make(map[int]*BombFace),
-		Modules:       make(map[uuid.UUID]Module),
-		Indicators:    generateRandomIndicators(config.MaxIndicatorCount),
-		Batteries:     generateRandomBatteryCount(config.MinBatteries, config.MaxBatteries),
-		Ports:         generateRandomPorts(config.PortCount),
+		ID:           uuid.New(),
+		SerialNumber: generateSerialNumber(),
+		StartingTime: config.Timer,
+		StrikeCount:  0,
+		MaxStrikes:   config.MaxStrikes,
+		Faces:        make(map[int]*BombFace),
+		Modules:      make(map[uuid.UUID]Module),
+		Indicators:   generateRandomIndicators(config.MaxIndicatorCount),
+		Batteries:    generateRandomBatteryCount(config.MinBatteries, config.MaxBatteries),
+		Ports:        generateRandomPorts(config.PortCount),
 	}
 }
 
@@ -60,6 +58,11 @@ func (b *Bomb) AddModule(module Module, faceIndex int, position valueobject.Modu
 	return nil
 }
 
+func (b *Bomb) GetTimeLeft() time.Duration {
+	now := time.Now()
+	return b.StartingTime - time.Since(now)
+}
+
 func generateSerialNumber() string {
 	var sb strings.Builder
 	options := common.ALPHABET_UPPERCASE
@@ -71,9 +74,9 @@ func generateSerialNumber() string {
 	return sb.String()
 }
 
-func generateRandomIndicators(count int) []valueobject.Indicator {
+func generateRandomIndicators(count int) map[string]valueobject.Indicator {
 	options := valueobject.AVAILABLE_INDICATOR_LABELS
-	indicators := make([]valueobject.Indicator, 0, count)
+	indicators := make(map[string]valueobject.Indicator, count)
 	if count == 0 {
 		return indicators
 	}
@@ -82,11 +85,12 @@ func generateRandomIndicators(count int) []valueobject.Indicator {
 
 	for range count {
 		lit := rand.Intn(2) == 1
-		randIdx := rand.Intn(len(words))
-		indicators = append(indicators, valueobject.Indicator{
+		randIdx := rand.Intn(len(options))
+		label := options[randIdx]
+		indicators[label] = valueobject.Indicator{
 			Lit:   lit,
-			Label: options[randIdx],
-		})
+			Label: label,
+		}
 	}
 
 	return indicators
@@ -115,7 +119,7 @@ func (b *Bomb) String() string {
 	var sb strings.Builder
 	sb.WriteString("Bomb ID: " + b.ID.String() + "\n")
 	sb.WriteString("Serial Number: " + b.SerialNumber + "\n")
-	sb.WriteString("Time Remaining: " + b.TimeRemaining.String() + "\n")
+	sb.WriteString("Time Remaining: " + b.GetTimeLeft().String() + "\n")
 	sb.WriteString("Strike Count: " + fmt.Sprint(b.StrikeCount) + "\n")
 	sb.WriteString("Max Strikes: " + fmt.Sprint(b.MaxStrikes) + "\n")
 	sb.WriteString("Batteries: " + fmt.Sprint(b.Batteries) + "\n")

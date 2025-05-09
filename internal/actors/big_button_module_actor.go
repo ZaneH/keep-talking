@@ -7,12 +7,18 @@ import (
 	"github.com/ZaneH/keep-talking/internal/domain/entities"
 )
 
-type SimpleWiresModuleActor struct {
+type BigButtonActorError error
+
+var (
+	ErrBigButtonUnhandledPressType BigButtonActorError = errors.New("unhandled press type")
+)
+
+type ButtonModuleActor struct {
 	BaseModuleActor
 }
 
-func NewSimpleWiresModuleActor(module entities.Module) *SimpleWiresModuleActor {
-	actor := &SimpleWiresModuleActor{
+func NewBigButtonModuleActor(bomb *entities.Bomb, module entities.Module) *ButtonModuleActor {
+	actor := &ButtonModuleActor{
 		BaseModuleActor: NewBaseModuleActor(module, 50),
 	}
 
@@ -21,7 +27,7 @@ func NewSimpleWiresModuleActor(module entities.Module) *SimpleWiresModuleActor {
 	return actor
 }
 
-func (a *SimpleWiresModuleActor) handleMessage(msg Message) {
+func (a *ButtonModuleActor) handleMessage(msg Message) {
 	switch m := msg.(type) {
 	case ModuleCommandMessage:
 		a.handleModuleCommand(m)
@@ -30,25 +36,29 @@ func (a *SimpleWiresModuleActor) handleMessage(msg Message) {
 	}
 }
 
-func (a *SimpleWiresModuleActor) handleModuleCommand(msg ModuleCommandMessage) {
+func (a *ButtonModuleActor) handleModuleCommand(msg ModuleCommandMessage) {
 	cmd := msg.Command
 
 	switch typedCmd := cmd.(type) {
-	case *command.SimpleWiresInputCommand:
-		wiresModule, ok := a.module.(*entities.SimpleWiresModule)
+	case *command.BigButtonInputCommand:
+		buttonModule, ok := a.module.(*entities.BigButtonModule)
 		if !ok {
 			msg.GetResponseChannel() <- ErrorResponse{
-				Err: errors.New("invalid module type"),
+				Err: ErrBigButtonUnhandledPressType,
 			}
 			return
 		}
 
-		err := wiresModule.CutWire(typedCmd.WireIndex)
-		result := &command.SimpleWiresInputCommandResult{
+		stripColor, err := buttonModule.PressButton(typedCmd.Action)
+		result := &command.BigButtonInputCommandResult{
 			BaseModuleInputCommandResult: command.BaseModuleInputCommandResult{
 				Solved: a.module.IsSolved(),
 				Strike: err != nil,
 			},
+		}
+
+		if stripColor != nil {
+			result.StripColor = *stripColor
 		}
 
 		if err != nil {
@@ -60,10 +70,9 @@ func (a *SimpleWiresModuleActor) handleModuleCommand(msg ModuleCommandMessage) {
 				Data: result,
 			}
 		}
-
 	default:
 		msg.ResponseChannel <- ErrorResponse{
-			Err: errors.New("unsupported command type for simple wires module"),
+			Err: ErrInvalidModuleCommand,
 		}
 	}
 }

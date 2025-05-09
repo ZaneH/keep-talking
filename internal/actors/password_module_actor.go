@@ -12,8 +12,7 @@ type PasswordModuleActor struct {
 	BaseModuleActor
 }
 
-func NewPasswordModuleActor() *PasswordModuleActor {
-	module := entities.NewPasswordModule(nil)
+func NewPasswordModuleActor(module *entities.PasswordModule) *PasswordModuleActor {
 	actor := &PasswordModuleActor{
 		BaseModuleActor: NewBaseModuleActor(module, 50),
 	}

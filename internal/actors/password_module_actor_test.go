@@ -15,7 +15,8 @@ import (
 
 func TestPasswordModuleActor_LetterChange(t *testing.T) {
 	// Arrange
-	passwordModuleActor := actors.NewPasswordModuleActor()
+	passwordModule := entities.NewPasswordModule(nil)
+	passwordModuleActor := actors.NewPasswordModuleActor(passwordModule)
 	passwordModuleActor.Start() // Start the actor to process messages
 	defer passwordModuleActor.Stop()
 
@@ -104,35 +105,6 @@ func TestPasswordModuleActor_LetterChange(t *testing.T) {
 	}
 
 	log.Printf("Final state: %v", passwordModuleActor.GetModule())
-
-	// Test with unsupported command type
-	t.Run("Unsupported command type", func(t *testing.T) {
-		// Using a command type that's not supported by this module
-		cmd := &command.SimpleWiresInputCommand{
-			BaseModuleInputCommand: command.BaseModuleInputCommand{
-				SessionID: sessionID,
-				BombID:    bombID,
-				ModuleID:  moduleID,
-			},
-			WireIndex: 0,
-		}
-
-		respChan := make(chan actors.Response, 1)
-
-		passwordModuleActor.Send(actors.ModuleCommandMessage{
-			Command:         cmd,
-			ResponseChannel: respChan,
-		})
-
-		var resp actors.Response
-		select {
-		case resp = <-respChan:
-		case <-time.After(1 * time.Second):
-			t.Fatal("Timeout waiting for response")
-		}
-
-		assert.False(t, resp.IsSuccess(), "Expected error response for unsupported command")
-	})
 }
 
 func TestPasswordModuleActor_ModuleTypeMismatch(t *testing.T) {

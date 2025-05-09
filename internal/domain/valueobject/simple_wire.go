@@ -1,17 +1,17 @@
 package valueobject
 
 type SimpleWire struct {
-	WireColor string
+	WireColor Color
 	IsCut     bool
 }
 
-var SimpleWireColors = [...]string{
-	"Red",
-	"Blue",
-	"White",
-	"Black",
-	"Yellow",
-	"Green",
-	"Orange",
-	"Pink",
+var SimpleWireColors = [...]Color{
+	Red,
+	Blue,
+	White,
+	Black,
+	Yellow,
+	Green,
+	Orange,
+	Pink,
 }
