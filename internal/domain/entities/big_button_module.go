@@ -11,21 +11,21 @@ import (
 
 type BigButtonState struct {
 	ModuleState
-	buttonColor valueobject.Color
+	ButtonColor valueobject.Color
 	// The label on the button
-	label string
-	// The final digit of the bomb's timer must match to solve. If it's nil,
-	// tapping the button is the only valid solution.
-	releaseDigit *int
+	Label string
+	// The final digit of the bomb's timer must match to solve. If it's nil, tapping the
+	// button is the only valid solution.
+	ReleaseDigit *int
 }
 
 func NewButtonState() BigButtonState {
 	colorIdx := rand.Intn(len(bigButtonColors))
 	labelIdx := rand.Intn(len(availableButtonWords))
 	return BigButtonState{
-		buttonColor:  bigButtonColors[colorIdx],
-		label:        string(availableButtonWords[labelIdx]),
-		releaseDigit: nil,
+		ButtonColor:  bigButtonColors[colorIdx],
+		Label:        string(availableButtonWords[labelIdx]),
+		ReleaseDigit: nil,
 	}
 }
 
@@ -57,7 +57,7 @@ func (m *BigButtonModule) SetState(state BigButtonState) {
 
 func (m *BigButtonModule) String() string {
 	var result string
-	result += fmt.Sprintf("Button Color: %s\n", m.State.buttonColor)
+	result += fmt.Sprintf("Button Color: %s\n", m.State.ButtonColor)
 
 	return result
 }
@@ -92,7 +92,7 @@ func (m *BigButtonModule) PressButton(pressType valueobject.PressType) (*valueob
 // Handles a short press (tap) of the button. There are certain conditions that must be met
 // for the module to be marked as solved. If the conditions are not met, it will return an error.
 func (m *BigButtonModule) handleShortPress() (handled bool, err error) {
-	if m.bomb.Batteries > 1 && m.State.label == string(Detonate) {
+	if m.bomb.Batteries > 1 && m.State.Label == string(Detonate) {
 		m.State.MarkSolved = true
 		return true, nil
 	}
@@ -102,7 +102,7 @@ func (m *BigButtonModule) handleShortPress() (handled bool, err error) {
 		return true, nil
 	}
 
-	if m.State.buttonColor == valueobject.Red && m.State.label == string(Hold) {
+	if m.State.ButtonColor == valueobject.Red && m.State.Label == string(Hold) {
 		m.State.MarkSolved = true
 		return true, nil
 	}
@@ -125,10 +125,10 @@ func (m *BigButtonModule) handleLongPress() (handled bool, color valueobject.Col
 // solved. Otherwise, it returns an error.
 func (m *BigButtonModule) handleLongPressRelease() (handled bool, err error) {
 	time := m.bomb.GetTimeLeft()
-	if m.State.releaseDigit == nil {
+	if m.State.ReleaseDigit == nil {
 		return true, errors.New("release digit is nil")
 	} else {
-		if int(time.Seconds())%10 == *m.State.releaseDigit {
+		if int(time.Seconds())%10 == *m.State.ReleaseDigit {
 			m.State.MarkSolved = true
 		} else {
 			return true, errors.New("release digit does not match")

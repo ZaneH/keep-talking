@@ -27,6 +27,7 @@ func TestBombFactory_CreateBomb(t *testing.T) {
 		PortCount:         0,
 	}
 
+	// Act
 	bomb := f.CreateBomb(c)
 
 	// Assert
