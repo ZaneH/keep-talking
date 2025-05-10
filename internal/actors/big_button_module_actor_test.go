@@ -134,3 +134,62 @@ func TestBigButtonModuleActor_FRKLitAndThreeBatteries(t *testing.T) {
 
 	log.Printf("Final state: %v", buttonModuleActor.GetModule())
 }
+
+func TestBigButtonModuleActor_YellowButton(t *testing.T) {
+	// Arrange
+	bomb := entities.NewBomb(valueobject.NewDefaultBombConfig())
+	bomb.Batteries = 1
+	bomb.Indicators["FRK"] = valueobject.Indicator{Lit: false}
+
+	buttonModule := entities.NewBigButtonModule(bomb)
+
+	testState := entities.NewButtonState()
+	testState.ButtonColor = valueobject.Yellow
+	testState.Label = "Hold"
+	buttonModule.SetState(testState)
+
+	buttonModuleActor := actors.NewBigButtonModuleActor(bomb, buttonModule)
+	buttonModuleActor.Start() // Start the actor to process messages
+	defer buttonModuleActor.Stop()
+
+	sessionID := uuid.New()
+	bombID := bomb.ID
+	moduleID := buttonModule.ModuleID
+
+	// Act
+	cmd := &command.BigButtonInputCommand{
+		BaseModuleInputCommand: command.BaseModuleInputCommand{
+			SessionID: sessionID,
+			BombID:    bombID,
+			ModuleID:  moduleID,
+		},
+		Action: valueobject.PressTypeTap,
+	}
+
+	respChan := make(chan actors.Response, 1)
+
+	buttonModuleActor.Send(actors.ModuleCommandMessage{
+		Command:         cmd,
+		ResponseChannel: respChan,
+	})
+
+	// Assert
+	var resp actors.Response
+	select {
+	case resp = <-respChan:
+	case <-time.After(1 * time.Second):
+		t.Fatalf("timeout waiting for response")
+	}
+
+	if successResp, ok := resp.(actors.SuccessResponse); ok {
+		if typedResp, ok := successResp.Data.(*command.BigButtonInputCommandResult); ok {
+			assert.True(t, typedResp.Strike, "Expected a strike for this operation")
+		} else {
+			t.Errorf("Expected command result response, found %T", successResp.Data)
+		}
+	} else {
+		t.Error("Expected success response")
+	}
+
+	log.Printf("Final state: %v", buttonModuleActor.GetModule())
+}

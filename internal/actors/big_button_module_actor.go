@@ -49,7 +49,7 @@ func (a *ButtonModuleActor) handleModuleCommand(msg ModuleCommandMessage) {
 			return
 		}
 
-		stripColor, err := buttonModule.PressButton(typedCmd.Action)
+		stripColor, strike, err := buttonModule.PressButton(typedCmd.Action)
 		result := &command.BigButtonInputCommandResult{
 			BaseModuleInputCommandResult: command.BaseModuleInputCommandResult{
 				Solved: a.module.IsSolved(),
@@ -61,7 +61,11 @@ func (a *ButtonModuleActor) handleModuleCommand(msg ModuleCommandMessage) {
 			result.StripColor = *stripColor
 		}
 
-		if err != nil {
+		if strike {
+			msg.ResponseChannel <- SuccessResponse{
+				Data: result,
+			}
+		} else if err != nil {
 			msg.ResponseChannel <- ErrorResponse{
 				Err: err,
 			}

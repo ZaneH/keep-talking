@@ -43,15 +43,19 @@ func (a *SimpleWiresModuleActor) handleModuleCommand(msg ModuleCommandMessage) {
 			return
 		}
 
-		err := wiresModule.CutWire(typedCmd.WireIndex)
+		strike, err := wiresModule.CutWire(typedCmd.WireIndex)
 		result := &command.SimpleWiresInputCommandResult{
 			BaseModuleInputCommandResult: command.BaseModuleInputCommandResult{
 				Solved: a.module.IsSolved(),
-				Strike: err != nil,
+				Strike: strike,
 			},
 		}
 
-		if err != nil {
+		if strike {
+			msg.ResponseChannel <- SuccessResponse{
+				Data: result,
+			}
+		} else if err != nil {
 			msg.ResponseChannel <- ErrorResponse{
 				Err: err,
 			}

@@ -114,10 +114,10 @@ func (m *SimpleWiresModule) IsSolved() bool {
 	return true
 }
 
-func (m *SimpleWiresModule) CutWire(wireIndex int) error {
+func (m *SimpleWiresModule) CutWire(wireIndex int) (strike bool, err error) {
 	wire := &m.State.Wires[wireIndex]
 	if wire.IsCut {
-		return errors.New("wire already cut")
+		return false, errors.New("wire already cut")
 	}
 
 	wire.IsCut = true
@@ -131,12 +131,12 @@ func (m *SimpleWiresModule) CutWire(wireIndex int) error {
 	}
 
 	if !isInSolution {
-		return errors.New("wire was not meant to be cut")
+		return true, errors.New("wire was not meant to be cut")
 	}
 
 	if m.IsSolved() {
 		m.State.MarkSolved = true
 	}
 
-	return nil
+	return false, nil
 }
