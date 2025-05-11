@@ -98,7 +98,7 @@ func TestPasswordModuleActor_LetterChange(t *testing.T) {
 				result, ok := successResp.Data.(*command.PasswordLetterChangeCommandResult)
 				assert.True(t, ok, "Expected PasswordLetterChangeCommandResult type")
 
-				assert.Equal(t, specifiedModule.IsSolved(), result.Solved, "Solved state should match module state")
+				assert.Equal(t, specifiedModule.GetModuleState().MarkSolved, result.Solved, "Solved state should match module state")
 				assert.False(t, result.Strike, "No strike should be issued for successful operations")
 			}
 		})

@@ -10,10 +10,10 @@ import (
 )
 
 type PasswordModuleState struct {
+	ModuleState
 	Letters   [5][6]string // 5 letters, 6 options each
 	Positions [5]int       // positions of the letters
 	solution  string
-	ModuleState
 }
 
 type PasswordModule struct {
@@ -47,12 +47,8 @@ func (m *PasswordModule) GetCurrentGuess() string {
 	return guess
 }
 
-func (m *PasswordModule) IsSolved() bool {
-	return m.state.solution == m.GetCurrentGuess()
-}
-
 func (m *PasswordModule) CheckPassword() error {
-	if m.IsSolved() {
+	if m.state.solution == m.GetCurrentGuess() {
 		m.state.MarkSolved = true
 		return nil
 	}
@@ -98,8 +94,8 @@ func (m *PasswordModule) GetType() valueobject.ModuleType {
 	return valueobject.Password
 }
 
-func (m *PasswordModule) GetState() PasswordModuleState {
-	return m.state
+func (m *PasswordModule) GetModuleState() ModuleState {
+	return m.state.ModuleState
 }
 
 var availablePasswordList = [...]string{

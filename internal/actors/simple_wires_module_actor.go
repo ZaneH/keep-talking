@@ -46,7 +46,7 @@ func (a *SimpleWiresModuleActor) handleModuleCommand(msg ModuleCommandMessage) {
 		strike, err := wiresModule.CutWire(typedCmd.WireIndex)
 		result := &command.SimpleWiresInputCommandResult{
 			BaseModuleInputCommandResult: command.BaseModuleInputCommandResult{
-				Solved: a.module.IsSolved(),
+				Solved: a.module.GetModuleState().MarkSolved,
 				Strike: strike,
 			},
 		}

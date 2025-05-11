@@ -1,6 +1,7 @@
 package actors_test
 
 import (
+	"log"
 	"testing"
 	"time"
 
@@ -12,9 +13,11 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestSimpleWiresModuleActor_SolveBasic(t *testing.T) {
+func TestSimpleWiresModuleActor_FourWiresMoreThanOneRedOddSerial(t *testing.T) {
 	// Arrange
-	simpleWiresModule := entities.NewSimpleWiresModule()
+	bomb := entities.NewBomb(valueobject.NewDefaultBombConfig())
+	bomb.SerialNumber = "1111"
+	simpleWiresModule := entities.NewSimpleWiresModule(bomb)
 	simpleWiresModuleActor := actors.NewSimpleWiresModuleActor(simpleWiresModule)
 	simpleWiresModuleActor.Start() // Start the actor to process messages
 	defer simpleWiresModuleActor.Stop()
@@ -41,7 +44,6 @@ func TestSimpleWiresModuleActor_SolveBasic(t *testing.T) {
 				WireColor: valueobject.SimpleWireColors[0],
 			},
 		},
-		SolutionIndices: []int{0, 3},
 	}
 
 	specifiedModule.SetState(testState)
@@ -60,7 +62,7 @@ func TestSimpleWiresModuleActor_SolveBasic(t *testing.T) {
 			desc:      "Cut the first Red wire",
 			wireIndex: 0,
 			solved:    false,
-			strike:    false,
+			strike:    true,
 		},
 		{
 			desc:      "Cut the second wire",
@@ -69,13 +71,7 @@ func TestSimpleWiresModuleActor_SolveBasic(t *testing.T) {
 			strike:    true,
 		},
 		{
-			desc:      "Cut the third wire",
-			wireIndex: 2,
-			solved:    false,
-			strike:    true,
-		},
-		{
-			desc:      "Cut the second Red wire",
+			desc:      "Cut the last Red wire",
 			wireIndex: 3,
 			solved:    true,
 			strike:    false,
@@ -115,6 +111,7 @@ func TestSimpleWiresModuleActor_SolveBasic(t *testing.T) {
 
 			if resp.IsSuccess() {
 				successResp, ok := resp.(actors.SuccessResponse)
+				log.Printf("Response: %+v", successResp.Data)
 				assert.True(t, ok, "Expected SuccessResponse type")
 
 				result, ok := successResp.Data.(*command.SimpleWiresInputCommandResult)
@@ -122,11 +119,14 @@ func TestSimpleWiresModuleActor_SolveBasic(t *testing.T) {
 
 				assert.Equal(t, action.solved, result.Solved, "Step %d: solved state mismatch", i+1)
 				assert.Equal(t, action.strike, result.Strike, "Step %d: strike state mismatch", i+1)
+			} else {
+				errorResp := resp.(actors.ErrorResponse)
+				log.Printf("Error response: %+v", errorResp)
 			}
 		})
 	}
 
 	// Verify final state
-	assert.True(t, specifiedModule.IsSolved(), "Module should be solved at the end of the test")
+	assert.True(t, specifiedModule.GetModuleState().MarkSolved, "Module should be solved at the end of the test")
 	t.Logf("Final state: %s", specifiedModule)
 }

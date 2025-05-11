@@ -7,7 +7,7 @@ import (
 
 type Module interface {
 	GetModuleID() uuid.UUID
-	IsSolved() bool
+	GetModuleState() ModuleState
 	GetType() valueobject.ModuleType
 }
 

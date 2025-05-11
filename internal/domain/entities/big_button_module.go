@@ -53,6 +53,10 @@ func (m *BigButtonModule) GetType() valueobject.ModuleType {
 	return valueobject.SimpleWires
 }
 
+func (m *BigButtonModule) GetModuleState() ModuleState {
+	return m.State.ModuleState
+}
+
 func (m *BigButtonModule) SetState(state BigButtonState) {
 	m.State = state
 }
@@ -62,10 +66,6 @@ func (m *BigButtonModule) String() string {
 	result += fmt.Sprintf("Button Color: %s\n", m.State.ButtonColor)
 
 	return result
-}
-
-func (m *BigButtonModule) IsSolved() bool {
-	return false
 }
 
 func (m *BigButtonModule) PressButton(pressType valueobject.PressType) (color *valueobject.Color, strike bool, err error) {

@@ -64,7 +64,7 @@ func (f *BombFactoryImpl) placeModulesOnBomb(bomb *entities.Bomb, moduleTypes []
 		}
 
 		location := availablePositions[i]
-		module := f.createModule(moduleType)
+		module := f.createModule(bomb, moduleType)
 		err := bomb.AddModule(module, location.face, location.position)
 		if err != nil {
 			log.Printf("error adding module to bomb: %v. skipping...", err)
@@ -73,10 +73,10 @@ func (f *BombFactoryImpl) placeModulesOnBomb(bomb *entities.Bomb, moduleTypes []
 	}
 }
 
-func (f *BombFactoryImpl) createModule(moduleType valueobject.ModuleType) entities.Module {
+func (f *BombFactoryImpl) createModule(bomb *entities.Bomb, moduleType valueobject.ModuleType) entities.Module {
 	switch moduleType {
 	case valueobject.SimpleWires:
-		return entities.NewSimpleWiresModule()
+		return entities.NewSimpleWiresModule(bomb)
 	case valueobject.Password:
 		return entities.NewPasswordModule(nil)
 	default:

@@ -5,49 +5,47 @@ import (
 	"fmt"
 	"math/rand"
 
+	"github.com/ZaneH/keep-talking/internal/application/helpers"
 	"github.com/ZaneH/keep-talking/internal/domain/valueobject"
 	"github.com/google/uuid"
 )
 
-const WIRE_POSITIONS = 6
+const MIN_WIRES = 3
+const MAX_WIRES = 6
 
 type SimpleWiresState struct {
 	ModuleState
-	SolutionIndices []int
-	Wires           []valueobject.SimpleWire
+	Wires []valueobject.SimpleWire
 }
 
 func NewSimpleWiresState() SimpleWiresState {
-	var wires []valueobject.SimpleWire
-	var solution []int
-	for {
-		wires = generateRandomWires()
-		solution = buildSolution(wires)
-		if len(solution) > 0 {
-			break
-		}
-	}
+	var wires = generateRandomWires()
 
 	return SimpleWiresState{
-		Wires:           wires,
-		SolutionIndices: solution,
+		Wires: wires,
 	}
 }
 
 type SimpleWiresModule struct {
 	ModuleID uuid.UUID
 	State    SimpleWiresState
+	bomb     *Bomb
 }
 
-func NewSimpleWiresModule() *SimpleWiresModule {
+func NewSimpleWiresModule(bomb *Bomb) *SimpleWiresModule {
 	return &SimpleWiresModule{
 		ModuleID: uuid.New(),
 		State:    NewSimpleWiresState(),
+		bomb:     bomb,
 	}
 }
 
 func (m *SimpleWiresModule) GetModuleID() uuid.UUID {
 	return m.ModuleID
+}
+
+func (m *SimpleWiresModule) GetModuleState() ModuleState {
+	return m.State.ModuleState
 }
 
 func (m *SimpleWiresModule) GetType() valueobject.ModuleType {
@@ -71,28 +69,11 @@ func (m *SimpleWiresModule) String() string {
 	return result
 }
 
-func buildSolution(wires []valueobject.SimpleWire) []int {
-	solution := make([]int, 0)
-
-	for i, wire := range wires {
-		// TODO: Implement a guide to determine the solution
-		// assume 'Red' is the solution for now
-		if wire.WireColor == valueobject.SimpleWireColors[0] {
-			solution = append(solution, i)
-		}
-	}
-
-	return solution
-}
-
 func generateRandomWires() []valueobject.SimpleWire {
-	wires := make([]valueobject.SimpleWire, WIRE_POSITIONS)
+	nWires := rand.Intn(MAX_WIRES-MIN_WIRES+1) + MIN_WIRES
+	wires := make([]valueobject.SimpleWire, nWires)
 
-	for i := 0; i < WIRE_POSITIONS; i++ {
-		if n := rand.Intn(100); n < 40 {
-			continue
-		}
-
+	for i := 0; i < nWires; i++ {
 		color := valueobject.SimpleWireColors[i%len(valueobject.SimpleWireColors)]
 		wires[i] = valueobject.SimpleWire{
 			WireColor: color,
@@ -102,16 +83,9 @@ func generateRandomWires() []valueobject.SimpleWire {
 	return wires
 }
 
-func (m *SimpleWiresModule) IsSolved() bool {
-	for _, index := range m.State.SolutionIndices {
-		if index < 0 || index >= len(m.State.Wires) {
-			return false
-		}
-		if !m.State.Wires[index].IsCut {
-			return false
-		}
-	}
-	return true
+func (m *SimpleWiresModule) setSolved() (bool, error) {
+	m.State.MarkSolved = true
+	return false, nil
 }
 
 func (m *SimpleWiresModule) CutWire(wireIndex int) (strike bool, err error) {
@@ -122,21 +96,165 @@ func (m *SimpleWiresModule) CutWire(wireIndex int) (strike bool, err error) {
 
 	wire.IsCut = true
 
-	isInSolution := false
-	for _, index := range m.State.SolutionIndices {
-		if index == wireIndex {
-			isInSolution = true
-			break
+	if len(m.State.Wires) == 3 {
+		// If there are no red wires, cut the second wire.
+		if !hasColor(m.State.Wires, valueobject.Red) {
+			if wireIndex == 1 {
+				return m.setSolved()
+			} else {
+				return true, nil
+			}
+		}
+
+		// If the last wire is white, cut the last wire.
+		if m.State.Wires[len(m.State.Wires)-1].WireColor == valueobject.White {
+			if wireIndex == len(m.State.Wires)-1 {
+				return m.setSolved()
+			} else {
+				return true, nil
+			}
+		}
+
+		// If there is more than one blue wire, cut the last blue wire.
+		blueIdxs := colorIndecies(m.State.Wires, valueobject.Blue)
+		if len(blueIdxs) > 1 {
+			if wireIndex == blueIdxs[len(blueIdxs)-1] {
+				return m.setSolved()
+			} else {
+				return true, nil
+			}
+		}
+	} else if len(m.State.Wires) == 4 {
+		// If there is more than one red wire and the last digit of the serial number is odd,
+		// cut the last red wire.
+		redIdxs := colorIndecies(m.State.Wires, valueobject.Red)
+		if len(redIdxs) > 1 && helpers.SerialNumbersEndsWithOddDigit(m.bomb.SerialNumber) {
+			if wireIndex == redIdxs[len(redIdxs)-1] {
+				return m.setSolved()
+			} else {
+				return true, nil
+			}
+		}
+
+		// If the last wire is yellow and there are no red wires, cut the first wire.
+		if m.State.Wires[len(m.State.Wires)-1].WireColor == valueobject.Yellow && !hasColor(m.State.Wires, valueobject.Red) {
+			if wireIndex == 0 {
+				return m.setSolved()
+			} else {
+				return true, nil
+			}
+		}
+
+		// If there is exactly one blue wire, cut the first wire.
+		if len(colorIndecies(m.State.Wires, valueobject.Blue)) == 1 {
+			if wireIndex == 0 {
+				return m.setSolved()
+			} else {
+				return true, nil
+			}
+		}
+
+		// If there is more than one yellow wire, cut the last wire.
+		yellowIdxs := colorIndecies(m.State.Wires, valueobject.Yellow)
+		if len(yellowIdxs) > 1 {
+			if wireIndex == yellowIdxs[len(yellowIdxs)-1] {
+				return m.setSolved()
+			} else {
+				return true, nil
+			}
+		}
+
+		// Otherwise, cut the second wire.
+		if wireIndex == 1 {
+			return m.setSolved()
+		}
+	} else if len(m.State.Wires) == 5 {
+		// If the last wire is black and the last digit of the serial number is odd,
+		// cut the fourth wire.
+		if m.State.Wires[len(m.State.Wires)-1].WireColor == valueobject.Black && helpers.SerialNumbersEndsWithOddDigit(m.bomb.SerialNumber) {
+			if wireIndex == 3 {
+				return m.setSolved()
+			} else {
+				return true, nil
+			}
+		}
+
+		// If there is exactly one red wire and there are no yellow wires, cut the first wire.
+		if len(colorIndecies(m.State.Wires, valueobject.Red)) == 1 && !hasColor(m.State.Wires, valueobject.Yellow) {
+			if wireIndex == 0 {
+				return m.setSolved()
+			} else {
+				return true, nil
+			}
+		}
+
+		// If there are no black wires, cut the second wire.
+		if !hasColor(m.State.Wires, valueobject.Black) {
+			if wireIndex == 1 {
+				return m.setSolved()
+			} else {
+				return true, nil
+			}
+		}
+
+		// Otherwise, cut the first wire
+		if wireIndex == 0 {
+			return m.setSolved()
+		}
+	} else if len(m.State.Wires) == 6 {
+		// If there are no yellow wires and the last digit of the serial number is odd,
+		// cut the third wire.
+		if !hasColor(m.State.Wires, valueobject.Yellow) && helpers.SerialNumbersEndsWithOddDigit(m.bomb.SerialNumber) {
+			if wireIndex == 2 {
+				return m.setSolved()
+			} else {
+				return true, nil
+			}
+		}
+
+		// If there is exactly one yellow wire and there is more than one white wire,
+		// cut the fourth wire.
+		if len(colorIndecies(m.State.Wires, valueobject.Yellow)) == 1 && len(colorIndecies(m.State.Wires, valueobject.White)) > 1 {
+			if wireIndex == 3 {
+				return m.setSolved()
+			} else {
+				return true, nil
+			}
+		}
+
+		// If there are no red wires, cut the last wire.
+		if !hasColor(m.State.Wires, valueobject.Red) {
+			if wireIndex == len(m.State.Wires)-1 {
+				return m.setSolved()
+			} else {
+				return true, nil
+			}
+		}
+
+		// Otherwise, cut the fourth wire.
+		if wireIndex == 3 {
+			return m.setSolved()
 		}
 	}
 
-	if !isInSolution {
-		return true, errors.New("wire was not meant to be cut")
-	}
+	return true, nil
+}
 
-	if m.IsSolved() {
-		m.State.MarkSolved = true
+func hasColor(wires []valueobject.SimpleWire, color valueobject.Color) bool {
+	for _, wire := range wires {
+		if wire.WireColor == color {
+			return true
+		}
 	}
+	return false
+}
 
-	return false, nil
+func colorIndecies(wires []valueobject.SimpleWire, color valueobject.Color) []int {
+	indecies := []int{}
+	for i, wire := range wires {
+		if wire.WireColor == color {
+			indecies = append(indecies, i)
+		}
+	}
+	return indecies
 }

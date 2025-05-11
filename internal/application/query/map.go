@@ -29,7 +29,7 @@ func mapModulesToProto(modules map[uuid.UUID]actors.ModuleActor) map[string]*pb.
 		protoModules[module.GetModuleID().String()] = &pb.Module{
 			Id:     module.GetModuleID().String(),
 			Type:   mapTypeToProto(module.GetModule().GetType()),
-			Solved: module.GetModule().IsSolved(),
+			Solved: module.GetModule().GetModuleState().MarkSolved,
 		}
 	}
 
