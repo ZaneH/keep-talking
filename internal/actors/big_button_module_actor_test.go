@@ -24,7 +24,7 @@ func TestBigButtonModuleActor_TwoBatteriesAndDetonate(t *testing.T) {
 	testState.Label = "Detonate"
 	buttonModule.SetState(testState)
 
-	buttonModuleActor := actors.NewBigButtonModuleActor(bomb, buttonModule)
+	buttonModuleActor := actors.NewBigButtonModuleActor(buttonModule)
 	buttonModuleActor.Start() // Start the actor to process messages
 	defer buttonModuleActor.Stop()
 
@@ -86,7 +86,7 @@ func TestBigButtonModuleActor_FRKLitAndThreeBatteries(t *testing.T) {
 	testState.Label = "Abort"
 	buttonModule.SetState(testState)
 
-	buttonModuleActor := actors.NewBigButtonModuleActor(bomb, buttonModule)
+	buttonModuleActor := actors.NewBigButtonModuleActor(buttonModule)
 	buttonModuleActor.Start() // Start the actor to process messages
 	defer buttonModuleActor.Stop()
 
@@ -148,7 +148,7 @@ func TestBigButtonModuleActor_YellowButton(t *testing.T) {
 	testState.Label = "Hold"
 	buttonModule.SetState(testState)
 
-	buttonModuleActor := actors.NewBigButtonModuleActor(bomb, buttonModule)
+	buttonModuleActor := actors.NewBigButtonModuleActor(buttonModule)
 	buttonModuleActor.Start() // Start the actor to process messages
 	defer buttonModuleActor.Stop()
 

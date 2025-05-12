@@ -6,6 +6,7 @@ import (
 	"log"
 	"strings"
 
+	"github.com/ZaneH/keep-talking/internal/application/command"
 	"github.com/ZaneH/keep-talking/internal/domain/entities"
 	"github.com/google/uuid"
 )
@@ -116,6 +117,28 @@ func (g *GameSessionActor) handleModuleCommand(msg ModuleCommandMessage) {
 		return
 	}
 
-	// Forward the command to the module actor
-	moduleActor.Send(msg)
+	proxyChannel := make(chan Response, 1)
+
+	proxyMsg := ModuleCommandMessage{
+		Command:         msg.Command,
+		ResponseChannel: proxyChannel,
+	}
+
+	moduleActor.Send(proxyMsg)
+
+	response := <-proxyChannel
+
+	if successResp, ok := response.(SuccessResponse); ok {
+		if result, ok := successResp.Data.(command.ModuleInputCommandResult); ok {
+			if result.HasStrike() {
+				bombActor.GetBomb().AddStrike()
+			}
+		} else {
+			log.Printf("unhandled response type: %T", successResp.Data)
+		}
+	} else {
+		log.Printf("unexpected error response type: %T", response)
+	}
+
+	msg.ResponseChannel <- response
 }

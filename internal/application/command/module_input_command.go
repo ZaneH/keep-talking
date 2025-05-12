@@ -21,6 +21,19 @@ type BaseModuleInputCommandResult struct {
 	Strike bool
 }
 
+type ModuleInputCommandResult interface {
+	HasStrike() bool
+	IsSolved() bool
+}
+
+func (r BaseModuleInputCommandResult) HasStrike() bool {
+	return r.Strike
+}
+
+func (r BaseModuleInputCommandResult) IsSolved() bool {
+	return r.Solved
+}
+
 func (c *BaseModuleInputCommand) GetSessionID() uuid.UUID {
 	return c.SessionID
 }

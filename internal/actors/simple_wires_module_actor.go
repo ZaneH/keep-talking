@@ -51,11 +51,7 @@ func (a *SimpleWiresModuleActor) handleModuleCommand(msg ModuleCommandMessage) {
 			},
 		}
 
-		if strike {
-			msg.ResponseChannel <- SuccessResponse{
-				Data: result,
-			}
-		} else if err != nil {
+		if err != nil {
 			msg.ResponseChannel <- ErrorResponse{
 				Err: err,
 			}
@@ -64,7 +60,6 @@ func (a *SimpleWiresModuleActor) handleModuleCommand(msg ModuleCommandMessage) {
 				Data: result,
 			}
 		}
-
 	default:
 		msg.ResponseChannel <- ErrorResponse{
 			Err: errors.New("unsupported command type for simple wires module"),

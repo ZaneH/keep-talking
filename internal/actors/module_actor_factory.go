@@ -13,7 +13,9 @@ func CreateModuleActor(bomb *entities.Bomb, module entities.Module) (ModuleActor
 	case *entities.PasswordModule:
 		return NewPasswordModuleActor(module), nil
 	case *entities.BigButtonModule:
-		return NewBigButtonModuleActor(bomb, module), nil
+		return NewBigButtonModuleActor(module), nil
+	case *entities.SimonSaysModule:
+		return NewSimonSaysModuleActor(module), nil
 	default:
 		return nil, fmt.Errorf("unsupported module type: %v", module.GetType())
 	}

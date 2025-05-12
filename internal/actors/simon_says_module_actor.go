@@ -58,11 +58,7 @@ func (a *SimonSaysModuleActor) handleModuleCommand(msg ModuleCommandMessage) {
 			NextColorSequence: nextSeq,
 		}
 
-		if strike {
-			msg.ResponseChannel <- SuccessResponse{
-				Data: result,
-			}
-		} else if err != nil {
+		if err != nil {
 			msg.ResponseChannel <- ErrorResponse{
 				Err: err,
 			}

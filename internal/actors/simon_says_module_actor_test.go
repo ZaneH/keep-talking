@@ -14,10 +14,13 @@ import (
 
 func TestSimonSaysModuleActor_TestVowelCompleteSequence(t *testing.T) {
 	// Arange
+	gameSession := actors.NewGameSessionActor(uuid.New())
+	defer gameSession.Stop()
+
 	bomb := entities.NewBomb(valueobject.NewDefaultBombConfig())
 	bomb.SerialNumber = "AAA"
+
 	module := entities.NewSimonSaysModule(bomb)
-	moduleActor := actors.NewSimonSaysModuleActor(module)
 	module.SetState(entities.SimonSaysModuleState{
 		DisplaySequence: []valueobject.Color{
 			valueobject.Red,
@@ -25,10 +28,19 @@ func TestSimonSaysModuleActor_TestVowelCompleteSequence(t *testing.T) {
 			valueobject.Yellow,
 		},
 	})
-	moduleActor.Start() // Start the actor to process messages
-	defer moduleActor.Stop()
 
-	sessionID := uuid.New()
+	bomb.AddModule(module, 0, valueobject.ModulePosition{
+		Row: 0, Column: 0, Face: 0,
+	})
+
+	gameSession.Start()
+
+	gameSession.Send(actors.AddBombMessage{
+		Bomb:            bomb,
+		ResponseChannel: make(chan actors.Response, 1),
+	})
+
+	sessionID := gameSession.GetSessionID()
 
 	actions := []struct {
 		desc   string
@@ -76,7 +88,7 @@ func TestSimonSaysModuleActor_TestVowelCompleteSequence(t *testing.T) {
 			respChan := make(chan actors.Response, 1)
 
 			// Act
-			moduleActor.Send(actors.ModuleCommandMessage{
+			gameSession.Send(actors.ModuleCommandMessage{
 				Command:         cmd,
 				ResponseChannel: respChan,
 			})
@@ -112,5 +124,5 @@ func TestSimonSaysModuleActor_TestVowelCompleteSequence(t *testing.T) {
 		})
 	}
 
-	t.Logf("Final state: %s", moduleActor.GetModule().String())
+	t.Logf("Final state: %s", module.String())
 }

@@ -58,6 +58,10 @@ func (b *Bomb) AddModule(module Module, faceIndex int, position valueobject.Modu
 	return nil
 }
 
+func (b *Bomb) AddStrike() {
+	b.StrikeCount++
+}
+
 func (b *Bomb) GetTimeLeft() time.Duration {
 	now := time.Now()
 	return b.StartingTime - time.Since(now)

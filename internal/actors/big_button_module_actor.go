@@ -17,7 +17,7 @@ type BigButtonModuleActor struct {
 	BaseModuleActor
 }
 
-func NewBigButtonModuleActor(bomb *entities.Bomb, module entities.Module) *BigButtonModuleActor {
+func NewBigButtonModuleActor(module entities.Module) *BigButtonModuleActor {
 	actor := &BigButtonModuleActor{
 		BaseModuleActor: NewBaseModuleActor(module, 50),
 	}
