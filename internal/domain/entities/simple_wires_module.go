@@ -10,8 +10,8 @@ import (
 	"github.com/google/uuid"
 )
 
-const MIN_WIRES = 3
-const MAX_WIRES = 6
+const minWires = 3
+const maxWires = 6
 
 type SimpleWiresState struct {
 	ModuleState
@@ -56,6 +56,10 @@ func (m *SimpleWiresModule) SetState(state SimpleWiresState) {
 	m.State = state
 }
 
+func (m *SimpleWiresModule) GetBomb() *Bomb {
+	return m.bomb
+}
+
 func (m *SimpleWiresModule) String() string {
 	var result = "\n"
 	for i, wire := range m.State.Wires {
@@ -70,7 +74,7 @@ func (m *SimpleWiresModule) String() string {
 }
 
 func generateRandomWires() []valueobject.SimpleWire {
-	nWires := rand.Intn(MAX_WIRES-MIN_WIRES+1) + MIN_WIRES
+	nWires := rand.Intn(maxWires-minWires+1) + minWires
 	wires := make([]valueobject.SimpleWire, nWires)
 
 	for i := 0; i < nWires; i++ {

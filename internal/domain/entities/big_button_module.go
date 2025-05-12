@@ -61,6 +61,10 @@ func (m *BigButtonModule) SetState(state BigButtonState) {
 	m.State = state
 }
 
+func (m *BigButtonModule) GetBomb() *Bomb {
+	return m.bomb
+}
+
 func (m *BigButtonModule) String() string {
 	var result string
 	result += fmt.Sprintf("Button Color: %s\n", m.State.ButtonColor)

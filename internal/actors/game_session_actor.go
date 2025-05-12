@@ -66,7 +66,6 @@ func (g *GameSessionActor) processMessages() {
 func (g *GameSessionActor) handleMessage(msg Message) {
 	switch m := msg.(type) {
 	case ModuleCommandMessage:
-		log.Printf("Handled")
 		g.handleModuleCommand(m)
 	case AddBombMessage:
 		g.handleAddBombCommand(m)

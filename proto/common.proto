@@ -7,3 +7,20 @@ enum IncrementDecrement {
   INCREMENT = 0;
   DECREMENT = 1;
 }
+
+enum PressType {
+  TAP = 0;
+  HOLD = 1;
+  RELEASE = 2;
+}
+
+enum Color {
+  RED = 0;
+  BLUE = 1;
+  WHITE = 2;
+  BLACK = 3;
+  YELLOW = 4;
+  GREEN = 5;
+  ORANGE = 6;
+  PINK = 7;
+}

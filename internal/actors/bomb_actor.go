@@ -74,6 +74,8 @@ func (b *BombActor) handleMessage(msg Message) {
 			reqMsg.GetResponseChannel() <- ErrorResponse{
 				Err: errors.New("unsupported message type for bomb"),
 			}
+		} else {
+			log.Printf("received unhandled message type: %T", msg)
 		}
 	}
 }

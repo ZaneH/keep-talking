@@ -2,12 +2,12 @@ package command
 
 import "github.com/ZaneH/keep-talking/internal/domain/valueobject"
 
-type BigButtonInputCommand struct {
+type SimonSaysInputCommand struct {
 	BaseModuleInputCommand
-	PressType valueobject.PressType
+	Color valueobject.Color
 }
 
-type BigButtonInputCommandResult struct {
+type SimonSaysInputCommandResult struct {
 	BaseModuleInputCommandResult
-	StripColor valueobject.Color
+	NextColorSequence []valueobject.Color
 }

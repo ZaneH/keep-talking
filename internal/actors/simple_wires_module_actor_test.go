@@ -132,13 +132,13 @@ func TestSimpleWiresModuleActor_ThreeWiresNoRed(t *testing.T) {
 	// Arrange
 	bomb := entities.NewBomb(valueobject.NewDefaultBombConfig())
 	bomb.SerialNumber = "1111"
-	simpleWiresModule := entities.NewSimpleWiresModule(bomb)
-	simpleWiresModuleActor := actors.NewSimpleWiresModuleActor(simpleWiresModule)
-	simpleWiresModuleActor.Start() // Start the actor to process messages
-	defer simpleWiresModuleActor.Stop()
+	wiresModule := entities.NewSimpleWiresModule(bomb)
+	wiresModuleActor := actors.NewSimpleWiresModuleActor(wiresModule)
+	wiresModuleActor.Start() // Start the actor to process messages
+	defer wiresModuleActor.Stop()
 
 	var specifiedModule *entities.SimpleWiresModule
-	if module, ok := simpleWiresModuleActor.GetModule().(*entities.SimpleWiresModule); ok {
+	if module, ok := wiresModuleActor.GetModule().(*entities.SimpleWiresModule); ok {
 		specifiedModule = module
 	} else {
 		t.Fatal("Could not cast to SimpleWiresModule")
@@ -161,8 +161,8 @@ func TestSimpleWiresModuleActor_ThreeWiresNoRed(t *testing.T) {
 	specifiedModule.SetState(testState)
 
 	sessionID := uuid.New()
-	bombID := uuid.New()
-	moduleID := uuid.New()
+	bombID := bomb.ID
+	moduleID := wiresModule.GetModuleID()
 
 	actions := []struct {
 		desc      string
@@ -203,7 +203,7 @@ func TestSimpleWiresModuleActor_ThreeWiresNoRed(t *testing.T) {
 
 			respChan := make(chan actors.Response, 1)
 
-			simpleWiresModuleActor.Send(actors.ModuleCommandMessage{
+			wiresModuleActor.Send(actors.ModuleCommandMessage{
 				Command:         cmd,
 				ResponseChannel: respChan,
 			})

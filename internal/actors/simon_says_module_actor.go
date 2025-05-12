@@ -7,18 +7,18 @@ import (
 	"github.com/ZaneH/keep-talking/internal/domain/entities"
 )
 
-type BigButtonActorError error
+type SimonSaysActorError error
 
 var (
-	ErrBigButtonUnhandledPressType BigButtonActorError = errors.New("unhandled press type")
+	ErrSimonSaysUnhandledPressType SimonSaysActorError = errors.New("unhandled press type")
 )
 
-type BigButtonModuleActor struct {
+type SimonSaysModuleActor struct {
 	BaseModuleActor
 }
 
-func NewBigButtonModuleActor(bomb *entities.Bomb, module entities.Module) *BigButtonModuleActor {
-	actor := &BigButtonModuleActor{
+func NewSimonSaysModuleActor(module entities.Module) *SimonSaysModuleActor {
+	actor := &SimonSaysModuleActor{
 		BaseModuleActor: NewBaseModuleActor(module, 50),
 	}
 
@@ -27,7 +27,7 @@ func NewBigButtonModuleActor(bomb *entities.Bomb, module entities.Module) *BigBu
 	return actor
 }
 
-func (a *BigButtonModuleActor) handleMessage(msg Message) {
+func (a *SimonSaysModuleActor) handleMessage(msg Message) {
 	switch m := msg.(type) {
 	case ModuleCommandMessage:
 		a.handleModuleCommand(m)
@@ -36,29 +36,26 @@ func (a *BigButtonModuleActor) handleMessage(msg Message) {
 	}
 }
 
-func (a *BigButtonModuleActor) handleModuleCommand(msg ModuleCommandMessage) {
+func (a *SimonSaysModuleActor) handleModuleCommand(msg ModuleCommandMessage) {
 	cmd := msg.Command
 
 	switch typedCmd := cmd.(type) {
-	case *command.BigButtonInputCommand:
-		buttonModule, ok := a.module.(*entities.BigButtonModule)
+	case *command.SimonSaysInputCommand:
+		simonSaysModule, ok := a.module.(*entities.SimonSaysModule)
 		if !ok {
 			msg.GetResponseChannel() <- ErrorResponse{
-				Err: ErrBigButtonUnhandledPressType,
+				Err: ErrSimonSaysUnhandledPressType,
 			}
 			return
 		}
 
-		stripColor, strike, err := buttonModule.PressButton(typedCmd.PressType)
-		result := &command.BigButtonInputCommandResult{
+		nextSeq, strike, err := simonSaysModule.PressColor(typedCmd.Color)
+		result := &command.SimonSaysInputCommandResult{
 			BaseModuleInputCommandResult: command.BaseModuleInputCommandResult{
 				Solved: a.module.GetModuleState().MarkSolved,
-				Strike: err != nil,
+				Strike: strike,
 			},
-		}
-
-		if stripColor != nil {
-			result.StripColor = *stripColor
+			NextColorSequence: nextSeq,
 		}
 
 		if strike {

@@ -19,9 +19,10 @@ type PasswordModuleState struct {
 type PasswordModule struct {
 	ModuleID uuid.UUID
 	state    PasswordModuleState
+	bomb     *Bomb
 }
 
-func NewPasswordModule(providedSolution *string) *PasswordModule {
+func NewPasswordModule(bomb *Bomb, providedSolution *string) *PasswordModule {
 	var solution string
 	if providedSolution == nil {
 		solution = generateWord()
@@ -96,6 +97,10 @@ func (m *PasswordModule) GetType() valueobject.ModuleType {
 
 func (m *PasswordModule) GetModuleState() ModuleState {
 	return m.state.ModuleState
+}
+
+func (m *PasswordModule) GetBomb() *Bomb {
+	return m.bomb
 }
 
 var availablePasswordList = [...]string{

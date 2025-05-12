@@ -9,6 +9,9 @@ type Module interface {
 	GetModuleID() uuid.UUID
 	GetModuleState() ModuleState
 	GetType() valueobject.ModuleType
+	String() string
+	GetBomb() *Bomb
+	// AddStrike()
 }
 
 type ModuleState struct {

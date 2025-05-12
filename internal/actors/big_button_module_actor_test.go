@@ -39,7 +39,7 @@ func TestBigButtonModuleActor_TwoBatteriesAndDetonate(t *testing.T) {
 			BombID:    bombID,
 			ModuleID:  moduleID,
 		},
-		Action: valueobject.PressTypeTap,
+		PressType: valueobject.PressTypeTap,
 	}
 
 	respChan := make(chan actors.Response, 1)
@@ -101,7 +101,7 @@ func TestBigButtonModuleActor_FRKLitAndThreeBatteries(t *testing.T) {
 			BombID:    bombID,
 			ModuleID:  moduleID,
 		},
-		Action: valueobject.PressTypeTap,
+		PressType: valueobject.PressTypeTap,
 	}
 
 	respChan := make(chan actors.Response, 1)
@@ -163,7 +163,7 @@ func TestBigButtonModuleActor_YellowButton(t *testing.T) {
 			BombID:    bombID,
 			ModuleID:  moduleID,
 		},
-		Action: valueobject.PressTypeTap,
+		PressType: valueobject.PressTypeTap,
 	}
 
 	respChan := make(chan actors.Response, 1)

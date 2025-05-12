@@ -77,6 +77,15 @@ func (s *GameServiceAdapter) SendInput(ctx context.Context, i *pb.PlayerInput) (
 		default:
 			return nil, fmt.Errorf("unknown password input type: %T", pi)
 		}
+	case *pb.PlayerInput_BigButtonInput:
+		cmd = &command.BigButtonInputCommand{
+			BaseModuleInputCommand: command.BaseModuleInputCommand{
+				SessionID: sessionID,
+				BombID:    bombID,
+				ModuleID:  moduleID,
+			},
+			PressType: valueobject.PressType(input.BigButtonInput.PressType.String()),
+		}
 	default:
 		return nil, fmt.Errorf("unknown input type: %T", input)
 	}

@@ -7,19 +7,14 @@ import (
 	"github.com/google/uuid"
 )
 
-type ModuleEntity interface {
-	entities.Module
-	GetModuleID() uuid.UUID
-}
-
 type BaseModuleActor struct {
 	BaseActor
-	module     ModuleEntity
+	module     entities.Module
 	moduleID   uuid.UUID
 	handleFunc func(msg Message)
 }
 
-func NewBaseModuleActor(module ModuleEntity, bufferSize int) BaseModuleActor {
+func NewBaseModuleActor(module entities.Module, bufferSize int) BaseModuleActor {
 	return BaseModuleActor{
 		BaseActor:  NewBaseActor(bufferSize),
 		module:     module,

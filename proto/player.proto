@@ -3,6 +3,8 @@ package player;
 
 import "proto/simple_wires_module.proto";
 import "proto/password_module.proto";
+import "proto/big_button_module.proto";
+import "proto/simon_says_module.proto";
 
 option go_package = "./proto";
 
@@ -20,6 +22,8 @@ message PlayerInput {
   oneof input {
     modules.SimpleWiresInput simple_wires_input = 10;
     modules.PasswordInput password_input = 11;
+    modules.BigButtonInput big_button_input = 12;
+    modules.SimonSaysInput simon_says_input = 13;
   }
 }
 

@@ -3,12 +3,12 @@ package valueobject
 type Color string
 
 const (
-	Red    Color = "Red"
-	Blue   Color = "Blue"
-	White  Color = "White"
-	Black  Color = "Black"
-	Yellow Color = "Yellow"
-	Green  Color = "Green"
-	Orange Color = "Orange"
-	Pink   Color = "Pink"
+	Red    Color = "RED"
+	Blue   Color = "BLUE"
+	White  Color = "WHITE"
+	Black  Color = "BLACK"
+	Yellow Color = "YELLOW"
+	Green  Color = "GREEN"
+	Orange Color = "ORANGE"
+	Pink   Color = "PINK"
 )

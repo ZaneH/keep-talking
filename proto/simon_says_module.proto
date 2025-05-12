@@ -1,0 +1,10 @@
+syntax = "proto3";
+package modules;
+
+import "proto/common.proto";
+
+option go_package = "./proto";
+
+message SimonSaysInput {
+  common.Color color = 1;
+}

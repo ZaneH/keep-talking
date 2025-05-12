@@ -27,6 +27,8 @@ const (
 	Module_UNKNOWN      Module_ModuleType = 0
 	Module_SIMPLE_WIRES Module_ModuleType = 1
 	Module_PASSWORD     Module_ModuleType = 2
+	Module_BIG_BUTTON   Module_ModuleType = 3
+	Module_SIMON_SAYS   Module_ModuleType = 4
 )
 
 // Enum value maps for Module_ModuleType.
@@ -35,11 +37,15 @@ var (
 		0: "UNKNOWN",
 		1: "SIMPLE_WIRES",
 		2: "PASSWORD",
+		3: "BIG_BUTTON",
+		4: "SIMON_SAYS",
 	}
 	Module_ModuleType_value = map[string]int32{
 		"UNKNOWN":      0,
 		"SIMPLE_WIRES": 1,
 		"PASSWORD":     2,
+		"BIG_BUTTON":   3,
+		"SIMON_SAYS":   4,
 	}
 )
 
@@ -199,16 +205,20 @@ const file_proto_modules_proto_rawDesc = "" +
 	"\x0eModulePosition\x12\x12\n" +
 	"\x04face\x18\x01 \x01(\x05R\x04face\x12\x10\n" +
 	"\x03row\x18\x02 \x01(\x05R\x03row\x12\x10\n" +
-	"\x03col\x18\x03 \x01(\x05R\x03col\"\x9b\x01\n" +
+	"\x03col\x18\x03 \x01(\x05R\x03col\"\xbb\x01\n" +
 	"\x06Module\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12.\n" +
 	"\x04type\x18\x02 \x01(\x0e2\x1a.modules.Module.ModuleTypeR\x04type\x12\x16\n" +
-	"\x06solved\x18\x04 \x01(\bR\x06solved\"9\n" +
+	"\x06solved\x18\x04 \x01(\bR\x06solved\"Y\n" +
 	"\n" +
 	"ModuleType\x12\v\n" +
 	"\aUNKNOWN\x10\x00\x12\x10\n" +
 	"\fSIMPLE_WIRES\x10\x01\x12\f\n" +
-	"\bPASSWORD\x10\x02B\tZ\a./protob\x06proto3"
+	"\bPASSWORD\x10\x02\x12\x0e\n" +
+	"\n" +
+	"BIG_BUTTON\x10\x03\x12\x0e\n" +
+	"\n" +
+	"SIMON_SAYS\x10\x04B\tZ\a./protob\x06proto3"
 
 var (
 	file_proto_modules_proto_rawDescOnce sync.Once

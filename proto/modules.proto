@@ -14,6 +14,8 @@ message Module {
     UNKNOWN = 0;
     SIMPLE_WIRES = 1;
     PASSWORD = 2;
+    BIG_BUTTON = 3;
+    SIMON_SAYS = 4;
   }
 
   string id = 1;
