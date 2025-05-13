@@ -4,6 +4,7 @@ go 1.23.4
 
 require (
 	github.com/google/uuid v1.6.0
+	github.com/gorilla/mux v1.8.1
 	github.com/stretchr/testify v1.10.0
 	google.golang.org/grpc v1.72.0
 	google.golang.org/protobuf v1.36.5
