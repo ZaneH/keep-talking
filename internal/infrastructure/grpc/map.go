@@ -48,6 +48,7 @@ func mapModulesToProto(modules map[uuid.UUID]actors.ModuleActor) map[string]*pb.
 				wires = append(wires, &pb.Wire{
 					WireColor: string(wire.WireColor),
 					IsCut:     wire.IsCut,
+					Index:     int32(wire.Index),
 				})
 			}
 

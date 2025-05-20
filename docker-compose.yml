@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   envoy:
     image: envoyproxy/envoy:v1.34.1

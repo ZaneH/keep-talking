@@ -14,4 +14,5 @@ message SimpleWiresState {
 message Wire {
   string wire_color = 1;
   bool is_cut = 2;
+  int32 index = 3;
 }

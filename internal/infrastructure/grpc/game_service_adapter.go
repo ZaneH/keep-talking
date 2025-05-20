@@ -107,7 +107,8 @@ func (s *GameServiceAdapter) SendInput(ctx context.Context, i *pb.PlayerInput) (
 
 	return &pb.PlayerInputResult{
 		ModuleId: i.GetModuleId(),
-		Success:  res != nil && !res.(command.BaseModuleInputCommandResult).Strike,
+		Strike:   res != nil && !res.(*command.SimpleWiresInputCommandResult).Strike,
+		Solved:   res != nil && res.(*command.SimpleWiresInputCommandResult).Solved,
 	}, nil
 }
 

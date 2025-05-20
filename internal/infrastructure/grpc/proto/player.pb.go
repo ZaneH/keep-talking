@@ -242,7 +242,8 @@ func (*PlayerInput_SimonSaysInput) isPlayerInput_Input() {}
 type PlayerInputResult struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	ModuleId      string                 `protobuf:"bytes,1,opt,name=module_id,json=moduleId,proto3" json:"module_id,omitempty"`
-	Success       bool                   `protobuf:"varint,2,opt,name=success,proto3" json:"success,omitempty"`
+	Strike        bool                   `protobuf:"varint,2,opt,name=strike,proto3" json:"strike,omitempty"`
+	Solved        bool                   `protobuf:"varint,3,opt,name=solved,proto3" json:"solved,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -284,9 +285,16 @@ func (x *PlayerInputResult) GetModuleId() string {
 	return ""
 }
 
-func (x *PlayerInputResult) GetSuccess() bool {
+func (x *PlayerInputResult) GetStrike() bool {
 	if x != nil {
-		return x.Success
+		return x.Strike
+	}
+	return false
+}
+
+func (x *PlayerInputResult) GetSolved() bool {
+	if x != nil {
+		return x.Solved
 	}
 	return false
 }
@@ -310,10 +318,11 @@ const file_proto_player_proto_rawDesc = "" +
 	"\x0epassword_input\x18\v \x01(\v2\x16.modules.PasswordInputH\x00R\rpasswordInput\x12C\n" +
 	"\x10big_button_input\x18\f \x01(\v2\x17.modules.BigButtonInputH\x00R\x0ebigButtonInput\x12C\n" +
 	"\x10simon_says_input\x18\r \x01(\v2\x17.modules.SimonSaysInputH\x00R\x0esimonSaysInputB\a\n" +
-	"\x05input\"J\n" +
+	"\x05input\"`\n" +
 	"\x11PlayerInputResult\x12\x1b\n" +
-	"\tmodule_id\x18\x01 \x01(\tR\bmoduleId\x12\x18\n" +
-	"\asuccess\x18\x02 \x01(\bR\asuccessB\tZ\a./protob\x06proto3"
+	"\tmodule_id\x18\x01 \x01(\tR\bmoduleId\x12\x16\n" +
+	"\x06strike\x18\x02 \x01(\bR\x06strike\x12\x16\n" +
+	"\x06solved\x18\x03 \x01(\bR\x06solvedB\tZ\a./protob\x06proto3"
 
 var (
 	file_proto_player_proto_rawDescOnce sync.Once

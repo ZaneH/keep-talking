@@ -113,6 +113,7 @@ type Wire struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	WireColor     string                 `protobuf:"bytes,1,opt,name=wire_color,json=wireColor,proto3" json:"wire_color,omitempty"`
 	IsCut         bool                   `protobuf:"varint,2,opt,name=is_cut,json=isCut,proto3" json:"is_cut,omitempty"`
+	Index         int32                  `protobuf:"varint,3,opt,name=index,proto3" json:"index,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -161,6 +162,13 @@ func (x *Wire) GetIsCut() bool {
 	return false
 }
 
+func (x *Wire) GetIndex() int32 {
+	if x != nil {
+		return x.Index
+	}
+	return 0
+}
+
 var File_proto_simple_wires_module_proto protoreflect.FileDescriptor
 
 const file_proto_simple_wires_module_proto_rawDesc = "" +
@@ -170,11 +178,12 @@ const file_proto_simple_wires_module_proto_rawDesc = "" +
 	"\n" +
 	"wire_index\x18\x01 \x01(\x05R\twireIndex\"7\n" +
 	"\x10SimpleWiresState\x12#\n" +
-	"\x05wires\x18\x01 \x03(\v2\r.modules.WireR\x05wires\"<\n" +
+	"\x05wires\x18\x01 \x03(\v2\r.modules.WireR\x05wires\"R\n" +
 	"\x04Wire\x12\x1d\n" +
 	"\n" +
 	"wire_color\x18\x01 \x01(\tR\twireColor\x12\x15\n" +
-	"\x06is_cut\x18\x02 \x01(\bR\x05isCutB\tZ\a./protob\x06proto3"
+	"\x06is_cut\x18\x02 \x01(\bR\x05isCut\x12\x14\n" +
+	"\x05index\x18\x03 \x01(\x05R\x05indexB\tZ\a./protob\x06proto3"
 
 var (
 	file_proto_simple_wires_module_proto_rawDescOnce sync.Once

@@ -76,10 +76,29 @@ func generateRandomWires() []valueobject.SimpleWire {
 	nWires := rand.Intn(maxWires-minWires+1) + minWires
 	wires := make([]valueobject.SimpleWire, nWires)
 
+	maxPossibleGaps := maxWires - nWires
+	extraPositions := 0
+	if maxPossibleGaps > 0 {
+		extraPositions = rand.Intn(maxPossibleGaps + 1)
+	}
+
+	totalPositions := nWires + extraPositions
+	possibleIndices := make([]int, totalPositions)
+	for i := 0; i < totalPositions; i++ {
+		possibleIndices[i] = i
+	}
+
+	rand.Shuffle(len(possibleIndices), func(i, j int) {
+		possibleIndices[i], possibleIndices[j] = possibleIndices[j], possibleIndices[i]
+	})
+
+	selectedIndices := possibleIndices[:nWires]
+
 	for i := 0; i < nWires; i++ {
 		color := valueobject.SimpleWireColors[i%len(valueobject.SimpleWireColors)]
 		wires[i] = valueobject.SimpleWire{
 			WireColor: color,
+			Index:     selectedIndices[i],
 		}
 	}
 

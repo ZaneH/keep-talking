@@ -29,5 +29,6 @@ message PlayerInput {
 
 message PlayerInputResult {
   string module_id = 1;
-  bool success = 2;
+  bool strike = 2;
+  bool solved = 3;
 }
