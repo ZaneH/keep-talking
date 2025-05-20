@@ -14,6 +14,19 @@ type Module interface {
 	// AddStrike()
 }
 
-type ModuleState struct {
+type ModuleState interface {
+	IsSolved() bool
+	MarkAsSolved()
+}
+
+type BaseModuleState struct {
 	MarkSolved bool
+}
+
+func (b BaseModuleState) IsSolved() bool {
+	return b.MarkSolved
+}
+
+func (b *BaseModuleState) MarkAsSolved() {
+	b.MarkSolved = true
 }

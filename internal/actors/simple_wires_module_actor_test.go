@@ -124,7 +124,7 @@ func TestSimpleWiresModuleActor_FourWiresMoreThanOneRedOddSerial(t *testing.T) {
 	}
 
 	// Verify final state
-	assert.True(t, specifiedModule.GetModuleState().MarkSolved, "Module should be solved at the end of the test")
+	assert.True(t, specifiedModule.GetModuleState().IsSolved(), "Module should be solved at the end of the test")
 	t.Logf("Final state: %s", specifiedModule)
 }
 

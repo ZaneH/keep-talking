@@ -56,7 +56,7 @@ func (a *PasswordModuleActor) handleModuleCommand(msg ModuleCommandMessage) {
 
 		result := &command.PasswordLetterChangeCommandResult{
 			BaseModuleInputCommandResult: command.BaseModuleInputCommandResult{
-				Solved: a.module.GetModuleState().MarkSolved,
+				Solved: a.module.GetModuleState().IsSolved(),
 				Strike: err != nil,
 			},
 		}
@@ -83,7 +83,7 @@ func (a *PasswordModuleActor) handleModuleCommand(msg ModuleCommandMessage) {
 		err := passwordModule.CheckPassword()
 		result := &command.PasswordSubmitCommandResult{
 			BaseModuleInputCommandResult: command.BaseModuleInputCommandResult{
-				Solved: a.module.GetModuleState().MarkSolved,
+				Solved: a.module.GetModuleState().IsSolved(),
 				Strike: err != nil,
 			},
 		}

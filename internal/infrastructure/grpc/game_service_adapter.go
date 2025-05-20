@@ -6,7 +6,6 @@ import (
 	"log"
 
 	"github.com/ZaneH/keep-talking/internal/application/command"
-	"github.com/ZaneH/keep-talking/internal/application/query"
 	"github.com/ZaneH/keep-talking/internal/application/services"
 	"github.com/ZaneH/keep-talking/internal/domain/valueobject"
 	pb "github.com/ZaneH/keep-talking/internal/infrastructure/grpc/proto"
@@ -38,9 +37,18 @@ func (s *GameServiceAdapter) CreateGame(ctx context.Context, req *pb.CreateGameR
 }
 
 func (s *GameServiceAdapter) SendInput(ctx context.Context, i *pb.PlayerInput) (*pb.PlayerInputResult, error) {
-	sessionID := uuid.MustParse(i.GetSessionId())
-	bombID := uuid.MustParse(i.GetBombId())
-	moduleID := uuid.MustParse(i.GetModuleId())
+	sessionID, err := uuid.Parse(i.GetSessionId())
+	if err != nil {
+		return nil, fmt.Errorf("invalid session ID: %s", i.GetSessionId())
+	}
+	bombID, err := uuid.Parse(i.GetBombId())
+	if err != nil {
+		return nil, fmt.Errorf("invalid bomb ID: %s", i.GetBombId())
+	}
+	moduleID, err := uuid.Parse(i.GetModuleId())
+	if err != nil {
+		return nil, fmt.Errorf("invalid module ID: %s", i.GetModuleId())
+	}
 
 	var cmd command.ModuleInputCommand
 
@@ -109,5 +117,5 @@ func (s *GameServiceAdapter) GetBombs(ctx context.Context, req *pb.GetBombsReque
 		return nil, fmt.Errorf("failed to get game session: %v", err)
 	}
 
-	return query.MapGameSessionActorToProto(gameState), nil
+	return mapGameSessionActorToProto(gameState), nil
 }

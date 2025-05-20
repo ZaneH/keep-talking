@@ -1,6 +1,8 @@
 syntax = "proto3";
 package modules;
 
+import "proto/simple_wires_module.proto";
+
 option go_package = "./proto";
 
 message ModulePosition {
@@ -22,4 +24,10 @@ message Module {
   ModuleType type = 2;
   // ModulePosition position = 3;
   bool solved = 4;
+  oneof state {
+    SimpleWiresState simple_wires = 5;
+    // PasswordState password = 6;
+    // BigButtonState big_button = 7;
+    // SimonSaysState simon_says = 8;
+  }
 }

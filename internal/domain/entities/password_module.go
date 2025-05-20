@@ -10,7 +10,7 @@ import (
 )
 
 type PasswordModuleState struct {
-	ModuleState
+	BaseModuleState
 	Letters   [5][6]string // 5 letters, 6 options each
 	Positions [5]int       // positions of the letters
 	solution  string
@@ -32,6 +32,7 @@ func NewPasswordModule(bomb *Bomb, providedSolution *string) *PasswordModule {
 
 	return &PasswordModule{
 		ModuleID: uuid.New(),
+		bomb:     bomb,
 		state: PasswordModuleState{
 			Letters:   generateLetters(solution),
 			Positions: [5]int{0, 0, 0, 0, 0},
@@ -50,7 +51,7 @@ func (m *PasswordModule) GetCurrentGuess() string {
 
 func (m *PasswordModule) CheckPassword() error {
 	if m.state.solution == m.GetCurrentGuess() {
-		m.state.MarkSolved = true
+		m.state.MarkAsSolved()
 		return nil
 	}
 
@@ -96,7 +97,7 @@ func (m *PasswordModule) GetType() valueobject.ModuleType {
 }
 
 func (m *PasswordModule) GetModuleState() ModuleState {
-	return m.state.ModuleState
+	return &m.state
 }
 
 func (m *PasswordModule) GetBomb() *Bomb {

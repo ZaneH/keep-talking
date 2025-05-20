@@ -52,7 +52,7 @@ func (a *BigButtonModuleActor) handleModuleCommand(msg ModuleCommandMessage) {
 		stripColor, strike, err := buttonModule.PressButton(typedCmd.PressType)
 		result := &command.BigButtonInputCommandResult{
 			BaseModuleInputCommandResult: command.BaseModuleInputCommandResult{
-				Solved: a.module.GetModuleState().MarkSolved,
+				Solved: a.module.GetModuleState().IsSolved(),
 				Strike: err != nil,
 			},
 		}

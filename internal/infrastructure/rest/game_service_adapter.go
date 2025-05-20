@@ -110,7 +110,7 @@ func (a *GameServiceAdapter) getBombs(w http.ResponseWriter, r *http.Request) {
 			moduleData := map[string]interface{}{
 				"id":     moduleID.String(),
 				"type":   module.GetType(),
-				"solved": module.GetModuleState().MarkSolved,
+				"solved": module.GetModuleState().IsSolved(),
 			}
 			bombData["modules"].(map[string]interface{})[moduleID.String()] = moduleData
 		}

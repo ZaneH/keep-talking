@@ -15,7 +15,7 @@ const minStages = 3
 const maxStages = 5
 
 type SimonSaysModuleState struct {
-	ModuleState
+	BaseModuleState
 	// Stores each color to be displayed in order.
 	DisplaySequence []valueobject.Color
 	// When the user starts their input, the module needs to know what index of the sequence they
@@ -69,7 +69,7 @@ func (m *SimonSaysModule) SetState(state SimonSaysModuleState) {
 }
 
 func (m *SimonSaysModule) GetModuleState() ModuleState {
-	return m.state.ModuleState
+	return &m.state
 }
 
 func (m *SimonSaysModule) GetBomb() *Bomb {

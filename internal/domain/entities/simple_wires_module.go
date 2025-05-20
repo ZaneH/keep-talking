@@ -14,15 +14,14 @@ const minWires = 3
 const maxWires = 6
 
 type SimpleWiresState struct {
-	ModuleState
+	BaseModuleState
 	Wires []valueobject.SimpleWire
 }
 
 func NewSimpleWiresState() SimpleWiresState {
-	var wires = generateRandomWires()
-
 	return SimpleWiresState{
-		Wires: wires,
+		BaseModuleState: BaseModuleState{},
+		Wires:           generateRandomWires(),
 	}
 }
 
@@ -45,7 +44,7 @@ func (m *SimpleWiresModule) GetModuleID() uuid.UUID {
 }
 
 func (m *SimpleWiresModule) GetModuleState() ModuleState {
-	return m.State.ModuleState
+	return &m.State
 }
 
 func (m *SimpleWiresModule) GetType() valueobject.ModuleType {
@@ -88,7 +87,7 @@ func generateRandomWires() []valueobject.SimpleWire {
 }
 
 func (m *SimpleWiresModule) cutSucceed() (bool, error) {
-	m.State.MarkSolved = true
+	m.State.MarkAsSolved()
 	return false, nil
 }
 

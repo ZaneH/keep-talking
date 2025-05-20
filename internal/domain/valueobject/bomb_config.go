@@ -18,8 +18,8 @@ func NewDefaultBombConfig() BombConfig {
 	return BombConfig{
 		Timer:             5 * time.Minute,
 		MaxStrikes:        3,
-		NumFaces:          2,
-		MaxModulesPerFace: 3,
+		NumFaces:          1,
+		MaxModulesPerFace: 1,
 		ModuleTypes: map[ModuleType]float32{
 			SimpleWires: 0.24,
 			Password:    0.1,

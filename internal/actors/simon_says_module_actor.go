@@ -52,7 +52,7 @@ func (a *SimonSaysModuleActor) handleModuleCommand(msg ModuleCommandMessage) {
 		nextSeq, strike, err := simonSaysModule.PressColor(typedCmd.Color)
 		result := &command.SimonSaysInputCommandResult{
 			BaseModuleInputCommandResult: command.BaseModuleInputCommandResult{
-				Solved: a.module.GetModuleState().MarkSolved,
+				Solved: a.module.GetModuleState().IsSolved(),
 				Strike: strike,
 			},
 			NextColorSequence: nextSeq,

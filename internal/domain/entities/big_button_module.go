@@ -109,17 +109,17 @@ func (m *BigButtonModule) PressButton(pressType valueobject.PressType) (color *v
 // for the module to be marked as solved. If the conditions are not met, it will return an error.
 func (m *BigButtonModule) handleShortPress() (handled bool, err error) {
 	if m.bomb.Batteries > 1 && m.State.Label == string(Detonate) {
-		m.State.MarkSolved = true
+		m.State.MarkAsSolved()
 		return true, nil
 	}
 
 	if m.bomb.Batteries > 2 && m.bomb.Indicators["FRK"].Lit {
-		m.State.MarkSolved = true
+		m.State.MarkAsSolved()
 		return true, nil
 	}
 
 	if m.State.ButtonColor == valueobject.Red && m.State.Label == string(Hold) {
-		m.State.MarkSolved = true
+		m.State.MarkAsSolved()
 		return true, nil
 	}
 
@@ -163,7 +163,7 @@ func (m *BigButtonModule) handleLongPressRelease() (handled bool, err error) {
 		return true, errors.New("release digit is nil")
 	} else {
 		if int(time.Seconds())%10 == *m.State.ReleaseDigit {
-			m.State.MarkSolved = true
+			m.State.MarkAsSolved()
 		} else {
 			return true, errors.New("release digit does not match")
 		}
