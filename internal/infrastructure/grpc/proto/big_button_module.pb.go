@@ -65,6 +65,58 @@ func (x *BigButtonInput) GetPressType() PressType {
 	return PressType_TAP
 }
 
+type BigButtonState struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	ButtonColor   Color                  `protobuf:"varint,1,opt,name=button_color,json=buttonColor,proto3,enum=common.Color" json:"button_color,omitempty"`
+	Label         string                 `protobuf:"bytes,2,opt,name=label,proto3" json:"label,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *BigButtonState) Reset() {
+	*x = BigButtonState{}
+	mi := &file_proto_big_button_module_proto_msgTypes[1]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *BigButtonState) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*BigButtonState) ProtoMessage() {}
+
+func (x *BigButtonState) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_big_button_module_proto_msgTypes[1]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use BigButtonState.ProtoReflect.Descriptor instead.
+func (*BigButtonState) Descriptor() ([]byte, []int) {
+	return file_proto_big_button_module_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *BigButtonState) GetButtonColor() Color {
+	if x != nil {
+		return x.ButtonColor
+	}
+	return Color_RED
+}
+
+func (x *BigButtonState) GetLabel() string {
+	if x != nil {
+		return x.Label
+	}
+	return ""
+}
+
 var File_proto_big_button_module_proto protoreflect.FileDescriptor
 
 const file_proto_big_button_module_proto_rawDesc = "" +
@@ -72,7 +124,10 @@ const file_proto_big_button_module_proto_rawDesc = "" +
 	"\x1dproto/big_button_module.proto\x12\amodules\x1a\x12proto/common.proto\"B\n" +
 	"\x0eBigButtonInput\x120\n" +
 	"\n" +
-	"press_type\x18\x01 \x01(\x0e2\x11.common.PressTypeR\tpressTypeB\tZ\a./protob\x06proto3"
+	"press_type\x18\x01 \x01(\x0e2\x11.common.PressTypeR\tpressType\"X\n" +
+	"\x0eBigButtonState\x120\n" +
+	"\fbutton_color\x18\x01 \x01(\x0e2\r.common.ColorR\vbuttonColor\x12\x14\n" +
+	"\x05label\x18\x02 \x01(\tR\x05labelB\tZ\a./protob\x06proto3"
 
 var (
 	file_proto_big_button_module_proto_rawDescOnce sync.Once
@@ -86,18 +141,21 @@ func file_proto_big_button_module_proto_rawDescGZIP() []byte {
 	return file_proto_big_button_module_proto_rawDescData
 }
 
-var file_proto_big_button_module_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
+var file_proto_big_button_module_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
 var file_proto_big_button_module_proto_goTypes = []any{
 	(*BigButtonInput)(nil), // 0: modules.BigButtonInput
-	(PressType)(0),         // 1: common.PressType
+	(*BigButtonState)(nil), // 1: modules.BigButtonState
+	(PressType)(0),         // 2: common.PressType
+	(Color)(0),             // 3: common.Color
 }
 var file_proto_big_button_module_proto_depIdxs = []int32{
-	1, // 0: modules.BigButtonInput.press_type:type_name -> common.PressType
-	1, // [1:1] is the sub-list for method output_type
-	1, // [1:1] is the sub-list for method input_type
-	1, // [1:1] is the sub-list for extension type_name
-	1, // [1:1] is the sub-list for extension extendee
-	0, // [0:1] is the sub-list for field type_name
+	2, // 0: modules.BigButtonInput.press_type:type_name -> common.PressType
+	3, // 1: modules.BigButtonState.button_color:type_name -> common.Color
+	2, // [2:2] is the sub-list for method output_type
+	2, // [2:2] is the sub-list for method input_type
+	2, // [2:2] is the sub-list for extension type_name
+	2, // [2:2] is the sub-list for extension extendee
+	0, // [0:2] is the sub-list for field type_name
 }
 
 func init() { file_proto_big_button_module_proto_init() }
@@ -112,7 +170,7 @@ func file_proto_big_button_module_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_big_button_module_proto_rawDesc), len(file_proto_big_button_module_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   1,
+			NumMessages:   2,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

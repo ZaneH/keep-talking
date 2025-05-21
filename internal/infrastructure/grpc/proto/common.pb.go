@@ -119,37 +119,40 @@ func (PressType) EnumDescriptor() ([]byte, []int) {
 type Color int32
 
 const (
-	Color_RED    Color = 0
-	Color_BLUE   Color = 1
-	Color_WHITE  Color = 2
-	Color_BLACK  Color = 3
-	Color_YELLOW Color = 4
-	Color_GREEN  Color = 5
-	Color_ORANGE Color = 6
-	Color_PINK   Color = 7
+	Color_RED     Color = 0
+	Color_BLUE    Color = 1
+	Color_WHITE   Color = 2
+	Color_BLACK   Color = 3
+	Color_YELLOW  Color = 4
+	Color_GREEN   Color = 5
+	Color_ORANGE  Color = 6
+	Color_PINK    Color = 7
+	Color_UNKNOWN Color = 99
 )
 
 // Enum value maps for Color.
 var (
 	Color_name = map[int32]string{
-		0: "RED",
-		1: "BLUE",
-		2: "WHITE",
-		3: "BLACK",
-		4: "YELLOW",
-		5: "GREEN",
-		6: "ORANGE",
-		7: "PINK",
+		0:  "RED",
+		1:  "BLUE",
+		2:  "WHITE",
+		3:  "BLACK",
+		4:  "YELLOW",
+		5:  "GREEN",
+		6:  "ORANGE",
+		7:  "PINK",
+		99: "UNKNOWN",
 	}
 	Color_value = map[string]int32{
-		"RED":    0,
-		"BLUE":   1,
-		"WHITE":  2,
-		"BLACK":  3,
-		"YELLOW": 4,
-		"GREEN":  5,
-		"ORANGE": 6,
-		"PINK":   7,
+		"RED":     0,
+		"BLUE":    1,
+		"WHITE":   2,
+		"BLACK":   3,
+		"YELLOW":  4,
+		"GREEN":   5,
+		"ORANGE":  6,
+		"PINK":    7,
+		"UNKNOWN": 99,
 	}
 )
 
@@ -191,7 +194,7 @@ const file_proto_common_proto_rawDesc = "" +
 	"\tPressType\x12\a\n" +
 	"\x03TAP\x10\x00\x12\b\n" +
 	"\x04HOLD\x10\x01\x12\v\n" +
-	"\aRELEASE\x10\x02*]\n" +
+	"\aRELEASE\x10\x02*j\n" +
 	"\x05Color\x12\a\n" +
 	"\x03RED\x10\x00\x12\b\n" +
 	"\x04BLUE\x10\x01\x12\t\n" +
@@ -202,7 +205,8 @@ const file_proto_common_proto_rawDesc = "" +
 	"\x05GREEN\x10\x05\x12\n" +
 	"\n" +
 	"\x06ORANGE\x10\x06\x12\b\n" +
-	"\x04PINK\x10\aB\tZ\a./protob\x06proto3"
+	"\x04PINK\x10\a\x12\v\n" +
+	"\aUNKNOWN\x10cB\tZ\a./protob\x06proto3"
 
 var (
 	file_proto_common_proto_rawDescOnce sync.Once

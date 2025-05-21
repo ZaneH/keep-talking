@@ -11,7 +11,7 @@ import (
 )
 
 type BigButtonState struct {
-	ModuleState
+	BaseModuleState
 	ButtonColor valueobject.Color
 	// The label on the button
 	Label string
@@ -25,9 +25,10 @@ func NewButtonState() BigButtonState {
 	labelIdx := rand.Intn(len(availableButtonWords))
 
 	return BigButtonState{
-		ButtonColor:  bigButtonColors[colorIdx],
-		Label:        string(availableButtonWords[labelIdx]),
-		ReleaseDigit: nil,
+		ButtonColor:     bigButtonColors[colorIdx],
+		Label:           string(availableButtonWords[labelIdx]),
+		ReleaseDigit:    nil,
+		BaseModuleState: BaseModuleState{},
 	}
 }
 
@@ -50,11 +51,11 @@ func (m *BigButtonModule) GetModuleID() uuid.UUID {
 }
 
 func (m *BigButtonModule) GetType() valueobject.ModuleType {
-	return valueobject.SimpleWires
+	return valueobject.BigButton
 }
 
 func (m *BigButtonModule) GetModuleState() ModuleState {
-	return m.State.ModuleState
+	return &m.State
 }
 
 func (m *BigButtonModule) SetState(state BigButtonState) {

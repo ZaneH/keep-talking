@@ -23,4 +23,6 @@ enum Color {
   GREEN = 5;
   ORANGE = 6;
   PINK = 7;
+
+  UNKNOWN = 99;
 }

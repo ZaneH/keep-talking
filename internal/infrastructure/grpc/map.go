@@ -10,6 +10,43 @@ import (
 	"github.com/google/uuid"
 )
 
+func mapTypeToProto(moduleType valueobject.ModuleType) pb.Module_ModuleType {
+	switch moduleType {
+	case valueobject.SimpleWires:
+		return pb.Module_SIMPLE_WIRES
+	case valueobject.Password:
+		return pb.Module_PASSWORD
+	case valueobject.BigButton:
+		return pb.Module_BIG_BUTTON
+	default:
+		return pb.Module_UNKNOWN
+	}
+}
+
+func mapColorToProto(color valueobject.Color) pb.Color {
+	switch color {
+	case valueobject.Red:
+		return pb.Color_RED
+	case valueobject.Blue:
+		return pb.Color_BLUE
+	case valueobject.White:
+		return pb.Color_WHITE
+	case valueobject.Yellow:
+		return pb.Color_YELLOW
+	case valueobject.Green:
+		return pb.Color_GREEN
+	case valueobject.Black:
+		return pb.Color_BLACK
+	case valueobject.Orange:
+		return pb.Color_ORANGE
+	case valueobject.Pink:
+		return pb.Color_PINK
+	default:
+		log.Printf("Unknown color: %v. Couldn't provide state.", color)
+		return pb.Color_UNKNOWN
+	}
+}
+
 func mapGameSessionActorToProto(game *actors.GameSessionActor) *pb.GetBombsResponse {
 	protoGameState := pb.GetBombsResponse{}
 
@@ -46,7 +83,7 @@ func mapModulesToProto(modules map[uuid.UUID]actors.ModuleActor) map[string]*pb.
 			wires := make([]*pb.Wire, 0, len(simpleWiresState.Wires))
 			for _, wire := range simpleWiresState.Wires {
 				wires = append(wires, &pb.Wire{
-					WireColor: string(wire.WireColor),
+					WireColor: mapColorToProto(wire.WireColor),
 					IsCut:     wire.IsCut,
 					Index:     int32(wire.Index),
 				})
@@ -57,23 +94,26 @@ func mapModulesToProto(modules map[uuid.UUID]actors.ModuleActor) map[string]*pb.
 					Wires: wires,
 				},
 			}
+		case valueobject.BigButton:
+			bigButtonState, ok := module.GetModule().GetModuleState().(*entities.BigButtonState)
+			if !ok {
+				log.Printf("Expected *BigButtonState but got different type: %T", module.GetModule().GetModuleState())
+				continue
+			}
+
+			protoModule.State = &pb.Module_BigButton{
+				BigButton: &pb.BigButtonState{
+					ButtonColor: mapColorToProto(bigButtonState.ButtonColor),
+					Label:       bigButtonState.Label,
+				},
+			}
+
 		default:
 			log.Fatalf("Unknown module type: %v. Couldn't provide state.", module.GetModule().GetType())
 		}
 
-		protoModules[module.GetModule().String()] = protoModule
+		protoModules[module.GetModule().GetModuleID().String()] = protoModule
 	}
 
 	return protoModules
-}
-
-func mapTypeToProto(moduleType valueobject.ModuleType) pb.Module_ModuleType {
-	switch moduleType {
-	case valueobject.SimpleWires:
-		return pb.Module_SIMPLE_WIRES
-	case valueobject.Password:
-		return pb.Module_PASSWORD
-	default:
-		return pb.Module_UNKNOWN
-	}
 }

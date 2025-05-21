@@ -111,7 +111,7 @@ func (x *SimpleWiresState) GetWires() []*Wire {
 
 type Wire struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	WireColor     string                 `protobuf:"bytes,1,opt,name=wire_color,json=wireColor,proto3" json:"wire_color,omitempty"`
+	WireColor     Color                  `protobuf:"varint,1,opt,name=wire_color,json=wireColor,proto3,enum=common.Color" json:"wire_color,omitempty"`
 	IsCut         bool                   `protobuf:"varint,2,opt,name=is_cut,json=isCut,proto3" json:"is_cut,omitempty"`
 	Index         int32                  `protobuf:"varint,3,opt,name=index,proto3" json:"index,omitempty"`
 	unknownFields protoimpl.UnknownFields
@@ -148,11 +148,11 @@ func (*Wire) Descriptor() ([]byte, []int) {
 	return file_proto_simple_wires_module_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *Wire) GetWireColor() string {
+func (x *Wire) GetWireColor() Color {
 	if x != nil {
 		return x.WireColor
 	}
-	return ""
+	return Color_RED
 }
 
 func (x *Wire) GetIsCut() bool {
@@ -173,15 +173,15 @@ var File_proto_simple_wires_module_proto protoreflect.FileDescriptor
 
 const file_proto_simple_wires_module_proto_rawDesc = "" +
 	"\n" +
-	"\x1fproto/simple_wires_module.proto\x12\amodules\"1\n" +
+	"\x1fproto/simple_wires_module.proto\x12\amodules\x1a\x12proto/common.proto\"1\n" +
 	"\x10SimpleWiresInput\x12\x1d\n" +
 	"\n" +
 	"wire_index\x18\x01 \x01(\x05R\twireIndex\"7\n" +
 	"\x10SimpleWiresState\x12#\n" +
-	"\x05wires\x18\x01 \x03(\v2\r.modules.WireR\x05wires\"R\n" +
-	"\x04Wire\x12\x1d\n" +
+	"\x05wires\x18\x01 \x03(\v2\r.modules.WireR\x05wires\"a\n" +
+	"\x04Wire\x12,\n" +
 	"\n" +
-	"wire_color\x18\x01 \x01(\tR\twireColor\x12\x15\n" +
+	"wire_color\x18\x01 \x01(\x0e2\r.common.ColorR\twireColor\x12\x15\n" +
 	"\x06is_cut\x18\x02 \x01(\bR\x05isCut\x12\x14\n" +
 	"\x05index\x18\x03 \x01(\x05R\x05indexB\tZ\a./protob\x06proto3"
 
@@ -202,14 +202,16 @@ var file_proto_simple_wires_module_proto_goTypes = []any{
 	(*SimpleWiresInput)(nil), // 0: modules.SimpleWiresInput
 	(*SimpleWiresState)(nil), // 1: modules.SimpleWiresState
 	(*Wire)(nil),             // 2: modules.Wire
+	(Color)(0),               // 3: common.Color
 }
 var file_proto_simple_wires_module_proto_depIdxs = []int32{
 	2, // 0: modules.SimpleWiresState.wires:type_name -> modules.Wire
-	1, // [1:1] is the sub-list for method output_type
-	1, // [1:1] is the sub-list for method input_type
-	1, // [1:1] is the sub-list for extension type_name
-	1, // [1:1] is the sub-list for extension extendee
-	0, // [0:1] is the sub-list for field type_name
+	3, // 1: modules.Wire.wire_color:type_name -> common.Color
+	2, // [2:2] is the sub-list for method output_type
+	2, // [2:2] is the sub-list for method input_type
+	2, // [2:2] is the sub-list for extension type_name
+	2, // [2:2] is the sub-list for extension extendee
+	0, // [0:2] is the sub-list for field type_name
 }
 
 func init() { file_proto_simple_wires_module_proto_init() }
@@ -217,6 +219,7 @@ func file_proto_simple_wires_module_proto_init() {
 	if File_proto_simple_wires_module_proto != nil {
 		return
 	}
+	file_proto_common_proto_init()
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{

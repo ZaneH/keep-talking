@@ -145,6 +145,7 @@ type Module struct {
 	// Types that are valid to be assigned to State:
 	//
 	//	*Module_SimpleWires
+	//	*Module_BigButton
 	State         isModule_State `protobuf_oneof:"state"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -217,6 +218,15 @@ func (x *Module) GetSimpleWires() *SimpleWiresState {
 	return nil
 }
 
+func (x *Module) GetBigButton() *BigButtonState {
+	if x != nil {
+		if x, ok := x.State.(*Module_BigButton); ok {
+			return x.BigButton
+		}
+	}
+	return nil
+}
+
 type isModule_State interface {
 	isModule_State()
 }
@@ -225,22 +235,31 @@ type Module_SimpleWires struct {
 	SimpleWires *SimpleWiresState `protobuf:"bytes,5,opt,name=simple_wires,json=simpleWires,proto3,oneof"`
 }
 
+type Module_BigButton struct {
+	// PasswordState password = 6;
+	BigButton *BigButtonState `protobuf:"bytes,7,opt,name=big_button,json=bigButton,proto3,oneof"` // SimonSaysState simon_says = 8;
+}
+
 func (*Module_SimpleWires) isModule_State() {}
+
+func (*Module_BigButton) isModule_State() {}
 
 var File_proto_modules_proto protoreflect.FileDescriptor
 
 const file_proto_modules_proto_rawDesc = "" +
 	"\n" +
-	"\x13proto/modules.proto\x12\amodules\x1a\x1fproto/simple_wires_module.proto\"H\n" +
+	"\x13proto/modules.proto\x12\amodules\x1a\x1fproto/simple_wires_module.proto\x1a\x1dproto/big_button_module.proto\"H\n" +
 	"\x0eModulePosition\x12\x12\n" +
 	"\x04face\x18\x01 \x01(\x05R\x04face\x12\x10\n" +
 	"\x03row\x18\x02 \x01(\x05R\x03row\x12\x10\n" +
-	"\x03col\x18\x03 \x01(\x05R\x03col\"\x84\x02\n" +
+	"\x03col\x18\x03 \x01(\x05R\x03col\"\xbe\x02\n" +
 	"\x06Module\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12.\n" +
 	"\x04type\x18\x02 \x01(\x0e2\x1a.modules.Module.ModuleTypeR\x04type\x12\x16\n" +
 	"\x06solved\x18\x04 \x01(\bR\x06solved\x12>\n" +
-	"\fsimple_wires\x18\x05 \x01(\v2\x19.modules.SimpleWiresStateH\x00R\vsimpleWires\"Y\n" +
+	"\fsimple_wires\x18\x05 \x01(\v2\x19.modules.SimpleWiresStateH\x00R\vsimpleWires\x128\n" +
+	"\n" +
+	"big_button\x18\a \x01(\v2\x17.modules.BigButtonStateH\x00R\tbigButton\"Y\n" +
 	"\n" +
 	"ModuleType\x12\v\n" +
 	"\aUNKNOWN\x10\x00\x12\x10\n" +
@@ -271,15 +290,17 @@ var file_proto_modules_proto_goTypes = []any{
 	(*ModulePosition)(nil),   // 1: modules.ModulePosition
 	(*Module)(nil),           // 2: modules.Module
 	(*SimpleWiresState)(nil), // 3: modules.SimpleWiresState
+	(*BigButtonState)(nil),   // 4: modules.BigButtonState
 }
 var file_proto_modules_proto_depIdxs = []int32{
 	0, // 0: modules.Module.type:type_name -> modules.Module.ModuleType
 	3, // 1: modules.Module.simple_wires:type_name -> modules.SimpleWiresState
-	2, // [2:2] is the sub-list for method output_type
-	2, // [2:2] is the sub-list for method input_type
-	2, // [2:2] is the sub-list for extension type_name
-	2, // [2:2] is the sub-list for extension extendee
-	0, // [0:2] is the sub-list for field type_name
+	4, // 2: modules.Module.big_button:type_name -> modules.BigButtonState
+	3, // [3:3] is the sub-list for method output_type
+	3, // [3:3] is the sub-list for method input_type
+	3, // [3:3] is the sub-list for extension type_name
+	3, // [3:3] is the sub-list for extension extendee
+	0, // [0:3] is the sub-list for field type_name
 }
 
 func init() { file_proto_modules_proto_init() }
@@ -288,8 +309,10 @@ func file_proto_modules_proto_init() {
 		return
 	}
 	file_proto_simple_wires_module_proto_init()
+	file_proto_big_button_module_proto_init()
 	file_proto_modules_proto_msgTypes[1].OneofWrappers = []any{
 		(*Module_SimpleWires)(nil),
+		(*Module_BigButton)(nil),
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
