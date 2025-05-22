@@ -65,18 +65,23 @@ func mapGameSessionActorToProto(game *actors.GameSessionActor) *pb.GetBombsRespo
 
 func mapModulesToProto(modules map[uuid.UUID]actors.ModuleActor) map[string]*pb.Module {
 	protoModules := make(map[string]*pb.Module)
-	for _, module := range modules {
+	for _, actor := range modules {
 		protoModule := &pb.Module{
-			Id:     module.GetModuleID().String(),
-			Type:   mapTypeToProto(module.GetModule().GetType()),
-			Solved: module.GetModule().GetModuleState().IsSolved(),
+			Id:   actor.GetModuleID().String(),
+			Type: mapTypeToProto(actor.GetModule().GetType()),
+			Position: &pb.ModulePosition{
+				Row:  int32(actor.GetModule().GetPosition().Row),
+				Col:  int32(actor.GetModule().GetPosition().Column),
+				Face: int32(actor.GetModule().GetPosition().Face),
+			},
+			Solved: actor.GetModule().GetModuleState().IsSolved(),
 		}
 
-		switch module.GetModule().GetType() {
+		switch actor.GetModule().GetType() {
 		case valueobject.SimpleWires:
-			simpleWiresState, ok := module.GetModule().GetModuleState().(*entities.SimpleWiresState)
+			simpleWiresState, ok := actor.GetModule().GetModuleState().(*entities.SimpleWiresState)
 			if !ok {
-				log.Printf("Expected *SimpleWiresState but got different type: %T", module.GetModule().GetModuleState())
+				log.Printf("Expected *SimpleWiresState but got different type: %T", actor.GetModule().GetModuleState())
 				continue
 			}
 
@@ -95,9 +100,9 @@ func mapModulesToProto(modules map[uuid.UUID]actors.ModuleActor) map[string]*pb.
 				},
 			}
 		case valueobject.BigButton:
-			bigButtonState, ok := module.GetModule().GetModuleState().(*entities.BigButtonState)
+			bigButtonState, ok := actor.GetModule().GetModuleState().(*entities.BigButtonState)
 			if !ok {
-				log.Printf("Expected *BigButtonState but got different type: %T", module.GetModule().GetModuleState())
+				log.Printf("Expected *BigButtonState but got different type: %T", actor.GetModule().GetModuleState())
 				continue
 			}
 
@@ -109,10 +114,10 @@ func mapModulesToProto(modules map[uuid.UUID]actors.ModuleActor) map[string]*pb.
 			}
 
 		default:
-			log.Fatalf("Unknown module type: %v. Couldn't provide state.", module.GetModule().GetType())
+			log.Fatalf("Unknown module type: %v. Couldn't provide state.", actor.GetModule().GetType())
 		}
 
-		protoModules[module.GetModule().GetModuleID().String()] = protoModule
+		protoModules[actor.GetModule().GetModuleID().String()] = protoModule
 	}
 
 	return protoModules

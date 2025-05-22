@@ -8,15 +8,39 @@ import (
 type Module interface {
 	GetModuleID() uuid.UUID
 	GetModuleState() ModuleState
+	GetPosition() valueobject.ModulePosition
 	GetType() valueobject.ModuleType
 	String() string
 	GetBomb() *Bomb
 	// AddStrike()
+	SetPosition(position valueobject.ModulePosition)
 }
 
 type ModuleState interface {
 	IsSolved() bool
 	MarkAsSolved()
+}
+
+type BaseModule struct {
+	ModuleID uuid.UUID
+	Position valueobject.ModulePosition
+	bomb     *Bomb
+}
+
+func (m *BaseModule) SetPosition(position valueobject.ModulePosition) {
+	m.Position = position
+}
+
+func (m *BaseModule) GetBomb() *Bomb {
+	return m.bomb
+}
+
+func (m *BaseModule) GetPosition() valueobject.ModulePosition {
+	return m.Position
+}
+
+func (m *BaseModule) GetModuleID() uuid.UUID {
+	return m.ModuleID
 }
 
 type BaseModuleState struct {

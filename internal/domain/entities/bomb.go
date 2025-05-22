@@ -40,12 +40,12 @@ func NewBomb(config valueobject.BombConfig) *Bomb {
 	}
 }
 
-func (b *Bomb) AddModule(module Module, faceIndex int, position valueobject.ModulePosition) error {
-	face, exists := b.Faces[faceIndex]
+func (b *Bomb) AddModule(module Module, position valueobject.ModulePosition) error {
+	face, exists := b.Faces[position.Face]
 
 	if !exists {
 		face = NewBombFace()
-		b.Faces[faceIndex] = face
+		b.Faces[position.Face] = face
 	}
 
 	if err := face.AddModule(module, position); err != nil {

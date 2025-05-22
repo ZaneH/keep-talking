@@ -17,9 +17,8 @@ type PasswordModuleState struct {
 }
 
 type PasswordModule struct {
-	ModuleID uuid.UUID
-	state    PasswordModuleState
-	bomb     *Bomb
+	BaseModule
+	state PasswordModuleState
 }
 
 func NewPasswordModule(bomb *Bomb, providedSolution *string) *PasswordModule {
@@ -31,8 +30,10 @@ func NewPasswordModule(bomb *Bomb, providedSolution *string) *PasswordModule {
 	}
 
 	return &PasswordModule{
-		ModuleID: uuid.New(),
-		bomb:     bomb,
+		BaseModule: BaseModule{
+			ModuleID: uuid.New(),
+			bomb:     bomb,
+		},
 		state: PasswordModuleState{
 			Letters:   generateLetters(solution),
 			Positions: [5]int{0, 0, 0, 0, 0},
@@ -88,20 +89,12 @@ func (m *PasswordModule) String() string {
 	return result
 }
 
-func (m *PasswordModule) GetModuleID() uuid.UUID {
-	return m.ModuleID
-}
-
 func (m *PasswordModule) GetType() valueobject.ModuleType {
 	return valueobject.Password
 }
 
 func (m *PasswordModule) GetModuleState() ModuleState {
 	return &m.state
-}
-
-func (m *PasswordModule) GetBomb() *Bomb {
-	return m.bomb
 }
 
 var availablePasswordList = [...]string{

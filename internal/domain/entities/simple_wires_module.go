@@ -26,21 +26,18 @@ func NewSimpleWiresState() SimpleWiresState {
 }
 
 type SimpleWiresModule struct {
-	ModuleID uuid.UUID
-	State    SimpleWiresState
-	bomb     *Bomb
+	BaseModule
+	State SimpleWiresState
 }
 
 func NewSimpleWiresModule(bomb *Bomb) *SimpleWiresModule {
 	return &SimpleWiresModule{
-		ModuleID: uuid.New(),
-		State:    NewSimpleWiresState(),
-		bomb:     bomb,
+		BaseModule: BaseModule{
+			ModuleID: uuid.New(),
+			bomb:     bomb,
+		},
+		State: NewSimpleWiresState(),
 	}
-}
-
-func (m *SimpleWiresModule) GetModuleID() uuid.UUID {
-	return m.ModuleID
 }
 
 func (m *SimpleWiresModule) GetModuleState() ModuleState {
@@ -53,10 +50,6 @@ func (m *SimpleWiresModule) GetType() valueobject.ModuleType {
 
 func (m *SimpleWiresModule) SetState(state SimpleWiresState) {
 	m.State = state
-}
-
-func (m *SimpleWiresModule) GetBomb() *Bomb {
-	return m.bomb
 }
 
 func (m *SimpleWiresModule) String() string {

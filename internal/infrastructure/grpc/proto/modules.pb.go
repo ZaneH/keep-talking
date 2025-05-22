@@ -137,11 +137,11 @@ func (x *ModulePosition) GetCol() int32 {
 }
 
 type Module struct {
-	state protoimpl.MessageState `protogen:"open.v1"`
-	Id    string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	Type  Module_ModuleType      `protobuf:"varint,2,opt,name=type,proto3,enum=modules.Module_ModuleType" json:"type,omitempty"`
-	// ModulePosition position = 3;
-	Solved bool `protobuf:"varint,4,opt,name=solved,proto3" json:"solved,omitempty"`
+	state    protoimpl.MessageState `protogen:"open.v1"`
+	Id       string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Type     Module_ModuleType      `protobuf:"varint,2,opt,name=type,proto3,enum=modules.Module_ModuleType" json:"type,omitempty"`
+	Position *ModulePosition        `protobuf:"bytes,3,opt,name=position,proto3" json:"position,omitempty"`
+	Solved   bool                   `protobuf:"varint,4,opt,name=solved,proto3" json:"solved,omitempty"`
 	// Types that are valid to be assigned to State:
 	//
 	//	*Module_SimpleWires
@@ -193,6 +193,13 @@ func (x *Module) GetType() Module_ModuleType {
 		return x.Type
 	}
 	return Module_UNKNOWN
+}
+
+func (x *Module) GetPosition() *ModulePosition {
+	if x != nil {
+		return x.Position
+	}
+	return nil
 }
 
 func (x *Module) GetSolved() bool {
@@ -252,10 +259,11 @@ const file_proto_modules_proto_rawDesc = "" +
 	"\x0eModulePosition\x12\x12\n" +
 	"\x04face\x18\x01 \x01(\x05R\x04face\x12\x10\n" +
 	"\x03row\x18\x02 \x01(\x05R\x03row\x12\x10\n" +
-	"\x03col\x18\x03 \x01(\x05R\x03col\"\xbe\x02\n" +
+	"\x03col\x18\x03 \x01(\x05R\x03col\"\xf3\x02\n" +
 	"\x06Module\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12.\n" +
-	"\x04type\x18\x02 \x01(\x0e2\x1a.modules.Module.ModuleTypeR\x04type\x12\x16\n" +
+	"\x04type\x18\x02 \x01(\x0e2\x1a.modules.Module.ModuleTypeR\x04type\x123\n" +
+	"\bposition\x18\x03 \x01(\v2\x17.modules.ModulePositionR\bposition\x12\x16\n" +
 	"\x06solved\x18\x04 \x01(\bR\x06solved\x12>\n" +
 	"\fsimple_wires\x18\x05 \x01(\v2\x19.modules.SimpleWiresStateH\x00R\vsimpleWires\x128\n" +
 	"\n" +
@@ -294,13 +302,14 @@ var file_proto_modules_proto_goTypes = []any{
 }
 var file_proto_modules_proto_depIdxs = []int32{
 	0, // 0: modules.Module.type:type_name -> modules.Module.ModuleType
-	3, // 1: modules.Module.simple_wires:type_name -> modules.SimpleWiresState
-	4, // 2: modules.Module.big_button:type_name -> modules.BigButtonState
-	3, // [3:3] is the sub-list for method output_type
-	3, // [3:3] is the sub-list for method input_type
-	3, // [3:3] is the sub-list for extension type_name
-	3, // [3:3] is the sub-list for extension extendee
-	0, // [0:3] is the sub-list for field type_name
+	1, // 1: modules.Module.position:type_name -> modules.ModulePosition
+	3, // 2: modules.Module.simple_wires:type_name -> modules.SimpleWiresState
+	4, // 3: modules.Module.big_button:type_name -> modules.BigButtonState
+	4, // [4:4] is the sub-list for method output_type
+	4, // [4:4] is the sub-list for method input_type
+	4, // [4:4] is the sub-list for extension type_name
+	4, // [4:4] is the sub-list for extension extendee
+	0, // [0:4] is the sub-list for field type_name
 }
 
 func init() { file_proto_modules_proto_init() }

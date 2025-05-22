@@ -37,19 +37,13 @@ func (f *BombFactoryImpl) CreateBomb(config valueobject.BombConfig) *entities.Bo
 }
 
 func (f *BombFactoryImpl) placeModulesOnBomb(bomb *entities.Bomb, moduleTypes []valueobject.ModuleType, config valueobject.BombConfig) {
-	availablePositions := make([]struct {
-		face     int
-		position valueobject.ModulePosition
-	}, 0)
+	availablePositions := make([]valueobject.ModulePosition, 0)
 
 	for face := 0; face < config.NumFaces; face++ {
 		for row := 0; row < config.MaxModulesPerFace; row++ {
 			for col := 0; col < config.MaxModulesPerFace; col++ {
 				position := valueobject.ModulePosition{Row: row, Column: col}
-				availablePositions = append(availablePositions, struct {
-					face     int
-					position valueobject.ModulePosition
-				}{face, position})
+				availablePositions = append(availablePositions, position)
 			}
 		}
 	}
@@ -63,9 +57,9 @@ func (f *BombFactoryImpl) placeModulesOnBomb(bomb *entities.Bomb, moduleTypes []
 			break
 		}
 
-		location := availablePositions[i]
-		module := f.createModule(bomb, moduleType)
-		err := bomb.AddModule(module, location.face, location.position)
+		position := availablePositions[i]
+		module := f.createModule(bomb, moduleType, position)
+		err := bomb.AddModule(module, position)
 		if err != nil {
 			log.Printf("error adding module to bomb: %v. skipping...", err)
 			continue
@@ -73,19 +67,24 @@ func (f *BombFactoryImpl) placeModulesOnBomb(bomb *entities.Bomb, moduleTypes []
 	}
 }
 
-func (f *BombFactoryImpl) createModule(bomb *entities.Bomb, moduleType valueobject.ModuleType) entities.Module {
+func (f *BombFactoryImpl) createModule(bomb *entities.Bomb, moduleType valueobject.ModuleType, position valueobject.ModulePosition) entities.Module {
+	var module entities.Module
 	switch moduleType {
 	case valueobject.SimpleWires:
-		return entities.NewSimpleWiresModule(bomb)
+		module = entities.NewSimpleWiresModule(bomb)
 	case valueobject.Password:
-		return entities.NewPasswordModule(bomb, nil)
+		module = entities.NewPasswordModule(bomb, nil)
 	case valueobject.BigButton:
-		return entities.NewBigButtonModule(bomb)
+		module = entities.NewBigButtonModule(bomb)
 	case valueobject.SimonSays:
-		return entities.NewSimonSaysModule(bomb)
+		module = entities.NewSimonSaysModule(bomb)
 	default:
 		return nil
 	}
+
+	module.SetPosition(position)
+
+	return module
 }
 
 // Choose a module type randomly based on weights

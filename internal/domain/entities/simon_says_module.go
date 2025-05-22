@@ -25,15 +25,16 @@ type SimonSaysModuleState struct {
 }
 
 type SimonSaysModule struct {
-	ModuleID uuid.UUID
-	state    SimonSaysModuleState
-	bomb     *Bomb
+	BaseModule
+	state SimonSaysModuleState
 }
 
 func NewSimonSaysModule(bomb *Bomb) *SimonSaysModule {
 	return &SimonSaysModule{
-		ModuleID: uuid.New(),
-		bomb:     bomb,
+		BaseModule: BaseModule{
+			ModuleID: uuid.New(),
+			bomb:     bomb,
+		},
 		state: SimonSaysModuleState{
 			DisplaySequence: generateDisplaySequence(),
 		},
@@ -56,10 +57,6 @@ func (m *SimonSaysModule) String() string {
 	return result.String()
 }
 
-func (m *SimonSaysModule) GetModuleID() uuid.UUID {
-	return m.ModuleID
-}
-
 func (m *SimonSaysModule) GetType() valueobject.ModuleType {
 	return valueobject.SimonSays
 }
@@ -70,10 +67,6 @@ func (m *SimonSaysModule) SetState(state SimonSaysModuleState) {
 
 func (m *SimonSaysModule) GetModuleState() ModuleState {
 	return &m.state
-}
-
-func (m *SimonSaysModule) GetBomb() *Bomb {
-	return m.bomb
 }
 
 func (m *SimonSaysModule) PressColor(c valueobject.Color) (nextSeq []valueobject.Color, strike bool, err error) {

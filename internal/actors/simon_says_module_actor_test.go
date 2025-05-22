@@ -29,7 +29,7 @@ func TestSimonSaysModuleActor_TestVowelCompleteSequence(t *testing.T) {
 		},
 	})
 
-	bomb.AddModule(module, 0, valueobject.ModulePosition{
+	bomb.AddModule(module, valueobject.ModulePosition{
 		Row: 0, Column: 0, Face: 0,
 	})
 

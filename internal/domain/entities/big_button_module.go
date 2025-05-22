@@ -33,21 +33,18 @@ func NewButtonState() BigButtonState {
 }
 
 type BigButtonModule struct {
-	ModuleID uuid.UUID
-	State    BigButtonState
-	bomb     *Bomb
+	BaseModule
+	State BigButtonState
 }
 
 func NewBigButtonModule(bomb *Bomb) *BigButtonModule {
 	return &BigButtonModule{
-		ModuleID: uuid.New(),
-		State:    NewButtonState(),
-		bomb:     bomb,
+		BaseModule: BaseModule{
+			ModuleID: uuid.New(),
+			bomb:     bomb,
+		},
+		State: NewButtonState(),
 	}
-}
-
-func (m *BigButtonModule) GetModuleID() uuid.UUID {
-	return m.ModuleID
 }
 
 func (m *BigButtonModule) GetType() valueobject.ModuleType {
@@ -60,10 +57,6 @@ func (m *BigButtonModule) GetModuleState() ModuleState {
 
 func (m *BigButtonModule) SetState(state BigButtonState) {
 	m.State = state
-}
-
-func (m *BigButtonModule) GetBomb() *Bomb {
-	return m.bomb
 }
 
 func (m *BigButtonModule) String() string {

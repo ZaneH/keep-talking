@@ -23,7 +23,7 @@ message Module {
 
   string id = 1;
   ModuleType type = 2;
-  // ModulePosition position = 3;
+  ModulePosition position = 3;
   bool solved = 4;
   oneof state {
     SimpleWiresState simple_wires = 5;
