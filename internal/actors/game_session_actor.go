@@ -138,6 +138,7 @@ func (g *GameSessionActor) handleModuleCommand(msg ModuleCommandMessage) {
 		}
 	} else {
 		log.Printf("unexpected error response type: %T", response)
+		log.Printf("error: %v", response)
 	}
 
 	msg.ResponseChannel <- response

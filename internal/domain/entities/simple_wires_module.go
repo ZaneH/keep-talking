@@ -91,7 +91,7 @@ func generateRandomWires() []valueobject.SimpleWire {
 		color := valueobject.SimpleWireColors[i%len(valueobject.SimpleWireColors)]
 		wires[i] = valueobject.SimpleWire{
 			WireColor: color,
-			Index:     selectedIndices[i],
+			Position:  selectedIndices[i],
 		}
 	}
 

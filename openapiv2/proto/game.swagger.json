@@ -294,7 +294,7 @@
         "isCut": {
           "type": "boolean"
         },
-        "index": {
+        "position": {
           "type": "integer",
           "format": "int32"
         }

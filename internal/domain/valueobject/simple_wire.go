@@ -3,7 +3,7 @@ package valueobject
 type SimpleWire struct {
 	WireColor Color
 	IsCut     bool
-	Index     int
+	Position  int
 }
 
 var SimpleWireColors = [...]Color{
