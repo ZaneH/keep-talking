@@ -58,10 +58,26 @@ func mapGameSessionActorToProto(game *actors.GameSessionActor) *pb.GetBombsRespo
 	protoGameState := pb.GetBombsResponse{}
 
 	var bombs []*pb.Bomb
-	for _, bomb := range game.GetBombActors() {
+	for _, bombActor := range game.GetBombActors() {
+		bomb := bombActor.GetBomb()
+
+		started_at := bomb.StartedAt
+		var started_at_ts int32
+		if started_at != nil {
+			started_at_ts = int32(bomb.StartedAt.Unix())
+		}
+
 		bombs = append(bombs, &pb.Bomb{
-			Id:      bomb.GetBombID().String(),
-			Modules: mapModulesToProto(bomb.GetModuleActors()),
+			Id:            bomb.ID.String(),
+			SerialNumber:  bomb.SerialNumber,
+			TimerDuration: int32(bomb.TimerDuration),
+			StartedAt:     started_at_ts,
+			StrikeCount:   int32(bomb.StrikeCount),
+			MaxStrikes:    int32(bomb.MaxStrikes),
+			Modules:       mapModulesToProto(bombActor.GetModuleActors()),
+			Indicators:    mapIndicatorsToProto(bomb.Indicators),
+			Batteries:     int32(bomb.Batteries),
+			Ports:         mapPortsToProto(bomb.Ports),
 		})
 	}
 
@@ -146,4 +162,34 @@ func mapProtoToPressType(pressType pb.PressType) valueobject.PressType {
 		log.Printf("Unknown press type: %v. Falling back to Tap.", pressType)
 		return valueobject.PressTypeTap
 	}
+}
+
+func mapIndicatorsToProto(indicators map[string]valueobject.Indicator) map[string]*pb.Indicator {
+	protoIndicators := make(map[string]*pb.Indicator, len(indicators))
+	for _, indicator := range indicators {
+		protoIndicators[indicator.Label] = &pb.Indicator{
+			Label: indicator.Label,
+			Lit:   indicator.Lit,
+		}
+	}
+	return protoIndicators
+}
+
+func mapPortsToProto(ports []valueobject.Port) []pb.Port {
+	protoPorts := make([]pb.Port, 0, len(ports))
+	for _, port := range ports {
+		switch port {
+		case valueobject.PortDVID:
+			protoPorts = append(protoPorts, pb.Port_DVID)
+		case valueobject.PortRCA:
+			protoPorts = append(protoPorts, pb.Port_RCA)
+		case valueobject.PortPS2:
+			protoPorts = append(protoPorts, pb.Port_PS2)
+		case valueobject.PortRJ45:
+			protoPorts = append(protoPorts, pb.Port_RJ45)
+		case valueobject.PortSerial:
+			protoPorts = append(protoPorts, pb.Port_SERIAL)
+		}
+	}
+	return protoPorts
 }

@@ -21,10 +21,73 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+type Port int32
+
+const (
+	Port_DVID   Port = 0
+	Port_RCA    Port = 1
+	Port_PS2    Port = 2
+	Port_RJ45   Port = 3
+	Port_SERIAL Port = 4
+)
+
+// Enum value maps for Port.
+var (
+	Port_name = map[int32]string{
+		0: "DVID",
+		1: "RCA",
+		2: "PS2",
+		3: "RJ45",
+		4: "SERIAL",
+	}
+	Port_value = map[string]int32{
+		"DVID":   0,
+		"RCA":    1,
+		"PS2":    2,
+		"RJ45":   3,
+		"SERIAL": 4,
+	}
+)
+
+func (x Port) Enum() *Port {
+	p := new(Port)
+	*p = x
+	return p
+}
+
+func (x Port) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (Port) Descriptor() protoreflect.EnumDescriptor {
+	return file_proto_bomb_proto_enumTypes[0].Descriptor()
+}
+
+func (Port) Type() protoreflect.EnumType {
+	return &file_proto_bomb_proto_enumTypes[0]
+}
+
+func (x Port) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use Port.Descriptor instead.
+func (Port) EnumDescriptor() ([]byte, []int) {
+	return file_proto_bomb_proto_rawDescGZIP(), []int{0}
+}
+
 type Bomb struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	Modules       map[string]*Module     `protobuf:"bytes,2,rep,name=modules,proto3" json:"modules,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	SerialNumber  string                 `protobuf:"bytes,2,opt,name=serial_number,json=serialNumber,proto3" json:"serial_number,omitempty"`
+	TimerDuration int32                  `protobuf:"varint,3,opt,name=timer_duration,json=timerDuration,proto3" json:"timer_duration,omitempty"`
+	StartedAt     int32                  `protobuf:"varint,4,opt,name=started_at,json=startedAt,proto3" json:"started_at,omitempty"`
+	StrikeCount   int32                  `protobuf:"varint,5,opt,name=strike_count,json=strikeCount,proto3" json:"strike_count,omitempty"`
+	MaxStrikes    int32                  `protobuf:"varint,6,opt,name=max_strikes,json=maxStrikes,proto3" json:"max_strikes,omitempty"`
+	Modules       map[string]*Module     `protobuf:"bytes,7,rep,name=modules,proto3" json:"modules,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	Indicators    map[string]*Indicator  `protobuf:"bytes,8,rep,name=indicators,proto3" json:"indicators,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	Batteries     int32                  `protobuf:"varint,9,opt,name=batteries,proto3" json:"batteries,omitempty"`
+	Ports         []Port                 `protobuf:"varint,10,rep,packed,name=ports,proto3,enum=bomb.Port" json:"ports,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -66,6 +129,41 @@ func (x *Bomb) GetId() string {
 	return ""
 }
 
+func (x *Bomb) GetSerialNumber() string {
+	if x != nil {
+		return x.SerialNumber
+	}
+	return ""
+}
+
+func (x *Bomb) GetTimerDuration() int32 {
+	if x != nil {
+		return x.TimerDuration
+	}
+	return 0
+}
+
+func (x *Bomb) GetStartedAt() int32 {
+	if x != nil {
+		return x.StartedAt
+	}
+	return 0
+}
+
+func (x *Bomb) GetStrikeCount() int32 {
+	if x != nil {
+		return x.StrikeCount
+	}
+	return 0
+}
+
+func (x *Bomb) GetMaxStrikes() int32 {
+	if x != nil {
+		return x.MaxStrikes
+	}
+	return 0
+}
+
 func (x *Bomb) GetModules() map[string]*Module {
 	if x != nil {
 		return x.Modules
@@ -73,17 +171,117 @@ func (x *Bomb) GetModules() map[string]*Module {
 	return nil
 }
 
+func (x *Bomb) GetIndicators() map[string]*Indicator {
+	if x != nil {
+		return x.Indicators
+	}
+	return nil
+}
+
+func (x *Bomb) GetBatteries() int32 {
+	if x != nil {
+		return x.Batteries
+	}
+	return 0
+}
+
+func (x *Bomb) GetPorts() []Port {
+	if x != nil {
+		return x.Ports
+	}
+	return nil
+}
+
+type Indicator struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Label         string                 `protobuf:"bytes,1,opt,name=label,proto3" json:"label,omitempty"`
+	Lit           bool                   `protobuf:"varint,2,opt,name=lit,proto3" json:"lit,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Indicator) Reset() {
+	*x = Indicator{}
+	mi := &file_proto_bomb_proto_msgTypes[1]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Indicator) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Indicator) ProtoMessage() {}
+
+func (x *Indicator) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_bomb_proto_msgTypes[1]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Indicator.ProtoReflect.Descriptor instead.
+func (*Indicator) Descriptor() ([]byte, []int) {
+	return file_proto_bomb_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *Indicator) GetLabel() string {
+	if x != nil {
+		return x.Label
+	}
+	return ""
+}
+
+func (x *Indicator) GetLit() bool {
+	if x != nil {
+		return x.Lit
+	}
+	return false
+}
+
 var File_proto_bomb_proto protoreflect.FileDescriptor
 
 const file_proto_bomb_proto_rawDesc = "" +
 	"\n" +
-	"\x10proto/bomb.proto\x12\x04bomb\x1a\x13proto/modules.proto\"\x96\x01\n" +
+	"\x10proto/bomb.proto\x12\x04bomb\x1a\x13proto/modules.proto\"\x91\x04\n" +
 	"\x04Bomb\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\tR\x02id\x121\n" +
-	"\amodules\x18\x02 \x03(\v2\x17.bomb.Bomb.ModulesEntryR\amodules\x1aK\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12#\n" +
+	"\rserial_number\x18\x02 \x01(\tR\fserialNumber\x12%\n" +
+	"\x0etimer_duration\x18\x03 \x01(\x05R\rtimerDuration\x12\x1d\n" +
+	"\n" +
+	"started_at\x18\x04 \x01(\x05R\tstartedAt\x12!\n" +
+	"\fstrike_count\x18\x05 \x01(\x05R\vstrikeCount\x12\x1f\n" +
+	"\vmax_strikes\x18\x06 \x01(\x05R\n" +
+	"maxStrikes\x121\n" +
+	"\amodules\x18\a \x03(\v2\x17.bomb.Bomb.ModulesEntryR\amodules\x12:\n" +
+	"\n" +
+	"indicators\x18\b \x03(\v2\x1a.bomb.Bomb.IndicatorsEntryR\n" +
+	"indicators\x12\x1c\n" +
+	"\tbatteries\x18\t \x01(\x05R\tbatteries\x12 \n" +
+	"\x05ports\x18\n" +
+	" \x03(\x0e2\n" +
+	".bomb.PortR\x05ports\x1aK\n" +
 	"\fModulesEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12%\n" +
-	"\x05value\x18\x02 \x01(\v2\x0f.modules.ModuleR\x05value:\x028\x01B\tZ\a./protob\x06proto3"
+	"\x05value\x18\x02 \x01(\v2\x0f.modules.ModuleR\x05value:\x028\x01\x1aN\n" +
+	"\x0fIndicatorsEntry\x12\x10\n" +
+	"\x03key\x18\x01 \x01(\tR\x03key\x12%\n" +
+	"\x05value\x18\x02 \x01(\v2\x0f.bomb.IndicatorR\x05value:\x028\x01\"3\n" +
+	"\tIndicator\x12\x14\n" +
+	"\x05label\x18\x01 \x01(\tR\x05label\x12\x10\n" +
+	"\x03lit\x18\x02 \x01(\bR\x03lit*8\n" +
+	"\x04Port\x12\b\n" +
+	"\x04DVID\x10\x00\x12\a\n" +
+	"\x03RCA\x10\x01\x12\a\n" +
+	"\x03PS2\x10\x02\x12\b\n" +
+	"\x04RJ45\x10\x03\x12\n" +
+	"\n" +
+	"\x06SERIAL\x10\x04B\tZ\a./protob\x06proto3"
 
 var (
 	file_proto_bomb_proto_rawDescOnce sync.Once
@@ -97,20 +295,27 @@ func file_proto_bomb_proto_rawDescGZIP() []byte {
 	return file_proto_bomb_proto_rawDescData
 }
 
-var file_proto_bomb_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_proto_bomb_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
+var file_proto_bomb_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
 var file_proto_bomb_proto_goTypes = []any{
-	(*Bomb)(nil),   // 0: bomb.Bomb
-	nil,            // 1: bomb.Bomb.ModulesEntry
-	(*Module)(nil), // 2: modules.Module
+	(Port)(0),         // 0: bomb.Port
+	(*Bomb)(nil),      // 1: bomb.Bomb
+	(*Indicator)(nil), // 2: bomb.Indicator
+	nil,               // 3: bomb.Bomb.ModulesEntry
+	nil,               // 4: bomb.Bomb.IndicatorsEntry
+	(*Module)(nil),    // 5: modules.Module
 }
 var file_proto_bomb_proto_depIdxs = []int32{
-	1, // 0: bomb.Bomb.modules:type_name -> bomb.Bomb.ModulesEntry
-	2, // 1: bomb.Bomb.ModulesEntry.value:type_name -> modules.Module
-	2, // [2:2] is the sub-list for method output_type
-	2, // [2:2] is the sub-list for method input_type
-	2, // [2:2] is the sub-list for extension type_name
-	2, // [2:2] is the sub-list for extension extendee
-	0, // [0:2] is the sub-list for field type_name
+	3, // 0: bomb.Bomb.modules:type_name -> bomb.Bomb.ModulesEntry
+	4, // 1: bomb.Bomb.indicators:type_name -> bomb.Bomb.IndicatorsEntry
+	0, // 2: bomb.Bomb.ports:type_name -> bomb.Port
+	5, // 3: bomb.Bomb.ModulesEntry.value:type_name -> modules.Module
+	2, // 4: bomb.Bomb.IndicatorsEntry.value:type_name -> bomb.Indicator
+	5, // [5:5] is the sub-list for method output_type
+	5, // [5:5] is the sub-list for method input_type
+	5, // [5:5] is the sub-list for extension type_name
+	5, // [5:5] is the sub-list for extension extendee
+	0, // [0:5] is the sub-list for field type_name
 }
 
 func init() { file_proto_bomb_proto_init() }
@@ -124,13 +329,14 @@ func file_proto_bomb_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_bomb_proto_rawDesc), len(file_proto_bomb_proto_rawDesc)),
-			NumEnums:      0,
-			NumMessages:   2,
+			NumEnums:      1,
+			NumMessages:   4,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
 		GoTypes:           file_proto_bomb_proto_goTypes,
 		DependencyIndexes: file_proto_bomb_proto_depIdxs,
+		EnumInfos:         file_proto_bomb_proto_enumTypes,
 		MessageInfos:      file_proto_bomb_proto_msgTypes,
 	}.Build()
 	File_proto_bomb_proto = out.File

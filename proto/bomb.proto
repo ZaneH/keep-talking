@@ -7,5 +7,26 @@ option go_package = "./proto";
 
 message Bomb {
   string id = 1;
-  map<string, modules.Module> modules = 2;
+  string serial_number = 2;
+  int32 timer_duration = 3;
+  int32 started_at = 4;
+  int32 strike_count = 5;
+  int32 max_strikes = 6;
+  map<string, modules.Module> modules = 7;
+  map<string, Indicator> indicators = 8;
+  int32 batteries = 9;
+  repeated Port ports = 10;
+}
+
+message Indicator {
+  string label = 1;
+  bool lit = 2;
+}
+
+enum Port {
+  DVID = 0;
+  RCA = 1;
+  PS2 = 2;
+  RJ45 = 3;
+  SERIAL = 4;
 }

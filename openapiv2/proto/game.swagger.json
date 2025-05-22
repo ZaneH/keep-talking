@@ -130,13 +130,70 @@
         "id": {
           "type": "string"
         },
+        "serialNumber": {
+          "type": "string"
+        },
+        "timerDuration": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "startedAt": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "strikeCount": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "maxStrikes": {
+          "type": "integer",
+          "format": "int32"
+        },
         "modules": {
           "type": "object",
           "additionalProperties": {
             "$ref": "#/definitions/modulesModule"
           }
+        },
+        "indicators": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/bombIndicator"
+          }
+        },
+        "batteries": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "ports": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/bombPort"
+          }
         }
       }
+    },
+    "bombIndicator": {
+      "type": "object",
+      "properties": {
+        "label": {
+          "type": "string"
+        },
+        "lit": {
+          "type": "boolean"
+        }
+      }
+    },
+    "bombPort": {
+      "type": "string",
+      "enum": [
+        "DVID",
+        "RCA",
+        "PS2",
+        "RJ45",
+        "SERIAL"
+      ],
+      "default": "DVID"
     },
     "commonColor": {
       "type": "string",
