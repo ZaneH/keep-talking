@@ -16,7 +16,8 @@ import (
 func TestPasswordModuleActor_LetterChange(t *testing.T) {
 	// Arrange
 	bomb := entities.NewBomb(valueobject.NewDefaultBombConfig())
-	passwordModule := entities.NewPasswordModule(bomb, nil)
+	passwordModule := entities.NewPasswordModule(nil)
+	passwordModule.SetBomb(bomb)
 	passwordModuleActor := actors.NewPasswordModuleActor(passwordModule)
 	passwordModuleActor.Start() // Start the actor to process messages
 	defer passwordModuleActor.Stop()

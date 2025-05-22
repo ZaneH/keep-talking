@@ -7,4 +7,5 @@ const (
 	Password
 	BigButton
 	SimonSays
+	Clock
 )

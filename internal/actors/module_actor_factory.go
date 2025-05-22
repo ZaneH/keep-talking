@@ -8,6 +8,8 @@ import (
 
 func CreateModuleActor(bomb *entities.Bomb, module entities.Module) (ModuleActor, error) {
 	switch module := module.(type) {
+	case *entities.ClockModule:
+		return NewStubModuleActor(module, 0), nil
 	case *entities.SimpleWiresModule:
 		return NewSimpleWiresModuleActor(module), nil
 	case *entities.PasswordModule:

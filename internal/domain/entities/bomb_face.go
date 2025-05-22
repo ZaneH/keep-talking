@@ -17,7 +17,7 @@ func NewBombFace() *BombFace {
 	}
 }
 
-func (f *BombFace) AddModule(module Module, position valueobject.ModulePosition) error {
+func (f *BombFace) AddModuleAt(module Module, position valueobject.ModulePosition) error {
 	if _, exists := f.ModulesByPosition[position]; exists {
 		return errors.New("position already occupied")
 	}

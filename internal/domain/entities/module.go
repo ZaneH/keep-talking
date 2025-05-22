@@ -14,6 +14,7 @@ type Module interface {
 	GetBomb() *Bomb
 	// AddStrike()
 	SetPosition(position valueobject.ModulePosition)
+	SetBomb(bomb *Bomb)
 }
 
 type ModuleState interface {
@@ -25,6 +26,10 @@ type BaseModule struct {
 	ModuleID uuid.UUID
 	Position valueobject.ModulePosition
 	bomb     *Bomb
+}
+
+func (m *BaseModule) SetBomb(bomb *Bomb) {
+	m.bomb = bomb
 }
 
 func (m *BaseModule) SetPosition(position valueobject.ModulePosition) {

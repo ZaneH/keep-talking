@@ -37,11 +37,10 @@ type BigButtonModule struct {
 	State BigButtonState
 }
 
-func NewBigButtonModule(bomb *Bomb) *BigButtonModule {
+func NewBigButtonModule() *BigButtonModule {
 	return &BigButtonModule{
 		BaseModule: BaseModule{
 			ModuleID: uuid.New(),
-			bomb:     bomb,
 		},
 		State: NewButtonState(),
 	}

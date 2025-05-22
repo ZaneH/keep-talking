@@ -21,7 +21,7 @@ type PasswordModule struct {
 	state PasswordModuleState
 }
 
-func NewPasswordModule(bomb *Bomb, providedSolution *string) *PasswordModule {
+func NewPasswordModule(providedSolution *string) *PasswordModule {
 	var solution string
 	if providedSolution == nil {
 		solution = generateWord()
@@ -32,7 +32,6 @@ func NewPasswordModule(bomb *Bomb, providedSolution *string) *PasswordModule {
 	return &PasswordModule{
 		BaseModule: BaseModule{
 			ModuleID: uuid.New(),
-			bomb:     bomb,
 		},
 		state: PasswordModuleState{
 			Letters:   generateLetters(solution),

@@ -16,7 +16,8 @@ func TestSimpleWiresModuleActor_FourWiresMoreThanOneRedOddSerial(t *testing.T) {
 	// Arrange
 	bomb := entities.NewBomb(valueobject.NewDefaultBombConfig())
 	bomb.SerialNumber = "1111"
-	simpleWiresModule := entities.NewSimpleWiresModule(bomb)
+	simpleWiresModule := entities.NewSimpleWiresModule()
+	simpleWiresModule.SetBomb(bomb)
 	simpleWiresModuleActor := actors.NewSimpleWiresModuleActor(simpleWiresModule)
 	simpleWiresModuleActor.Start() // Start the actor to process messages
 	defer simpleWiresModuleActor.Stop()
@@ -132,7 +133,8 @@ func TestSimpleWiresModuleActor_ThreeWiresNoRed(t *testing.T) {
 	// Arrange
 	bomb := entities.NewBomb(valueobject.NewDefaultBombConfig())
 	bomb.SerialNumber = "1111"
-	wiresModule := entities.NewSimpleWiresModule(bomb)
+	wiresModule := entities.NewSimpleWiresModule()
+	wiresModule.SetBomb(bomb)
 	wiresModuleActor := actors.NewSimpleWiresModuleActor(wiresModule)
 	wiresModuleActor.Start() // Start the actor to process messages
 	defer wiresModuleActor.Stop()

@@ -116,6 +116,7 @@
       "type": "string",
       "enum": [
         "UNKNOWN",
+        "CLOCK",
         "SIMPLE_WIRES",
         "PASSWORD",
         "BIG_BUTTON",

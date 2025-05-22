@@ -13,30 +13,32 @@ import (
 )
 
 type Bomb struct {
-	ID           uuid.UUID
-	SerialNumber string
-	StartingTime time.Duration
-	StrikeCount  int
-	MaxStrikes   int
-	Faces        map[int]*BombFace
-	Modules      map[uuid.UUID]Module
-	Indicators   map[string]valueobject.Indicator
-	Batteries    int
-	Ports        []valueobject.Port
+	ID            uuid.UUID
+	SerialNumber  string
+	TimerDuration time.Duration
+	StartedAt     *time.Time
+	StrikeCount   int
+	MaxStrikes    int
+	Faces         map[int]*BombFace
+	Modules       map[uuid.UUID]Module
+	Indicators    map[string]valueobject.Indicator
+	Batteries     int
+	Ports         []valueobject.Port
 }
 
 func NewBomb(config valueobject.BombConfig) *Bomb {
 	return &Bomb{
-		ID:           uuid.New(),
-		SerialNumber: generateSerialNumber(),
-		StartingTime: config.Timer,
-		StrikeCount:  0,
-		MaxStrikes:   config.MaxStrikes,
-		Faces:        make(map[int]*BombFace),
-		Modules:      make(map[uuid.UUID]Module),
-		Indicators:   generateRandomIndicators(config.MaxIndicatorCount),
-		Batteries:    generateRandomBatteryCount(config.MinBatteries, config.MaxBatteries),
-		Ports:        generateRandomPorts(config.PortCount),
+		ID:            uuid.New(),
+		SerialNumber:  generateSerialNumber(),
+		TimerDuration: config.Timer,
+		StartedAt:     nil,
+		StrikeCount:   0,
+		MaxStrikes:    config.MaxStrikes,
+		Faces:         make(map[int]*BombFace),
+		Modules:       make(map[uuid.UUID]Module),
+		Indicators:    generateRandomIndicators(config.MaxIndicatorCount),
+		Batteries:     generateRandomBatteryCount(config.MinBatteries, config.MaxBatteries),
+		Ports:         generateRandomPorts(config.PortCount),
 	}
 }
 
@@ -48,7 +50,7 @@ func (b *Bomb) AddModule(module Module, position valueobject.ModulePosition) err
 		b.Faces[position.Face] = face
 	}
 
-	if err := face.AddModule(module, position); err != nil {
+	if err := face.AddModuleAt(module, position); err != nil {
 		return err
 	}
 
@@ -64,7 +66,7 @@ func (b *Bomb) AddStrike() {
 
 func (b *Bomb) GetTimeLeft() time.Duration {
 	now := time.Now()
-	return b.StartingTime - time.Since(now)
+	return b.TimerDuration - time.Since(now)
 }
 
 func generateSerialNumber() string {

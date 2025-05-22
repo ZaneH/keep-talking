@@ -36,7 +36,7 @@ func TestBombFactory_CreateBomb(t *testing.T) {
 		return
 	}
 
-	assert.Equal(t, bomb.StartingTime, c.Timer, "Expected bomb timer to be %v, but got %v", c.Timer, bomb.StartingTime)
+	assert.Equal(t, bomb.TimerDuration, c.Timer, "Expected bomb timer to be %v, but got %v", c.Timer, bomb.TimerDuration)
 	assert.Equal(t, bomb.MaxStrikes, c.MaxStrikes, "Expected bomb max strikes to be %d, but got %d", c.MaxStrikes, bomb.MaxStrikes)
 	assert.Equal(t, bomb.Batteries, c.MinBatteries, "Expected bomb batteries to be %d, but got %d", 0, bomb.Batteries)
 	assert.Equal(t, bomb.Ports, []valueobject.Port{}, "Expected bomb ports to be empty, but got %v", bomb.Ports)

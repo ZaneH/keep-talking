@@ -18,7 +18,10 @@ func mapTypeToProto(moduleType valueobject.ModuleType) pb.Module_ModuleType {
 		return pb.Module_PASSWORD
 	case valueobject.BigButton:
 		return pb.Module_BIG_BUTTON
+	case valueobject.Clock:
+		return pb.Module_CLOCK
 	default:
+		log.Fatalf("Unknown module type: %v. Couldn't map type to proto.", moduleType)
 		return pb.Module_UNKNOWN
 	}
 }
@@ -78,7 +81,11 @@ func mapModulesToProto(modules map[uuid.UUID]actors.ModuleActor) map[string]*pb.
 				Col:  int32(actor.GetModule().GetPosition().Column),
 				Face: int32(actor.GetModule().GetPosition().Face),
 			},
-			Solved: actor.GetModule().GetModuleState().IsSolved(),
+		}
+
+		moduleState := actor.GetModule().GetModuleState()
+		if moduleState != nil {
+			protoModule.Solved = moduleState.IsSolved()
 		}
 
 		switch actor.GetModule().GetType() {
@@ -116,7 +123,7 @@ func mapModulesToProto(modules map[uuid.UUID]actors.ModuleActor) map[string]*pb.
 					Label:       bigButtonState.Label,
 				},
 			}
-
+		case valueobject.Clock:
 		default:
 			log.Fatalf("Unknown module type: %v. Couldn't provide state.", actor.GetModule().GetType())
 		}

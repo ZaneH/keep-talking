@@ -30,11 +30,10 @@ type SimpleWiresModule struct {
 	State SimpleWiresState
 }
 
-func NewSimpleWiresModule(bomb *Bomb) *SimpleWiresModule {
+func NewSimpleWiresModule() *SimpleWiresModule {
 	return &SimpleWiresModule{
 		BaseModule: BaseModule{
 			ModuleID: uuid.New(),
-			bomb:     bomb,
 		},
 		State: NewSimpleWiresState(),
 	}

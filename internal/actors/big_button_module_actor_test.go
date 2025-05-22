@@ -17,7 +17,8 @@ func TestBigButtonModuleActor_TwoBatteriesAndDetonate(t *testing.T) {
 	// Arrange
 	bomb := entities.NewBomb(valueobject.NewDefaultBombConfig())
 	bomb.Batteries = 2
-	buttonModule := entities.NewBigButtonModule(bomb)
+	buttonModule := entities.NewBigButtonModule()
+	buttonModule.SetBomb(bomb)
 
 	testState := entities.NewButtonState()
 	testState.ButtonColor = valueobject.Red
@@ -79,7 +80,8 @@ func TestBigButtonModuleActor_FRKLitAndThreeBatteries(t *testing.T) {
 	bomb.Batteries = 3
 	bomb.Indicators["FRK"] = valueobject.Indicator{Lit: true}
 
-	buttonModule := entities.NewBigButtonModule(bomb)
+	buttonModule := entities.NewBigButtonModule()
+	buttonModule.SetBomb(bomb)
 
 	testState := entities.NewButtonState()
 	testState.ButtonColor = valueobject.White
@@ -141,7 +143,8 @@ func TestBigButtonModuleActor_YellowButton(t *testing.T) {
 	bomb.Batteries = 1
 	bomb.Indicators["FRK"] = valueobject.Indicator{Lit: false}
 
-	buttonModule := entities.NewBigButtonModule(bomb)
+	buttonModule := entities.NewBigButtonModule()
+	buttonModule.SetBomb(bomb)
 
 	testState := entities.NewButtonState()
 	testState.ButtonColor = valueobject.Yellow

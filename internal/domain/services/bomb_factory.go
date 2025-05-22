@@ -18,6 +18,10 @@ func (f *BombFactoryImpl) CreateBomb(config valueobject.BombConfig) *entities.Bo
 		totalModules = 9
 	}
 
+	if totalModules < config.MinModules {
+		totalModules = config.MinModules
+	}
+
 	moduleTypes := make([]valueobject.ModuleType, 0)
 	weights := make([]float32, 0)
 
@@ -27,7 +31,9 @@ func (f *BombFactoryImpl) CreateBomb(config valueobject.BombConfig) *entities.Bo
 	}
 
 	modulesToAdd := make([]valueobject.ModuleType, totalModules)
-	for i := 0; i < totalModules; i++ {
+	modulesToAdd[0] = valueobject.Clock
+
+	for i := 1; i < totalModules; i++ {
 		modulesToAdd[i] = selectWeightedModuleType(moduleTypes, weights)
 	}
 
@@ -70,24 +76,26 @@ func (f *BombFactoryImpl) placeModulesOnBomb(bomb *entities.Bomb, moduleTypes []
 func (f *BombFactoryImpl) createModule(bomb *entities.Bomb, moduleType valueobject.ModuleType, position valueobject.ModulePosition) entities.Module {
 	var module entities.Module
 	switch moduleType {
+	case valueobject.Clock:
+		module = entities.NewClockModule()
 	case valueobject.SimpleWires:
-		module = entities.NewSimpleWiresModule(bomb)
+		module = entities.NewSimpleWiresModule()
 	case valueobject.Password:
-		module = entities.NewPasswordModule(bomb, nil)
+		module = entities.NewPasswordModule(nil)
 	case valueobject.BigButton:
-		module = entities.NewBigButtonModule(bomb)
+		module = entities.NewBigButtonModule()
 	case valueobject.SimonSays:
-		module = entities.NewSimonSaysModule(bomb)
+		module = entities.NewSimonSaysModule()
 	default:
 		return nil
 	}
 
+	module.SetBomb(bomb)
 	module.SetPosition(position)
 
 	return module
 }
 
-// Choose a module type randomly based on weights
 func selectWeightedModuleType(moduleTypes []valueobject.ModuleType, weights []float32) valueobject.ModuleType {
 	// Simple weighted selection algorithm
 	totalWeight := float32(0)

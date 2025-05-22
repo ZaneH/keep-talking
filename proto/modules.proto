@@ -15,10 +15,11 @@ message ModulePosition {
 message Module {
   enum ModuleType {
     UNKNOWN = 0;
-    SIMPLE_WIRES = 1;
-    PASSWORD = 2;
-    BIG_BUTTON = 3;
-    SIMON_SAYS = 4;
+    CLOCK = 1;
+    SIMPLE_WIRES = 2;
+    PASSWORD = 3;
+    BIG_BUTTON = 4;
+    SIMON_SAYS = 5;
   }
 
   string id = 1;

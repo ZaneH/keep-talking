@@ -6,6 +6,7 @@ type BombConfig struct {
 	Timer             time.Duration
 	MaxStrikes        int
 	NumFaces          int
+	MinModules        int
 	MaxModulesPerFace int
 	ModuleTypes       map[ModuleType]float32 // Module type to probability mapping
 	MinBatteries      int
@@ -19,11 +20,13 @@ func NewDefaultBombConfig() BombConfig {
 		Timer:             5 * time.Minute,
 		MaxStrikes:        3,
 		NumFaces:          1,
-		MaxModulesPerFace: 1,
+		MinModules:        2,
+		MaxModulesPerFace: 2,
 		ModuleTypes: map[ModuleType]float32{
-			SimpleWires: 0.24,
+			SimpleWires: 0.1,
 			// Password: 0.1,
 			BigButton: 0.1,
+			Clock:     0.0, // Will be added manually
 		},
 		MinBatteries:      1,
 		MaxBatteries:      4,

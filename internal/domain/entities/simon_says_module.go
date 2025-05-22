@@ -29,11 +29,10 @@ type SimonSaysModule struct {
 	state SimonSaysModuleState
 }
 
-func NewSimonSaysModule(bomb *Bomb) *SimonSaysModule {
+func NewSimonSaysModule() *SimonSaysModule {
 	return &SimonSaysModule{
 		BaseModule: BaseModule{
 			ModuleID: uuid.New(),
-			bomb:     bomb,
 		},
 		state: SimonSaysModuleState{
 			DisplaySequence: generateDisplaySequence(),

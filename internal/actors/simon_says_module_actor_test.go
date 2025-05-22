@@ -20,7 +20,8 @@ func TestSimonSaysModuleActor_TestVowelCompleteSequence(t *testing.T) {
 	bomb := entities.NewBomb(valueobject.NewDefaultBombConfig())
 	bomb.SerialNumber = "AAA"
 
-	module := entities.NewSimonSaysModule(bomb)
+	module := entities.NewSimonSaysModule()
+	module.SetBomb(bomb)
 	module.SetState(entities.SimonSaysModuleState{
 		DisplaySequence: []valueobject.Color{
 			valueobject.Red,
