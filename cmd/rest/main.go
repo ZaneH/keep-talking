@@ -3,9 +3,11 @@ package main
 import (
 	"context"
 	"flag"
+	"log"
 	"net/http"
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
+	"github.com/rs/cors"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/grpclog"
@@ -32,8 +34,14 @@ func run() error {
 		return err
 	}
 
+	withCors := cors.New(cors.Options{
+		AllowedOrigins:   []string{"*"},
+		AllowCredentials: true,
+	}).Handler(mux)
+
 	// Start HTTP server (and proxy calls to gRPC server endpoint)
-	return http.ListenAndServe(":8081", mux)
+	log.Println("Starting HTTP server on :8081")
+	return http.ListenAndServe(":8081", withCors)
 }
 
 func main() {

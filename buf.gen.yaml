@@ -15,3 +15,9 @@ plugins:
       - generate_unbound_methods=true
   - local: protoc-gen-openapiv2
     out: openapiv2
+  - local: protoc-gen-grpc-gateway-ts
+    # ensure the web client is located at ../keep-talking-app
+    out: ../keep-talking-app/src/generated
+    opt:
+      - paths=source_relative
+      - grpc-gateway-ts_out=import_style=commonjs,binary
