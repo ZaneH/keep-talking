@@ -1,0 +1,395 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "proto/game.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "GameService"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/v1/game/bombs": {
+      "get": {
+        "operationId": "GameService_GetBombs",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/sessionGetBombsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "GameService"
+        ]
+      }
+    },
+    "/v1/game/create": {
+      "post": {
+        "operationId": "GameService_CreateGame",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/playerCreateGameResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/playerCreateGameRequest"
+            }
+          }
+        ],
+        "tags": [
+          "GameService"
+        ]
+      }
+    },
+    "/v1/game/input": {
+      "post": {
+        "operationId": "GameService_SendInput",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/playerPlayerInputResult"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/playerPlayerInput"
+            }
+          }
+        ],
+        "tags": [
+          "GameService"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "ModuleModuleType": {
+      "type": "string",
+      "enum": [
+        "UNKNOWN",
+        "SIMPLE_WIRES",
+        "PASSWORD",
+        "BIG_BUTTON",
+        "SIMON_SAYS"
+      ],
+      "default": "UNKNOWN"
+    },
+    "bombBomb": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "modules": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/modulesModule"
+          }
+        }
+      }
+    },
+    "commonColor": {
+      "type": "string",
+      "enum": [
+        "RED",
+        "BLUE",
+        "WHITE",
+        "BLACK",
+        "YELLOW",
+        "GREEN",
+        "ORANGE",
+        "PINK",
+        "UNKNOWN"
+      ],
+      "default": "RED"
+    },
+    "commonIncrementDecrement": {
+      "type": "string",
+      "enum": [
+        "INCREMENT",
+        "DECREMENT"
+      ],
+      "default": "INCREMENT"
+    },
+    "commonPressType": {
+      "type": "string",
+      "enum": [
+        "TAP",
+        "HOLD",
+        "RELEASE"
+      ],
+      "default": "TAP"
+    },
+    "modulesBigButtonInput": {
+      "type": "object",
+      "properties": {
+        "pressType": {
+          "$ref": "#/definitions/commonPressType"
+        }
+      }
+    },
+    "modulesBigButtonState": {
+      "type": "object",
+      "properties": {
+        "buttonColor": {
+          "$ref": "#/definitions/commonColor"
+        },
+        "label": {
+          "type": "string"
+        }
+      }
+    },
+    "modulesLetterChange": {
+      "type": "object",
+      "properties": {
+        "letterIndex": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "direction": {
+          "$ref": "#/definitions/commonIncrementDecrement"
+        }
+      }
+    },
+    "modulesModule": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "type": {
+          "$ref": "#/definitions/ModuleModuleType"
+        },
+        "position": {
+          "$ref": "#/definitions/modulesModulePosition"
+        },
+        "solved": {
+          "type": "boolean"
+        },
+        "simpleWires": {
+          "$ref": "#/definitions/modulesSimpleWiresState"
+        },
+        "bigButton": {
+          "$ref": "#/definitions/modulesBigButtonState",
+          "description": "SimonSaysState simon_says = 8;",
+          "title": "PasswordState password = 6;"
+        }
+      }
+    },
+    "modulesModulePosition": {
+      "type": "object",
+      "properties": {
+        "face": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "row": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "col": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "modulesPasswordInput": {
+      "type": "object",
+      "properties": {
+        "letterChange": {
+          "$ref": "#/definitions/modulesLetterChange"
+        },
+        "submit": {
+          "$ref": "#/definitions/modulesPasswordSubmit"
+        }
+      }
+    },
+    "modulesPasswordSubmit": {
+      "type": "object"
+    },
+    "modulesSimonSaysInput": {
+      "type": "object",
+      "properties": {
+        "color": {
+          "$ref": "#/definitions/commonColor"
+        }
+      }
+    },
+    "modulesSimpleWiresInput": {
+      "type": "object",
+      "properties": {
+        "wireIndex": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "modulesSimpleWiresState": {
+      "type": "object",
+      "properties": {
+        "wires": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/modulesWire"
+          }
+        }
+      }
+    },
+    "modulesWire": {
+      "type": "object",
+      "properties": {
+        "wireColor": {
+          "$ref": "#/definitions/commonColor"
+        },
+        "isCut": {
+          "type": "boolean"
+        },
+        "index": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "playerCreateGameRequest": {
+      "type": "object"
+    },
+    "playerCreateGameResponse": {
+      "type": "object",
+      "properties": {
+        "sessionId": {
+          "type": "string"
+        }
+      }
+    },
+    "playerPlayerInput": {
+      "type": "object",
+      "properties": {
+        "sessionId": {
+          "type": "string"
+        },
+        "bombId": {
+          "type": "string"
+        },
+        "moduleId": {
+          "type": "string"
+        },
+        "simpleWiresInput": {
+          "$ref": "#/definitions/modulesSimpleWiresInput"
+        },
+        "passwordInput": {
+          "$ref": "#/definitions/modulesPasswordInput"
+        },
+        "bigButtonInput": {
+          "$ref": "#/definitions/modulesBigButtonInput"
+        },
+        "simonSaysInput": {
+          "$ref": "#/definitions/modulesSimonSaysInput"
+        }
+      }
+    },
+    "playerPlayerInputResult": {
+      "type": "object",
+      "properties": {
+        "moduleId": {
+          "type": "string"
+        },
+        "strike": {
+          "type": "boolean"
+        },
+        "solved": {
+          "type": "boolean"
+        }
+      }
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    },
+    "sessionGetBombsResponse": {
+      "type": "object",
+      "properties": {
+        "bombs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/bombBomb"
+          }
+        }
+      }
+    }
+  }
+}

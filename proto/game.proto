@@ -3,11 +3,26 @@ package game;
 
 import "proto/player.proto";
 import "proto/session.proto";
+import "google/api/annotations.proto";
 
 option go_package = "./proto";
 
 service GameService {
-  rpc CreateGame(player.CreateGameRequest) returns (player.CreateGameResponse);
-  rpc GetBombs(session.GetBombsRequest) returns (session.GetBombsResponse);
-  rpc SendInput(player.PlayerInput) returns (player.PlayerInputResult);
+  rpc CreateGame(player.CreateGameRequest) returns (player.CreateGameResponse) {
+    option (google.api.http) = {
+      post: "/v1/game/create"
+      body: "*"
+    };
+  };
+  rpc GetBombs(session.GetBombsRequest) returns (session.GetBombsResponse) {
+    option (google.api.http) = {
+      get: "/v1/game/bombs"
+    };
+  };
+  rpc SendInput(player.PlayerInput) returns (player.PlayerInputResult) {
+    option (google.api.http) = {
+      post: "/v1/game/input"
+      body: "*"
+    };
+  };
 }

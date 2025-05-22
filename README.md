@@ -39,9 +39,13 @@ $ cd keep-talking
 $ go mod tidy
 ```
 
+```bash
+$ go install tool
+```
+
 ### Run the Game
 ```bash
-$ go run cmd/server/main.go
+$ go run cmd/server/main.go # starts gRPC server
 ```
 
 ## TODO List
@@ -54,8 +58,8 @@ $ go run cmd/server/main.go
 - [ ] Create comprehensive test suite
 - [ ] Add game statistics and leaderboards
 - [ ] Document gRPC API for client developers
-- [~] Create a simple demo client ([In Progress](https://github.com/ZaneH/keep-talking-app))
-- [~] Add CI/CD pipeline
+- [ ] Create a simple demo client ([In Progress](https://github.com/ZaneH/keep-talking-app))
+- [ ] Add CI/CD pipeline
 - [ ] Implement session management for multiplayer games
 
 ## Contributing

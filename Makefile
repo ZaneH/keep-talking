@@ -1,13 +1,14 @@
 gen-protobuf:
 	@echo "Generating protobuf files..."
-	@protoc \
-		--go_out=./internal/infrastructure/grpc \
-  	--go_opt=paths=source_relative \
-		--go-grpc_out=./internal/infrastructure/grpc \
-  	--go-grpc_opt=paths=source_relative \
-		--experimental_allow_proto3_optional \
-		proto/*proto
+	@buf generate
 	@echo "Protobuf files generated successfully."
+
+swagger-ui:
+	@docker run -p 80:8080 \
+    -e SWAGGER_JSON=/proto/game.swagger.json \
+    -v $(PWD)/openapiv2/proto:/proto \
+    swaggerapi/swagger-ui
+	@echo "Swagger UI is running at http://localhost:80"
 
 test:
 	@go test ./... -v
