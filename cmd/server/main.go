@@ -24,7 +24,7 @@ func main() {
 	gameService := appServices.NewGameService(actorSystem, bombService)
 	grpcGameServiceServer := grpcServer.NewGameServiceAdapter(gameService)
 
-	lis, err := net.Listen("tcp", ":50051")
+	lis, err := net.Listen("tcp", "0.0.0.0:50051")
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
