@@ -29,6 +29,7 @@ func NewDefaultBombConfig() BombConfig {
 			// Password: 0.1,
 			BigButton: 0.1,
 			Clock:     0.0, // Will be added manually
+			SimonSays: 0.05,
 		},
 		MinBatteries:      1,
 		MaxBatteries:      4,

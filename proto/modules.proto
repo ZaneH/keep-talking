@@ -3,6 +3,7 @@ package modules;
 
 import "proto/simple_wires_module.proto";
 import "proto/big_button_module.proto";
+import "proto/simon_says_module.proto";
 
 option go_package = "./proto";
 
@@ -30,6 +31,5 @@ message Module {
     SimpleWiresState simple_wires = 5;
     // PasswordState password = 6;
     BigButtonState big_button = 7;
-    // SimonSaysState simon_says = 8;
   }
 }

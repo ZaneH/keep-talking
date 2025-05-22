@@ -113,13 +113,34 @@ func (s *GameServiceAdapter) SendInput(ctx context.Context, i *pb.PlayerInput) (
 			Solved:   res != nil && cmdResult.Solved,
 		}, nil
 	case *command.BigButtonInputCommandResult:
+		var color pb.Color
+		if cmdResult.StripColor != nil {
+			color = mapColorToProto(*cmdResult.StripColor)
+		}
+
 		return &pb.PlayerInputResult{
 			ModuleId: i.GetModuleId(),
 			Strike:   res != nil && !cmdResult.Strike,
 			Solved:   res != nil && cmdResult.Solved,
 			Result: &pb.PlayerInputResult_BigButtonInputResult{
 				BigButtonInputResult: &pb.BigButtonInputResult{
-					StripColor: mapColorToProto(cmdResult.StripColor),
+					StripColor: color,
+				},
+			},
+		}, nil
+	case *command.SimonSaysInputCommandResult:
+		sequence := make([]pb.Color, len(cmdResult.NextColorSequence))
+		for i, color := range cmdResult.NextColorSequence {
+			sequence[i] = mapColorToProto(color)
+		}
+
+		return &pb.PlayerInputResult{
+			ModuleId: i.GetModuleId(),
+			Strike:   res != nil && !cmdResult.Strike,
+			Solved:   res != nil && cmdResult.Solved,
+			Result: &pb.PlayerInputResult_SimonSaysInputResult{
+				SimonSaysInputResult: &pb.SimonSaysInputResult{
+					NextSequence: sequence,
 				},
 			},
 		}, nil

@@ -247,6 +247,7 @@ type PlayerInputResult struct {
 	// Types that are valid to be assigned to Result:
 	//
 	//	*PlayerInputResult_BigButtonInputResult
+	//	*PlayerInputResult_SimonSaysInputResult
 	Result        isPlayerInputResult_Result `protobuf_oneof:"result"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -319,6 +320,15 @@ func (x *PlayerInputResult) GetBigButtonInputResult() *BigButtonInputResult {
 	return nil
 }
 
+func (x *PlayerInputResult) GetSimonSaysInputResult() *SimonSaysInputResult {
+	if x != nil {
+		if x, ok := x.Result.(*PlayerInputResult_SimonSaysInputResult); ok {
+			return x.SimonSaysInputResult
+		}
+	}
+	return nil
+}
+
 type isPlayerInputResult_Result interface {
 	isPlayerInputResult_Result()
 }
@@ -327,7 +337,13 @@ type PlayerInputResult_BigButtonInputResult struct {
 	BigButtonInputResult *BigButtonInputResult `protobuf:"bytes,10,opt,name=big_button_input_result,json=bigButtonInputResult,proto3,oneof"`
 }
 
+type PlayerInputResult_SimonSaysInputResult struct {
+	SimonSaysInputResult *SimonSaysInputResult `protobuf:"bytes,11,opt,name=simon_says_input_result,json=simonSaysInputResult,proto3,oneof"`
+}
+
 func (*PlayerInputResult_BigButtonInputResult) isPlayerInputResult_Result() {}
+
+func (*PlayerInputResult_SimonSaysInputResult) isPlayerInputResult_Result() {}
 
 var File_proto_player_proto protoreflect.FileDescriptor
 
@@ -348,13 +364,14 @@ const file_proto_player_proto_rawDesc = "" +
 	"\x0epassword_input\x18\v \x01(\v2\x16.modules.PasswordInputH\x00R\rpasswordInput\x12C\n" +
 	"\x10big_button_input\x18\f \x01(\v2\x17.modules.BigButtonInputH\x00R\x0ebigButtonInput\x12C\n" +
 	"\x10simon_says_input\x18\r \x01(\v2\x17.modules.SimonSaysInputH\x00R\x0esimonSaysInputB\a\n" +
-	"\x05input\"\xc2\x01\n" +
+	"\x05input\"\x9a\x02\n" +
 	"\x11PlayerInputResult\x12\x1b\n" +
 	"\tmodule_id\x18\x01 \x01(\tR\bmoduleId\x12\x16\n" +
 	"\x06strike\x18\x02 \x01(\bR\x06strike\x12\x16\n" +
 	"\x06solved\x18\x03 \x01(\bR\x06solved\x12V\n" +
 	"\x17big_button_input_result\x18\n" +
-	" \x01(\v2\x1d.modules.BigButtonInputResultH\x00R\x14bigButtonInputResultB\b\n" +
+	" \x01(\v2\x1d.modules.BigButtonInputResultH\x00R\x14bigButtonInputResult\x12V\n" +
+	"\x17simon_says_input_result\x18\v \x01(\v2\x1d.modules.SimonSaysInputResultH\x00R\x14simonSaysInputResultB\b\n" +
 	"\x06resultB\tZ\a./protob\x06proto3"
 
 var (
@@ -380,6 +397,7 @@ var file_proto_player_proto_goTypes = []any{
 	(*BigButtonInput)(nil),       // 6: modules.BigButtonInput
 	(*SimonSaysInput)(nil),       // 7: modules.SimonSaysInput
 	(*BigButtonInputResult)(nil), // 8: modules.BigButtonInputResult
+	(*SimonSaysInputResult)(nil), // 9: modules.SimonSaysInputResult
 }
 var file_proto_player_proto_depIdxs = []int32{
 	4, // 0: player.PlayerInput.simple_wires_input:type_name -> modules.SimpleWiresInput
@@ -387,11 +405,12 @@ var file_proto_player_proto_depIdxs = []int32{
 	6, // 2: player.PlayerInput.big_button_input:type_name -> modules.BigButtonInput
 	7, // 3: player.PlayerInput.simon_says_input:type_name -> modules.SimonSaysInput
 	8, // 4: player.PlayerInputResult.big_button_input_result:type_name -> modules.BigButtonInputResult
-	5, // [5:5] is the sub-list for method output_type
-	5, // [5:5] is the sub-list for method input_type
-	5, // [5:5] is the sub-list for extension type_name
-	5, // [5:5] is the sub-list for extension extendee
-	0, // [0:5] is the sub-list for field type_name
+	9, // 5: player.PlayerInputResult.simon_says_input_result:type_name -> modules.SimonSaysInputResult
+	6, // [6:6] is the sub-list for method output_type
+	6, // [6:6] is the sub-list for method input_type
+	6, // [6:6] is the sub-list for extension type_name
+	6, // [6:6] is the sub-list for extension extendee
+	0, // [0:6] is the sub-list for field type_name
 }
 
 func init() { file_proto_player_proto_init() }
@@ -411,6 +430,7 @@ func file_proto_player_proto_init() {
 	}
 	file_proto_player_proto_msgTypes[3].OneofWrappers = []any{
 		(*PlayerInputResult_BigButtonInputResult)(nil),
+		(*PlayerInputResult_SimonSaysInputResult)(nil),
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{

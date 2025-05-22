@@ -8,3 +8,7 @@ option go_package = "./proto";
 message SimonSaysInput {
   common.Color color = 1;
 }
+
+message SimonSaysInputResult {
+  repeated common.Color next_sequence = 1;
+}

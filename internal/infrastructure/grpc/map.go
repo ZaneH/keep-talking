@@ -20,18 +20,16 @@ func mapTypeToProto(moduleType valueobject.ModuleType) pb.Module_ModuleType {
 		return pb.Module_BIG_BUTTON
 	case valueobject.Clock:
 		return pb.Module_CLOCK
+	case valueobject.SimonSays:
+		return pb.Module_SIMON_SAYS
 	default:
 		log.Fatalf("Unknown module type: %v. Couldn't map type to proto.", moduleType)
 		return pb.Module_UNKNOWN
 	}
 }
 
-func mapColorToProto(color *valueobject.Color) pb.Color {
-	if color == nil {
-		return pb.Color_UNKNOWN
-	}
-
-	switch *color {
+func mapColorToProto(color valueobject.Color) pb.Color {
+	switch color {
 	case valueobject.Red:
 		return pb.Color_RED
 	case valueobject.Blue:
@@ -49,7 +47,7 @@ func mapColorToProto(color *valueobject.Color) pb.Color {
 	case valueobject.Pink:
 		return pb.Color_PINK
 	default:
-		log.Printf("Unknown color: %v. Couldn't provide state.", color)
+		log.Fatalf("Unknown color: %v. Couldn't provide state.", color)
 		return pb.Color_UNKNOWN
 	}
 }
@@ -115,7 +113,7 @@ func mapModulesToProto(modules map[uuid.UUID]actors.ModuleActor) map[string]*pb.
 			wires := make([]*pb.Wire, 0, len(simpleWiresState.Wires))
 			for _, wire := range simpleWiresState.Wires {
 				wires = append(wires, &pb.Wire{
-					WireColor: mapColorToProto(&wire.WireColor),
+					WireColor: mapColorToProto(wire.WireColor),
 					IsCut:     wire.IsCut,
 					Position:  int32(wire.Position),
 				})
@@ -135,11 +133,12 @@ func mapModulesToProto(modules map[uuid.UUID]actors.ModuleActor) map[string]*pb.
 
 			protoModule.State = &pb.Module_BigButton{
 				BigButton: &pb.BigButtonState{
-					ButtonColor: mapColorToProto(&bigButtonState.ButtonColor),
+					ButtonColor: mapColorToProto(bigButtonState.ButtonColor),
 					Label:       bigButtonState.Label,
 				},
 			}
 		case valueobject.Clock:
+		case valueobject.SimonSays:
 		default:
 			log.Fatalf("Unknown module type: %v. Couldn't provide state.", actor.GetModule().GetType())
 		}

@@ -14,7 +14,7 @@ import (
 const minStages = 3
 const maxStages = 5
 
-type SimonSaysModuleState struct {
+type SimonSaysState struct {
 	BaseModuleState
 	// Stores each color to be displayed in order.
 	DisplaySequence []valueobject.Color
@@ -26,7 +26,7 @@ type SimonSaysModuleState struct {
 
 type SimonSaysModule struct {
 	BaseModule
-	state SimonSaysModuleState
+	state SimonSaysState
 }
 
 func NewSimonSaysModule() *SimonSaysModule {
@@ -34,7 +34,7 @@ func NewSimonSaysModule() *SimonSaysModule {
 		BaseModule: BaseModule{
 			ModuleID: uuid.New(),
 		},
-		state: SimonSaysModuleState{
+		state: SimonSaysState{
 			DisplaySequence: generateDisplaySequence(),
 		},
 	}
@@ -60,7 +60,7 @@ func (m *SimonSaysModule) GetType() valueobject.ModuleType {
 	return valueobject.SimonSays
 }
 
-func (m *SimonSaysModule) SetState(state SimonSaysModuleState) {
+func (m *SimonSaysModule) SetState(state SimonSaysState) {
 	m.state = state
 }
 

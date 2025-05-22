@@ -247,7 +247,7 @@ type Module_SimpleWires struct {
 
 type Module_BigButton struct {
 	// PasswordState password = 6;
-	BigButton *BigButtonState `protobuf:"bytes,7,opt,name=big_button,json=bigButton,proto3,oneof"` // SimonSaysState simon_says = 8;
+	BigButton *BigButtonState `protobuf:"bytes,7,opt,name=big_button,json=bigButton,proto3,oneof"`
 }
 
 func (*Module_SimpleWires) isModule_State() {}
@@ -258,7 +258,7 @@ var File_proto_modules_proto protoreflect.FileDescriptor
 
 const file_proto_modules_proto_rawDesc = "" +
 	"\n" +
-	"\x13proto/modules.proto\x12\amodules\x1a\x1fproto/simple_wires_module.proto\x1a\x1dproto/big_button_module.proto\"H\n" +
+	"\x13proto/modules.proto\x12\amodules\x1a\x1fproto/simple_wires_module.proto\x1a\x1dproto/big_button_module.proto\x1a\x1dproto/simon_says_module.proto\"H\n" +
 	"\x0eModulePosition\x12\x12\n" +
 	"\x04face\x18\x01 \x01(\x05R\x04face\x12\x10\n" +
 	"\x03row\x18\x02 \x01(\x05R\x03row\x12\x10\n" +
@@ -323,6 +323,7 @@ func file_proto_modules_proto_init() {
 	}
 	file_proto_simple_wires_module_proto_init()
 	file_proto_big_button_module_proto_init()
+	file_proto_simon_says_module_proto_init()
 	file_proto_modules_proto_msgTypes[1].OneofWrappers = []any{
 		(*Module_SimpleWires)(nil),
 		(*Module_BigButton)(nil),

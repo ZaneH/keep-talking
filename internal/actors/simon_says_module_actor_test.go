@@ -22,7 +22,7 @@ func TestSimonSaysModuleActor_TestVowelCompleteSequence(t *testing.T) {
 
 	module := entities.NewSimonSaysModule()
 	module.SetBomb(bomb)
-	module.SetState(entities.SimonSaysModuleState{
+	module.SetState(entities.SimonSaysState{
 		DisplaySequence: []valueobject.Color{
 			valueobject.Red,
 			valueobject.Green,

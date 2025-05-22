@@ -286,7 +286,6 @@
         },
         "bigButton": {
           "$ref": "#/definitions/modulesBigButtonState",
-          "description": "SimonSaysState simon_says = 8;",
           "title": "PasswordState password = 6;"
         }
       }
@@ -327,6 +326,17 @@
       "properties": {
         "color": {
           "$ref": "#/definitions/commonColor"
+        }
+      }
+    },
+    "modulesSimonSaysInputResult": {
+      "type": "object",
+      "properties": {
+        "nextSequence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/commonColor"
+          }
         }
       }
     },
@@ -417,6 +427,9 @@
         },
         "bigButtonInputResult": {
           "$ref": "#/definitions/modulesBigButtonInputResult"
+        },
+        "simonSaysInputResult": {
+          "$ref": "#/definitions/modulesSimonSaysInputResult"
         }
       }
     },
