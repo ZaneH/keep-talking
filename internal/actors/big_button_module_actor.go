@@ -58,7 +58,7 @@ func (a *BigButtonModuleActor) handleModuleCommand(msg ModuleCommandMessage) {
 		}
 
 		if stripColor != nil {
-			result.StripColor = *stripColor
+			result.StripColor = stripColor
 		}
 
 		if strike {

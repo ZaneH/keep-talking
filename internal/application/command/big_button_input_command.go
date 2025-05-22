@@ -9,5 +9,5 @@ type BigButtonInputCommand struct {
 
 type BigButtonInputCommandResult struct {
 	BaseModuleInputCommandResult
-	StripColor valueobject.Color
+	StripColor *valueobject.Color
 }

@@ -23,8 +23,12 @@ func mapTypeToProto(moduleType valueobject.ModuleType) pb.Module_ModuleType {
 	}
 }
 
-func mapColorToProto(color valueobject.Color) pb.Color {
-	switch color {
+func mapColorToProto(color *valueobject.Color) pb.Color {
+	if color == nil {
+		return pb.Color_UNKNOWN
+	}
+
+	switch *color {
 	case valueobject.Red:
 		return pb.Color_RED
 	case valueobject.Blue:
@@ -88,7 +92,7 @@ func mapModulesToProto(modules map[uuid.UUID]actors.ModuleActor) map[string]*pb.
 			wires := make([]*pb.Wire, 0, len(simpleWiresState.Wires))
 			for _, wire := range simpleWiresState.Wires {
 				wires = append(wires, &pb.Wire{
-					WireColor: mapColorToProto(wire.WireColor),
+					WireColor: mapColorToProto(&wire.WireColor),
 					IsCut:     wire.IsCut,
 					Position:  int32(wire.Position),
 				})
@@ -108,7 +112,7 @@ func mapModulesToProto(modules map[uuid.UUID]actors.ModuleActor) map[string]*pb.
 
 			protoModule.State = &pb.Module_BigButton{
 				BigButton: &pb.BigButtonState{
-					ButtonColor: mapColorToProto(bigButtonState.ButtonColor),
+					ButtonColor: mapColorToProto(&bigButtonState.ButtonColor),
 					Label:       bigButtonState.Label,
 				},
 			}
