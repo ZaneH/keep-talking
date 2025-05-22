@@ -9,6 +9,10 @@ message BigButtonInput {
   common.PressType press_type = 1;
 }
 
+message BigButtonInputResult {
+  common.Color strip_color = 1;
+}
+
 message BigButtonState {
   common.Color button_color = 1;
   string label = 2;

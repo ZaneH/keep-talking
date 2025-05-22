@@ -122,3 +122,17 @@ func mapModulesToProto(modules map[uuid.UUID]actors.ModuleActor) map[string]*pb.
 
 	return protoModules
 }
+
+func mapProtoToPressType(pressType pb.PressType) valueobject.PressType {
+	switch pressType {
+	case pb.PressType_TAP:
+		return valueobject.PressTypeTap
+	case pb.PressType_HOLD:
+		return valueobject.PressTypeHold
+	case pb.PressType_RELEASE:
+		return valueobject.PressTypeRelease
+	default:
+		log.Printf("Unknown press type: %v. Falling back to Tap.", pressType)
+		return valueobject.PressTypeTap
+	}
+}

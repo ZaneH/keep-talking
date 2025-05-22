@@ -174,6 +174,10 @@ func generateReleaseDigit() *int {
 }
 
 func releaseDigitToStripColor(digit *int) (color *valueobject.Color, err error) {
+	if digit == nil {
+		return nil, errors.New("release digit is nil")
+	}
+
 	switch *digit {
 	case 1:
 		color = &bigButtonStripColors[rand.Intn(len(bigButtonStripColors))]

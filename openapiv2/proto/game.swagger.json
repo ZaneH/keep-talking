@@ -177,6 +177,14 @@
         }
       }
     },
+    "modulesBigButtonInputResult": {
+      "type": "object",
+      "properties": {
+        "stripColor": {
+          "$ref": "#/definitions/commonColor"
+        }
+      }
+    },
     "modulesBigButtonState": {
       "type": "object",
       "properties": {
@@ -348,6 +356,9 @@
         },
         "solved": {
           "type": "boolean"
+        },
+        "bigButtonInputResult": {
+          "$ref": "#/definitions/modulesBigButtonInputResult"
         }
       }
     },

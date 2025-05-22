@@ -31,4 +31,7 @@ message PlayerInputResult {
   string module_id = 1;
   bool strike = 2;
   bool solved = 3;
+  oneof result {
+    modules.BigButtonInputResult big_button_input_result = 10;
+  }
 }

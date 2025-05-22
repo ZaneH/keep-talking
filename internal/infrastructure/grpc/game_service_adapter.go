@@ -92,7 +92,7 @@ func (s *GameServiceAdapter) SendInput(ctx context.Context, i *pb.PlayerInput) (
 				BombID:    bombID,
 				ModuleID:  moduleID,
 			},
-			PressType: valueobject.PressType(input.BigButtonInput.PressType.String()),
+			PressType: mapProtoToPressType(input.BigButtonInput.PressType),
 		}
 	default:
 		return nil, fmt.Errorf("unknown input type: %T", input)
@@ -105,11 +105,27 @@ func (s *GameServiceAdapter) SendInput(ctx context.Context, i *pb.PlayerInput) (
 
 	fmt.Printf("Processed input for session %s: %v\n", sessionID, res)
 
-	return &pb.PlayerInputResult{
-		ModuleId: i.GetModuleId(),
-		Strike:   res != nil && !res.(*command.SimpleWiresInputCommandResult).Strike,
-		Solved:   res != nil && res.(*command.SimpleWiresInputCommandResult).Solved,
-	}, nil
+	switch cmdResult := res.(type) {
+	case *command.SimpleWiresInputCommandResult:
+		return &pb.PlayerInputResult{
+			ModuleId: i.GetModuleId(),
+			Strike:   res != nil && !cmdResult.Strike,
+			Solved:   res != nil && cmdResult.Solved,
+		}, nil
+	case *command.BigButtonInputCommandResult:
+		return &pb.PlayerInputResult{
+			ModuleId: i.GetModuleId(),
+			Strike:   res != nil && !cmdResult.Strike,
+			Solved:   res != nil && cmdResult.Solved,
+			Result: &pb.PlayerInputResult_BigButtonInputResult{
+				BigButtonInputResult: &pb.BigButtonInputResult{
+					StripColor: mapColorToProto(cmdResult.StripColor),
+				},
+			},
+		}, nil
+	default:
+		return nil, fmt.Errorf("unknown result type: %T", res)
+	}
 }
 
 func (s *GameServiceAdapter) GetBombs(ctx context.Context, req *pb.GetBombsRequest) (*pb.GetBombsResponse, error) {

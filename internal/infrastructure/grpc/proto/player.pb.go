@@ -240,10 +240,14 @@ func (*PlayerInput_BigButtonInput) isPlayerInput_Input() {}
 func (*PlayerInput_SimonSaysInput) isPlayerInput_Input() {}
 
 type PlayerInputResult struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	ModuleId      string                 `protobuf:"bytes,1,opt,name=module_id,json=moduleId,proto3" json:"module_id,omitempty"`
-	Strike        bool                   `protobuf:"varint,2,opt,name=strike,proto3" json:"strike,omitempty"`
-	Solved        bool                   `protobuf:"varint,3,opt,name=solved,proto3" json:"solved,omitempty"`
+	state    protoimpl.MessageState `protogen:"open.v1"`
+	ModuleId string                 `protobuf:"bytes,1,opt,name=module_id,json=moduleId,proto3" json:"module_id,omitempty"`
+	Strike   bool                   `protobuf:"varint,2,opt,name=strike,proto3" json:"strike,omitempty"`
+	Solved   bool                   `protobuf:"varint,3,opt,name=solved,proto3" json:"solved,omitempty"`
+	// Types that are valid to be assigned to Result:
+	//
+	//	*PlayerInputResult_BigButtonInputResult
+	Result        isPlayerInputResult_Result `protobuf_oneof:"result"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -299,6 +303,32 @@ func (x *PlayerInputResult) GetSolved() bool {
 	return false
 }
 
+func (x *PlayerInputResult) GetResult() isPlayerInputResult_Result {
+	if x != nil {
+		return x.Result
+	}
+	return nil
+}
+
+func (x *PlayerInputResult) GetBigButtonInputResult() *BigButtonInputResult {
+	if x != nil {
+		if x, ok := x.Result.(*PlayerInputResult_BigButtonInputResult); ok {
+			return x.BigButtonInputResult
+		}
+	}
+	return nil
+}
+
+type isPlayerInputResult_Result interface {
+	isPlayerInputResult_Result()
+}
+
+type PlayerInputResult_BigButtonInputResult struct {
+	BigButtonInputResult *BigButtonInputResult `protobuf:"bytes,10,opt,name=big_button_input_result,json=bigButtonInputResult,proto3,oneof"`
+}
+
+func (*PlayerInputResult_BigButtonInputResult) isPlayerInputResult_Result() {}
+
 var File_proto_player_proto protoreflect.FileDescriptor
 
 const file_proto_player_proto_rawDesc = "" +
@@ -318,11 +348,14 @@ const file_proto_player_proto_rawDesc = "" +
 	"\x0epassword_input\x18\v \x01(\v2\x16.modules.PasswordInputH\x00R\rpasswordInput\x12C\n" +
 	"\x10big_button_input\x18\f \x01(\v2\x17.modules.BigButtonInputH\x00R\x0ebigButtonInput\x12C\n" +
 	"\x10simon_says_input\x18\r \x01(\v2\x17.modules.SimonSaysInputH\x00R\x0esimonSaysInputB\a\n" +
-	"\x05input\"`\n" +
+	"\x05input\"\xc2\x01\n" +
 	"\x11PlayerInputResult\x12\x1b\n" +
 	"\tmodule_id\x18\x01 \x01(\tR\bmoduleId\x12\x16\n" +
 	"\x06strike\x18\x02 \x01(\bR\x06strike\x12\x16\n" +
-	"\x06solved\x18\x03 \x01(\bR\x06solvedB\tZ\a./protob\x06proto3"
+	"\x06solved\x18\x03 \x01(\bR\x06solved\x12V\n" +
+	"\x17big_button_input_result\x18\n" +
+	" \x01(\v2\x1d.modules.BigButtonInputResultH\x00R\x14bigButtonInputResultB\b\n" +
+	"\x06resultB\tZ\a./protob\x06proto3"
 
 var (
 	file_proto_player_proto_rawDescOnce sync.Once
@@ -338,25 +371,27 @@ func file_proto_player_proto_rawDescGZIP() []byte {
 
 var file_proto_player_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
 var file_proto_player_proto_goTypes = []any{
-	(*CreateGameRequest)(nil),  // 0: player.CreateGameRequest
-	(*CreateGameResponse)(nil), // 1: player.CreateGameResponse
-	(*PlayerInput)(nil),        // 2: player.PlayerInput
-	(*PlayerInputResult)(nil),  // 3: player.PlayerInputResult
-	(*SimpleWiresInput)(nil),   // 4: modules.SimpleWiresInput
-	(*PasswordInput)(nil),      // 5: modules.PasswordInput
-	(*BigButtonInput)(nil),     // 6: modules.BigButtonInput
-	(*SimonSaysInput)(nil),     // 7: modules.SimonSaysInput
+	(*CreateGameRequest)(nil),    // 0: player.CreateGameRequest
+	(*CreateGameResponse)(nil),   // 1: player.CreateGameResponse
+	(*PlayerInput)(nil),          // 2: player.PlayerInput
+	(*PlayerInputResult)(nil),    // 3: player.PlayerInputResult
+	(*SimpleWiresInput)(nil),     // 4: modules.SimpleWiresInput
+	(*PasswordInput)(nil),        // 5: modules.PasswordInput
+	(*BigButtonInput)(nil),       // 6: modules.BigButtonInput
+	(*SimonSaysInput)(nil),       // 7: modules.SimonSaysInput
+	(*BigButtonInputResult)(nil), // 8: modules.BigButtonInputResult
 }
 var file_proto_player_proto_depIdxs = []int32{
 	4, // 0: player.PlayerInput.simple_wires_input:type_name -> modules.SimpleWiresInput
 	5, // 1: player.PlayerInput.password_input:type_name -> modules.PasswordInput
 	6, // 2: player.PlayerInput.big_button_input:type_name -> modules.BigButtonInput
 	7, // 3: player.PlayerInput.simon_says_input:type_name -> modules.SimonSaysInput
-	4, // [4:4] is the sub-list for method output_type
-	4, // [4:4] is the sub-list for method input_type
-	4, // [4:4] is the sub-list for extension type_name
-	4, // [4:4] is the sub-list for extension extendee
-	0, // [0:4] is the sub-list for field type_name
+	8, // 4: player.PlayerInputResult.big_button_input_result:type_name -> modules.BigButtonInputResult
+	5, // [5:5] is the sub-list for method output_type
+	5, // [5:5] is the sub-list for method input_type
+	5, // [5:5] is the sub-list for extension type_name
+	5, // [5:5] is the sub-list for extension extendee
+	0, // [0:5] is the sub-list for field type_name
 }
 
 func init() { file_proto_player_proto_init() }
@@ -373,6 +408,9 @@ func file_proto_player_proto_init() {
 		(*PlayerInput_PasswordInput)(nil),
 		(*PlayerInput_BigButtonInput)(nil),
 		(*PlayerInput_SimonSaysInput)(nil),
+	}
+	file_proto_player_proto_msgTypes[3].OneofWrappers = []any{
+		(*PlayerInputResult_BigButtonInputResult)(nil),
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
