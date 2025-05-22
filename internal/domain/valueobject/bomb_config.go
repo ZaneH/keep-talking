@@ -13,6 +13,8 @@ type BombConfig struct {
 	MaxBatteries      int
 	MaxIndicatorCount int
 	PortCount         int
+	Columns           int
+	Rows              int
 }
 
 func NewDefaultBombConfig() BombConfig {
@@ -21,7 +23,7 @@ func NewDefaultBombConfig() BombConfig {
 		MaxStrikes:        3,
 		NumFaces:          1,
 		MinModules:        2,
-		MaxModulesPerFace: 2,
+		MaxModulesPerFace: 4,
 		ModuleTypes: map[ModuleType]float32{
 			SimpleWires: 0.1,
 			// Password: 0.1,
@@ -32,5 +34,7 @@ func NewDefaultBombConfig() BombConfig {
 		MaxBatteries:      4,
 		MaxIndicatorCount: 2,
 		PortCount:         3,
+		Columns:           3,
+		Rows:              2,
 	}
 }

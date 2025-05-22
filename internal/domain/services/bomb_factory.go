@@ -46,9 +46,9 @@ func (f *BombFactoryImpl) placeModulesOnBomb(bomb *entities.Bomb, moduleTypes []
 	availablePositions := make([]valueobject.ModulePosition, 0)
 
 	for face := 0; face < config.NumFaces; face++ {
-		for row := 0; row < config.MaxModulesPerFace; row++ {
-			for col := 0; col < config.MaxModulesPerFace; col++ {
-				position := valueobject.ModulePosition{Row: row, Column: col}
+		for row := 0; row < config.Rows; row++ {
+			for col := 0; col < config.Columns; col++ {
+				position := valueobject.ModulePosition{Row: row, Column: col, Face: face}
 				availablePositions = append(availablePositions, position)
 			}
 		}
