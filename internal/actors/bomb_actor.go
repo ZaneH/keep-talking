@@ -34,6 +34,7 @@ func (b *BombActor) Start() {
 
 		b.moduleActors[moduleID] = moduleActor
 		moduleActor.Start()
+		b.bomb.StartTimer()
 	}
 
 	go b.processMessages()

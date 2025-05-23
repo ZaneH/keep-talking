@@ -68,7 +68,7 @@ func mapGameSessionActorToProto(game *actors.GameSessionActor) *pb.GetBombsRespo
 		bombs = append(bombs, &pb.Bomb{
 			Id:            bomb.ID.String(),
 			SerialNumber:  bomb.SerialNumber,
-			TimerDuration: int32(bomb.TimerDuration),
+			TimerDuration: int32(bomb.TimerDuration.Seconds()),
 			StartedAt:     started_at_ts,
 			StrikeCount:   int32(bomb.StrikeCount),
 			MaxStrikes:    int32(bomb.MaxStrikes),

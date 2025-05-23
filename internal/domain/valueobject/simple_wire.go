@@ -7,12 +7,9 @@ type SimpleWire struct {
 }
 
 var SimpleWireColors = [...]Color{
+	Yellow,
 	Red,
 	Blue,
-	White,
 	Black,
-	Yellow,
-	Green,
-	Orange,
-	Pink,
+	White,
 }

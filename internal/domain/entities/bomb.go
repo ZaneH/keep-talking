@@ -69,6 +69,14 @@ func (b *Bomb) GetTimeLeft() time.Duration {
 	return b.TimerDuration - time.Since(now)
 }
 
+func (b *Bomb) StartTimer() {
+	if b.StartedAt != nil {
+		return
+	}
+	now := time.Now()
+	b.StartedAt = &now
+}
+
 func generateSerialNumber() string {
 	var sb strings.Builder
 	options := common.ALPHABET_UPPERCASE
