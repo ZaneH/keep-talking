@@ -21,7 +21,7 @@ type SimonSaysState struct {
 	// When the user starts their input, the module needs to know what index of the sequence they
 	// are at. This is used to determine if the user input is correct or not. 0 indicates that the
 	// module is waiting for the user to input the first color in the sequence.
-	inputCheckIdx int
+	InputCheckIdx int
 }
 
 type SimonSaysModule struct {
@@ -36,6 +36,7 @@ func NewSimonSaysModule() *SimonSaysModule {
 		},
 		state: SimonSaysState{
 			DisplaySequence: generateDisplaySequence(),
+			InputCheckIdx:   0,
 		},
 	}
 }
@@ -47,7 +48,7 @@ func (m *SimonSaysModule) String() string {
 	result.WriteString(fmt.Sprintf("Serial Number: %s\n", m.bomb.SerialNumber))
 	result.WriteString("Current sequence: ")
 	for i, color := range m.state.DisplaySequence {
-		if i == m.state.inputCheckIdx {
+		if i == m.state.InputCheckIdx {
 			result.WriteString(fmt.Sprintf("[%s] ", color))
 		} else {
 			result.WriteString(string(color) + " ")
@@ -69,9 +70,9 @@ func (m *SimonSaysModule) GetModuleState() ModuleState {
 }
 
 func (m *SimonSaysModule) PressColor(c valueobject.Color) (nextSeq []valueobject.Color, strike bool, err error) {
-	nextSeqIdx := min(m.state.inputCheckIdx+2, len(m.state.DisplaySequence))
+	nextSeqIdx := min(m.state.InputCheckIdx+2, len(m.state.DisplaySequence))
 	nextSeq = m.state.DisplaySequence[:nextSeqIdx]
-	if m.state.inputCheckIdx >= len(m.state.DisplaySequence) {
+	if m.state.InputCheckIdx >= len(m.state.DisplaySequence) {
 		return nextSeq, false, fmt.Errorf("input check index out of bounds")
 	}
 
@@ -79,17 +80,17 @@ func (m *SimonSaysModule) PressColor(c valueobject.Color) (nextSeq []valueobject
 		return nextSeq, false, fmt.Errorf("invalid color: %s", c)
 	}
 
-	displayColor := m.state.DisplaySequence[m.state.inputCheckIdx]
+	displayColor := m.state.DisplaySequence[m.state.InputCheckIdx]
 	correctColor, err := m.translateColor(displayColor)
 	if err != nil {
 		return nextSeq, false, fmt.Errorf("error translating color: %w", err)
 	}
 
 	if c == correctColor {
-		if m.state.inputCheckIdx == len(m.state.DisplaySequence)-1 {
+		if m.state.InputCheckIdx == len(m.state.DisplaySequence)-1 {
 			m.state.MarkSolved = true
 		} else {
-			m.state.inputCheckIdx++
+			m.state.InputCheckIdx++
 		}
 
 		return nextSeq, false, nil
@@ -183,8 +184,9 @@ var simonSaysColors = [...]valueobject.Color{
 
 func generateDisplaySequence() []valueobject.Color {
 	sequence := make([]valueobject.Color, maxStages)
-	for i := minStages; i < maxStages; i++ {
-		sequence = append(sequence, simonSaysColors[rand.Intn(len(simonSaysColors))])
+	for i := 0; i < maxStages; i++ {
+		randomColor := rand.Intn(len(simonSaysColors))
+		sequence[i] = simonSaysColors[randomColor]
 	}
 	return sequence
 }

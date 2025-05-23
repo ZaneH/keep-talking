@@ -147,8 +147,9 @@ type Module struct {
 	Solved   bool                   `protobuf:"varint,4,opt,name=solved,proto3" json:"solved,omitempty"`
 	// Types that are valid to be assigned to State:
 	//
-	//	*Module_SimpleWires
-	//	*Module_BigButton
+	//	*Module_SimpleWiresState
+	//	*Module_BigButtonState
+	//	*Module_SimonSaysState
 	State         isModule_State `protobuf_oneof:"state"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -219,19 +220,28 @@ func (x *Module) GetState() isModule_State {
 	return nil
 }
 
-func (x *Module) GetSimpleWires() *SimpleWiresState {
+func (x *Module) GetSimpleWiresState() *SimpleWiresState {
 	if x != nil {
-		if x, ok := x.State.(*Module_SimpleWires); ok {
-			return x.SimpleWires
+		if x, ok := x.State.(*Module_SimpleWiresState); ok {
+			return x.SimpleWiresState
 		}
 	}
 	return nil
 }
 
-func (x *Module) GetBigButton() *BigButtonState {
+func (x *Module) GetBigButtonState() *BigButtonState {
 	if x != nil {
-		if x, ok := x.State.(*Module_BigButton); ok {
-			return x.BigButton
+		if x, ok := x.State.(*Module_BigButtonState); ok {
+			return x.BigButtonState
+		}
+	}
+	return nil
+}
+
+func (x *Module) GetSimonSaysState() *SimonSaysState {
+	if x != nil {
+		if x, ok := x.State.(*Module_SimonSaysState); ok {
+			return x.SimonSaysState
 		}
 	}
 	return nil
@@ -241,18 +251,24 @@ type isModule_State interface {
 	isModule_State()
 }
 
-type Module_SimpleWires struct {
-	SimpleWires *SimpleWiresState `protobuf:"bytes,5,opt,name=simple_wires,json=simpleWires,proto3,oneof"`
+type Module_SimpleWiresState struct {
+	SimpleWiresState *SimpleWiresState `protobuf:"bytes,5,opt,name=simple_wires_state,json=simpleWiresState,proto3,oneof"`
 }
 
-type Module_BigButton struct {
-	// PasswordState password = 6;
-	BigButton *BigButtonState `protobuf:"bytes,7,opt,name=big_button,json=bigButton,proto3,oneof"`
+type Module_BigButtonState struct {
+	// PasswordState password_state = 6;
+	BigButtonState *BigButtonState `protobuf:"bytes,7,opt,name=big_button_state,json=bigButtonState,proto3,oneof"`
 }
 
-func (*Module_SimpleWires) isModule_State() {}
+type Module_SimonSaysState struct {
+	SimonSaysState *SimonSaysState `protobuf:"bytes,8,opt,name=simon_says_state,json=simonSaysState,proto3,oneof"`
+}
 
-func (*Module_BigButton) isModule_State() {}
+func (*Module_SimpleWiresState) isModule_State() {}
+
+func (*Module_BigButtonState) isModule_State() {}
+
+func (*Module_SimonSaysState) isModule_State() {}
 
 var File_proto_modules_proto protoreflect.FileDescriptor
 
@@ -262,15 +278,15 @@ const file_proto_modules_proto_rawDesc = "" +
 	"\x0eModulePosition\x12\x12\n" +
 	"\x04face\x18\x01 \x01(\x05R\x04face\x12\x10\n" +
 	"\x03row\x18\x02 \x01(\x05R\x03row\x12\x10\n" +
-	"\x03col\x18\x03 \x01(\x05R\x03col\"\xfe\x02\n" +
+	"\x03col\x18\x03 \x01(\x05R\x03col\"\xd9\x03\n" +
 	"\x06Module\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12.\n" +
 	"\x04type\x18\x02 \x01(\x0e2\x1a.modules.Module.ModuleTypeR\x04type\x123\n" +
 	"\bposition\x18\x03 \x01(\v2\x17.modules.ModulePositionR\bposition\x12\x16\n" +
-	"\x06solved\x18\x04 \x01(\bR\x06solved\x12>\n" +
-	"\fsimple_wires\x18\x05 \x01(\v2\x19.modules.SimpleWiresStateH\x00R\vsimpleWires\x128\n" +
-	"\n" +
-	"big_button\x18\a \x01(\v2\x17.modules.BigButtonStateH\x00R\tbigButton\"d\n" +
+	"\x06solved\x18\x04 \x01(\bR\x06solved\x12I\n" +
+	"\x12simple_wires_state\x18\x05 \x01(\v2\x19.modules.SimpleWiresStateH\x00R\x10simpleWiresState\x12C\n" +
+	"\x10big_button_state\x18\a \x01(\v2\x17.modules.BigButtonStateH\x00R\x0ebigButtonState\x12C\n" +
+	"\x10simon_says_state\x18\b \x01(\v2\x17.modules.SimonSaysStateH\x00R\x0esimonSaysState\"d\n" +
 	"\n" +
 	"ModuleType\x12\v\n" +
 	"\aUNKNOWN\x10\x00\x12\t\n" +
@@ -303,17 +319,19 @@ var file_proto_modules_proto_goTypes = []any{
 	(*Module)(nil),           // 2: modules.Module
 	(*SimpleWiresState)(nil), // 3: modules.SimpleWiresState
 	(*BigButtonState)(nil),   // 4: modules.BigButtonState
+	(*SimonSaysState)(nil),   // 5: modules.SimonSaysState
 }
 var file_proto_modules_proto_depIdxs = []int32{
 	0, // 0: modules.Module.type:type_name -> modules.Module.ModuleType
 	1, // 1: modules.Module.position:type_name -> modules.ModulePosition
-	3, // 2: modules.Module.simple_wires:type_name -> modules.SimpleWiresState
-	4, // 3: modules.Module.big_button:type_name -> modules.BigButtonState
-	4, // [4:4] is the sub-list for method output_type
-	4, // [4:4] is the sub-list for method input_type
-	4, // [4:4] is the sub-list for extension type_name
-	4, // [4:4] is the sub-list for extension extendee
-	0, // [0:4] is the sub-list for field type_name
+	3, // 2: modules.Module.simple_wires_state:type_name -> modules.SimpleWiresState
+	4, // 3: modules.Module.big_button_state:type_name -> modules.BigButtonState
+	5, // 4: modules.Module.simon_says_state:type_name -> modules.SimonSaysState
+	5, // [5:5] is the sub-list for method output_type
+	5, // [5:5] is the sub-list for method input_type
+	5, // [5:5] is the sub-list for extension type_name
+	5, // [5:5] is the sub-list for extension extendee
+	0, // [0:5] is the sub-list for field type_name
 }
 
 func init() { file_proto_modules_proto_init() }
@@ -325,8 +343,9 @@ func file_proto_modules_proto_init() {
 	file_proto_big_button_module_proto_init()
 	file_proto_simon_says_module_proto_init()
 	file_proto_modules_proto_msgTypes[1].OneofWrappers = []any{
-		(*Module_SimpleWires)(nil),
-		(*Module_BigButton)(nil),
+		(*Module_SimpleWiresState)(nil),
+		(*Module_BigButtonState)(nil),
+		(*Module_SimonSaysState)(nil),
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{

@@ -281,12 +281,15 @@
         "solved": {
           "type": "boolean"
         },
-        "simpleWires": {
+        "simpleWiresState": {
           "$ref": "#/definitions/modulesSimpleWiresState"
         },
-        "bigButton": {
+        "bigButtonState": {
           "$ref": "#/definitions/modulesBigButtonState",
-          "title": "PasswordState password = 6;"
+          "title": "PasswordState password_state = 6;"
+        },
+        "simonSaysState": {
+          "$ref": "#/definitions/modulesSimonSaysState"
         }
       }
     },
@@ -333,6 +336,17 @@
       "type": "object",
       "properties": {
         "nextSequence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/commonColor"
+          }
+        }
+      }
+    },
+    "modulesSimonSaysState": {
+      "type": "object",
+      "properties": {
+        "currentSequence": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/commonColor"

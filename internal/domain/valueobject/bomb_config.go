@@ -3,18 +3,26 @@ package valueobject
 import "time"
 
 type BombConfig struct {
-	Timer             time.Duration
-	MaxStrikes        int
-	NumFaces          int
+	// Duration of the bomb timer
+	Timer      time.Duration
+	MaxStrikes int
+	NumFaces   int
+	// Minimum number of modules on the bomb
 	MinModules        int
 	MaxModulesPerFace int
-	ModuleTypes       map[ModuleType]float32 // Module type to probability mapping
-	MinBatteries      int
+	// Module type to probability mapping
+	ModuleTypes map[ModuleType]float32
+	// Minimum number of batteries on the bomb
+	MinBatteries int
+	// Maximum number of batteries on the bomb
 	MaxBatteries      int
 	MaxIndicatorCount int
-	PortCount         int
-	Columns           int
-	Rows              int
+	// Maximum number of ports on the bomb
+	PortCount int
+	// Max number of columns for modules
+	Columns int
+	// Max number of rows for modules
+	Rows int
 }
 
 func NewDefaultBombConfig() BombConfig {
@@ -26,8 +34,8 @@ func NewDefaultBombConfig() BombConfig {
 		MaxModulesPerFace: 4,
 		ModuleTypes: map[ModuleType]float32{
 			SimpleWires: 0.1,
-			// Password: 0.1,
-			BigButton: 0.1,
+			Password:    0.1,
+			// BigButton: 0.1,
 			Clock:     0.0, // Will be added manually
 			SimonSays: 0.05,
 		},

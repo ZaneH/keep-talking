@@ -28,8 +28,9 @@ message Module {
   ModulePosition position = 3;
   bool solved = 4;
   oneof state {
-    SimpleWiresState simple_wires = 5;
-    // PasswordState password = 6;
-    BigButtonState big_button = 7;
+    SimpleWiresState simple_wires_state = 5;
+    // PasswordState password_state = 6;
+    BigButtonState big_button_state = 7;
+    SimonSaysState simon_says_state = 8;
   }
 }

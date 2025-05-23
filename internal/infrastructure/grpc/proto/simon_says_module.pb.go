@@ -65,6 +65,50 @@ func (x *SimonSaysInput) GetColor() Color {
 	return Color_RED
 }
 
+type SimonSaysState struct {
+	state           protoimpl.MessageState `protogen:"open.v1"`
+	CurrentSequence []Color                `protobuf:"varint,1,rep,packed,name=current_sequence,json=currentSequence,proto3,enum=common.Color" json:"current_sequence,omitempty"`
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
+}
+
+func (x *SimonSaysState) Reset() {
+	*x = SimonSaysState{}
+	mi := &file_proto_simon_says_module_proto_msgTypes[1]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SimonSaysState) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SimonSaysState) ProtoMessage() {}
+
+func (x *SimonSaysState) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_simon_says_module_proto_msgTypes[1]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SimonSaysState.ProtoReflect.Descriptor instead.
+func (*SimonSaysState) Descriptor() ([]byte, []int) {
+	return file_proto_simon_says_module_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *SimonSaysState) GetCurrentSequence() []Color {
+	if x != nil {
+		return x.CurrentSequence
+	}
+	return nil
+}
+
 type SimonSaysInputResult struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	NextSequence  []Color                `protobuf:"varint,1,rep,packed,name=next_sequence,json=nextSequence,proto3,enum=common.Color" json:"next_sequence,omitempty"`
@@ -74,7 +118,7 @@ type SimonSaysInputResult struct {
 
 func (x *SimonSaysInputResult) Reset() {
 	*x = SimonSaysInputResult{}
-	mi := &file_proto_simon_says_module_proto_msgTypes[1]
+	mi := &file_proto_simon_says_module_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -86,7 +130,7 @@ func (x *SimonSaysInputResult) String() string {
 func (*SimonSaysInputResult) ProtoMessage() {}
 
 func (x *SimonSaysInputResult) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_simon_says_module_proto_msgTypes[1]
+	mi := &file_proto_simon_says_module_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -99,7 +143,7 @@ func (x *SimonSaysInputResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SimonSaysInputResult.ProtoReflect.Descriptor instead.
 func (*SimonSaysInputResult) Descriptor() ([]byte, []int) {
-	return file_proto_simon_says_module_proto_rawDescGZIP(), []int{1}
+	return file_proto_simon_says_module_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *SimonSaysInputResult) GetNextSequence() []Color {
@@ -116,6 +160,8 @@ const file_proto_simon_says_module_proto_rawDesc = "" +
 	"\x1dproto/simon_says_module.proto\x12\amodules\x1a\x12proto/common.proto\"5\n" +
 	"\x0eSimonSaysInput\x12#\n" +
 	"\x05color\x18\x01 \x01(\x0e2\r.common.ColorR\x05color\"J\n" +
+	"\x0eSimonSaysState\x128\n" +
+	"\x10current_sequence\x18\x01 \x03(\x0e2\r.common.ColorR\x0fcurrentSequence\"J\n" +
 	"\x14SimonSaysInputResult\x122\n" +
 	"\rnext_sequence\x18\x01 \x03(\x0e2\r.common.ColorR\fnextSequenceB\tZ\a./protob\x06proto3"
 
@@ -131,20 +177,22 @@ func file_proto_simon_says_module_proto_rawDescGZIP() []byte {
 	return file_proto_simon_says_module_proto_rawDescData
 }
 
-var file_proto_simon_says_module_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_proto_simon_says_module_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
 var file_proto_simon_says_module_proto_goTypes = []any{
 	(*SimonSaysInput)(nil),       // 0: modules.SimonSaysInput
-	(*SimonSaysInputResult)(nil), // 1: modules.SimonSaysInputResult
-	(Color)(0),                   // 2: common.Color
+	(*SimonSaysState)(nil),       // 1: modules.SimonSaysState
+	(*SimonSaysInputResult)(nil), // 2: modules.SimonSaysInputResult
+	(Color)(0),                   // 3: common.Color
 }
 var file_proto_simon_says_module_proto_depIdxs = []int32{
-	2, // 0: modules.SimonSaysInput.color:type_name -> common.Color
-	2, // 1: modules.SimonSaysInputResult.next_sequence:type_name -> common.Color
-	2, // [2:2] is the sub-list for method output_type
-	2, // [2:2] is the sub-list for method input_type
-	2, // [2:2] is the sub-list for extension type_name
-	2, // [2:2] is the sub-list for extension extendee
-	0, // [0:2] is the sub-list for field type_name
+	3, // 0: modules.SimonSaysInput.color:type_name -> common.Color
+	3, // 1: modules.SimonSaysState.current_sequence:type_name -> common.Color
+	3, // 2: modules.SimonSaysInputResult.next_sequence:type_name -> common.Color
+	3, // [3:3] is the sub-list for method output_type
+	3, // [3:3] is the sub-list for method input_type
+	3, // [3:3] is the sub-list for extension type_name
+	3, // [3:3] is the sub-list for extension extendee
+	0, // [0:3] is the sub-list for field type_name
 }
 
 func init() { file_proto_simon_says_module_proto_init() }
@@ -159,7 +207,7 @@ func file_proto_simon_says_module_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_simon_says_module_proto_rawDesc), len(file_proto_simon_says_module_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   2,
+			NumMessages:   3,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

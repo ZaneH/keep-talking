@@ -9,6 +9,10 @@ message SimonSaysInput {
   common.Color color = 1;
 }
 
+message SimonSaysState {
+  repeated common.Color current_sequence = 1;
+}
+
 message SimonSaysInputResult {
   repeated common.Color next_sequence = 1;
 }

@@ -119,8 +119,8 @@ func mapModulesToProto(modules map[uuid.UUID]actors.ModuleActor) map[string]*pb.
 				})
 			}
 
-			protoModule.State = &pb.Module_SimpleWires{
-				SimpleWires: &pb.SimpleWiresState{
+			protoModule.State = &pb.Module_SimpleWiresState{
+				SimpleWiresState: &pb.SimpleWiresState{
 					Wires: wires,
 				},
 			}
@@ -131,14 +131,35 @@ func mapModulesToProto(modules map[uuid.UUID]actors.ModuleActor) map[string]*pb.
 				continue
 			}
 
-			protoModule.State = &pb.Module_BigButton{
-				BigButton: &pb.BigButtonState{
+			protoModule.State = &pb.Module_BigButtonState{
+				BigButtonState: &pb.BigButtonState{
 					ButtonColor: mapColorToProto(bigButtonState.ButtonColor),
 					Label:       bigButtonState.Label,
 				},
 			}
 		case valueobject.Clock:
 		case valueobject.SimonSays:
+			simonSaysState, ok := actor.GetModule().GetModuleState().(*entities.SimonSaysState)
+			if !ok {
+				log.Printf("Expected *SimonSaysState but got different type: %T", actor.GetModule().GetModuleState())
+				continue
+			}
+
+			next_sequence := simonSaysState.DisplaySequence
+			seq_idx := simonSaysState.InputCheckIdx
+			up_to_idx := min(seq_idx+1, len(next_sequence))
+			next_sequence = next_sequence[:up_to_idx]
+
+			seq_proto := make([]pb.Color, 0, len(next_sequence))
+			for _, color := range next_sequence {
+				seq_proto = append(seq_proto, mapColorToProto(color))
+			}
+
+			protoModule.State = &pb.Module_SimonSaysState{
+				SimonSaysState: &pb.SimonSaysState{
+					CurrentSequence: seq_proto,
+				},
+			}
 		default:
 			log.Fatalf("Unknown module type: %v. Couldn't provide state.", actor.GetModule().GetType())
 		}
