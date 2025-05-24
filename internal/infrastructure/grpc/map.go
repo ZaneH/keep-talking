@@ -213,3 +213,27 @@ func mapPortsToProto(ports []valueobject.Port) []pb.Port {
 	}
 	return protoPorts
 }
+
+func mapProtoToColor(color pb.Color) valueobject.Color {
+	switch color {
+	case pb.Color_RED:
+		return valueobject.Red
+	case pb.Color_BLUE:
+		return valueobject.Blue
+	case pb.Color_WHITE:
+		return valueobject.White
+	case pb.Color_YELLOW:
+		return valueobject.Yellow
+	case pb.Color_GREEN:
+		return valueobject.Green
+	case pb.Color_BLACK:
+		return valueobject.Black
+	case pb.Color_ORANGE:
+		return valueobject.Orange
+	case pb.Color_PINK:
+		return valueobject.Pink
+	default:
+		log.Fatalf("Unknown color: %v. Couldn't provide state.", color)
+		return valueobject.Red
+	}
+}
