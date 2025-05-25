@@ -98,7 +98,7 @@ func (m *SimonSaysModule) PressColor(c valueobject.Color) (finishedSeq bool, nex
 		// otherwise, add a new color to the sequence
 		if m.state.InputCheckIdx == len(m.state.DisplaySequence)-1 {
 			if m.state.InputCheckIdx+1 == m.state.nStages {
-				m.state.MarkSolved = true
+				m.state.MarkAsSolved()
 				return true, nextSeq, false, nil
 			}
 

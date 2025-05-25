@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"math/rand"
+	"strings"
 
 	"github.com/ZaneH/keep-talking/internal/domain/valueobject"
 	"github.com/google/uuid"
@@ -65,63 +66,65 @@ func (m *BigButtonModule) String() string {
 	return result
 }
 
-func (m *BigButtonModule) PressButton(pressType valueobject.PressType) (color *valueobject.Color, strike bool, err error) {
+func (m *BigButtonModule) PressButton(pressType valueobject.PressType, releaseTime int64) (stripColor *valueobject.Color, strike bool, err error) {
 	handled := false
 
 	switch pressType {
 	case valueobject.PressTypeTap:
-		handled, err = m.handleShortPress()
+		handled = m.handleShortPress()
 	case valueobject.PressTypeHold:
-		handled, color = m.handleLongPress()
+		handled, stripColor = m.handleLongPress()
 	case valueobject.PressTypeRelease:
-		handled, err = m.handleLongPressRelease()
+		handled, err = m.handleLongPressRelease(releaseTime)
 	default:
 		return nil, true, errors.New("invalid press type")
 	}
 
 	// If not handled by a specific case, fallback to random color and release digit
 	if !handled {
+		// Short tap was not handled, so it's a strike
 		if pressType == valueobject.PressTypeTap {
 			return nil, true, errors.New("invalid short press")
 		}
 
 		if pressType == valueobject.PressTypeHold {
 			m.State.ReleaseDigit = generateReleaseDigit()
-			color, err = releaseDigitToStripColor(m.State.ReleaseDigit)
+			stripColor, err = releaseDigitToStripColor(m.State.ReleaseDigit)
 			if err != nil {
-				log.Println("Error generating strip color for Big Button:", err)
-				return nil, false, err
+				log.Println("error generating strip color:", err)
+				return nil, strike, err
 			}
 		}
 	}
 
-	return color, false, err
+	return stripColor, strike, err
 }
 
 // Handles a short press (tap) of the button. There are certain conditions that must be met
 // for the module to be marked as solved. If the conditions are not met, it will return an error.
-func (m *BigButtonModule) handleShortPress() (handled bool, err error) {
+func (m *BigButtonModule) handleShortPress() (handled bool) {
 	if m.bomb.Batteries > 1 && m.State.Label == string(Detonate) {
 		m.State.MarkAsSolved()
-		return true, nil
+		return true
 	}
 
 	if m.bomb.Batteries > 2 && m.bomb.Indicators["FRK"].Lit {
 		m.State.MarkAsSolved()
-		return true, nil
+		return true
 	}
 
 	if m.State.ButtonColor == valueobject.Red && m.State.Label == string(Hold) {
 		m.State.MarkAsSolved()
-		return true, nil
+		return true
 	}
 
-	return false, nil
+	return false
 }
 
 // Generates a random strip color regardless of the button color or label. There is no
 // possibility of a strike from this action. If the button is to be pressed and held, this
-// function will also set the release digit to either 4, 1, or 5.
+// function will also set the release digit to either 4, 1, or 5. If the button is not meant
+// to be pressed and held, it will return nil for the strip color and no release digit will be set.
 func (m *BigButtonModule) handleLongPress() (handled bool, color *valueobject.Color) {
 	if m.State.ButtonColor == valueobject.Blue && m.State.Label == string(Abort) {
 		m.State.ReleaseDigit = generateReleaseDigit()
@@ -140,7 +143,7 @@ func (m *BigButtonModule) handleLongPress() (handled bool, color *valueobject.Co
 
 	color, err := releaseDigitToStripColor(m.State.ReleaseDigit)
 	if err != nil {
-		log.Println("Error generating strip color for Big Button:", err)
+		// Unhandled, let the caller handle it
 		return false, nil
 	}
 
@@ -148,21 +151,32 @@ func (m *BigButtonModule) handleLongPress() (handled bool, color *valueobject.Co
 }
 
 // Handles the release of a long press. If the release digit is nil, it will return an error.
-// If the release digit matches the last digit of the bomb's timer, the module is marked as
+// If the release digit matches any digit of the bomb's timer, the module is marked as
 // solved. Otherwise, it returns an error.
-func (m *BigButtonModule) handleLongPressRelease() (handled bool, err error) {
-	time := m.bomb.GetTimeLeft()
+func (m *BigButtonModule) handleLongPressRelease(releaseTime int64) (handled bool, err error) {
 	if m.State.ReleaseDigit == nil {
 		return true, errors.New("release digit is nil")
 	} else {
-		if int(time.Seconds())%10 == *m.State.ReleaseDigit {
+		// Check if any digit in MM:SS matches the release digit
+		startedAt := m.bomb.StartedAt.Unix()
+		duration := m.bomb.TimerDuration.Milliseconds() / 1000 // Convert to seconds
+
+		// Calculate remaining time on the bomb (in seconds)
+		elapsedTime := releaseTime - startedAt  // How many seconds have passed
+		remainingTime := duration - elapsedTime // How many seconds remain
+
+		minutes := remainingTime / 60
+		seconds := remainingTime % 60
+		releaseDigit := *m.State.ReleaseDigit
+
+		// Check if MM:SS contains the release digit
+		if strings.Contains(fmt.Sprintf("%02d:%02d", minutes, seconds), fmt.Sprintf("%d", releaseDigit)) {
 			m.State.MarkAsSolved()
+			return true, nil
 		} else {
-			return true, errors.New("release digit does not match")
+			return true, fmt.Errorf("release digit %d did not match any digit in MM:SS", releaseDigit)
 		}
 	}
-
-	return false, nil
 }
 
 var releaseDigits = [...]int{1, 4, 5}
@@ -184,7 +198,7 @@ func releaseDigitToStripColor(digit *int) (color *valueobject.Color, err error) 
 		value := valueobject.Blue
 		color = &value
 	case 5:
-		value := valueobject.Red
+		value := valueobject.Yellow
 		color = &value
 	}
 

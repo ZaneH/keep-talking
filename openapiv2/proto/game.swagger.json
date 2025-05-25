@@ -232,6 +232,11 @@
       "properties": {
         "pressType": {
           "$ref": "#/definitions/commonPressType"
+        },
+        "releaseTimestamp": {
+          "type": "string",
+          "format": "int64",
+          "description": "Let the user specify the release time as Unix timestamp to avoid issues with latency.\n0 indicates no relevance to the current press_type. Could be abused to solve faster."
         }
       }
     },

@@ -7,6 +7,9 @@ option go_package = "./proto";
 
 message BigButtonInput {
   common.PressType press_type = 1;
+  // Let the user specify the release time as Unix timestamp to avoid issues with latency.
+  // 0 indicates no relevance to the current press_type. Could be abused to solve faster.
+  int64 release_timestamp = 2;
 }
 
 message BigButtonInputResult {

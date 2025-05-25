@@ -92,7 +92,8 @@ func (s *GameServiceAdapter) SendInput(ctx context.Context, i *pb.PlayerInput) (
 				BombID:    bombID,
 				ModuleID:  moduleID,
 			},
-			PressType: mapProtoToPressType(input.BigButtonInput.PressType),
+			PressType:        mapProtoToPressType(input.BigButtonInput.PressType),
+			ReleaseTimestamp: input.BigButtonInput.ReleaseTimestamp,
 		}
 	case *pb.PlayerInput_SimonSaysInput:
 		cmd = &command.SimonSaysInputCommand{

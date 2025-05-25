@@ -22,10 +22,13 @@ const (
 )
 
 type BigButtonInput struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	PressType     PressType              `protobuf:"varint,1,opt,name=press_type,json=pressType,proto3,enum=common.PressType" json:"press_type,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state     protoimpl.MessageState `protogen:"open.v1"`
+	PressType PressType              `protobuf:"varint,1,opt,name=press_type,json=pressType,proto3,enum=common.PressType" json:"press_type,omitempty"`
+	// Let the user specify the release time as Unix timestamp to avoid issues with latency.
+	// 0 indicates no relevance to the current press_type. Could be abused to solve faster.
+	ReleaseTimestamp int64 `protobuf:"varint,2,opt,name=release_timestamp,json=releaseTimestamp,proto3" json:"release_timestamp,omitempty"`
+	unknownFields    protoimpl.UnknownFields
+	sizeCache        protoimpl.SizeCache
 }
 
 func (x *BigButtonInput) Reset() {
@@ -63,6 +66,13 @@ func (x *BigButtonInput) GetPressType() PressType {
 		return x.PressType
 	}
 	return PressType_TAP
+}
+
+func (x *BigButtonInput) GetReleaseTimestamp() int64 {
+	if x != nil {
+		return x.ReleaseTimestamp
+	}
+	return 0
 }
 
 type BigButtonInputResult struct {
@@ -165,10 +175,11 @@ var File_proto_big_button_module_proto protoreflect.FileDescriptor
 
 const file_proto_big_button_module_proto_rawDesc = "" +
 	"\n" +
-	"\x1dproto/big_button_module.proto\x12\amodules\x1a\x12proto/common.proto\"B\n" +
+	"\x1dproto/big_button_module.proto\x12\amodules\x1a\x12proto/common.proto\"o\n" +
 	"\x0eBigButtonInput\x120\n" +
 	"\n" +
-	"press_type\x18\x01 \x01(\x0e2\x11.common.PressTypeR\tpressType\"F\n" +
+	"press_type\x18\x01 \x01(\x0e2\x11.common.PressTypeR\tpressType\x12+\n" +
+	"\x11release_timestamp\x18\x02 \x01(\x03R\x10releaseTimestamp\"F\n" +
 	"\x14BigButtonInputResult\x12.\n" +
 	"\vstrip_color\x18\x01 \x01(\x0e2\r.common.ColorR\n" +
 	"stripColor\"X\n" +

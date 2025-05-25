@@ -4,7 +4,8 @@ import "github.com/ZaneH/keep-talking/internal/domain/valueobject"
 
 type BigButtonInputCommand struct {
 	BaseModuleInputCommand
-	PressType valueobject.PressType
+	PressType        valueobject.PressType
+	ReleaseTimestamp int64
 }
 
 type BigButtonInputCommandResult struct {
