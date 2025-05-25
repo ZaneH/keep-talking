@@ -106,20 +106,20 @@ func (m *SimpleWiresModule) cutSucceed() (strike bool, err error) {
 }
 
 func (m *SimpleWiresModule) CutWire(wirePos int) (strike bool, err error) {
-	if wirePos < 1 || wirePos > len(m.State.Wires) {
-		return false, errors.New("invalid wire position")
-	}
+	sorted := make([]valueobject.SimpleWire, len(m.State.Wires))
+	copy(sorted, m.State.Wires)
 
-	// Get index from position
-	wireIdx := slices.IndexFunc(m.State.Wires, func(w valueobject.SimpleWire) bool {
+	// Create a sorted copy of the wires based on their positions
+	slices.SortFunc(sorted, func(a, b valueobject.SimpleWire) int {
+		return a.Position - b.Position
+	})
+
+	// Get the index, accounting for any gaps created by extra positions
+	wireIdx := slices.IndexFunc(sorted, func(w valueobject.SimpleWire) bool {
 		return w.Position == wirePos
 	})
 
-	if wireIdx == -1 {
-		return false, fmt.Errorf("wire at position %d not found", wirePos)
-	}
-
-	wire := &m.State.Wires[wireIdx]
+	wire := sorted[wireIdx]
 
 	if wire.IsCut {
 		return false, errors.New("wire already cut")
@@ -127,9 +127,9 @@ func (m *SimpleWiresModule) CutWire(wirePos int) (strike bool, err error) {
 
 	wire.IsCut = true
 
-	if len(m.State.Wires) == 3 {
+	if len(sorted) == 3 {
 		// If there are no red wires, cut the second wire.
-		if !hasColor(m.State.Wires, valueobject.Red) {
+		if !hasColor(sorted, valueobject.Red) {
 			if wireIdx == 1 {
 				return m.cutSucceed()
 			} else {
@@ -138,8 +138,8 @@ func (m *SimpleWiresModule) CutWire(wirePos int) (strike bool, err error) {
 		}
 
 		// If the last wire is white, cut the last wire.
-		if m.State.Wires[len(m.State.Wires)-1].WireColor == valueobject.White {
-			if wireIdx == len(m.State.Wires)-1 {
+		if sorted[len(sorted)-1].WireColor == valueobject.White {
+			if wireIdx == len(sorted)-1 {
 				return m.cutSucceed()
 			} else {
 				return true, nil
@@ -147,7 +147,7 @@ func (m *SimpleWiresModule) CutWire(wirePos int) (strike bool, err error) {
 		}
 
 		// If there is more than one blue wire, cut the last blue wire.
-		blueIdxs := colorIndecies(m.State.Wires, valueobject.Blue)
+		blueIdxs := colorIndecies(sorted, valueobject.Blue)
 		if len(blueIdxs) > 1 {
 			if wireIdx == blueIdxs[len(blueIdxs)-1] {
 				return m.cutSucceed()
@@ -155,10 +155,17 @@ func (m *SimpleWiresModule) CutWire(wirePos int) (strike bool, err error) {
 				return true, nil
 			}
 		}
-	} else if len(m.State.Wires) == 4 {
+
+		// Otherwise cut the last wire.
+		if wireIdx == len(sorted)-1 {
+			return m.cutSucceed()
+		} else {
+			return true, nil
+		}
+	} else if len(sorted) == 4 {
 		// If there is more than one red wire and the last digit of the serial number is odd,
 		// cut the last red wire.
-		redIdxs := colorIndecies(m.State.Wires, valueobject.Red)
+		redIdxs := colorIndecies(sorted, valueobject.Red)
 		if len(redIdxs) > 1 && helpers.SerialNumbersEndsWithOddDigit(m.bomb.SerialNumber) {
 			if wireIdx == redIdxs[len(redIdxs)-1] {
 				return m.cutSucceed()
@@ -168,7 +175,7 @@ func (m *SimpleWiresModule) CutWire(wirePos int) (strike bool, err error) {
 		}
 
 		// If the last wire is yellow and there are no red wires, cut the first wire.
-		if m.State.Wires[len(m.State.Wires)-1].WireColor == valueobject.Yellow && !hasColor(m.State.Wires, valueobject.Red) {
+		if sorted[len(sorted)-1].WireColor == valueobject.Yellow && !hasColor(sorted, valueobject.Red) {
 			if wireIdx == 0 {
 				return m.cutSucceed()
 			} else {
@@ -177,7 +184,7 @@ func (m *SimpleWiresModule) CutWire(wirePos int) (strike bool, err error) {
 		}
 
 		// If there is exactly one blue wire, cut the first wire.
-		if len(colorIndecies(m.State.Wires, valueobject.Blue)) == 1 {
+		if len(colorIndecies(sorted, valueobject.Blue)) == 1 {
 			if wireIdx == 0 {
 				return m.cutSucceed()
 			} else {
@@ -186,7 +193,7 @@ func (m *SimpleWiresModule) CutWire(wirePos int) (strike bool, err error) {
 		}
 
 		// If there is more than one yellow wire, cut the last wire.
-		yellowIdxs := colorIndecies(m.State.Wires, valueobject.Yellow)
+		yellowIdxs := colorIndecies(sorted, valueobject.Yellow)
 		if len(yellowIdxs) > 1 {
 			if wireIdx == yellowIdxs[len(yellowIdxs)-1] {
 				return m.cutSucceed()
@@ -199,10 +206,10 @@ func (m *SimpleWiresModule) CutWire(wirePos int) (strike bool, err error) {
 		if wireIdx == 1 {
 			return m.cutSucceed()
 		}
-	} else if len(m.State.Wires) == 5 {
+	} else if len(sorted) == 5 {
 		// If the last wire is black and the last digit of the serial number is odd,
 		// cut the fourth wire.
-		if m.State.Wires[len(m.State.Wires)-1].WireColor == valueobject.Black && helpers.SerialNumbersEndsWithOddDigit(m.bomb.SerialNumber) {
+		if sorted[len(sorted)-1].WireColor == valueobject.Black && helpers.SerialNumbersEndsWithOddDigit(m.bomb.SerialNumber) {
 			if wireIdx == 3 {
 				return m.cutSucceed()
 			} else {
@@ -211,7 +218,7 @@ func (m *SimpleWiresModule) CutWire(wirePos int) (strike bool, err error) {
 		}
 
 		// If there is exactly one red wire and there are no yellow wires, cut the first wire.
-		if len(colorIndecies(m.State.Wires, valueobject.Red)) == 1 && !hasColor(m.State.Wires, valueobject.Yellow) {
+		if len(colorIndecies(sorted, valueobject.Red)) == 1 && !hasColor(sorted, valueobject.Yellow) {
 			if wireIdx == 0 {
 				return m.cutSucceed()
 			} else {
@@ -220,7 +227,7 @@ func (m *SimpleWiresModule) CutWire(wirePos int) (strike bool, err error) {
 		}
 
 		// If there are no black wires, cut the second wire.
-		if !hasColor(m.State.Wires, valueobject.Black) {
+		if !hasColor(sorted, valueobject.Black) {
 			if wireIdx == 1 {
 				return m.cutSucceed()
 			} else {
@@ -232,10 +239,10 @@ func (m *SimpleWiresModule) CutWire(wirePos int) (strike bool, err error) {
 		if wireIdx == 0 {
 			return m.cutSucceed()
 		}
-	} else if len(m.State.Wires) == 6 {
+	} else if len(sorted) == 6 {
 		// If there are no yellow wires and the last digit of the serial number is odd,
 		// cut the third wire.
-		if !hasColor(m.State.Wires, valueobject.Yellow) && helpers.SerialNumbersEndsWithOddDigit(m.bomb.SerialNumber) {
+		if !hasColor(sorted, valueobject.Yellow) && helpers.SerialNumbersEndsWithOddDigit(m.bomb.SerialNumber) {
 			if wireIdx == 2 {
 				return m.cutSucceed()
 			} else {
@@ -245,7 +252,7 @@ func (m *SimpleWiresModule) CutWire(wirePos int) (strike bool, err error) {
 
 		// If there is exactly one yellow wire and there is more than one white wire,
 		// cut the fourth wire.
-		if len(colorIndecies(m.State.Wires, valueobject.Yellow)) == 1 && len(colorIndecies(m.State.Wires, valueobject.White)) > 1 {
+		if len(colorIndecies(sorted, valueobject.Yellow)) == 1 && len(colorIndecies(sorted, valueobject.White)) > 1 {
 			if wireIdx == 3 {
 				return m.cutSucceed()
 			} else {
@@ -254,8 +261,8 @@ func (m *SimpleWiresModule) CutWire(wirePos int) (strike bool, err error) {
 		}
 
 		// If there are no red wires, cut the last wire.
-		if !hasColor(m.State.Wires, valueobject.Red) {
-			if wireIdx == len(m.State.Wires)-1 {
+		if !hasColor(sorted, valueobject.Red) {
+			if wireIdx == len(sorted)-1 {
 				return m.cutSucceed()
 			} else {
 				return true, nil
