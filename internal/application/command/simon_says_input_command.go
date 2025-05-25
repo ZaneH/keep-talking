@@ -9,5 +9,7 @@ type SimonSaysInputCommand struct {
 
 type SimonSaysInputCommandResult struct {
 	BaseModuleInputCommandResult
-	NextColorSequence []valueobject.Color
+	// Indicates if the current iteration of the sequence is finished.
+	HasFinishedSeq  bool
+	DisplaySequence []valueobject.Color
 }

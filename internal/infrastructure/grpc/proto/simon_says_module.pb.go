@@ -110,10 +110,11 @@ func (x *SimonSaysState) GetCurrentSequence() []Color {
 }
 
 type SimonSaysInputResult struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	NextSequence  []Color                `protobuf:"varint,1,rep,packed,name=next_sequence,json=nextSequence,proto3,enum=common.Color" json:"next_sequence,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state           protoimpl.MessageState `protogen:"open.v1"`
+	HasFinishedSeq  bool                   `protobuf:"varint,1,opt,name=has_finished_seq,json=hasFinishedSeq,proto3" json:"has_finished_seq,omitempty"`
+	DisplaySequence []Color                `protobuf:"varint,2,rep,packed,name=display_sequence,json=displaySequence,proto3,enum=common.Color" json:"display_sequence,omitempty"`
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
 }
 
 func (x *SimonSaysInputResult) Reset() {
@@ -146,9 +147,16 @@ func (*SimonSaysInputResult) Descriptor() ([]byte, []int) {
 	return file_proto_simon_says_module_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *SimonSaysInputResult) GetNextSequence() []Color {
+func (x *SimonSaysInputResult) GetHasFinishedSeq() bool {
 	if x != nil {
-		return x.NextSequence
+		return x.HasFinishedSeq
+	}
+	return false
+}
+
+func (x *SimonSaysInputResult) GetDisplaySequence() []Color {
+	if x != nil {
+		return x.DisplaySequence
 	}
 	return nil
 }
@@ -161,9 +169,10 @@ const file_proto_simon_says_module_proto_rawDesc = "" +
 	"\x0eSimonSaysInput\x12#\n" +
 	"\x05color\x18\x01 \x01(\x0e2\r.common.ColorR\x05color\"J\n" +
 	"\x0eSimonSaysState\x128\n" +
-	"\x10current_sequence\x18\x01 \x03(\x0e2\r.common.ColorR\x0fcurrentSequence\"J\n" +
-	"\x14SimonSaysInputResult\x122\n" +
-	"\rnext_sequence\x18\x01 \x03(\x0e2\r.common.ColorR\fnextSequenceB\tZ\a./protob\x06proto3"
+	"\x10current_sequence\x18\x01 \x03(\x0e2\r.common.ColorR\x0fcurrentSequence\"z\n" +
+	"\x14SimonSaysInputResult\x12(\n" +
+	"\x10has_finished_seq\x18\x01 \x01(\bR\x0ehasFinishedSeq\x128\n" +
+	"\x10display_sequence\x18\x02 \x03(\x0e2\r.common.ColorR\x0fdisplaySequenceB\tZ\a./protob\x06proto3"
 
 var (
 	file_proto_simon_says_module_proto_rawDescOnce sync.Once
@@ -187,7 +196,7 @@ var file_proto_simon_says_module_proto_goTypes = []any{
 var file_proto_simon_says_module_proto_depIdxs = []int32{
 	3, // 0: modules.SimonSaysInput.color:type_name -> common.Color
 	3, // 1: modules.SimonSaysState.current_sequence:type_name -> common.Color
-	3, // 2: modules.SimonSaysInputResult.next_sequence:type_name -> common.Color
+	3, // 2: modules.SimonSaysInputResult.display_sequence:type_name -> common.Color
 	3, // [3:3] is the sub-list for method output_type
 	3, // [3:3] is the sub-list for method input_type
 	3, // [3:3] is the sub-list for extension type_name

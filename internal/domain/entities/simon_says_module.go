@@ -16,12 +16,14 @@ const maxStages = 5
 
 type SimonSaysState struct {
 	BaseModuleState
-	// Stores each color to be displayed in order.
+	// Stores the current sequence to be displayed to the user. Grows as the user progresses.
 	DisplaySequence []valueobject.Color
 	// When the user starts their input, the module needs to know what index of the sequence they
 	// are at. This is used to determine if the user input is correct or not. 0 indicates that the
 	// module is waiting for the user to input the first color in the sequence.
 	InputCheckIdx int
+	// The number of sequences that the user will need to complete to solve the module.
+	nStages int
 }
 
 type SimonSaysModule struct {
@@ -29,14 +31,20 @@ type SimonSaysModule struct {
 	state SimonSaysState
 }
 
-func NewSimonSaysModule() *SimonSaysModule {
+func NewSimonSaysModule(nStages *int) *SimonSaysModule {
+	n := 0
+	if nStages == nil {
+		n = minStages + rand.Intn(maxStages-minStages+1)
+	}
+
 	return &SimonSaysModule{
 		BaseModule: BaseModule{
 			ModuleID: uuid.New(),
 		},
 		state: SimonSaysState{
-			DisplaySequence: generateDisplaySequence(),
+			DisplaySequence: []valueobject.Color{generateRandomSimonSaysColor()},
 			InputCheckIdx:   0,
+			nStages:         n,
 		},
 	}
 }
@@ -69,34 +77,47 @@ func (m *SimonSaysModule) GetModuleState() ModuleState {
 	return &m.state
 }
 
-func (m *SimonSaysModule) PressColor(c valueobject.Color) (nextSeq []valueobject.Color, strike bool, err error) {
-	nextSeqIdx := min(m.state.InputCheckIdx+2, len(m.state.DisplaySequence))
-	nextSeq = m.state.DisplaySequence[:nextSeqIdx]
+func (m *SimonSaysModule) PressColor(c valueobject.Color) (finishedSeq bool, nextSeq []valueobject.Color, strike bool, err error) {
 	if m.state.InputCheckIdx >= len(m.state.DisplaySequence) {
-		return nextSeq, false, fmt.Errorf("input check index out of bounds")
+		return false, nextSeq, false, fmt.Errorf("input check index out of bounds")
 	}
 
 	if !slices.Contains(simonSaysColors[:], c) {
-		return nextSeq, false, fmt.Errorf("invalid color: %s", c)
+		return false, nextSeq, false, fmt.Errorf("invalid color: %s", c)
 	}
 
 	displayColor := m.state.DisplaySequence[m.state.InputCheckIdx]
 	correctColor, err := m.translateColor(displayColor)
 	if err != nil {
-		return nextSeq, false, fmt.Errorf("error translating color: %w", err)
+		return false, nextSeq, false, fmt.Errorf("error translating color: %w", err)
 	}
 
 	if c == correctColor {
+		// They hit the last color in the current sequence
+		// solved if they have completed all stages
+		// otherwise, add a new color to the sequence
 		if m.state.InputCheckIdx == len(m.state.DisplaySequence)-1 {
-			m.state.MarkSolved = true
+			if m.state.InputCheckIdx+1 == m.state.nStages {
+				m.state.MarkSolved = true
+				return true, nextSeq, false, nil
+			}
+
+			newColor := generateRandomSimonSaysColor()
+			m.state.InputCheckIdx = 0
+			m.state.DisplaySequence = append(m.state.DisplaySequence, newColor)
+			return true, m.state.DisplaySequence, false, nil
 		} else {
+			// They hit a color in the sequence, but not the last one
+			// Just increment the input check index
 			m.state.InputCheckIdx++
+			return false, nextSeq, false, nil
 		}
-
-		return nextSeq, false, nil
+	} else {
+		// Incorrect input, reset state
+		m.state.InputCheckIdx = 0
+		m.state.DisplaySequence = []valueobject.Color{generateRandomSimonSaysColor()}
+		return false, m.state.DisplaySequence, true, nil
 	}
-
-	return nextSeq, true, nil
 }
 
 func (m *SimonSaysModule) translateColor(c valueobject.Color) (translated valueobject.Color, err error) {
@@ -182,11 +203,15 @@ var simonSaysColors = [...]valueobject.Color{
 	valueobject.Yellow,
 }
 
-func generateDisplaySequence() []valueobject.Color {
-	sequence := make([]valueobject.Color, maxStages)
-	for i := 0; i < maxStages; i++ {
-		randomColor := rand.Intn(len(simonSaysColors))
-		sequence[i] = simonSaysColors[randomColor]
-	}
-	return sequence
+// func generateDisplaySequence() []valueobject.Color {
+// 	sequence := make([]valueobject.Color, maxStages)
+// 	for i := 0; i < maxStages; i++ {
+// 		randomColor := rand.Intn(len(simonSaysColors))
+// 		sequence[i] = simonSaysColors[randomColor]
+// 	}
+// 	return sequence
+// }
+
+func generateRandomSimonSaysColor() valueobject.Color {
+	return simonSaysColors[rand.Intn(len(simonSaysColors))]
 }

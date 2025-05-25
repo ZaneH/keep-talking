@@ -94,6 +94,15 @@ func (s *GameServiceAdapter) SendInput(ctx context.Context, i *pb.PlayerInput) (
 			},
 			PressType: mapProtoToPressType(input.BigButtonInput.PressType),
 		}
+	case *pb.PlayerInput_SimonSaysInput:
+		cmd = &command.SimonSaysInputCommand{
+			BaseModuleInputCommand: command.BaseModuleInputCommand{
+				SessionID: sessionID,
+				BombID:    bombID,
+				ModuleID:  moduleID,
+			},
+			Color: mapProtoToColor(input.SimonSaysInput.Color),
+		}
 	default:
 		return nil, fmt.Errorf("unknown input type: %T", input)
 	}
@@ -109,7 +118,7 @@ func (s *GameServiceAdapter) SendInput(ctx context.Context, i *pb.PlayerInput) (
 	case *command.SimpleWiresInputCommandResult:
 		return &pb.PlayerInputResult{
 			ModuleId: i.GetModuleId(),
-			Strike:   res != nil && !cmdResult.Strike,
+			Strike:   res != nil && cmdResult.Strike,
 			Solved:   res != nil && cmdResult.Solved,
 		}, nil
 	case *command.BigButtonInputCommandResult:
@@ -120,7 +129,7 @@ func (s *GameServiceAdapter) SendInput(ctx context.Context, i *pb.PlayerInput) (
 
 		return &pb.PlayerInputResult{
 			ModuleId: i.GetModuleId(),
-			Strike:   res != nil && !cmdResult.Strike,
+			Strike:   res != nil && cmdResult.Strike,
 			Solved:   res != nil && cmdResult.Solved,
 			Result: &pb.PlayerInputResult_BigButtonInputResult{
 				BigButtonInputResult: &pb.BigButtonInputResult{
@@ -129,18 +138,19 @@ func (s *GameServiceAdapter) SendInput(ctx context.Context, i *pb.PlayerInput) (
 			},
 		}, nil
 	case *command.SimonSaysInputCommandResult:
-		sequence := make([]pb.Color, len(cmdResult.NextColorSequence))
-		for i, color := range cmdResult.NextColorSequence {
+		sequence := make([]pb.Color, len(cmdResult.DisplaySequence))
+		for i, color := range cmdResult.DisplaySequence {
 			sequence[i] = mapColorToProto(color)
 		}
 
 		return &pb.PlayerInputResult{
 			ModuleId: i.GetModuleId(),
-			Strike:   res != nil && !cmdResult.Strike,
+			Strike:   res != nil && cmdResult.Strike,
 			Solved:   res != nil && cmdResult.Solved,
 			Result: &pb.PlayerInputResult_SimonSaysInputResult{
 				SimonSaysInputResult: &pb.SimonSaysInputResult{
-					NextSequence: sequence,
+					DisplaySequence: sequence,
+					HasFinishedSeq:  cmdResult.HasFinishedSeq,
 				},
 			},
 		}, nil

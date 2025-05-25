@@ -85,7 +85,7 @@ func (f *BombFactoryImpl) createModule(bomb *entities.Bomb, moduleType valueobje
 	case valueobject.BigButton:
 		module = entities.NewBigButtonModule()
 	case valueobject.SimonSays:
-		module = entities.NewSimonSaysModule()
+		module = entities.NewSimonSaysModule(nil)
 	default:
 		return nil
 	}

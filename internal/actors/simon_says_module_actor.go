@@ -49,13 +49,14 @@ func (a *SimonSaysModuleActor) handleModuleCommand(msg ModuleCommandMessage) {
 			return
 		}
 
-		nextSeq, strike, err := simonSaysModule.PressColor(typedCmd.Color)
+		finishedSeq, nextSeq, strike, err := simonSaysModule.PressColor(typedCmd.Color)
 		result := &command.SimonSaysInputCommandResult{
 			BaseModuleInputCommandResult: command.BaseModuleInputCommandResult{
 				Solved: a.module.GetModuleState().IsSolved(),
 				Strike: strike,
 			},
-			NextColorSequence: nextSeq,
+			HasFinishedSeq:  finishedSeq,
+			DisplaySequence: nextSeq,
 		}
 
 		if err != nil {

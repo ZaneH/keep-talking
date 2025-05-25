@@ -14,5 +14,6 @@ message SimonSaysState {
 }
 
 message SimonSaysInputResult {
-  repeated common.Color next_sequence = 1;
+  bool has_finished_seq = 1;
+  repeated common.Color display_sequence = 2;
 }

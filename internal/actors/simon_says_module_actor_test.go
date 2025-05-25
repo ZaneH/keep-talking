@@ -20,7 +20,7 @@ func TestSimonSaysModuleActor_TestVowelCompleteSequence(t *testing.T) {
 	bomb := entities.NewBomb(valueobject.NewDefaultBombConfig())
 	bomb.SerialNumber = "AAA"
 
-	module := entities.NewSimonSaysModule()
+	module := entities.NewSimonSaysModule(nil)
 	module.SetBomb(bomb)
 	module.SetState(entities.SimonSaysState{
 		DisplaySequence: []valueobject.Color{
@@ -66,12 +66,6 @@ func TestSimonSaysModuleActor_TestVowelCompleteSequence(t *testing.T) {
 			color:  valueobject.Red,
 			solved: false,
 			strike: true,
-		},
-		{
-			desc:   "Yellow->Red (1 strike)",
-			color:  valueobject.Red,
-			solved: true,
-			strike: false,
 		},
 	}
 

@@ -145,19 +145,15 @@ func mapModulesToProto(modules map[uuid.UUID]actors.ModuleActor) map[string]*pb.
 				continue
 			}
 
-			next_sequence := simonSaysState.DisplaySequence
-			seq_idx := simonSaysState.InputCheckIdx
-			up_to_idx := min(seq_idx+1, len(next_sequence))
-			next_sequence = next_sequence[:up_to_idx]
-
-			seq_proto := make([]pb.Color, 0, len(next_sequence))
-			for _, color := range next_sequence {
-				seq_proto = append(seq_proto, mapColorToProto(color))
+			seq := simonSaysState.DisplaySequence
+			seqProto := make([]pb.Color, len(seq))
+			for i, color := range seq {
+				seqProto[i] = mapColorToProto(color)
 			}
 
 			protoModule.State = &pb.Module_SimonSaysState{
 				SimonSaysState: &pb.SimonSaysState{
-					CurrentSequence: seq_proto,
+					CurrentSequence: seqProto,
 				},
 			}
 		default:
