@@ -6,7 +6,7 @@ import "proto/common.proto";
 option go_package = "./proto";
 
 message SimpleWiresInput {
-  int32 wire_index = 1;
+  int32 wire_position = 1;
 }
 
 message SimpleWiresState {

@@ -365,7 +365,7 @@
     "modulesSimpleWiresInput": {
       "type": "object",
       "properties": {
-        "wireIndex": {
+        "wirePosition": {
           "type": "integer",
           "format": "int32"
         }

@@ -2,7 +2,7 @@ package command
 
 type SimpleWiresInputCommand struct {
 	BaseModuleInputCommand
-	WireIndex int
+	WirePosition int
 }
 
 type SimpleWiresInputCommandResult struct {

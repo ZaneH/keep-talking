@@ -32,16 +32,24 @@ func TestSimpleWiresModuleActor_FourWiresMoreThanOneRedOddSerial(t *testing.T) {
 	testState := entities.SimpleWiresState{
 		Wires: []valueobject.SimpleWire{
 			{
+				// Yellow
 				WireColor: valueobject.SimpleWireColors[0],
+				Position:  1,
 			},
 			{
+				// Red
 				WireColor: valueobject.SimpleWireColors[1],
+				Position:  2,
 			},
 			{
+				// Blue
 				WireColor: valueobject.SimpleWireColors[2],
+				Position:  3,
 			},
 			{
-				WireColor: valueobject.SimpleWireColors[0],
+				// Red
+				WireColor: valueobject.SimpleWireColors[1],
+				Position:  4,
 			},
 		},
 	}
@@ -53,28 +61,28 @@ func TestSimpleWiresModuleActor_FourWiresMoreThanOneRedOddSerial(t *testing.T) {
 	moduleID := uuid.New()
 
 	actions := []struct {
-		desc      string
-		wireIndex int
-		solved    bool
-		strike    bool
+		desc    string
+		wirePos int
+		solved  bool
+		strike  bool
 	}{
 		{
-			desc:      "Cut the first Red wire",
-			wireIndex: 0,
-			solved:    false,
-			strike:    true,
+			desc:    "Cut the first wire (Yellow)",
+			wirePos: 1,
+			solved:  false,
+			strike:  true,
 		},
 		{
-			desc:      "Cut the second wire",
-			wireIndex: 1,
-			solved:    false,
-			strike:    true,
+			desc:    "Cut the second wire (Red)",
+			wirePos: 2,
+			solved:  false,
+			strike:  true,
 		},
 		{
-			desc:      "Cut the last Red wire",
-			wireIndex: 3,
-			solved:    true,
-			strike:    false,
+			desc:    "Cut the last Red wire",
+			wirePos: 4,
+			solved:  true,
+			strike:  false,
 		},
 	}
 
@@ -87,7 +95,7 @@ func TestSimpleWiresModuleActor_FourWiresMoreThanOneRedOddSerial(t *testing.T) {
 					BombID:    bombID,
 					ModuleID:  moduleID,
 				},
-				WireIndex: action.wireIndex,
+				WirePosition: action.wirePos,
 			}
 
 			respChan := make(chan actors.Response, 1)
@@ -149,13 +157,19 @@ func TestSimpleWiresModuleActor_ThreeWiresNoRed(t *testing.T) {
 	testState := entities.SimpleWiresState{
 		Wires: []valueobject.SimpleWire{
 			{
-				WireColor: valueobject.SimpleWireColors[1],
+				// Yellow
+				WireColor: valueobject.SimpleWireColors[0],
+				Position:  1,
 			},
 			{
+				// Blue
 				WireColor: valueobject.SimpleWireColors[2],
+				Position:  2,
 			},
 			{
+				// Black
 				WireColor: valueobject.SimpleWireColors[3],
+				Position:  3,
 			},
 		},
 	}
@@ -167,28 +181,28 @@ func TestSimpleWiresModuleActor_ThreeWiresNoRed(t *testing.T) {
 	moduleID := wiresModule.GetModuleID()
 
 	actions := []struct {
-		desc      string
-		wireIndex int
-		solved    bool
-		strike    bool
+		desc    string
+		wirePos int
+		solved  bool
+		strike  bool
 	}{
 		{
-			desc:      "Cut the first wire",
-			wireIndex: 0,
-			solved:    false,
-			strike:    true,
+			desc:    "Cut the first wire",
+			wirePos: 1,
+			solved:  false,
+			strike:  true,
 		},
 		{
-			desc:      "Cut the third wire",
-			wireIndex: 2,
-			solved:    false,
-			strike:    true,
+			desc:    "Cut the third wire",
+			wirePos: 3,
+			solved:  false,
+			strike:  true,
 		},
 		{
-			desc:      "Cut the second wire",
-			wireIndex: 1,
-			solved:    true,
-			strike:    false,
+			desc:    "Cut the second wire",
+			wirePos: 2,
+			solved:  true,
+			strike:  false,
 		},
 	}
 
@@ -200,7 +214,7 @@ func TestSimpleWiresModuleActor_ThreeWiresNoRed(t *testing.T) {
 					BombID:    bombID,
 					ModuleID:  moduleID,
 				},
-				WireIndex: action.wireIndex,
+				WirePosition: action.wirePos,
 			}
 
 			respChan := make(chan actors.Response, 1)
@@ -220,6 +234,7 @@ func TestSimpleWiresModuleActor_ThreeWiresNoRed(t *testing.T) {
 			if action.strike {
 				assert.True(t, resp.IsSuccess(), "Step %d: expected success response for correct wire", i+1)
 			}
+
 			if resp.IsSuccess() {
 				successResp, ok := resp.(actors.SuccessResponse)
 				assert.True(t, ok, "Expected SuccessResponse type")

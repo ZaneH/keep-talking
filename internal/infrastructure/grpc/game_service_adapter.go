@@ -60,7 +60,7 @@ func (s *GameServiceAdapter) SendInput(ctx context.Context, i *pb.PlayerInput) (
 				BombID:    bombID,
 				ModuleID:  moduleID,
 			},
-			WireIndex: int(input.SimpleWiresInput.WireIndex),
+			WirePosition: int(input.SimpleWiresInput.WirePosition),
 		}
 	case *pb.PlayerInput_PasswordInput:
 		switch pi := input.PasswordInput.Input.(type) {

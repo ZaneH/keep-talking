@@ -23,7 +23,7 @@ const (
 
 type SimpleWiresInput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	WireIndex     int32                  `protobuf:"varint,1,opt,name=wire_index,json=wireIndex,proto3" json:"wire_index,omitempty"`
+	WirePosition  int32                  `protobuf:"varint,1,opt,name=wire_position,json=wirePosition,proto3" json:"wire_position,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -58,9 +58,9 @@ func (*SimpleWiresInput) Descriptor() ([]byte, []int) {
 	return file_proto_simple_wires_module_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *SimpleWiresInput) GetWireIndex() int32 {
+func (x *SimpleWiresInput) GetWirePosition() int32 {
 	if x != nil {
-		return x.WireIndex
+		return x.WirePosition
 	}
 	return 0
 }
@@ -173,10 +173,9 @@ var File_proto_simple_wires_module_proto protoreflect.FileDescriptor
 
 const file_proto_simple_wires_module_proto_rawDesc = "" +
 	"\n" +
-	"\x1fproto/simple_wires_module.proto\x12\amodules\x1a\x12proto/common.proto\"1\n" +
-	"\x10SimpleWiresInput\x12\x1d\n" +
-	"\n" +
-	"wire_index\x18\x01 \x01(\x05R\twireIndex\"7\n" +
+	"\x1fproto/simple_wires_module.proto\x12\amodules\x1a\x12proto/common.proto\"7\n" +
+	"\x10SimpleWiresInput\x12#\n" +
+	"\rwire_position\x18\x01 \x01(\x05R\fwirePosition\"7\n" +
 	"\x10SimpleWiresState\x12#\n" +
 	"\x05wires\x18\x01 \x03(\v2\r.modules.WireR\x05wires\"g\n" +
 	"\x04Wire\x12,\n" +

@@ -4,6 +4,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/ZaneH/keep-talking/internal/domain/entities"
 	"github.com/ZaneH/keep-talking/internal/domain/services"
 	"github.com/ZaneH/keep-talking/internal/domain/valueobject"
 	"github.com/stretchr/testify/assert"
@@ -26,9 +27,15 @@ func TestBombFactory_CreateBomb(t *testing.T) {
 		MaxIndicatorCount: 0,
 		PortCount:         0,
 	}
+	m := entities.NewClockModule()
 
 	// Act
 	bomb := f.CreateBomb(c)
+	bomb.AddModule(m, valueobject.ModulePosition{
+		Row:    0,
+		Column: 0,
+		Face:   0,
+	})
 
 	// Assert
 	if bomb == nil {
