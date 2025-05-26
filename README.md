@@ -4,9 +4,10 @@
 
 Keep Talking is an open-source re-implementation of one of my favorite games: "Keep Talking and Nobody Explodes".
 
-The game is designed for two or more players, where one player (the "Defuser") is tasked with defusing a bomb while the other players (the "Experts") provide instructions from a bomb defusal manual. The catch is that the Defuser cannot see the manual, and the Experts cannot see the bomb.
+The game is designed for two or more players, where one player (the "Defuser") is tasked with defusing a bomb while the other players (the "Experts") provide instructions from a bomb defusal manual.
+The catch is that the Defuser cannot see the manual, and the Experts cannot see the bomb.
 
-This repo is a practical exercise in DDD (Domain-Driven Design) and the actor model.
+This repo serves as a practical exercise in DDD (Domain-Driven Design) and the actor model.
 
 ## Architecture
 
@@ -20,9 +21,10 @@ The bomb defusal logic is implemented using the actor model, where different com
 
 ## API Design
 
-The server exposes a gRPC API, making it easy for clients to interact with the game. Protocol Buffers (protobuf) are used for efficient, language-agnostic data serialization. This design allows developers to build their own game clients in any language that supports gRPC.
+The server exposes a gRPC API and an optional HTTP Proxy using [grpc-gateway](https://github.com/grpc-ecosystem/grpc-gateway), making it easy for clients to interact with the game. Protocol Buffers (protobuf) are used for efficient, language-agnostic data serialization.
+This design allows developers to build their own game clients in any language that supports gRPC.
 
-While this implementation focuses on gRPC, the Domain-Driven Design approach means that alternative interfaces (like REST or WebSockets) could be implemented without modifying the core game logic.
+While this implementation focuses on gRPC/HTTP, the Domain-Driven Design approach means that alternative interfaces (like WebSockets or ) could be implemented without modifying the core game logic.
 
 ## Setup
 
@@ -49,6 +51,18 @@ $ go install tool
 ```bash
 $ go run cmd/server/main.go # starts gRPC server
 $ go run cmd/rest/main.go # starts gRPC REST proxy
+```
+
+### View Swagger Documentation
+
+```bash
+$ make swagger-ui # visit http://localhost:80 to view Swagger UI
+```
+
+### Run Tests
+```bash
+$ make test # runs all tests
+$ go test -v -run TestSimpleWires ./... # runs tests with a prefix
 ```
 
 ## TODO List
