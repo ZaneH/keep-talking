@@ -45,9 +45,10 @@ $ go mod tidy
 $ go install tool
 ```
 
-### Run the Game
+### Run the Server and REST Proxy
 ```bash
 $ go run cmd/server/main.go # starts gRPC server
+$ go run cmd/rest/main.go # starts gRPC REST proxy
 ```
 
 ## TODO List
@@ -70,4 +71,4 @@ Contributions are welcome. If you'd like to add a new module, fix a bug, or impr
 
 This project is open-source under the MIT license.
 
-**Note:** This project is an unofficial educational implementation inspired by "Keep Talking and Nobody Explodes" by Steel Crate Games. It is not affiliated with, endorsed by, or connected to Steel Crate Games in any way. All trademarks, game mechanics, and concepts belong to their respective owners. This implementation is created for educational purposes to explore software design patterns and architecture.
+**Note:** This project is an unofficial implementation inspired by "Keep Talking and Nobody Explodes" from Steel Crate Games. It is not affiliated with, endorsed by, or connected to Steel Crate Games in any way. All trademarks, game mechanics, and concepts belong to their respective owners. This implementation is created for educational purposes to explore software design patterns and architecture.
