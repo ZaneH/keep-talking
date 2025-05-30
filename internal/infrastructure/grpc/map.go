@@ -156,6 +156,18 @@ func mapModulesToProto(modules map[uuid.UUID]actors.ModuleActor) map[string]*pb.
 					CurrentSequence: seqProto,
 				},
 			}
+		case valueobject.Password:
+			passwordModule, ok := actor.GetModule().(*entities.PasswordModule)
+			if !ok {
+				log.Printf("Expected *PasswordModule but got different type: %T", actor.GetModule().GetModuleState())
+				continue
+			}
+
+			protoModule.State = &pb.Module_PasswordState{
+				PasswordState: &pb.PasswordState{
+					Letters: passwordModule.GetCurrentGuess(),
+				},
+			}
 		default:
 			log.Fatalf("Unknown module type: %v. Couldn't provide state.", actor.GetModule().GetType())
 		}

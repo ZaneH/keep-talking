@@ -14,10 +14,7 @@ type PasswordSubmitCommand struct {
 	BaseModuleInputCommand
 }
 
-type PasswordLetterChangeCommandResult struct {
+type PasswordCommandResult struct {
 	BaseModuleInputCommandResult
-}
-
-type PasswordSubmitCommandResult struct {
-	BaseModuleInputCommandResult
+	Letters string
 }

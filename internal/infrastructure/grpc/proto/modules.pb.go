@@ -148,6 +148,7 @@ type Module struct {
 	// Types that are valid to be assigned to State:
 	//
 	//	*Module_SimpleWiresState
+	//	*Module_PasswordState
 	//	*Module_BigButtonState
 	//	*Module_SimonSaysState
 	State         isModule_State `protobuf_oneof:"state"`
@@ -229,6 +230,15 @@ func (x *Module) GetSimpleWiresState() *SimpleWiresState {
 	return nil
 }
 
+func (x *Module) GetPasswordState() *PasswordState {
+	if x != nil {
+		if x, ok := x.State.(*Module_PasswordState); ok {
+			return x.PasswordState
+		}
+	}
+	return nil
+}
+
 func (x *Module) GetBigButtonState() *BigButtonState {
 	if x != nil {
 		if x, ok := x.State.(*Module_BigButtonState); ok {
@@ -255,8 +265,11 @@ type Module_SimpleWiresState struct {
 	SimpleWiresState *SimpleWiresState `protobuf:"bytes,5,opt,name=simple_wires_state,json=simpleWiresState,proto3,oneof"`
 }
 
+type Module_PasswordState struct {
+	PasswordState *PasswordState `protobuf:"bytes,6,opt,name=password_state,json=passwordState,proto3,oneof"`
+}
+
 type Module_BigButtonState struct {
-	// PasswordState password_state = 6;
 	BigButtonState *BigButtonState `protobuf:"bytes,7,opt,name=big_button_state,json=bigButtonState,proto3,oneof"`
 }
 
@@ -266,6 +279,8 @@ type Module_SimonSaysState struct {
 
 func (*Module_SimpleWiresState) isModule_State() {}
 
+func (*Module_PasswordState) isModule_State() {}
+
 func (*Module_BigButtonState) isModule_State() {}
 
 func (*Module_SimonSaysState) isModule_State() {}
@@ -274,17 +289,18 @@ var File_proto_modules_proto protoreflect.FileDescriptor
 
 const file_proto_modules_proto_rawDesc = "" +
 	"\n" +
-	"\x13proto/modules.proto\x12\amodules\x1a\x1fproto/simple_wires_module.proto\x1a\x1dproto/big_button_module.proto\x1a\x1dproto/simon_says_module.proto\"H\n" +
+	"\x13proto/modules.proto\x12\amodules\x1a\x1fproto/simple_wires_module.proto\x1a\x1dproto/big_button_module.proto\x1a\x1dproto/simon_says_module.proto\x1a\x1bproto/password_module.proto\"H\n" +
 	"\x0eModulePosition\x12\x12\n" +
 	"\x04face\x18\x01 \x01(\x05R\x04face\x12\x10\n" +
 	"\x03row\x18\x02 \x01(\x05R\x03row\x12\x10\n" +
-	"\x03col\x18\x03 \x01(\x05R\x03col\"\xd9\x03\n" +
+	"\x03col\x18\x03 \x01(\x05R\x03col\"\x9a\x04\n" +
 	"\x06Module\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12.\n" +
 	"\x04type\x18\x02 \x01(\x0e2\x1a.modules.Module.ModuleTypeR\x04type\x123\n" +
 	"\bposition\x18\x03 \x01(\v2\x17.modules.ModulePositionR\bposition\x12\x16\n" +
 	"\x06solved\x18\x04 \x01(\bR\x06solved\x12I\n" +
-	"\x12simple_wires_state\x18\x05 \x01(\v2\x19.modules.SimpleWiresStateH\x00R\x10simpleWiresState\x12C\n" +
+	"\x12simple_wires_state\x18\x05 \x01(\v2\x19.modules.SimpleWiresStateH\x00R\x10simpleWiresState\x12?\n" +
+	"\x0epassword_state\x18\x06 \x01(\v2\x16.modules.PasswordStateH\x00R\rpasswordState\x12C\n" +
 	"\x10big_button_state\x18\a \x01(\v2\x17.modules.BigButtonStateH\x00R\x0ebigButtonState\x12C\n" +
 	"\x10simon_says_state\x18\b \x01(\v2\x17.modules.SimonSaysStateH\x00R\x0esimonSaysState\"d\n" +
 	"\n" +
@@ -318,20 +334,22 @@ var file_proto_modules_proto_goTypes = []any{
 	(*ModulePosition)(nil),   // 1: modules.ModulePosition
 	(*Module)(nil),           // 2: modules.Module
 	(*SimpleWiresState)(nil), // 3: modules.SimpleWiresState
-	(*BigButtonState)(nil),   // 4: modules.BigButtonState
-	(*SimonSaysState)(nil),   // 5: modules.SimonSaysState
+	(*PasswordState)(nil),    // 4: modules.PasswordState
+	(*BigButtonState)(nil),   // 5: modules.BigButtonState
+	(*SimonSaysState)(nil),   // 6: modules.SimonSaysState
 }
 var file_proto_modules_proto_depIdxs = []int32{
 	0, // 0: modules.Module.type:type_name -> modules.Module.ModuleType
 	1, // 1: modules.Module.position:type_name -> modules.ModulePosition
 	3, // 2: modules.Module.simple_wires_state:type_name -> modules.SimpleWiresState
-	4, // 3: modules.Module.big_button_state:type_name -> modules.BigButtonState
-	5, // 4: modules.Module.simon_says_state:type_name -> modules.SimonSaysState
-	5, // [5:5] is the sub-list for method output_type
-	5, // [5:5] is the sub-list for method input_type
-	5, // [5:5] is the sub-list for extension type_name
-	5, // [5:5] is the sub-list for extension extendee
-	0, // [0:5] is the sub-list for field type_name
+	4, // 3: modules.Module.password_state:type_name -> modules.PasswordState
+	5, // 4: modules.Module.big_button_state:type_name -> modules.BigButtonState
+	6, // 5: modules.Module.simon_says_state:type_name -> modules.SimonSaysState
+	6, // [6:6] is the sub-list for method output_type
+	6, // [6:6] is the sub-list for method input_type
+	6, // [6:6] is the sub-list for extension type_name
+	6, // [6:6] is the sub-list for extension extendee
+	0, // [0:6] is the sub-list for field type_name
 }
 
 func init() { file_proto_modules_proto_init() }
@@ -342,8 +360,10 @@ func file_proto_modules_proto_init() {
 	file_proto_simple_wires_module_proto_init()
 	file_proto_big_button_module_proto_init()
 	file_proto_simon_says_module_proto_init()
+	file_proto_password_module_proto_init()
 	file_proto_modules_proto_msgTypes[1].OneofWrappers = []any{
 		(*Module_SimpleWiresState)(nil),
+		(*Module_PasswordState)(nil),
 		(*Module_BigButtonState)(nil),
 		(*Module_SimonSaysState)(nil),
 	}

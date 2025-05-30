@@ -54,11 +54,12 @@ func (a *PasswordModuleActor) handleModuleCommand(msg ModuleCommandMessage) {
 			err = errors.New("unsupported letter change option")
 		}
 
-		result := &command.PasswordLetterChangeCommandResult{
+		result := &command.PasswordCommandResult{
 			BaseModuleInputCommandResult: command.BaseModuleInputCommandResult{
 				Solved: a.module.GetModuleState().IsSolved(),
 				Strike: err != nil,
 			},
+			Letters: passwordModule.GetCurrentGuess(),
 		}
 
 		if err != nil {
@@ -81,11 +82,12 @@ func (a *PasswordModuleActor) handleModuleCommand(msg ModuleCommandMessage) {
 		}
 
 		err := passwordModule.CheckPassword()
-		result := &command.PasswordSubmitCommandResult{
+		result := &command.PasswordCommandResult{
 			BaseModuleInputCommandResult: command.BaseModuleInputCommandResult{
 				Solved: a.module.GetModuleState().IsSolved(),
 				Strike: err != nil,
 			},
+			Letters: passwordModule.GetCurrentGuess(),
 		}
 
 		if err != nil {

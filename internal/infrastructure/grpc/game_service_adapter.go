@@ -155,6 +155,20 @@ func (s *GameServiceAdapter) SendInput(ctx context.Context, i *pb.PlayerInput) (
 				},
 			},
 		}, nil
+	case *command.PasswordCommandResult:
+		return &pb.PlayerInputResult{
+			ModuleId: i.GetModuleId(),
+			Strike:   res != nil && cmdResult.Strike,
+			Solved:   res != nil && cmdResult.Solved,
+			Result: &pb.PlayerInputResult_PasswordInputResult{
+				PasswordInputResult: &pb.PasswordInputResult{
+					PasswordState: &pb.PasswordState{
+						Letters: cmdResult.Letters,
+					},
+				},
+			},
+		}, nil
+
 	default:
 		return nil, fmt.Errorf("unknown result type: %T", res)
 	}

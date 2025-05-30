@@ -22,13 +22,7 @@ func (f *BombFactoryImpl) CreateBomb(rng ports.RandomGenerator, config valueobje
 	bomb := entities.NewBomb(rng, config)
 
 	totalModules := config.NumFaces * config.MaxModulesPerFace
-	if totalModules > 9 { // Arbitrary maximum
-		totalModules = 9
-	}
-
-	if totalModules < config.MinModules {
-		totalModules = config.MinModules
-	}
+	totalModules = max(totalModules, config.MinModules)
 
 	moduleTypes := make([]valueobject.ModuleType, 0)
 	weights := make([]float32, 0)

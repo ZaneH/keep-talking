@@ -65,50 +65,6 @@ func (x *SimonSaysInput) GetColor() Color {
 	return Color_RED
 }
 
-type SimonSaysState struct {
-	state           protoimpl.MessageState `protogen:"open.v1"`
-	CurrentSequence []Color                `protobuf:"varint,1,rep,packed,name=current_sequence,json=currentSequence,proto3,enum=common.Color" json:"current_sequence,omitempty"`
-	unknownFields   protoimpl.UnknownFields
-	sizeCache       protoimpl.SizeCache
-}
-
-func (x *SimonSaysState) Reset() {
-	*x = SimonSaysState{}
-	mi := &file_proto_simon_says_module_proto_msgTypes[1]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *SimonSaysState) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*SimonSaysState) ProtoMessage() {}
-
-func (x *SimonSaysState) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_simon_says_module_proto_msgTypes[1]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use SimonSaysState.ProtoReflect.Descriptor instead.
-func (*SimonSaysState) Descriptor() ([]byte, []int) {
-	return file_proto_simon_says_module_proto_rawDescGZIP(), []int{1}
-}
-
-func (x *SimonSaysState) GetCurrentSequence() []Color {
-	if x != nil {
-		return x.CurrentSequence
-	}
-	return nil
-}
-
 type SimonSaysInputResult struct {
 	state           protoimpl.MessageState `protogen:"open.v1"`
 	HasFinishedSeq  bool                   `protobuf:"varint,1,opt,name=has_finished_seq,json=hasFinishedSeq,proto3" json:"has_finished_seq,omitempty"`
@@ -119,7 +75,7 @@ type SimonSaysInputResult struct {
 
 func (x *SimonSaysInputResult) Reset() {
 	*x = SimonSaysInputResult{}
-	mi := &file_proto_simon_says_module_proto_msgTypes[2]
+	mi := &file_proto_simon_says_module_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -131,7 +87,7 @@ func (x *SimonSaysInputResult) String() string {
 func (*SimonSaysInputResult) ProtoMessage() {}
 
 func (x *SimonSaysInputResult) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_simon_says_module_proto_msgTypes[2]
+	mi := &file_proto_simon_says_module_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -144,7 +100,7 @@ func (x *SimonSaysInputResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SimonSaysInputResult.ProtoReflect.Descriptor instead.
 func (*SimonSaysInputResult) Descriptor() ([]byte, []int) {
-	return file_proto_simon_says_module_proto_rawDescGZIP(), []int{2}
+	return file_proto_simon_says_module_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *SimonSaysInputResult) GetHasFinishedSeq() bool {
@@ -161,18 +117,62 @@ func (x *SimonSaysInputResult) GetDisplaySequence() []Color {
 	return nil
 }
 
+type SimonSaysState struct {
+	state           protoimpl.MessageState `protogen:"open.v1"`
+	CurrentSequence []Color                `protobuf:"varint,1,rep,packed,name=current_sequence,json=currentSequence,proto3,enum=common.Color" json:"current_sequence,omitempty"`
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
+}
+
+func (x *SimonSaysState) Reset() {
+	*x = SimonSaysState{}
+	mi := &file_proto_simon_says_module_proto_msgTypes[2]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SimonSaysState) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SimonSaysState) ProtoMessage() {}
+
+func (x *SimonSaysState) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_simon_says_module_proto_msgTypes[2]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SimonSaysState.ProtoReflect.Descriptor instead.
+func (*SimonSaysState) Descriptor() ([]byte, []int) {
+	return file_proto_simon_says_module_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *SimonSaysState) GetCurrentSequence() []Color {
+	if x != nil {
+		return x.CurrentSequence
+	}
+	return nil
+}
+
 var File_proto_simon_says_module_proto protoreflect.FileDescriptor
 
 const file_proto_simon_says_module_proto_rawDesc = "" +
 	"\n" +
 	"\x1dproto/simon_says_module.proto\x12\amodules\x1a\x12proto/common.proto\"5\n" +
 	"\x0eSimonSaysInput\x12#\n" +
-	"\x05color\x18\x01 \x01(\x0e2\r.common.ColorR\x05color\"J\n" +
-	"\x0eSimonSaysState\x128\n" +
-	"\x10current_sequence\x18\x01 \x03(\x0e2\r.common.ColorR\x0fcurrentSequence\"z\n" +
+	"\x05color\x18\x01 \x01(\x0e2\r.common.ColorR\x05color\"z\n" +
 	"\x14SimonSaysInputResult\x12(\n" +
 	"\x10has_finished_seq\x18\x01 \x01(\bR\x0ehasFinishedSeq\x128\n" +
-	"\x10display_sequence\x18\x02 \x03(\x0e2\r.common.ColorR\x0fdisplaySequenceB\tZ\a./protob\x06proto3"
+	"\x10display_sequence\x18\x02 \x03(\x0e2\r.common.ColorR\x0fdisplaySequence\"J\n" +
+	"\x0eSimonSaysState\x128\n" +
+	"\x10current_sequence\x18\x01 \x03(\x0e2\r.common.ColorR\x0fcurrentSequenceB\tZ\a./protob\x06proto3"
 
 var (
 	file_proto_simon_says_module_proto_rawDescOnce sync.Once
@@ -189,14 +189,14 @@ func file_proto_simon_says_module_proto_rawDescGZIP() []byte {
 var file_proto_simon_says_module_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
 var file_proto_simon_says_module_proto_goTypes = []any{
 	(*SimonSaysInput)(nil),       // 0: modules.SimonSaysInput
-	(*SimonSaysState)(nil),       // 1: modules.SimonSaysState
-	(*SimonSaysInputResult)(nil), // 2: modules.SimonSaysInputResult
+	(*SimonSaysInputResult)(nil), // 1: modules.SimonSaysInputResult
+	(*SimonSaysState)(nil),       // 2: modules.SimonSaysState
 	(Color)(0),                   // 3: common.Color
 }
 var file_proto_simon_says_module_proto_depIdxs = []int32{
 	3, // 0: modules.SimonSaysInput.color:type_name -> common.Color
-	3, // 1: modules.SimonSaysState.current_sequence:type_name -> common.Color
-	3, // 2: modules.SimonSaysInputResult.display_sequence:type_name -> common.Color
+	3, // 1: modules.SimonSaysInputResult.display_sequence:type_name -> common.Color
+	3, // 2: modules.SimonSaysState.current_sequence:type_name -> common.Color
 	3, // [3:3] is the sub-list for method output_type
 	3, // [3:3] is the sub-list for method input_type
 	3, // [3:3] is the sub-list for extension type_name

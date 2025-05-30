@@ -289,9 +289,11 @@
         "simpleWiresState": {
           "$ref": "#/definitions/modulesSimpleWiresState"
         },
+        "passwordState": {
+          "$ref": "#/definitions/modulesPasswordState"
+        },
         "bigButtonState": {
-          "$ref": "#/definitions/modulesBigButtonState",
-          "title": "PasswordState password_state = 6;"
+          "$ref": "#/definitions/modulesBigButtonState"
         },
         "simonSaysState": {
           "$ref": "#/definitions/modulesSimonSaysState"
@@ -323,6 +325,23 @@
         },
         "submit": {
           "$ref": "#/definitions/modulesPasswordSubmit"
+        }
+      }
+    },
+    "modulesPasswordInputResult": {
+      "type": "object",
+      "properties": {
+        "passwordState": {
+          "$ref": "#/definitions/modulesPasswordState"
+        }
+      }
+    },
+    "modulesPasswordState": {
+      "type": "object",
+      "properties": {
+        "letters": {
+          "type": "string",
+          "title": "Contains the current letters in order"
         }
       }
     },
@@ -452,6 +471,9 @@
         },
         "simonSaysInputResult": {
           "$ref": "#/definitions/modulesSimonSaysInputResult"
+        },
+        "passwordInputResult": {
+          "$ref": "#/definitions/modulesPasswordInputResult"
         }
       }
     },

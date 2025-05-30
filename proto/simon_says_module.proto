@@ -9,11 +9,11 @@ message SimonSaysInput {
   common.Color color = 1;
 }
 
-message SimonSaysState {
-  repeated common.Color current_sequence = 1;
-}
-
 message SimonSaysInputResult {
   bool has_finished_seq = 1;
   repeated common.Color display_sequence = 2;
+}
+
+message SimonSaysState {
+  repeated common.Color current_sequence = 1;
 }

@@ -4,6 +4,7 @@ package modules;
 import "proto/simple_wires_module.proto";
 import "proto/big_button_module.proto";
 import "proto/simon_says_module.proto";
+import "proto/password_module.proto";
 
 option go_package = "./proto";
 
@@ -29,7 +30,7 @@ message Module {
   bool solved = 4;
   oneof state {
     SimpleWiresState simple_wires_state = 5;
-    // PasswordState password_state = 6;
+    PasswordState password_state = 6;
     BigButtonState big_button_state = 7;
     SimonSaysState simon_says_state = 8;
   }

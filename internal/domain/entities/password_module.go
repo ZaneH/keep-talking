@@ -9,7 +9,7 @@ import (
 	"github.com/google/uuid"
 )
 
-type PasswordModuleState struct {
+type PasswordState struct {
 	BaseModuleState
 	Letters   [5][6]string // 5 letters, 6 options each
 	Positions [5]int       // positions of the letters
@@ -18,7 +18,7 @@ type PasswordModuleState struct {
 
 type PasswordModule struct {
 	BaseModule
-	state PasswordModuleState
+	state PasswordState
 	rng   ports.RandomGenerator
 }
 
@@ -34,7 +34,7 @@ func NewPasswordModule(rng ports.RandomGenerator, providedSolution *string) *Pas
 		BaseModule: BaseModule{
 			ModuleID: uuid.New(),
 		},
-		state: PasswordModuleState{
+		state: PasswordState{
 			Letters:   generateLetters(rng, solution),
 			Positions: [5]int{0, 0, 0, 0, 0},
 			solution:  solution,
@@ -76,9 +76,9 @@ func (m *PasswordModule) DecrementLetterOption(letterIndex int) {
 
 func (m *PasswordModule) String() string {
 	var result = "\n"
-	for i := 0; i < len(m.state.Letters); i++ {
+	for i := range len(m.state.Letters) {
 		result += "Letter " + string(rune('A'+i)) + ": "
-		for j := 0; j < len(m.state.Letters[i]); j++ {
+		for j := range len(m.state.Letters[i]) {
 			if j == m.state.Positions[i] {
 				result += "[" + m.state.Letters[i][j] + "] "
 			} else {
@@ -124,7 +124,7 @@ func generateLetters(rng ports.RandomGenerator, solution string) [5][6]string {
 		usedLetters := make(map[string]bool)
 		usedLetters[targetLetter] = true
 
-		for row := 0; row < 6; row++ {
+		for row := range 6 {
 			if row == targetPos {
 				letters[col][row] = targetLetter
 			} else {
@@ -146,7 +146,7 @@ func generateLetters(rng ports.RandomGenerator, solution string) [5][6]string {
 	for col := len(solution); col < 5; col++ {
 		usedLetters := make(map[string]bool)
 
-		for row := 0; row < 6; row++ {
+		for row := range 6 {
 			var randomLetter string
 			for {
 				randomLetter = string(common.ALPHABET[rng.GetIntInRange(0, len(common.ALPHABET)-1)])

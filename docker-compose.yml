@@ -1,9 +1,0 @@
-services:
-  envoy:
-    image: envoyproxy/envoy:v1.34.1
-    container_name: envoy
-    volumes:
-      - ./envoy.yaml:/etc/envoy/envoy.yaml:ro
-    command: >
-      -c /etc/envoy/envoy.yaml
-    network_mode: host

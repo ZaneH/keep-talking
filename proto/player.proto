@@ -34,5 +34,6 @@ message PlayerInputResult {
   oneof result {
     modules.BigButtonInputResult big_button_input_result = 10;
     modules.SimonSaysInputResult simon_says_input_result = 11;
+    modules.PasswordInputResult password_input_result = 12;
   }
 }

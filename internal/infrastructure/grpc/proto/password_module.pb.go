@@ -191,6 +191,95 @@ func (*PasswordInput_LetterChange) isPasswordInput_Input() {}
 
 func (*PasswordInput_Submit) isPasswordInput_Input() {}
 
+type PasswordInputResult struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	PasswordState *PasswordState         `protobuf:"bytes,1,opt,name=password_state,json=passwordState,proto3" json:"password_state,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *PasswordInputResult) Reset() {
+	*x = PasswordInputResult{}
+	mi := &file_proto_password_module_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PasswordInputResult) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PasswordInputResult) ProtoMessage() {}
+
+func (x *PasswordInputResult) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_password_module_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PasswordInputResult.ProtoReflect.Descriptor instead.
+func (*PasswordInputResult) Descriptor() ([]byte, []int) {
+	return file_proto_password_module_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *PasswordInputResult) GetPasswordState() *PasswordState {
+	if x != nil {
+		return x.PasswordState
+	}
+	return nil
+}
+
+type PasswordState struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Contains the current letters in order
+	Letters       string `protobuf:"bytes,1,opt,name=letters,proto3" json:"letters,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *PasswordState) Reset() {
+	*x = PasswordState{}
+	mi := &file_proto_password_module_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PasswordState) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PasswordState) ProtoMessage() {}
+
+func (x *PasswordState) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_password_module_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PasswordState.ProtoReflect.Descriptor instead.
+func (*PasswordState) Descriptor() ([]byte, []int) {
+	return file_proto_password_module_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *PasswordState) GetLetters() string {
+	if x != nil {
+		return x.Letters
+	}
+	return ""
+}
+
 var File_proto_password_module_proto protoreflect.FileDescriptor
 
 const file_proto_password_module_proto_rawDesc = "" +
@@ -203,7 +292,11 @@ const file_proto_password_module_proto_rawDesc = "" +
 	"\rPasswordInput\x12<\n" +
 	"\rletter_change\x18\x01 \x01(\v2\x15.modules.LetterChangeH\x00R\fletterChange\x121\n" +
 	"\x06submit\x18\x02 \x01(\v2\x17.modules.PasswordSubmitH\x00R\x06submitB\a\n" +
-	"\x05inputB\tZ\a./protob\x06proto3"
+	"\x05input\"T\n" +
+	"\x13PasswordInputResult\x12=\n" +
+	"\x0epassword_state\x18\x01 \x01(\v2\x16.modules.PasswordStateR\rpasswordState\")\n" +
+	"\rPasswordState\x12\x18\n" +
+	"\aletters\x18\x01 \x01(\tR\alettersB\tZ\a./protob\x06proto3"
 
 var (
 	file_proto_password_module_proto_rawDescOnce sync.Once
@@ -217,22 +310,25 @@ func file_proto_password_module_proto_rawDescGZIP() []byte {
 	return file_proto_password_module_proto_rawDescData
 }
 
-var file_proto_password_module_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
+var file_proto_password_module_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
 var file_proto_password_module_proto_goTypes = []any{
-	(*LetterChange)(nil),    // 0: modules.LetterChange
-	(*PasswordSubmit)(nil),  // 1: modules.PasswordSubmit
-	(*PasswordInput)(nil),   // 2: modules.PasswordInput
-	(IncrementDecrement)(0), // 3: common.IncrementDecrement
+	(*LetterChange)(nil),        // 0: modules.LetterChange
+	(*PasswordSubmit)(nil),      // 1: modules.PasswordSubmit
+	(*PasswordInput)(nil),       // 2: modules.PasswordInput
+	(*PasswordInputResult)(nil), // 3: modules.PasswordInputResult
+	(*PasswordState)(nil),       // 4: modules.PasswordState
+	(IncrementDecrement)(0),     // 5: common.IncrementDecrement
 }
 var file_proto_password_module_proto_depIdxs = []int32{
-	3, // 0: modules.LetterChange.direction:type_name -> common.IncrementDecrement
+	5, // 0: modules.LetterChange.direction:type_name -> common.IncrementDecrement
 	0, // 1: modules.PasswordInput.letter_change:type_name -> modules.LetterChange
 	1, // 2: modules.PasswordInput.submit:type_name -> modules.PasswordSubmit
-	3, // [3:3] is the sub-list for method output_type
-	3, // [3:3] is the sub-list for method input_type
-	3, // [3:3] is the sub-list for extension type_name
-	3, // [3:3] is the sub-list for extension extendee
-	0, // [0:3] is the sub-list for field type_name
+	4, // 3: modules.PasswordInputResult.password_state:type_name -> modules.PasswordState
+	4, // [4:4] is the sub-list for method output_type
+	4, // [4:4] is the sub-list for method input_type
+	4, // [4:4] is the sub-list for extension type_name
+	4, // [4:4] is the sub-list for extension extendee
+	0, // [0:4] is the sub-list for field type_name
 }
 
 func init() { file_proto_password_module_proto_init() }
@@ -251,7 +347,7 @@ func file_proto_password_module_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_password_module_proto_rawDesc), len(file_proto_password_module_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   3,
+			NumMessages:   5,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
