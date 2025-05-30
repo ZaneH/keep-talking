@@ -1,29 +1,28 @@
 package services
 
 import (
-	"context"
 	"log"
 
 	"github.com/ZaneH/keep-talking/internal/application/ports"
 	"github.com/ZaneH/keep-talking/internal/domain/entities"
+	dPorts "github.com/ZaneH/keep-talking/internal/domain/ports"
+	"github.com/ZaneH/keep-talking/internal/domain/services"
 	"github.com/ZaneH/keep-talking/internal/domain/valueobject"
 	"github.com/google/uuid"
 )
 
 type BombService struct {
 	sessionManager ports.GameSessionManager
-	bombFactory    ports.BombFactory
 }
 
-func NewBombService(sessionManager ports.GameSessionManager, bombFactory ports.BombFactory) *BombService {
+func NewBombService(sessionManager ports.GameSessionManager) *BombService {
 	return &BombService{
 		sessionManager: sessionManager,
-		bombFactory:    bombFactory,
 	}
 }
 
 func (s *BombService) CreateBombInSession(
-	ctx context.Context,
+	rng dPorts.RandomGenerator,
 	sessionID uuid.UUID,
 	config valueobject.BombConfig,
 ) (*entities.Bomb, error) {
@@ -32,7 +31,10 @@ func (s *BombService) CreateBombInSession(
 		return nil, err
 	}
 
-	bomb := s.bombFactory.CreateBomb(config)
+	mf := services.NewModuleFactory(rng)
+	bf := services.NewBombFactory(mf)
+	bomb := bf.CreateBomb(rng, config)
+
 	if err := sessionActor.AddBomb(bomb); err != nil {
 		log.Printf("error adding bomb to session: %v", err)
 		return nil, err

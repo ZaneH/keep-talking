@@ -3,11 +3,11 @@ package entities
 import (
 	"fmt"
 	"log"
-	"math/rand"
 	"strings"
 	"time"
 
 	"github.com/ZaneH/keep-talking/internal/application/common"
+	"github.com/ZaneH/keep-talking/internal/domain/ports"
 	"github.com/ZaneH/keep-talking/internal/domain/valueobject"
 	"github.com/google/uuid"
 )
@@ -26,19 +26,19 @@ type Bomb struct {
 	Ports         []valueobject.Port
 }
 
-func NewBomb(config valueobject.BombConfig) *Bomb {
+func NewBomb(rng ports.RandomGenerator, config valueobject.BombConfig) *Bomb {
 	return &Bomb{
 		ID:            uuid.New(),
-		SerialNumber:  generateSerialNumber(),
+		SerialNumber:  generateSerialNumber(rng),
 		TimerDuration: config.Timer,
 		StartedAt:     nil,
 		StrikeCount:   0,
 		MaxStrikes:    config.MaxStrikes,
 		Faces:         make(map[int]*BombFace),
 		Modules:       make(map[uuid.UUID]Module),
-		Indicators:    generateRandomIndicators(config.MaxIndicatorCount),
-		Batteries:     generateRandomBatteryCount(config.MinBatteries, config.MaxBatteries),
-		Ports:         generateRandomPorts(config.PortCount),
+		Indicators:    generateRandomIndicators(rng, config.MaxIndicatorCount),
+		Batteries:     generateRandomBatteryCount(rng, config.MinBatteries, config.MaxBatteries),
+		Ports:         generateRandomPorts(rng, config.PortCount),
 	}
 }
 
@@ -77,29 +77,29 @@ func (b *Bomb) StartTimer() {
 	b.StartedAt = &now
 }
 
-func generateSerialNumber() string {
+func generateSerialNumber(rng ports.RandomGenerator) string {
 	var sb strings.Builder
 	options := common.ALPHABET_UPPERCASE
 	for i := 0; i < 6; i++ {
-		randIdx := rand.Intn(len(options))
+		randIdx := rng.GetIntInRange(0, len(options)-1)
 		sb.WriteByte(options[randIdx])
 	}
 
 	return sb.String()
 }
 
-func generateRandomIndicators(count int) map[string]valueobject.Indicator {
+func generateRandomIndicators(rng ports.RandomGenerator, count int) map[string]valueobject.Indicator {
 	options := valueobject.AVAILABLE_INDICATOR_LABELS
 	indicators := make(map[string]valueobject.Indicator, count)
 	if count == 0 {
 		return indicators
 	}
 
-	count = rand.Intn(count + 1)
+	count = rng.GetIntInRange(0, count)
 
 	for i := 0; i < count; i++ {
-		lit := rand.Intn(2) == 1
-		randIdx := rand.Intn(len(options))
+		lit := rng.GetIntInRange(0, 1) == 1
+		randIdx := rng.GetIntInRange(0, len(options)-1)
 		label := options[randIdx]
 		indicators[label] = valueobject.Indicator{
 			Lit:   lit,
@@ -110,19 +110,19 @@ func generateRandomIndicators(count int) map[string]valueobject.Indicator {
 	return indicators
 }
 
-func generateRandomBatteryCount(minBatteries int, maxBatteries int) int {
-	if minBatteries == maxBatteries {
+func generateRandomBatteryCount(rng ports.RandomGenerator, minBatteries int, maxBatteries int) int {
+	if minBatteries >= maxBatteries {
 		return minBatteries
 	}
-	return rand.Intn(maxBatteries-minBatteries) + minBatteries
+	return rng.GetIntInRange(minBatteries, maxBatteries)
 }
 
-func generateRandomPorts(count int) []valueobject.Port {
+func generateRandomPorts(rng ports.RandomGenerator, count int) []valueobject.Port {
 	options := valueobject.AVAILABLE_PORTS
 	ports := make([]valueobject.Port, 0, count)
 
 	for i := 0; i < count; i++ {
-		randIdx := rand.Intn(len(options))
+		randIdx := rng.GetIntInRange(0, len(options)-1)
 		ports = append(ports, options[randIdx])
 	}
 

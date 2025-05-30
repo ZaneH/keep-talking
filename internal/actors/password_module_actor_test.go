@@ -8,6 +8,7 @@ import (
 	"github.com/ZaneH/keep-talking/internal/actors"
 	"github.com/ZaneH/keep-talking/internal/application/command"
 	"github.com/ZaneH/keep-talking/internal/domain/entities"
+	"github.com/ZaneH/keep-talking/internal/domain/services"
 	"github.com/ZaneH/keep-talking/internal/domain/valueobject"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
@@ -15,8 +16,9 @@ import (
 
 func TestPasswordModuleActor_LetterChange(t *testing.T) {
 	// Arrange
-	bomb := entities.NewBomb(valueobject.NewDefaultBombConfig())
-	passwordModule := entities.NewPasswordModule(nil)
+	rng := services.NewSeededRNGFromString("test")
+	bomb := entities.NewBomb(rng, valueobject.NewDefaultBombConfig())
+	passwordModule := entities.NewPasswordModule(rng, nil)
 	passwordModule.SetBomb(bomb)
 	passwordModuleActor := actors.NewPasswordModuleActor(passwordModule)
 	passwordModuleActor.Start() // Start the actor to process messages

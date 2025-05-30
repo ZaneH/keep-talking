@@ -7,20 +7,21 @@ import (
 	"github.com/ZaneH/keep-talking/internal/actors"
 	"github.com/ZaneH/keep-talking/internal/application/command"
 	"github.com/ZaneH/keep-talking/internal/domain/entities"
+	"github.com/ZaneH/keep-talking/internal/domain/services"
 	"github.com/ZaneH/keep-talking/internal/domain/valueobject"
-	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestSimonSaysModuleActor_TestVowelCompleteSequence(t *testing.T) {
 	// Arange
-	gameSession := actors.NewGameSessionActor(uuid.New())
+	rng := services.NewSeededRNGFromString("test")
+	gameSession, _ := actors.NewGameSessionActor(rng, valueobject.NewEasyGameSessionConfig(""))
 	defer gameSession.Stop()
 
-	bomb := entities.NewBomb(valueobject.NewDefaultBombConfig())
+	bomb := entities.NewBomb(rng, valueobject.NewDefaultBombConfig())
 	bomb.SerialNumber = "AAA"
 
-	module := entities.NewSimonSaysModule(nil)
+	module := entities.NewSimonSaysModule(rng, nil)
 	module.SetBomb(bomb)
 	module.SetState(entities.SimonSaysState{
 		DisplaySequence: []valueobject.Color{

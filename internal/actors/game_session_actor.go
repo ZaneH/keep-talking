@@ -8,6 +8,8 @@ import (
 
 	"github.com/ZaneH/keep-talking/internal/application/command"
 	"github.com/ZaneH/keep-talking/internal/domain/entities"
+	"github.com/ZaneH/keep-talking/internal/domain/ports"
+	"github.com/ZaneH/keep-talking/internal/domain/valueobject"
 	"github.com/google/uuid"
 )
 
@@ -17,14 +19,19 @@ type GameSessionActor struct {
 	bombActors map[uuid.UUID]BombActor
 }
 
-func NewGameSessionActor(sessionID uuid.UUID) *GameSessionActor {
-	actor := &GameSessionActor{
+func NewGameSessionActor(rng ports.RandomGenerator, config valueobject.GameSessionConfig) (actor *GameSessionActor, sessionID uuid.UUID) {
+	sessionID = uuid.New()
+
+	session := entities.NewGameSession(sessionID)
+	session.SetRandomGenerator(rng)
+
+	actor = &GameSessionActor{
 		BaseActor:  NewBaseActor(100),
 		bombActors: make(map[uuid.UUID]BombActor),
-		session:    entities.NewGameSession(sessionID),
+		session:    session,
 	}
 
-	return actor
+	return actor, sessionID
 }
 
 func (g *GameSessionActor) GetBombActors() map[uuid.UUID]BombActor {

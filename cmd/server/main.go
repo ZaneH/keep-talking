@@ -9,7 +9,6 @@ import (
 
 	"github.com/ZaneH/keep-talking/internal/actors"
 	appServices "github.com/ZaneH/keep-talking/internal/application/services"
-	domainServices "github.com/ZaneH/keep-talking/internal/domain/services"
 	"github.com/ZaneH/keep-talking/internal/infrastructure/adapters"
 	grpcServer "github.com/ZaneH/keep-talking/internal/infrastructure/grpc"
 	pb "github.com/ZaneH/keep-talking/internal/infrastructure/grpc/proto"
@@ -18,8 +17,7 @@ import (
 func main() {
 	actorSystem := actors.NewActorSystem()
 	actorSystemAdapter := adapters.NewActorSystemAdapter(actorSystem)
-	bombFactory := &domainServices.BombFactoryImpl{}
-	bombService := appServices.NewBombService(actorSystemAdapter, bombFactory)
+	bombService := appServices.NewBombService(actorSystemAdapter)
 
 	gameService := appServices.NewGameService(actorSystem, bombService)
 	grpcGameServiceServer := grpcServer.NewGameServiceAdapter(gameService)

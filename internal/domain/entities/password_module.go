@@ -2,9 +2,9 @@ package entities
 
 import (
 	"errors"
-	"math/rand"
 
 	"github.com/ZaneH/keep-talking/internal/application/common"
+	"github.com/ZaneH/keep-talking/internal/domain/ports"
 	"github.com/ZaneH/keep-talking/internal/domain/valueobject"
 	"github.com/google/uuid"
 )
@@ -19,12 +19,13 @@ type PasswordModuleState struct {
 type PasswordModule struct {
 	BaseModule
 	state PasswordModuleState
+	rng   ports.RandomGenerator
 }
 
-func NewPasswordModule(providedSolution *string) *PasswordModule {
+func NewPasswordModule(rng ports.RandomGenerator, providedSolution *string) *PasswordModule {
 	var solution string
 	if providedSolution == nil {
-		solution = generateWord()
+		solution = generateWord(rng)
 	} else {
 		solution = *providedSolution
 	}
@@ -34,10 +35,11 @@ func NewPasswordModule(providedSolution *string) *PasswordModule {
 			ModuleID: uuid.New(),
 		},
 		state: PasswordModuleState{
-			Letters:   generateLetters(solution),
+			Letters:   generateLetters(rng, solution),
 			Positions: [5]int{0, 0, 0, 0, 0},
 			solution:  solution,
 		},
+		rng: rng,
 	}
 }
 
@@ -106,17 +108,17 @@ var availablePasswordList = [...]string{
 	"chair",
 }
 
-func generateWord() string {
-	randIdx := rand.Intn(len(availablePasswordList))
+func generateWord(rng ports.RandomGenerator) string {
+	randIdx := rng.GetIntInRange(0, len(availablePasswordList)-1)
 	return availablePasswordList[randIdx]
 }
 
-func generateLetters(solution string) [5][6]string {
+func generateLetters(rng ports.RandomGenerator, solution string) [5][6]string {
 	var letters [5][6]string
 
 	for col := 0; col < len(solution) && col < 5; col++ {
 		targetLetter := string(solution[col])
-		targetPos := rand.Intn(6)
+		targetPos := rng.GetIntInRange(0, 5)
 
 		// Track used letters in this column
 		usedLetters := make(map[string]bool)
@@ -129,7 +131,7 @@ func generateLetters(solution string) [5][6]string {
 				// Generate unique letter for this column
 				var randomLetter string
 				for {
-					randomLetter = string(common.ALPHABET[rand.Intn(len(common.ALPHABET))])
+					randomLetter = string(common.ALPHABET[rng.GetIntInRange(0, len(common.ALPHABET)-1)])
 					if !usedLetters[randomLetter] {
 						usedLetters[randomLetter] = true
 						break
@@ -147,7 +149,7 @@ func generateLetters(solution string) [5][6]string {
 		for row := 0; row < 6; row++ {
 			var randomLetter string
 			for {
-				randomLetter = string(common.ALPHABET[rand.Intn(len(common.ALPHABET))])
+				randomLetter = string(common.ALPHABET[rng.GetIntInRange(0, len(common.ALPHABET)-1)])
 				if !usedLetters[randomLetter] {
 					usedLetters[randomLetter] = true
 					break

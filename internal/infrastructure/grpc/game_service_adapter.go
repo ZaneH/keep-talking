@@ -24,7 +24,7 @@ func NewGameServiceAdapter(gameService *services.GameService) *GameServiceAdapte
 func (s *GameServiceAdapter) CreateGame(ctx context.Context, req *pb.CreateGameRequest) (*pb.CreateGameResponse, error) {
 	createGameCmd := &command.CreateGameCommand{}
 
-	session, err := s.gameService.CreateGameSession(ctx, createGameCmd)
+	session, err := s.gameService.CreateGameSession(createGameCmd)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create game: %v", err)
 	}

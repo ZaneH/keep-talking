@@ -4,6 +4,8 @@ import (
 	"errors"
 	"sync"
 
+	"github.com/ZaneH/keep-talking/internal/domain/ports"
+	"github.com/ZaneH/keep-talking/internal/domain/valueobject"
 	"github.com/google/uuid"
 )
 
@@ -18,9 +20,8 @@ func NewActorSystem() *ActorSystem {
 	}
 }
 
-func (s *ActorSystem) CreateGameSession() (*GameSessionActor, error) {
-	sessionID := uuid.New()
-	sessionActor := NewGameSessionActor(sessionID)
+func (s *ActorSystem) CreateGameSession(rng ports.RandomGenerator, config valueobject.GameSessionConfig) (*GameSessionActor, error) {
+	sessionActor, sessionID := NewGameSessionActor(rng, config)
 	sessionActor.Start()
 
 	s.mu.Lock()

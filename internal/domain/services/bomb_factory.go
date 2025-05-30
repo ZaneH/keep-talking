@@ -2,16 +2,24 @@ package services
 
 import (
 	"log"
-	rand "math/rand/v2"
 
 	"github.com/ZaneH/keep-talking/internal/domain/entities"
+	"github.com/ZaneH/keep-talking/internal/domain/ports"
 	"github.com/ZaneH/keep-talking/internal/domain/valueobject"
 )
 
-type BombFactoryImpl struct{}
+type BombFactoryImpl struct {
+	moduleFactory *ModuleFactory
+}
 
-func (f *BombFactoryImpl) CreateBomb(config valueobject.BombConfig) *entities.Bomb {
-	bomb := entities.NewBomb(config)
+func NewBombFactory(moduleFactory *ModuleFactory) *BombFactoryImpl {
+	return &BombFactoryImpl{
+		moduleFactory: moduleFactory,
+	}
+}
+
+func (f *BombFactoryImpl) CreateBomb(rng ports.RandomGenerator, config valueobject.BombConfig) *entities.Bomb {
+	bomb := entities.NewBomb(rng, config)
 
 	totalModules := config.NumFaces * config.MaxModulesPerFace
 	if totalModules > 9 { // Arbitrary maximum
@@ -34,15 +42,15 @@ func (f *BombFactoryImpl) CreateBomb(config valueobject.BombConfig) *entities.Bo
 	modulesToAdd[0] = valueobject.Clock
 
 	for i := 1; i < totalModules; i++ {
-		modulesToAdd[i] = selectWeightedModuleType(moduleTypes, weights)
+		modulesToAdd[i] = selectWeightedModuleType(f.moduleFactory.rng, moduleTypes, weights)
 	}
 
-	f.placeModulesOnBomb(bomb, modulesToAdd, config)
+	f.placeModulesOnBomb(rng, bomb, modulesToAdd, config)
 
 	return bomb
 }
 
-func (f *BombFactoryImpl) placeModulesOnBomb(bomb *entities.Bomb, moduleTypes []valueobject.ModuleType, config valueobject.BombConfig) {
+func (f *BombFactoryImpl) placeModulesOnBomb(rng ports.RandomGenerator, bomb *entities.Bomb, moduleTypes []valueobject.ModuleType, config valueobject.BombConfig) {
 	availablePositions := make([]valueobject.ModulePosition, 0)
 
 	for face := 0; face < config.NumFaces; face++ {
@@ -54,7 +62,7 @@ func (f *BombFactoryImpl) placeModulesOnBomb(bomb *entities.Bomb, moduleTypes []
 		}
 	}
 
-	rand.Shuffle(len(availablePositions), func(i, j int) {
+	rng.Shuffle(len(availablePositions), func(i, j int) {
 		availablePositions[i], availablePositions[j] = availablePositions[j], availablePositions[i]
 	})
 
@@ -77,16 +85,17 @@ func (f *BombFactoryImpl) createModule(bomb *entities.Bomb, moduleType valueobje
 	var module entities.Module
 	switch moduleType {
 	case valueobject.Clock:
-		module = entities.NewClockModule()
+		module = f.moduleFactory.CreateClockModule()
 	case valueobject.SimpleWires:
-		module = entities.NewSimpleWiresModule()
+		module = f.moduleFactory.CreateSimpleWiresModule()
 	case valueobject.Password:
-		module = entities.NewPasswordModule(nil)
+		module = f.moduleFactory.CreatePasswordModule()
 	case valueobject.BigButton:
-		module = entities.NewBigButtonModule()
+		module = f.moduleFactory.CreateBigButtonModule()
 	case valueobject.SimonSays:
-		module = entities.NewSimonSaysModule(nil)
+		module = f.moduleFactory.CreateSimonSaysModule()
 	default:
+		log.Printf("unknown module type %v, skipping...", moduleType)
 		return nil
 	}
 
@@ -96,14 +105,14 @@ func (f *BombFactoryImpl) createModule(bomb *entities.Bomb, moduleType valueobje
 	return module
 }
 
-func selectWeightedModuleType(moduleTypes []valueobject.ModuleType, weights []float32) valueobject.ModuleType {
+func selectWeightedModuleType(rng ports.RandomGenerator, moduleTypes []valueobject.ModuleType, weights []float32) valueobject.ModuleType {
 	// Simple weighted selection algorithm
 	totalWeight := float32(0)
 	for _, w := range weights {
 		totalWeight += w
 	}
 
-	r := rand.Float32() * totalWeight
+	r := rng.Float32(0, totalWeight)
 	for i, w := range weights {
 		r -= w
 		if r <= 0 {

@@ -2,11 +2,11 @@ package entities
 
 import (
 	"fmt"
-	"math/rand"
 	"slices"
 	"strings"
 
 	"github.com/ZaneH/keep-talking/internal/application/helpers"
+	"github.com/ZaneH/keep-talking/internal/domain/ports"
 	"github.com/ZaneH/keep-talking/internal/domain/valueobject"
 	"github.com/google/uuid"
 )
@@ -29,12 +29,13 @@ type SimonSaysState struct {
 type SimonSaysModule struct {
 	BaseModule
 	state SimonSaysState
+	rng   ports.RandomGenerator
 }
 
-func NewSimonSaysModule(nStages *int) *SimonSaysModule {
+func NewSimonSaysModule(rng ports.RandomGenerator, nStages *int) *SimonSaysModule {
 	n := 0
 	if nStages == nil {
-		n = minStages + rand.Intn(maxStages-minStages+1)
+		n = minStages + rng.GetIntInRange(minStages, maxStages)
 	}
 
 	return &SimonSaysModule{
@@ -42,10 +43,11 @@ func NewSimonSaysModule(nStages *int) *SimonSaysModule {
 			ModuleID: uuid.New(),
 		},
 		state: SimonSaysState{
-			DisplaySequence: []valueobject.Color{generateRandomSimonSaysColor()},
+			DisplaySequence: []valueobject.Color{generateRandomSimonSaysColor(rng)},
 			InputCheckIdx:   0,
 			nStages:         n,
 		},
+		rng: rng,
 	}
 }
 
@@ -102,7 +104,7 @@ func (m *SimonSaysModule) PressColor(c valueobject.Color) (finishedSeq bool, nex
 				return true, nextSeq, false, nil
 			}
 
-			newColor := generateRandomSimonSaysColor()
+			newColor := generateRandomSimonSaysColor(m.rng)
 			m.state.InputCheckIdx = 0
 			m.state.DisplaySequence = append(m.state.DisplaySequence, newColor)
 			return true, m.state.DisplaySequence, false, nil
@@ -115,7 +117,7 @@ func (m *SimonSaysModule) PressColor(c valueobject.Color) (finishedSeq bool, nex
 	} else {
 		// Incorrect input, reset state
 		m.state.InputCheckIdx = 0
-		m.state.DisplaySequence = []valueobject.Color{generateRandomSimonSaysColor()}
+		m.state.DisplaySequence = []valueobject.Color{generateRandomSimonSaysColor(m.rng)}
 		return false, m.state.DisplaySequence, true, nil
 	}
 }
@@ -203,15 +205,6 @@ var simonSaysColors = [...]valueobject.Color{
 	valueobject.Yellow,
 }
 
-// func generateDisplaySequence() []valueobject.Color {
-// 	sequence := make([]valueobject.Color, maxStages)
-// 	for i := 0; i < maxStages; i++ {
-// 		randomColor := rand.Intn(len(simonSaysColors))
-// 		sequence[i] = simonSaysColors[randomColor]
-// 	}
-// 	return sequence
-// }
-
-func generateRandomSimonSaysColor() valueobject.Color {
-	return simonSaysColors[rand.Intn(len(simonSaysColors))]
+func generateRandomSimonSaysColor(rng ports.RandomGenerator) valueobject.Color {
+	return simonSaysColors[rng.GetIntInRange(0, len(simonSaysColors)-1)]
 }

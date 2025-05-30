@@ -7,6 +7,7 @@ import (
 	"github.com/ZaneH/keep-talking/internal/actors"
 	"github.com/ZaneH/keep-talking/internal/application/command"
 	"github.com/ZaneH/keep-talking/internal/domain/entities"
+	"github.com/ZaneH/keep-talking/internal/domain/services"
 	"github.com/ZaneH/keep-talking/internal/domain/valueobject"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
@@ -14,9 +15,10 @@ import (
 
 func TestSimpleWiresModuleActor_FourWiresMoreThanOneRedOddSerial(t *testing.T) {
 	// Arrange
-	bomb := entities.NewBomb(valueobject.NewDefaultBombConfig())
+	rng := services.NewSeededRNGFromString("test")
+	bomb := entities.NewBomb(rng, valueobject.NewDefaultBombConfig())
 	bomb.SerialNumber = "1111"
-	simpleWiresModule := entities.NewSimpleWiresModule()
+	simpleWiresModule := entities.NewSimpleWiresModule(rng)
 	simpleWiresModule.SetBomb(bomb)
 	simpleWiresModuleActor := actors.NewSimpleWiresModuleActor(simpleWiresModule)
 	simpleWiresModuleActor.Start() // Start the actor to process messages
@@ -139,9 +141,10 @@ func TestSimpleWiresModuleActor_FourWiresMoreThanOneRedOddSerial(t *testing.T) {
 
 func TestSimpleWiresModuleActor_ThreeWiresNoRed(t *testing.T) {
 	// Arrange
-	bomb := entities.NewBomb(valueobject.NewDefaultBombConfig())
+	rng := services.NewSeededRNGFromString("test")
+	bomb := entities.NewBomb(rng, valueobject.NewDefaultBombConfig())
 	bomb.SerialNumber = "1111"
-	wiresModule := entities.NewSimpleWiresModule()
+	wiresModule := entities.NewSimpleWiresModule(rng)
 	wiresModule.SetBomb(bomb)
 	wiresModuleActor := actors.NewSimpleWiresModuleActor(wiresModule)
 	wiresModuleActor.Start() // Start the actor to process messages

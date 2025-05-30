@@ -8,6 +8,7 @@ import (
 	"github.com/ZaneH/keep-talking/internal/actors"
 	"github.com/ZaneH/keep-talking/internal/application/command"
 	"github.com/ZaneH/keep-talking/internal/domain/entities"
+	"github.com/ZaneH/keep-talking/internal/domain/services"
 	"github.com/ZaneH/keep-talking/internal/domain/valueobject"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
@@ -15,12 +16,13 @@ import (
 
 func TestBigButtonModuleActor_TwoBatteriesAndDetonate(t *testing.T) {
 	// Arrange
-	bomb := entities.NewBomb(valueobject.NewDefaultBombConfig())
+	rng := services.NewSeededRNGFromString("test")
+	bomb := entities.NewBomb(rng, valueobject.NewDefaultBombConfig())
 	bomb.Batteries = 2
-	buttonModule := entities.NewBigButtonModule()
+	buttonModule := entities.NewBigButtonModule(rng)
 	buttonModule.SetBomb(bomb)
 
-	testState := entities.NewButtonState()
+	testState := entities.NewButtonState(rng)
 	testState.ButtonColor = valueobject.Red
 	testState.Label = "Detonate"
 	buttonModule.SetState(testState)
@@ -76,14 +78,15 @@ func TestBigButtonModuleActor_TwoBatteriesAndDetonate(t *testing.T) {
 
 func TestBigButtonModuleActor_FRKLitAndThreeBatteries(t *testing.T) {
 	// Arrange
-	bomb := entities.NewBomb(valueobject.NewDefaultBombConfig())
+	rng := services.NewSeededRNGFromString("test")
+	bomb := entities.NewBomb(rng, valueobject.NewDefaultBombConfig())
 	bomb.Batteries = 3
 	bomb.Indicators["FRK"] = valueobject.Indicator{Lit: true}
 
-	buttonModule := entities.NewBigButtonModule()
+	buttonModule := entities.NewBigButtonModule(rng)
 	buttonModule.SetBomb(bomb)
 
-	testState := entities.NewButtonState()
+	testState := entities.NewButtonState(rng)
 	testState.ButtonColor = valueobject.White
 	testState.Label = "Abort"
 	buttonModule.SetState(testState)
@@ -139,14 +142,15 @@ func TestBigButtonModuleActor_FRKLitAndThreeBatteries(t *testing.T) {
 
 func TestBigButtonModuleActor_YellowButton(t *testing.T) {
 	// Arrange
-	bomb := entities.NewBomb(valueobject.NewDefaultBombConfig())
+	rng := services.NewSeededRNGFromString("test")
+	bomb := entities.NewBomb(rng, valueobject.NewDefaultBombConfig())
 	bomb.Batteries = 1
 	bomb.Indicators["FRK"] = valueobject.Indicator{Lit: false}
 
-	buttonModule := entities.NewBigButtonModule()
+	buttonModule := entities.NewBigButtonModule(rng)
 	buttonModule.SetBomb(bomb)
 
-	testState := entities.NewButtonState()
+	testState := entities.NewButtonState(rng)
 	testState.ButtonColor = valueobject.Yellow
 	testState.Label = "Hold"
 	buttonModule.SetState(testState)

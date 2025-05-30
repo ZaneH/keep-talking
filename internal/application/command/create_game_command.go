@@ -5,6 +5,7 @@ import (
 )
 
 type CreateGameCommand struct {
+	Seed string
 }
 
 type CreateGameCommandResult struct {

@@ -3,10 +3,10 @@ package entities
 import (
 	"errors"
 	"fmt"
-	"math/rand"
 	"slices"
 
 	"github.com/ZaneH/keep-talking/internal/application/helpers"
+	"github.com/ZaneH/keep-talking/internal/domain/ports"
 	"github.com/ZaneH/keep-talking/internal/domain/valueobject"
 	"github.com/google/uuid"
 )
@@ -19,24 +19,26 @@ type SimpleWiresState struct {
 	Wires []valueobject.SimpleWire
 }
 
-func NewSimpleWiresState() SimpleWiresState {
+func NewSimpleWiresState(rng ports.RandomGenerator) SimpleWiresState {
 	return SimpleWiresState{
 		BaseModuleState: BaseModuleState{},
-		Wires:           generateRandomWires(),
+		Wires:           generateRandomWires(rng),
 	}
 }
 
 type SimpleWiresModule struct {
 	BaseModule
 	State SimpleWiresState
+	rng   ports.RandomGenerator
 }
 
-func NewSimpleWiresModule() *SimpleWiresModule {
+func NewSimpleWiresModule(rng ports.RandomGenerator) *SimpleWiresModule {
 	return &SimpleWiresModule{
 		BaseModule: BaseModule{
 			ModuleID: uuid.New(),
 		},
-		State: NewSimpleWiresState(),
+		State: NewSimpleWiresState(rng),
+		rng:   rng,
 	}
 }
 
@@ -65,14 +67,14 @@ func (m *SimpleWiresModule) String() string {
 	return result
 }
 
-func generateRandomWires() []valueobject.SimpleWire {
-	nWires := rand.Intn(maxWires-minWires+1) + minWires
+func generateRandomWires(rng ports.RandomGenerator) []valueobject.SimpleWire {
+	nWires := rng.GetIntInRange(minWires, maxWires)
 	wires := make([]valueobject.SimpleWire, nWires)
 
 	maxPossibleGaps := maxWires - nWires
 	extraPositions := 0
 	if maxPossibleGaps > 0 {
-		extraPositions = rand.Intn(maxPossibleGaps + 1)
+		extraPositions = rng.GetIntInRange(0, maxPossibleGaps)
 	}
 
 	totalPositions := nWires + extraPositions
@@ -81,14 +83,14 @@ func generateRandomWires() []valueobject.SimpleWire {
 		possibleIndices[i] = i
 	}
 
-	rand.Shuffle(len(possibleIndices), func(i, j int) {
+	rng.Shuffle(len(possibleIndices), func(i, j int) {
 		possibleIndices[i], possibleIndices[j] = possibleIndices[j], possibleIndices[i]
 	})
 
 	selectedIndices := possibleIndices[:nWires]
 
 	for i := 0; i < nWires; i++ {
-		colorIndex := rand.Intn(len(valueobject.SimpleWireColors))
+		colorIndex := rng.GetIntInRange(0, len(valueobject.SimpleWireColors)-1)
 		color := valueobject.SimpleWireColors[colorIndex]
 
 		wires[i] = valueobject.SimpleWire{

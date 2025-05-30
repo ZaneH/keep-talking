@@ -8,6 +8,7 @@ import (
 
 	"github.com/ZaneH/keep-talking/internal/actors"
 	"github.com/ZaneH/keep-talking/internal/application/command"
+	"github.com/ZaneH/keep-talking/internal/domain/services"
 	"github.com/ZaneH/keep-talking/internal/domain/valueobject"
 	"github.com/google/uuid"
 )
@@ -21,14 +22,20 @@ func NewGameService(actorSystem *actors.ActorSystem, bombService *BombService) *
 	return &GameService{actorSystem: actorSystem, bombService: bombService}
 }
 
-func (s *GameService) CreateGameSession(ctx context.Context, cmd *command.CreateGameCommand) (*actors.GameSessionActor, error) {
-	session, err := s.actorSystem.CreateGameSession()
+func (s *GameService) CreateGameSession(cmd *command.CreateGameCommand) (*actors.GameSessionActor, error) {
+	config := valueobject.NewEasyGameSessionConfig(cmd.Seed)
+	rng := services.NewSeededRNGFromString(config.Seed())
+	session, err := s.actorSystem.CreateGameSession(rng, config)
+
 	if err != nil {
 		log.Printf("error creating game session: %v", err)
 		return nil, errors.New("failed to create game session")
 	}
 
-	_, err = s.bombService.CreateBombInSession(ctx, session.GetSessionID(), valueobject.NewDefaultBombConfig())
+	for _, c := range config.BombConfigs {
+		_, err = s.bombService.CreateBombInSession(rng, session.GetSessionID(), c)
+	}
+
 	if err != nil {
 		return nil, errors.New("failed to create bomb in session")
 	}

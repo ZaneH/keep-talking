@@ -4,9 +4,9 @@ import (
 	"errors"
 	"fmt"
 	"log"
-	"math/rand"
 	"strings"
 
+	"github.com/ZaneH/keep-talking/internal/domain/ports"
 	"github.com/ZaneH/keep-talking/internal/domain/valueobject"
 	"github.com/google/uuid"
 )
@@ -21,9 +21,9 @@ type BigButtonState struct {
 	ReleaseDigit *int
 }
 
-func NewButtonState() BigButtonState {
-	colorIdx := rand.Intn(len(bigButtonColors))
-	labelIdx := rand.Intn(len(availableButtonWords))
+func NewButtonState(rng ports.RandomGenerator) BigButtonState {
+	colorIdx := rng.GetIntInRange(0, len(bigButtonColors)-1)
+	labelIdx := rng.GetIntInRange(0, len(availableButtonWords)-1)
 
 	return BigButtonState{
 		ButtonColor:     bigButtonColors[colorIdx],
@@ -36,14 +36,16 @@ func NewButtonState() BigButtonState {
 type BigButtonModule struct {
 	BaseModule
 	State BigButtonState
+	rng   ports.RandomGenerator
 }
 
-func NewBigButtonModule() *BigButtonModule {
+func NewBigButtonModule(rng ports.RandomGenerator) *BigButtonModule {
 	return &BigButtonModule{
 		BaseModule: BaseModule{
 			ModuleID: uuid.New(),
 		},
-		State: NewButtonState(),
+		State: NewButtonState(rng),
+		rng:   rng,
 	}
 }
 
@@ -88,8 +90,8 @@ func (m *BigButtonModule) PressButton(pressType valueobject.PressType, releaseTi
 		}
 
 		if pressType == valueobject.PressTypeHold {
-			m.State.ReleaseDigit = generateReleaseDigit()
-			stripColor, err = releaseDigitToStripColor(m.State.ReleaseDigit)
+			m.State.ReleaseDigit = generateReleaseDigit(m.rng)
+			stripColor, err = releaseDigitToStripColor(m.rng, m.State.ReleaseDigit)
 			if err != nil {
 				log.Println("error generating strip color:", err)
 				return nil, strike, err
@@ -127,21 +129,21 @@ func (m *BigButtonModule) handleShortPress() (handled bool) {
 // to be pressed and held, it will return nil for the strip color and no release digit will be set.
 func (m *BigButtonModule) handleLongPress() (handled bool, color *valueobject.Color) {
 	if m.State.ButtonColor == valueobject.Blue && m.State.Label == string(Abort) {
-		m.State.ReleaseDigit = generateReleaseDigit()
+		m.State.ReleaseDigit = generateReleaseDigit(m.rng)
 		handled = true
 	}
 
 	if m.State.ButtonColor == valueobject.White && m.bomb.Indicators["CAR"].Lit {
-		m.State.ReleaseDigit = generateReleaseDigit()
+		m.State.ReleaseDigit = generateReleaseDigit(m.rng)
 		handled = true
 	}
 
 	if m.State.ButtonColor == valueobject.Yellow {
-		m.State.ReleaseDigit = generateReleaseDigit()
+		m.State.ReleaseDigit = generateReleaseDigit(m.rng)
 		handled = true
 	}
 
-	color, err := releaseDigitToStripColor(m.State.ReleaseDigit)
+	color, err := releaseDigitToStripColor(m.rng, m.State.ReleaseDigit)
 	if err != nil {
 		// Unhandled, let the caller handle it
 		return false, nil
@@ -181,19 +183,19 @@ func (m *BigButtonModule) handleLongPressRelease(releaseTime int64) (handled boo
 
 var releaseDigits = [...]int{1, 4, 5}
 
-func generateReleaseDigit() *int {
-	digit := releaseDigits[rand.Intn(len(releaseDigits))]
+func generateReleaseDigit(rng ports.RandomGenerator) *int {
+	digit := releaseDigits[rng.GetIntInRange(0, len(releaseDigits)-1)]
 	return &digit
 }
 
-func releaseDigitToStripColor(digit *int) (color *valueobject.Color, err error) {
+func releaseDigitToStripColor(rng ports.RandomGenerator, digit *int) (color *valueobject.Color, err error) {
 	if digit == nil {
 		return nil, errors.New("release digit is nil")
 	}
 
 	switch *digit {
 	case 1:
-		color = &bigButtonStripColors[rand.Intn(len(bigButtonStripColors))]
+		color = &bigButtonStripColors[rng.GetIntInRange(0, len(bigButtonStripColors)-1)]
 	case 4:
 		value := valueobject.Blue
 		color = &value

@@ -28,9 +28,10 @@ func TestBombFactory_CreateBomb(t *testing.T) {
 		PortCount:         0,
 	}
 	m := entities.NewClockModule()
+	rng := services.NewSeededRNGFromString("test")
 
 	// Act
-	bomb := f.CreateBomb(c)
+	bomb := f.CreateBomb(rng, c)
 	bomb.AddModule(m, valueobject.ModulePosition{
 		Row:    0,
 		Column: 0,
