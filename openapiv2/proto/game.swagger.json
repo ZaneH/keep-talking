@@ -117,11 +117,12 @@
       "enum": [
         "UNKNOWN",
         "CLOCK",
-        "SIMPLE_WIRES",
+        "WIRES",
         "PASSWORD",
         "BIG_BUTTON",
-        "SIMON_SAYS",
-        "KEYPAD"
+        "SIMON",
+        "KEYPAD",
+        "WHOS_ON_FIRST"
       ],
       "default": "UNKNOWN"
     },
@@ -320,8 +321,8 @@
         "solved": {
           "type": "boolean"
         },
-        "simpleWiresState": {
-          "$ref": "#/definitions/modulesSimpleWiresState"
+        "wiresState": {
+          "$ref": "#/definitions/modulesWiresState"
         },
         "passwordState": {
           "$ref": "#/definitions/modulesPasswordState"
@@ -329,11 +330,14 @@
         "bigButtonState": {
           "$ref": "#/definitions/modulesBigButtonState"
         },
-        "simonSaysState": {
-          "$ref": "#/definitions/modulesSimonSaysState"
+        "simonState": {
+          "$ref": "#/definitions/modulesSimonState"
         },
         "keypadState": {
           "$ref": "#/definitions/modulesKeypadState"
+        },
+        "whosOnFirstState": {
+          "$ref": "#/definitions/modulesWhosOnFirstState"
         }
       }
     },
@@ -385,7 +389,7 @@
     "modulesPasswordSubmit": {
       "type": "object"
     },
-    "modulesSimonSaysInput": {
+    "modulesSimonInput": {
       "type": "object",
       "properties": {
         "color": {
@@ -393,7 +397,7 @@
         }
       }
     },
-    "modulesSimonSaysInputResult": {
+    "modulesSimonInputResult": {
       "type": "object",
       "properties": {
         "hasFinishedSeq": {
@@ -407,34 +411,13 @@
         }
       }
     },
-    "modulesSimonSaysState": {
+    "modulesSimonState": {
       "type": "object",
       "properties": {
         "currentSequence": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/commonColor"
-          }
-        }
-      }
-    },
-    "modulesSimpleWiresInput": {
-      "type": "object",
-      "properties": {
-        "wirePosition": {
-          "type": "integer",
-          "format": "int32"
-        }
-      }
-    },
-    "modulesSimpleWiresState": {
-      "type": "object",
-      "properties": {
-        "wires": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/modulesWire"
           }
         }
       }
@@ -473,6 +456,40 @@
       "default": "COPYRIGHT",
       "title": "- SIX: TEEPEE = 9;\n - NWITHHAT: CIRCLE = 16;\n - CURSIVE: TRIPOD = 24;\n - UPSIDEDOWNY: WEIRDNOSE = 28;"
     },
+    "modulesWhosOnFirstInput": {
+      "type": "object",
+      "properties": {
+        "word": {
+          "type": "string"
+        }
+      }
+    },
+    "modulesWhosOnFirstInputResult": {
+      "type": "object",
+      "properties": {
+        "whosOnFirstState": {
+          "$ref": "#/definitions/modulesWhosOnFirstState"
+        }
+      }
+    },
+    "modulesWhosOnFirstState": {
+      "type": "object",
+      "properties": {
+        "screenWord": {
+          "type": "string"
+        },
+        "buttonWords": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "stage": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
     "modulesWire": {
       "type": "object",
       "properties": {
@@ -485,6 +502,27 @@
         "position": {
           "type": "integer",
           "format": "int32"
+        }
+      }
+    },
+    "modulesWiresInput": {
+      "type": "object",
+      "properties": {
+        "wirePosition": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "modulesWiresState": {
+      "type": "object",
+      "properties": {
+        "wires": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/modulesWire"
+          }
         }
       }
     },
@@ -511,8 +549,8 @@
         "moduleId": {
           "type": "string"
         },
-        "simpleWiresInput": {
-          "$ref": "#/definitions/modulesSimpleWiresInput"
+        "wiresInput": {
+          "$ref": "#/definitions/modulesWiresInput"
         },
         "passwordInput": {
           "$ref": "#/definitions/modulesPasswordInput"
@@ -520,11 +558,14 @@
         "bigButtonInput": {
           "$ref": "#/definitions/modulesBigButtonInput"
         },
-        "simonSaysInput": {
-          "$ref": "#/definitions/modulesSimonSaysInput"
+        "simonInput": {
+          "$ref": "#/definitions/modulesSimonInput"
         },
         "keypadInput": {
           "$ref": "#/definitions/modulesKeypadInput"
+        },
+        "whosOnFirstInput": {
+          "$ref": "#/definitions/modulesWhosOnFirstInput"
         }
       }
     },
@@ -543,14 +584,17 @@
         "bigButtonInputResult": {
           "$ref": "#/definitions/modulesBigButtonInputResult"
         },
-        "simonSaysInputResult": {
-          "$ref": "#/definitions/modulesSimonSaysInputResult"
+        "simonInputResult": {
+          "$ref": "#/definitions/modulesSimonInputResult"
         },
         "passwordInputResult": {
           "$ref": "#/definitions/modulesPasswordInputResult"
         },
         "keypadInputResult": {
           "$ref": "#/definitions/modulesKeypadInputResult"
+        },
+        "whosOnFirstInputResult": {
+          "$ref": "#/definitions/modulesWhosOnFirstInputResult"
         }
       }
     },

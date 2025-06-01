@@ -12,18 +12,20 @@ import (
 
 func mapTypeToProto(moduleType valueobject.ModuleType) pb.Module_ModuleType {
 	switch moduleType {
-	case valueobject.SimpleWires:
-		return pb.Module_SIMPLE_WIRES
+	case valueobject.Wires:
+		return pb.Module_WIRES
 	case valueobject.Password:
 		return pb.Module_PASSWORD
 	case valueobject.BigButton:
 		return pb.Module_BIG_BUTTON
 	case valueobject.Clock:
 		return pb.Module_CLOCK
-	case valueobject.SimonSays:
-		return pb.Module_SIMON_SAYS
+	case valueobject.Simon:
+		return pb.Module_SIMON
 	case valueobject.Keypad:
 		return pb.Module_KEYPAD
+	case valueobject.WhosOnFirst:
+		return pb.Module_WHOS_ON_FIRST
 	default:
 		log.Fatalf("Unknown module type: %v. Couldn't map type to proto.", moduleType)
 		return pb.Module_UNKNOWN
@@ -105,15 +107,15 @@ func mapModulesToProto(modules map[uuid.UUID]actors.ModuleActor) map[string]*pb.
 		}
 
 		switch actor.GetModule().GetType() {
-		case valueobject.SimpleWires:
-			simpleWiresState, ok := actor.GetModule().GetModuleState().(*entities.SimpleWiresState)
+		case valueobject.Wires:
+			wiresState, ok := actor.GetModule().GetModuleState().(*entities.WiresState)
 			if !ok {
-				log.Printf("Expected *SimpleWiresState but got different type: %T", actor.GetModule().GetModuleState())
+				log.Printf("Expected *WiresState but got different type: %T", actor.GetModule().GetModuleState())
 				continue
 			}
 
-			wires := make([]*pb.Wire, 0, len(simpleWiresState.Wires))
-			for _, wire := range simpleWiresState.Wires {
+			wires := make([]*pb.Wire, 0, len(wiresState.Wires))
+			for _, wire := range wiresState.Wires {
 				wires = append(wires, &pb.Wire{
 					WireColor: mapColorToProto(wire.WireColor),
 					IsCut:     wire.IsCut,
@@ -121,8 +123,8 @@ func mapModulesToProto(modules map[uuid.UUID]actors.ModuleActor) map[string]*pb.
 				})
 			}
 
-			protoModule.State = &pb.Module_SimpleWiresState{
-				SimpleWiresState: &pb.SimpleWiresState{
+			protoModule.State = &pb.Module_WiresState{
+				WiresState: &pb.WiresState{
 					Wires: wires,
 				},
 			}
@@ -140,21 +142,21 @@ func mapModulesToProto(modules map[uuid.UUID]actors.ModuleActor) map[string]*pb.
 				},
 			}
 		case valueobject.Clock:
-		case valueobject.SimonSays:
-			simonSaysState, ok := actor.GetModule().GetModuleState().(*entities.SimonSaysState)
+		case valueobject.Simon:
+			simonState, ok := actor.GetModule().GetModuleState().(*entities.SimonState)
 			if !ok {
 				log.Printf("Expected *SimonSaysState but got different type: %T", actor.GetModule().GetModuleState())
 				continue
 			}
 
-			seq := simonSaysState.DisplaySequence
+			seq := simonState.DisplaySequence
 			seqProto := make([]pb.Color, len(seq))
 			for i, color := range seq {
 				seqProto[i] = mapColorToProto(color)
 			}
 
-			protoModule.State = &pb.Module_SimonSaysState{
-				SimonSaysState: &pb.SimonSaysState{
+			protoModule.State = &pb.Module_SimonState{
+				SimonState: &pb.SimonState{
 					CurrentSequence: seqProto,
 				},
 			}
@@ -193,6 +195,20 @@ func mapModulesToProto(modules map[uuid.UUID]actors.ModuleActor) map[string]*pb.
 				KeypadState: &pb.KeypadState{
 					DisplayedSymbols: displayed_symbols,
 					ActivatedSymbols: activated_symbols,
+				},
+			}
+		case valueobject.WhosOnFirst:
+			whosOnFirstState, ok := actor.GetModule().GetModuleState().(*entities.WhosOnFirstState)
+			if !ok {
+				log.Printf("Expected *WhosOnFirstState but got different type: %T", actor.GetModule().GetModuleState())
+				continue
+			}
+
+			protoModule.State = &pb.Module_WhosOnFirstState{
+				WhosOnFirstState: &pb.WhosOnFirstState{
+					ScreenWord:  whosOnFirstState.ScreenWord,
+					ButtonWords: whosOnFirstState.ButtonWords,
+					Stage:       int32(whosOnFirstState.Stage),
 				},
 			}
 		default:

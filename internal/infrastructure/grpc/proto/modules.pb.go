@@ -24,13 +24,14 @@ const (
 type Module_ModuleType int32
 
 const (
-	Module_UNKNOWN      Module_ModuleType = 0
-	Module_CLOCK        Module_ModuleType = 1
-	Module_SIMPLE_WIRES Module_ModuleType = 2
-	Module_PASSWORD     Module_ModuleType = 3
-	Module_BIG_BUTTON   Module_ModuleType = 4
-	Module_SIMON_SAYS   Module_ModuleType = 5
-	Module_KEYPAD       Module_ModuleType = 6
+	Module_UNKNOWN       Module_ModuleType = 0
+	Module_CLOCK         Module_ModuleType = 1
+	Module_WIRES         Module_ModuleType = 2
+	Module_PASSWORD      Module_ModuleType = 3
+	Module_BIG_BUTTON    Module_ModuleType = 4
+	Module_SIMON         Module_ModuleType = 5
+	Module_KEYPAD        Module_ModuleType = 6
+	Module_WHOS_ON_FIRST Module_ModuleType = 7
 )
 
 // Enum value maps for Module_ModuleType.
@@ -38,20 +39,22 @@ var (
 	Module_ModuleType_name = map[int32]string{
 		0: "UNKNOWN",
 		1: "CLOCK",
-		2: "SIMPLE_WIRES",
+		2: "WIRES",
 		3: "PASSWORD",
 		4: "BIG_BUTTON",
-		5: "SIMON_SAYS",
+		5: "SIMON",
 		6: "KEYPAD",
+		7: "WHOS_ON_FIRST",
 	}
 	Module_ModuleType_value = map[string]int32{
-		"UNKNOWN":      0,
-		"CLOCK":        1,
-		"SIMPLE_WIRES": 2,
-		"PASSWORD":     3,
-		"BIG_BUTTON":   4,
-		"SIMON_SAYS":   5,
-		"KEYPAD":       6,
+		"UNKNOWN":       0,
+		"CLOCK":         1,
+		"WIRES":         2,
+		"PASSWORD":      3,
+		"BIG_BUTTON":    4,
+		"SIMON":         5,
+		"KEYPAD":        6,
+		"WHOS_ON_FIRST": 7,
 	}
 )
 
@@ -150,11 +153,12 @@ type Module struct {
 	Solved   bool                   `protobuf:"varint,4,opt,name=solved,proto3" json:"solved,omitempty"`
 	// Types that are valid to be assigned to State:
 	//
-	//	*Module_SimpleWiresState
+	//	*Module_WiresState
 	//	*Module_PasswordState
 	//	*Module_BigButtonState
-	//	*Module_SimonSaysState
+	//	*Module_SimonState
 	//	*Module_KeypadState
+	//	*Module_WhosOnFirstState
 	State         isModule_State `protobuf_oneof:"state"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -225,10 +229,10 @@ func (x *Module) GetState() isModule_State {
 	return nil
 }
 
-func (x *Module) GetSimpleWiresState() *SimpleWiresState {
+func (x *Module) GetWiresState() *WiresState {
 	if x != nil {
-		if x, ok := x.State.(*Module_SimpleWiresState); ok {
-			return x.SimpleWiresState
+		if x, ok := x.State.(*Module_WiresState); ok {
+			return x.WiresState
 		}
 	}
 	return nil
@@ -252,10 +256,10 @@ func (x *Module) GetBigButtonState() *BigButtonState {
 	return nil
 }
 
-func (x *Module) GetSimonSaysState() *SimonSaysState {
+func (x *Module) GetSimonState() *SimonState {
 	if x != nil {
-		if x, ok := x.State.(*Module_SimonSaysState); ok {
-			return x.SimonSaysState
+		if x, ok := x.State.(*Module_SimonState); ok {
+			return x.SimonState
 		}
 	}
 	return nil
@@ -270,12 +274,21 @@ func (x *Module) GetKeypadState() *KeypadState {
 	return nil
 }
 
+func (x *Module) GetWhosOnFirstState() *WhosOnFirstState {
+	if x != nil {
+		if x, ok := x.State.(*Module_WhosOnFirstState); ok {
+			return x.WhosOnFirstState
+		}
+	}
+	return nil
+}
+
 type isModule_State interface {
 	isModule_State()
 }
 
-type Module_SimpleWiresState struct {
-	SimpleWiresState *SimpleWiresState `protobuf:"bytes,5,opt,name=simple_wires_state,json=simpleWiresState,proto3,oneof"`
+type Module_WiresState struct {
+	WiresState *WiresState `protobuf:"bytes,5,opt,name=wires_state,json=wiresState,proto3,oneof"`
 }
 
 type Module_PasswordState struct {
@@ -286,55 +299,65 @@ type Module_BigButtonState struct {
 	BigButtonState *BigButtonState `protobuf:"bytes,7,opt,name=big_button_state,json=bigButtonState,proto3,oneof"`
 }
 
-type Module_SimonSaysState struct {
-	SimonSaysState *SimonSaysState `protobuf:"bytes,8,opt,name=simon_says_state,json=simonSaysState,proto3,oneof"`
+type Module_SimonState struct {
+	SimonState *SimonState `protobuf:"bytes,8,opt,name=simon_state,json=simonState,proto3,oneof"`
 }
 
 type Module_KeypadState struct {
 	KeypadState *KeypadState `protobuf:"bytes,9,opt,name=keypad_state,json=keypadState,proto3,oneof"`
 }
 
-func (*Module_SimpleWiresState) isModule_State() {}
+type Module_WhosOnFirstState struct {
+	WhosOnFirstState *WhosOnFirstState `protobuf:"bytes,10,opt,name=whos_on_first_state,json=whosOnFirstState,proto3,oneof"`
+}
+
+func (*Module_WiresState) isModule_State() {}
 
 func (*Module_PasswordState) isModule_State() {}
 
 func (*Module_BigButtonState) isModule_State() {}
 
-func (*Module_SimonSaysState) isModule_State() {}
+func (*Module_SimonState) isModule_State() {}
 
 func (*Module_KeypadState) isModule_State() {}
+
+func (*Module_WhosOnFirstState) isModule_State() {}
 
 var File_proto_modules_proto protoreflect.FileDescriptor
 
 const file_proto_modules_proto_rawDesc = "" +
 	"\n" +
-	"\x13proto/modules.proto\x12\amodules\x1a\x1fproto/simple_wires_module.proto\x1a\x1dproto/big_button_module.proto\x1a\x1dproto/simon_says_module.proto\x1a\x1bproto/password_module.proto\x1a\x19proto/keypad_module.proto\"H\n" +
+	"\x13proto/modules.proto\x12\amodules\x1a\x18proto/wires_module.proto\x1a\x1dproto/big_button_module.proto\x1a\x18proto/simon_module.proto\x1a\x1bproto/password_module.proto\x1a\x19proto/keypad_module.proto\x1a proto/whos_on_first_module.proto\"H\n" +
 	"\x0eModulePosition\x12\x12\n" +
 	"\x04face\x18\x01 \x01(\x05R\x04face\x12\x10\n" +
 	"\x03row\x18\x02 \x01(\x05R\x03row\x12\x10\n" +
-	"\x03col\x18\x03 \x01(\x05R\x03col\"\xe1\x04\n" +
+	"\x03col\x18\x03 \x01(\x05R\x03col\"\x94\x05\n" +
 	"\x06Module\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12.\n" +
 	"\x04type\x18\x02 \x01(\x0e2\x1a.modules.Module.ModuleTypeR\x04type\x123\n" +
 	"\bposition\x18\x03 \x01(\v2\x17.modules.ModulePositionR\bposition\x12\x16\n" +
-	"\x06solved\x18\x04 \x01(\bR\x06solved\x12I\n" +
-	"\x12simple_wires_state\x18\x05 \x01(\v2\x19.modules.SimpleWiresStateH\x00R\x10simpleWiresState\x12?\n" +
+	"\x06solved\x18\x04 \x01(\bR\x06solved\x126\n" +
+	"\vwires_state\x18\x05 \x01(\v2\x13.modules.WiresStateH\x00R\n" +
+	"wiresState\x12?\n" +
 	"\x0epassword_state\x18\x06 \x01(\v2\x16.modules.PasswordStateH\x00R\rpasswordState\x12C\n" +
-	"\x10big_button_state\x18\a \x01(\v2\x17.modules.BigButtonStateH\x00R\x0ebigButtonState\x12C\n" +
-	"\x10simon_says_state\x18\b \x01(\v2\x17.modules.SimonSaysStateH\x00R\x0esimonSaysState\x129\n" +
-	"\fkeypad_state\x18\t \x01(\v2\x14.modules.KeypadStateH\x00R\vkeypadState\"p\n" +
+	"\x10big_button_state\x18\a \x01(\v2\x17.modules.BigButtonStateH\x00R\x0ebigButtonState\x126\n" +
+	"\vsimon_state\x18\b \x01(\v2\x13.modules.SimonStateH\x00R\n" +
+	"simonState\x129\n" +
+	"\fkeypad_state\x18\t \x01(\v2\x14.modules.KeypadStateH\x00R\vkeypadState\x12J\n" +
+	"\x13whos_on_first_state\x18\n" +
+	" \x01(\v2\x19.modules.WhosOnFirstStateH\x00R\x10whosOnFirstState\"w\n" +
 	"\n" +
 	"ModuleType\x12\v\n" +
 	"\aUNKNOWN\x10\x00\x12\t\n" +
-	"\x05CLOCK\x10\x01\x12\x10\n" +
-	"\fSIMPLE_WIRES\x10\x02\x12\f\n" +
+	"\x05CLOCK\x10\x01\x12\t\n" +
+	"\x05WIRES\x10\x02\x12\f\n" +
 	"\bPASSWORD\x10\x03\x12\x0e\n" +
 	"\n" +
-	"BIG_BUTTON\x10\x04\x12\x0e\n" +
+	"BIG_BUTTON\x10\x04\x12\t\n" +
+	"\x05SIMON\x10\x05\x12\n" +
 	"\n" +
-	"SIMON_SAYS\x10\x05\x12\n" +
-	"\n" +
-	"\x06KEYPAD\x10\x06B\a\n" +
+	"\x06KEYPAD\x10\x06\x12\x11\n" +
+	"\rWHOS_ON_FIRST\x10\aB\a\n" +
 	"\x05stateB\tZ\a./protob\x06proto3"
 
 var (
@@ -355,25 +378,27 @@ var file_proto_modules_proto_goTypes = []any{
 	(Module_ModuleType)(0),   // 0: modules.Module.ModuleType
 	(*ModulePosition)(nil),   // 1: modules.ModulePosition
 	(*Module)(nil),           // 2: modules.Module
-	(*SimpleWiresState)(nil), // 3: modules.SimpleWiresState
+	(*WiresState)(nil),       // 3: modules.WiresState
 	(*PasswordState)(nil),    // 4: modules.PasswordState
 	(*BigButtonState)(nil),   // 5: modules.BigButtonState
-	(*SimonSaysState)(nil),   // 6: modules.SimonSaysState
+	(*SimonState)(nil),       // 6: modules.SimonState
 	(*KeypadState)(nil),      // 7: modules.KeypadState
+	(*WhosOnFirstState)(nil), // 8: modules.WhosOnFirstState
 }
 var file_proto_modules_proto_depIdxs = []int32{
 	0, // 0: modules.Module.type:type_name -> modules.Module.ModuleType
 	1, // 1: modules.Module.position:type_name -> modules.ModulePosition
-	3, // 2: modules.Module.simple_wires_state:type_name -> modules.SimpleWiresState
+	3, // 2: modules.Module.wires_state:type_name -> modules.WiresState
 	4, // 3: modules.Module.password_state:type_name -> modules.PasswordState
 	5, // 4: modules.Module.big_button_state:type_name -> modules.BigButtonState
-	6, // 5: modules.Module.simon_says_state:type_name -> modules.SimonSaysState
+	6, // 5: modules.Module.simon_state:type_name -> modules.SimonState
 	7, // 6: modules.Module.keypad_state:type_name -> modules.KeypadState
-	7, // [7:7] is the sub-list for method output_type
-	7, // [7:7] is the sub-list for method input_type
-	7, // [7:7] is the sub-list for extension type_name
-	7, // [7:7] is the sub-list for extension extendee
-	0, // [0:7] is the sub-list for field type_name
+	8, // 7: modules.Module.whos_on_first_state:type_name -> modules.WhosOnFirstState
+	8, // [8:8] is the sub-list for method output_type
+	8, // [8:8] is the sub-list for method input_type
+	8, // [8:8] is the sub-list for extension type_name
+	8, // [8:8] is the sub-list for extension extendee
+	0, // [0:8] is the sub-list for field type_name
 }
 
 func init() { file_proto_modules_proto_init() }
@@ -381,17 +406,19 @@ func file_proto_modules_proto_init() {
 	if File_proto_modules_proto != nil {
 		return
 	}
-	file_proto_simple_wires_module_proto_init()
+	file_proto_wires_module_proto_init()
 	file_proto_big_button_module_proto_init()
-	file_proto_simon_says_module_proto_init()
+	file_proto_simon_module_proto_init()
 	file_proto_password_module_proto_init()
 	file_proto_keypad_module_proto_init()
+	file_proto_whos_on_first_module_proto_init()
 	file_proto_modules_proto_msgTypes[1].OneofWrappers = []any{
-		(*Module_SimpleWiresState)(nil),
+		(*Module_WiresState)(nil),
 		(*Module_PasswordState)(nil),
 		(*Module_BigButtonState)(nil),
-		(*Module_SimonSaysState)(nil),
+		(*Module_SimonState)(nil),
 		(*Module_KeypadState)(nil),
+		(*Module_WhosOnFirstState)(nil),
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{

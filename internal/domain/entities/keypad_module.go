@@ -10,7 +10,7 @@ import (
 	"github.com/google/uuid"
 )
 
-const nStages = 4
+const nKeypadStages = 4
 
 type KeypadState struct {
 	BaseModuleState
@@ -38,7 +38,7 @@ func NewKeypadModule(rng ports.RandomGenerator) *KeypadModule {
 		},
 		State: KeypadState{
 			DisplayedSymbols: displayed,
-			ActivatedSymbols: make(map[valueobject.Symbol]bool, nStages),
+			ActivatedSymbols: make(map[valueobject.Symbol]bool, nKeypadStages),
 			solution:         solution,
 		},
 		rng: rng,
@@ -87,7 +87,7 @@ func (m *KeypadModule) PressSymbol(sym valueobject.Symbol) (map[valueobject.Symb
 	// They hit the current symbol in the sequence
 	if sym == m.State.solution[idx] {
 		// They hit the last symbol in the sequence
-		if len(m.State.ActivatedSymbols) == nStages {
+		if len(m.State.ActivatedSymbols) == nKeypadStages {
 			m.State.MarkAsSolved()
 			return m.State.ActivatedSymbols, false, nil
 		}
@@ -97,7 +97,7 @@ func (m *KeypadModule) PressSymbol(sym valueobject.Symbol) (map[valueobject.Symb
 		return m.State.ActivatedSymbols, false, nil
 	} else {
 		// Incorrect input, reset state
-		m.State.ActivatedSymbols = make(map[valueobject.Symbol]bool, nStages)
+		m.State.ActivatedSymbols = make(map[valueobject.Symbol]bool, nKeypadStages)
 	}
 
 	return m.State.ActivatedSymbols, true, nil
@@ -173,11 +173,11 @@ var columns = [][]valueobject.Symbol{
 }
 
 func generateDisplayedSymbols(rng ports.RandomGenerator) (displayed []valueobject.Symbol, column []valueobject.Symbol) {
-	displayed = make([]valueobject.Symbol, 0, nStages)
+	displayed = make([]valueobject.Symbol, 0, nKeypadStages)
 	randomColumn := rng.GetIntInRange(0, len(columns)-1)
 	keypadSymbols := columns[randomColumn]
 
-	for len(displayed) < nStages {
+	for len(displayed) < nKeypadStages {
 		symbol := keypadSymbols[rng.GetIntInRange(0, len(keypadSymbols)-1)]
 		if !slices.Contains(displayed, symbol) {
 			displayed = append(displayed, symbol)

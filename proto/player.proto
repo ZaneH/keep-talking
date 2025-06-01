@@ -1,11 +1,12 @@
 syntax = "proto3";
 package player;
 
-import "proto/simple_wires_module.proto";
+import "proto/wires_module.proto";
 import "proto/password_module.proto";
 import "proto/big_button_module.proto";
-import "proto/simon_says_module.proto";
+import "proto/simon_module.proto";
 import "proto/keypad_module.proto";
+import "proto/whos_on_first_module.proto";
 
 option go_package = "./proto";
 
@@ -21,11 +22,12 @@ message PlayerInput {
   string bomb_id = 2;
   string module_id = 3;
   oneof input {
-    modules.SimpleWiresInput simple_wires_input = 10;
+    modules.WiresInput wires_input = 10;
     modules.PasswordInput password_input = 11;
     modules.BigButtonInput big_button_input = 12;
-    modules.SimonSaysInput simon_says_input = 13;
+    modules.SimonInput simon_input = 13;
     modules.KeypadInput keypad_input = 14;
+    modules.WhosOnFirstInput whos_on_first_input = 15;
   }
 }
 
@@ -35,8 +37,9 @@ message PlayerInputResult {
   bool solved = 3;
   oneof result {
     modules.BigButtonInputResult big_button_input_result = 10;
-    modules.SimonSaysInputResult simon_says_input_result = 11;
+    modules.SimonInputResult simon_input_result = 11;
     modules.PasswordInputResult password_input_result = 12;
     modules.KeypadInputResult keypad_input_result = 13;
+    modules.WhosOnFirstInputResult whos_on_first_input_result = 14;
   }
 }

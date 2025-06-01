@@ -17,16 +17,16 @@ func (f *ModuleFactory) CreateClockModule() *entities.ClockModule {
 	return entities.NewClockModule()
 }
 
-func (f *ModuleFactory) CreateSimpleWiresModule() *entities.SimpleWiresModule {
-	return entities.NewSimpleWiresModule(f.rng)
+func (f *ModuleFactory) CreateWiresModule() *entities.WiresModule {
+	return entities.NewWiresModule(f.rng)
 }
 
 func (f *ModuleFactory) CreatePasswordModule() *entities.PasswordModule {
 	return entities.NewPasswordModule(f.rng, nil)
 }
 
-func (f *ModuleFactory) CreateSimonSaysModule() *entities.SimonSaysModule {
-	return entities.NewSimonSaysModule(f.rng, nil)
+func (f *ModuleFactory) CreateSimonSaysModule() *entities.SimonModule {
+	return entities.NewSimonModule(f.rng, nil)
 }
 
 func (f *ModuleFactory) CreateBigButtonModule() *entities.BigButtonModule {
@@ -35,4 +35,8 @@ func (f *ModuleFactory) CreateBigButtonModule() *entities.BigButtonModule {
 
 func (f *ModuleFactory) CreateKeypadModule() *entities.KeypadModule {
 	return entities.NewKeypadModule(f.rng)
+}
+
+func (f *ModuleFactory) CreateWhosOnFirstModule() *entities.WhosOnFirstModule {
+	return entities.NewWhosOnFirstModule(f.rng)
 }

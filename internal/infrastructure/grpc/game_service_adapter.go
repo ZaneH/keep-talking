@@ -53,14 +53,14 @@ func (s *GameServiceAdapter) SendInput(ctx context.Context, i *pb.PlayerInput) (
 	var cmd command.ModuleInputCommand
 
 	switch input := i.GetInput().(type) {
-	case *pb.PlayerInput_SimpleWiresInput:
-		cmd = &command.SimpleWiresInputCommand{
+	case *pb.PlayerInput_WiresInput:
+		cmd = &command.WiresInputCommand{
 			BaseModuleInputCommand: command.BaseModuleInputCommand{
 				SessionID: sessionID,
 				BombID:    bombID,
 				ModuleID:  moduleID,
 			},
-			WirePosition: int(input.SimpleWiresInput.WirePosition),
+			WirePosition: int(input.WiresInput.WirePosition),
 		}
 	case *pb.PlayerInput_PasswordInput:
 		switch pi := input.PasswordInput.Input.(type) {
@@ -95,14 +95,14 @@ func (s *GameServiceAdapter) SendInput(ctx context.Context, i *pb.PlayerInput) (
 			PressType:        mapProtoToPressType(input.BigButtonInput.PressType),
 			ReleaseTimestamp: input.BigButtonInput.ReleaseTimestamp,
 		}
-	case *pb.PlayerInput_SimonSaysInput:
-		cmd = &command.SimonSaysInputCommand{
+	case *pb.PlayerInput_SimonInput:
+		cmd = &command.SimonInputCommand{
 			BaseModuleInputCommand: command.BaseModuleInputCommand{
 				SessionID: sessionID,
 				BombID:    bombID,
 				ModuleID:  moduleID,
 			},
-			Color: mapProtoToColor(input.SimonSaysInput.Color),
+			Color: mapProtoToColor(input.SimonInput.Color),
 		}
 	case *pb.PlayerInput_KeypadInput:
 		cmd = &command.KeypadInputCommand{
@@ -112,6 +112,15 @@ func (s *GameServiceAdapter) SendInput(ctx context.Context, i *pb.PlayerInput) (
 				ModuleID:  moduleID,
 			},
 			Symbol: mapProtoToSymbol(input.KeypadInput.Symbol),
+		}
+	case *pb.PlayerInput_WhosOnFirstInput:
+		cmd = &command.WhosOnFirstInputCommand{
+			BaseModuleInputCommand: command.BaseModuleInputCommand{
+				SessionID: sessionID,
+				BombID:    bombID,
+				ModuleID:  moduleID,
+			},
+			Word: input.WhosOnFirstInput.Word,
 		}
 	default:
 		return nil, fmt.Errorf("unknown input type: %T", input)
@@ -125,7 +134,7 @@ func (s *GameServiceAdapter) SendInput(ctx context.Context, i *pb.PlayerInput) (
 	fmt.Printf("Processed input for session %s: %v\n", sessionID, res)
 
 	switch cmdResult := res.(type) {
-	case *command.SimpleWiresInputCommandResult:
+	case *command.WiresInputCommandResult:
 		return &pb.PlayerInputResult{
 			ModuleId: i.GetModuleId(),
 			Strike:   res != nil && cmdResult.Strike,
@@ -147,7 +156,7 @@ func (s *GameServiceAdapter) SendInput(ctx context.Context, i *pb.PlayerInput) (
 				},
 			},
 		}, nil
-	case *command.SimonSaysInputCommandResult:
+	case *command.SimonInputCommandResult:
 		sequence := make([]pb.Color, len(cmdResult.DisplaySequence))
 		for i, color := range cmdResult.DisplaySequence {
 			sequence[i] = mapColorToProto(color)
@@ -157,8 +166,8 @@ func (s *GameServiceAdapter) SendInput(ctx context.Context, i *pb.PlayerInput) (
 			ModuleId: i.GetModuleId(),
 			Strike:   res != nil && cmdResult.Strike,
 			Solved:   res != nil && cmdResult.Solved,
-			Result: &pb.PlayerInputResult_SimonSaysInputResult{
-				SimonSaysInputResult: &pb.SimonSaysInputResult{
+			Result: &pb.PlayerInputResult_SimonInputResult{
+				SimonInputResult: &pb.SimonInputResult{
 					DisplaySequence: sequence,
 					HasFinishedSeq:  cmdResult.HasFinishedSeq,
 				},
@@ -199,6 +208,21 @@ func (s *GameServiceAdapter) SendInput(ctx context.Context, i *pb.PlayerInput) (
 					KeypadState: &pb.KeypadState{
 						ActivatedSymbols: activatedSymbols,
 						DisplayedSymbols: displayedSymbols,
+					},
+				},
+			},
+		}, nil
+	case *command.WhosOnFirstInputCommandResult:
+		return &pb.PlayerInputResult{
+			ModuleId: i.GetModuleId(),
+			Strike:   res != nil && cmdResult.Strike,
+			Solved:   res != nil && cmdResult.Solved,
+			Result: &pb.PlayerInputResult_WhosOnFirstInputResult{
+				WhosOnFirstInputResult: &pb.WhosOnFirstInputResult{
+					WhosOnFirstState: &pb.WhosOnFirstState{
+						ScreenWord:  cmdResult.ScreenWord,
+						ButtonWords: cmdResult.ButtonWords,
+						Stage:       int32(cmdResult.Stage),
 					},
 				},
 			},

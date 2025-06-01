@@ -80,7 +80,7 @@ func (b *Bomb) StartTimer() {
 func generateSerialNumber(rng ports.RandomGenerator) string {
 	var sb strings.Builder
 	options := common.ALPHABET_UPPERCASE
-	for i := 0; i < 6; i++ {
+	for range 6 {
 		randIdx := rng.GetIntInRange(0, len(options)-1)
 		sb.WriteByte(options[randIdx])
 	}
@@ -97,7 +97,7 @@ func generateRandomIndicators(rng ports.RandomGenerator, count int) map[string]v
 
 	count = rng.GetIntInRange(0, count)
 
-	for i := 0; i < count; i++ {
+	for range count {
 		lit := rng.GetIntInRange(0, 1) == 1
 		randIdx := rng.GetIntInRange(0, len(options)-1)
 		label := options[randIdx]
@@ -121,7 +121,7 @@ func generateRandomPorts(rng ports.RandomGenerator, count int) []valueobject.Por
 	options := valueobject.AVAILABLE_PORTS
 	ports := make([]valueobject.Port, 0, count)
 
-	for i := 0; i < count; i++ {
+	for range count {
 		randIdx := rng.GetIntInRange(0, len(options)-1)
 		ports = append(ports, options[randIdx])
 	}

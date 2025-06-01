@@ -80,16 +80,18 @@ func (f *BombFactoryImpl) createModule(bomb *entities.Bomb, moduleType valueobje
 	switch moduleType {
 	case valueobject.Clock:
 		module = f.moduleFactory.CreateClockModule()
-	case valueobject.SimpleWires:
-		module = f.moduleFactory.CreateSimpleWiresModule()
+	case valueobject.Wires:
+		module = f.moduleFactory.CreateWiresModule()
 	case valueobject.Password:
 		module = f.moduleFactory.CreatePasswordModule()
 	case valueobject.BigButton:
 		module = f.moduleFactory.CreateBigButtonModule()
-	case valueobject.SimonSays:
+	case valueobject.Simon:
 		module = f.moduleFactory.CreateSimonSaysModule()
 	case valueobject.Keypad:
 		module = f.moduleFactory.CreateKeypadModule()
+	case valueobject.WhosOnFirst:
+		module = f.moduleFactory.CreateWhosOnFirstModule()
 	default:
 		log.Printf("unknown module type %v, skipping...", moduleType)
 		return nil
