@@ -333,7 +333,7 @@ func mapSymbolToProto(symbol valueobject.Symbol) pb.Symbol {
 		return pb.Symbol_BALLOON
 	case valueobject.WeirdNose:
 		log.Fatalf("WeirdNose symbol is not implemented in proto mapping.")
-	case valueobject.Upsidedowny:
+	case valueobject.UpsideDownY:
 		return pb.Symbol_UPSIDEDOWNY
 	case valueobject.Bt:
 		return pb.Symbol_BT
@@ -397,7 +397,7 @@ func mapProtoToSymbol(symbol pb.Symbol) valueobject.Symbol {
 	case pb.Symbol_BALLOON:
 		return valueobject.Balloon
 	case pb.Symbol_UPSIDEDOWNY:
-		return valueobject.Upsidedowny
+		return valueobject.UpsideDownY
 	case pb.Symbol_BT:
 		return valueobject.Bt
 	default:

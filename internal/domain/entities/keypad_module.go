@@ -29,15 +29,15 @@ type KeypadModule struct {
 }
 
 func NewKeypadModule(rng ports.RandomGenerator) *KeypadModule {
-	displayedSymbols := generateDisplayedSymbols(rng)
-	solution := generateKeypadSolution(rng, displayedSymbols)
+	displayed, col := generateDisplayedSymbols(rng)
+	solution := generateKeypadSolution(displayed, col)
 
 	return &KeypadModule{
 		BaseModule: BaseModule{
 			ModuleID: uuid.New(),
 		},
 		State: KeypadState{
-			DisplayedSymbols: displayedSymbols,
+			DisplayedSymbols: displayed,
 			ActivatedSymbols: make(map[valueobject.Symbol]bool, nStages),
 			solution:         solution,
 		},
@@ -76,10 +76,6 @@ func (m *KeypadModule) GetModuleState() ModuleState {
 }
 
 func (m *KeypadModule) PressSymbol(sym valueobject.Symbol) (map[valueobject.Symbol]bool, bool, error) {
-	if !slices.Contains(keypadSymbols[:], sym) {
-		return m.State.ActivatedSymbols, false, fmt.Errorf("invalid symbol: %s", sym)
-	}
-
 	active := m.State.ActivatedSymbols[sym]
 	if active {
 		return m.State.ActivatedSymbols, false, fmt.Errorf("symbol %s is already activated", sym)
@@ -107,58 +103,100 @@ func (m *KeypadModule) PressSymbol(sym valueobject.Symbol) (map[valueobject.Symb
 	return m.State.ActivatedSymbols, true, nil
 }
 
-func generateKeypadSolution(rng ports.RandomGenerator, available []valueobject.Symbol) []valueobject.Symbol {
-	solution := make([]valueobject.Symbol, 0, len(available))
-	for len(solution) < nStages {
-		symbol := available[rng.GetIntInRange(0, len(available)-1)]
-		if !slices.Contains(solution, symbol) {
-			solution = append(solution, symbol)
-		}
-	}
-	return solution
-}
-
-var keypadSymbols = [...]valueobject.Symbol{
-	valueobject.Copyright,
-	valueobject.FilledStar,
-	valueobject.HollowStar,
-	valueobject.SmileyFace,
-	valueobject.DoubleK,
-	valueobject.Omega,
-	valueobject.SquidKnife,
-	valueobject.Pumpkin,
-	valueobject.HookN,
-	// valueobject.Teepee,
-	valueobject.Six,
-	valueobject.SquigglyN,
-	valueobject.At,
-	valueobject.Ae,
-	valueobject.MeltedThree,
-	valueobject.Euro,
-	// valueobject.Circle,
-	valueobject.NWithHat,
-	valueobject.Dragon,
-	valueobject.QuestionMark,
-	valueobject.Paragraph,
-	valueobject.RightC,
-	valueobject.LeftC,
-	valueobject.Pitchfork,
-	// valueobject.Tripod,
-	valueobject.Cursive,
-	valueobject.Tracks,
+var keypadCol1 = [...]valueobject.Symbol{
 	valueobject.Balloon,
-	// valueobject.WeirdNose,
-	valueobject.Upsidedowny,
-	valueobject.Bt,
+	valueobject.At,
+	valueobject.UpsideDownY,
+	valueobject.SquigglyN,
+	valueobject.SquidKnife,
+	valueobject.HookN,
+	valueobject.LeftC,
 }
 
-func generateDisplayedSymbols(rng ports.RandomGenerator) []valueobject.Symbol {
-	displayed := make([]valueobject.Symbol, 0, nStages)
+var keypadCol2 = [...]valueobject.Symbol{
+	valueobject.Euro,
+	valueobject.Balloon,
+	valueobject.LeftC,
+	valueobject.Cursive,
+	valueobject.HollowStar,
+	valueobject.HookN,
+	valueobject.QuestionMark,
+}
+
+var keypadCol3 = [...]valueobject.Symbol{
+	valueobject.Copyright,
+	valueobject.Pumpkin,
+	valueobject.Cursive,
+	valueobject.DoubleK,
+	valueobject.MeltedThree,
+	valueobject.UpsideDownY,
+	valueobject.HollowStar,
+}
+
+var keypadCol4 = [...]valueobject.Symbol{
+	valueobject.Six,
+	valueobject.Paragraph,
+	valueobject.Bt,
+	valueobject.SquidKnife,
+	valueobject.DoubleK,
+	valueobject.QuestionMark,
+	valueobject.SmileyFace,
+}
+
+var keypadCol5 = [...]valueobject.Symbol{
+	valueobject.Pitchfork,
+	valueobject.SmileyFace,
+	valueobject.Bt,
+	valueobject.RightC,
+	valueobject.Paragraph,
+	valueobject.Dragon,
+	valueobject.FilledStar,
+}
+
+var keypadCol6 = [...]valueobject.Symbol{
+	valueobject.Six,
+	valueobject.Euro,
+	valueobject.Tracks,
+	valueobject.Ae,
+	valueobject.Pitchfork,
+	valueobject.NWithHat,
+	valueobject.Omega,
+}
+
+var columns = [][]valueobject.Symbol{
+	keypadCol1[:],
+	keypadCol2[:],
+	keypadCol3[:],
+	keypadCol4[:],
+	keypadCol5[:],
+	keypadCol6[:],
+}
+
+func generateDisplayedSymbols(rng ports.RandomGenerator) (displayed []valueobject.Symbol, column []valueobject.Symbol) {
+	displayed = make([]valueobject.Symbol, 0, nStages)
+	randomColumn := rng.GetIntInRange(0, len(columns)-1)
+	keypadSymbols := columns[randomColumn]
+
 	for len(displayed) < nStages {
 		symbol := keypadSymbols[rng.GetIntInRange(0, len(keypadSymbols)-1)]
 		if !slices.Contains(displayed, symbol) {
 			displayed = append(displayed, symbol)
 		}
 	}
-	return displayed
+
+	return displayed, keypadSymbols
+}
+
+func generateKeypadSolution(displayed []valueobject.Symbol, column []valueobject.Symbol) []valueobject.Symbol {
+	solution := make([]valueobject.Symbol, 0, len(displayed))
+	for c := range column {
+		for _, sym := range displayed {
+			if column[c] == sym {
+				solution = append(solution, sym)
+				break
+			}
+		}
+	}
+
+	return solution
 }

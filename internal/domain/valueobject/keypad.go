@@ -11,7 +11,7 @@ const (
 	Omega        Symbol = "Omega"
 	SquidKnife   Symbol = "SquidKnife"
 	Pumpkin      Symbol = "Pumpkin"
-	HookN        Symbol = "Hookn"
+	HookN        Symbol = "HookN"
 	Teepee       Symbol = "Teepee"
 	Six          Symbol = "Six"
 	SquigglyN    Symbol = "SquigglyN"
@@ -32,6 +32,6 @@ const (
 	Tracks       Symbol = "Tracks"
 	Balloon      Symbol = "Balloon"
 	WeirdNose    Symbol = "WeirdNose"
-	Upsidedowny  Symbol = "Upsidedowny"
+	UpsideDownY  Symbol = "UpsideDownY"
 	Bt           Symbol = "Bt"
 )
