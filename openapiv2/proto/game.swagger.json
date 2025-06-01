@@ -120,7 +120,8 @@
         "SIMPLE_WIRES",
         "PASSWORD",
         "BIG_BUTTON",
-        "SIMON_SAYS"
+        "SIMON_SAYS",
+        "KEYPAD"
       ],
       "default": "UNKNOWN"
     },
@@ -259,6 +260,39 @@
         }
       }
     },
+    "modulesKeypadInput": {
+      "type": "object",
+      "properties": {
+        "symbol": {
+          "$ref": "#/definitions/modulesSymbol"
+        }
+      }
+    },
+    "modulesKeypadInputResult": {
+      "type": "object",
+      "properties": {
+        "keypadState": {
+          "$ref": "#/definitions/modulesKeypadState"
+        }
+      }
+    },
+    "modulesKeypadState": {
+      "type": "object",
+      "properties": {
+        "displayedSymbols": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/modulesSymbol"
+          }
+        },
+        "activatedSymbols": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/modulesSymbol"
+          }
+        }
+      }
+    },
     "modulesLetterChange": {
       "type": "object",
       "properties": {
@@ -297,6 +331,9 @@
         },
         "simonSaysState": {
           "$ref": "#/definitions/modulesSimonSaysState"
+        },
+        "keypadState": {
+          "$ref": "#/definitions/modulesKeypadState"
         }
       }
     },
@@ -402,6 +439,40 @@
         }
       }
     },
+    "modulesSymbol": {
+      "type": "string",
+      "enum": [
+        "COPYRIGHT",
+        "FILLEDSTAR",
+        "HOLLOWSTAR",
+        "SMILEYFACE",
+        "DOUBLEK",
+        "OMEGA",
+        "SQUIDKNIFE",
+        "PUMPKIN",
+        "HOOKN",
+        "SIX",
+        "SQUIGGLYN",
+        "AT",
+        "AE",
+        "MELTEDTHREE",
+        "EURO",
+        "NWITHHAT",
+        "DRAGON",
+        "QUESTIONMARK",
+        "PARAGRAPH",
+        "RIGHTC",
+        "LEFTC",
+        "PITCHFORK",
+        "CURSIVE",
+        "TRACKS",
+        "BALLOON",
+        "UPSIDEDOWNY",
+        "BT"
+      ],
+      "default": "COPYRIGHT",
+      "title": "- SIX: TEEPEE = 9;\n - NWITHHAT: CIRCLE = 16;\n - CURSIVE: TRIPOD = 24;\n - UPSIDEDOWNY: WEIRDNOSE = 28;"
+    },
     "modulesWire": {
       "type": "object",
       "properties": {
@@ -451,6 +522,9 @@
         },
         "simonSaysInput": {
           "$ref": "#/definitions/modulesSimonSaysInput"
+        },
+        "keypadInput": {
+          "$ref": "#/definitions/modulesKeypadInput"
         }
       }
     },
@@ -474,6 +548,9 @@
         },
         "passwordInputResult": {
           "$ref": "#/definitions/modulesPasswordInputResult"
+        },
+        "keypadInputResult": {
+          "$ref": "#/definitions/modulesKeypadInputResult"
         }
       }
     },

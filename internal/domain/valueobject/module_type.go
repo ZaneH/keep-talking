@@ -8,4 +8,5 @@ const (
 	BigButton
 	SimonSays
 	Clock
+	Keypad
 )

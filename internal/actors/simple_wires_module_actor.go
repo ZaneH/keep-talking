@@ -38,7 +38,7 @@ func (a *SimpleWiresModuleActor) handleModuleCommand(msg ModuleCommandMessage) {
 		wiresModule, ok := a.module.(*entities.SimpleWiresModule)
 		if !ok {
 			msg.GetResponseChannel() <- ErrorResponse{
-				Err: errors.New("invalid module type"),
+				Err: ErrInvalidModuleType,
 			}
 			return
 		}

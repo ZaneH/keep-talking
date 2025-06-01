@@ -104,6 +104,15 @@ func (s *GameServiceAdapter) SendInput(ctx context.Context, i *pb.PlayerInput) (
 			},
 			Color: mapProtoToColor(input.SimonSaysInput.Color),
 		}
+	case *pb.PlayerInput_KeypadInput:
+		cmd = &command.KeypadInputCommand{
+			BaseModuleInputCommand: command.BaseModuleInputCommand{
+				SessionID: sessionID,
+				BombID:    bombID,
+				ModuleID:  moduleID,
+			},
+			Symbol: mapProtoToSymbol(input.KeypadInput.Symbol),
+		}
 	default:
 		return nil, fmt.Errorf("unknown input type: %T", input)
 	}
@@ -168,7 +177,32 @@ func (s *GameServiceAdapter) SendInput(ctx context.Context, i *pb.PlayerInput) (
 				},
 			},
 		}, nil
+	case *command.KeypadInputCommandResult:
+		activatedSymbols := make([]pb.Symbol, 0, len(cmdResult.ActivatedSymbols))
+		for sym, active := range cmdResult.ActivatedSymbols {
+			if active {
+				activatedSymbols = append(activatedSymbols, mapSymbolToProto(sym))
+			}
+		}
 
+		displayedSymbols := make([]pb.Symbol, len(cmdResult.DisplayedSymbols))
+		for i, sym := range cmdResult.DisplayedSymbols {
+			displayedSymbols[i] = mapSymbolToProto(sym)
+		}
+
+		return &pb.PlayerInputResult{
+			ModuleId: i.GetModuleId(),
+			Strike:   res != nil && cmdResult.Strike,
+			Solved:   res != nil && cmdResult.Solved,
+			Result: &pb.PlayerInputResult_KeypadInputResult{
+				KeypadInputResult: &pb.KeypadInputResult{
+					KeypadState: &pb.KeypadState{
+						ActivatedSymbols: activatedSymbols,
+						DisplayedSymbols: displayedSymbols,
+					},
+				},
+			},
+		}, nil
 	default:
 		return nil, fmt.Errorf("unknown result type: %T", res)
 	}

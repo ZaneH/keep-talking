@@ -22,6 +22,8 @@ func mapTypeToProto(moduleType valueobject.ModuleType) pb.Module_ModuleType {
 		return pb.Module_CLOCK
 	case valueobject.SimonSays:
 		return pb.Module_SIMON_SAYS
+	case valueobject.Keypad:
+		return pb.Module_KEYPAD
 	default:
 		log.Fatalf("Unknown module type: %v. Couldn't map type to proto.", moduleType)
 		return pb.Module_UNKNOWN
@@ -168,6 +170,31 @@ func mapModulesToProto(modules map[uuid.UUID]actors.ModuleActor) map[string]*pb.
 					Letters: passwordModule.GetCurrentGuess(),
 				},
 			}
+		case valueobject.Keypad:
+			keypadState, ok := actor.GetModule().GetModuleState().(*entities.KeypadState)
+			if !ok {
+				log.Printf("Expected *KeypadState but got different type: %T", actor.GetModule().GetModuleState())
+				continue
+			}
+
+			displayed_symbols := make([]pb.Symbol, 0, len(keypadState.DisplayedSymbols))
+			for _, symbol := range keypadState.DisplayedSymbols {
+				displayed_symbols = append(displayed_symbols, mapSymbolToProto(symbol))
+			}
+
+			activated_symbols := make([]pb.Symbol, 0, len(keypadState.ActivatedSymbols))
+			for symbol := range keypadState.ActivatedSymbols {
+				if keypadState.ActivatedSymbols[symbol] {
+					activated_symbols = append(activated_symbols, mapSymbolToProto(symbol))
+				}
+			}
+
+			protoModule.State = &pb.Module_KeypadState{
+				KeypadState: &pb.KeypadState{
+					DisplayedSymbols: displayed_symbols,
+					ActivatedSymbols: activated_symbols,
+				},
+			}
 		default:
 			log.Fatalf("Unknown module type: %v. Couldn't provide state.", actor.GetModule().GetType())
 		}
@@ -244,4 +271,138 @@ func mapProtoToColor(color pb.Color) valueobject.Color {
 		log.Fatalf("Unknown color: %v. Couldn't provide state.", color)
 		return valueobject.Red
 	}
+}
+
+func mapSymbolToProto(symbol valueobject.Symbol) pb.Symbol {
+	switch symbol {
+	case valueobject.Copyright:
+		return pb.Symbol_COPYRIGHT
+	case valueobject.FilledStar:
+		return pb.Symbol_FILLEDSTAR
+	case valueobject.HollowStar:
+		return pb.Symbol_HOLLOWSTAR
+	case valueobject.SmileyFace:
+		return pb.Symbol_SMILEYFACE
+	case valueobject.DoubleK:
+		return pb.Symbol_DOUBLEK
+	case valueobject.Omega:
+		return pb.Symbol_OMEGA
+	case valueobject.SquidKnife:
+		return pb.Symbol_SQUIDKNIFE
+	case valueobject.Pumpkin:
+		return pb.Symbol_PUMPKIN
+	case valueobject.HookN:
+		return pb.Symbol_HOOKN
+	case valueobject.Teepee:
+		log.Fatalf("Teepee symbol is not implemented in proto mapping.")
+	case valueobject.Six:
+		return pb.Symbol_SIX
+	case valueobject.SquigglyN:
+		return pb.Symbol_SQUIGGLYN
+	case valueobject.At:
+		return pb.Symbol_AT
+	case valueobject.Ae:
+		return pb.Symbol_AE
+	case valueobject.MeltedThree:
+		return pb.Symbol_MELTEDTHREE
+	case valueobject.Euro:
+		return pb.Symbol_EURO
+	case valueobject.Circle:
+		log.Fatalf("Circle symbol is not implemented in proto mapping.")
+	case valueobject.NWithHat:
+		return pb.Symbol_NWITHHAT
+	case valueobject.Dragon:
+		return pb.Symbol_DRAGON
+	case valueobject.QuestionMark:
+		return pb.Symbol_QUESTIONMARK
+	case valueobject.Paragraph:
+		return pb.Symbol_PARAGRAPH
+	case valueobject.RightC:
+		return pb.Symbol_RIGHTC
+	case valueobject.LeftC:
+		return pb.Symbol_LEFTC
+	case valueobject.Pitchfork:
+		return pb.Symbol_PITCHFORK
+	case valueobject.Tripod:
+		log.Fatalf("Tripod symbol is not implemented in proto mapping.")
+	case valueobject.Cursive:
+		return pb.Symbol_CURSIVE
+	case valueobject.Tracks:
+		return pb.Symbol_TRACKS
+	case valueobject.Balloon:
+		return pb.Symbol_BALLOON
+	case valueobject.WeirdNose:
+		log.Fatalf("WeirdNose symbol is not implemented in proto mapping.")
+	case valueobject.Upsidedowny:
+		return pb.Symbol_UPSIDEDOWNY
+	case valueobject.Bt:
+		return pb.Symbol_BT
+	default:
+		log.Fatalf("Unknown symbol: %v. Couldn't provide state.", symbol)
+	}
+
+	return pb.Symbol_COPYRIGHT
+}
+
+func mapProtoToSymbol(symbol pb.Symbol) valueobject.Symbol {
+	switch symbol {
+	case pb.Symbol_COPYRIGHT:
+		return valueobject.Copyright
+	case pb.Symbol_FILLEDSTAR:
+		return valueobject.FilledStar
+	case pb.Symbol_HOLLOWSTAR:
+		return valueobject.HollowStar
+	case pb.Symbol_SMILEYFACE:
+		return valueobject.SmileyFace
+	case pb.Symbol_DOUBLEK:
+		return valueobject.DoubleK
+	case pb.Symbol_OMEGA:
+		return valueobject.Omega
+	case pb.Symbol_SQUIDKNIFE:
+		return valueobject.SquidKnife
+	case pb.Symbol_PUMPKIN:
+		return valueobject.Pumpkin
+	case pb.Symbol_HOOKN:
+		return valueobject.HookN
+	case pb.Symbol_SIX:
+		return valueobject.Six
+	case pb.Symbol_SQUIGGLYN:
+		return valueobject.SquigglyN
+	case pb.Symbol_AT:
+		return valueobject.At
+	case pb.Symbol_AE:
+		return valueobject.Ae
+	case pb.Symbol_MELTEDTHREE:
+		return valueobject.MeltedThree
+	case pb.Symbol_EURO:
+		return valueobject.Euro
+	case pb.Symbol_NWITHHAT:
+		return valueobject.NWithHat
+	case pb.Symbol_DRAGON:
+		return valueobject.Dragon
+	case pb.Symbol_QUESTIONMARK:
+		return valueobject.QuestionMark
+	case pb.Symbol_PARAGRAPH:
+		return valueobject.Paragraph
+	case pb.Symbol_RIGHTC:
+		return valueobject.RightC
+	case pb.Symbol_LEFTC:
+		return valueobject.LeftC
+	case pb.Symbol_PITCHFORK:
+		return valueobject.Pitchfork
+	case pb.Symbol_CURSIVE:
+		return valueobject.Cursive
+	case pb.Symbol_TRACKS:
+		return valueobject.Tracks
+	case pb.Symbol_BALLOON:
+		return valueobject.Balloon
+	case pb.Symbol_UPSIDEDOWNY:
+		return valueobject.Upsidedowny
+	case pb.Symbol_BT:
+		return valueobject.Bt
+	default:
+		log.Fatalf("Unknown symbol: %v. Couldn't provide state.", symbol)
+	}
+
+	return valueobject.Copyright
 }

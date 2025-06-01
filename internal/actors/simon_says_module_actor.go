@@ -1,16 +1,8 @@
 package actors
 
 import (
-	"errors"
-
 	"github.com/ZaneH/keep-talking/internal/application/command"
 	"github.com/ZaneH/keep-talking/internal/domain/entities"
-)
-
-type SimonSaysActorError error
-
-var (
-	ErrSimonSaysUnhandledPressType SimonSaysActorError = errors.New("unhandled press type")
 )
 
 type SimonSaysModuleActor struct {
@@ -44,7 +36,7 @@ func (a *SimonSaysModuleActor) handleModuleCommand(msg ModuleCommandMessage) {
 		simonSaysModule, ok := a.module.(*entities.SimonSaysModule)
 		if !ok {
 			msg.GetResponseChannel() <- ErrorResponse{
-				Err: ErrSimonSaysUnhandledPressType,
+				Err: ErrInvalidModuleType,
 			}
 			return
 		}

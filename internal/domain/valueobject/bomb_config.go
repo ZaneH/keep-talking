@@ -34,9 +34,10 @@ func NewDefaultBombConfig() BombConfig {
 		MaxModulesPerFace: 3,
 		ModuleTypes: map[ModuleType]float32{
 			Clock:       0.0, // One will be added manually
-			SimpleWires: 0.1,
-			Password:    0.1,
-			BigButton:   0.1,
+			SimpleWires: 0.05,
+			Password:    0.05,
+			BigButton:   0.05,
+			Keypad:      0.05,
 			SimonSays:   0.05,
 		},
 		MinBatteries:      1,

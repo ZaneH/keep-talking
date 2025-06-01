@@ -5,6 +5,7 @@ import "proto/simple_wires_module.proto";
 import "proto/password_module.proto";
 import "proto/big_button_module.proto";
 import "proto/simon_says_module.proto";
+import "proto/keypad_module.proto";
 
 option go_package = "./proto";
 
@@ -24,6 +25,7 @@ message PlayerInput {
     modules.PasswordInput password_input = 11;
     modules.BigButtonInput big_button_input = 12;
     modules.SimonSaysInput simon_says_input = 13;
+    modules.KeypadInput keypad_input = 14;
   }
 }
 
@@ -35,5 +37,6 @@ message PlayerInputResult {
     modules.BigButtonInputResult big_button_input_result = 10;
     modules.SimonSaysInputResult simon_says_input_result = 11;
     modules.PasswordInputResult password_input_result = 12;
+    modules.KeypadInputResult keypad_input_result = 13;
   }
 }

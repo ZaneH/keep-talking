@@ -5,6 +5,7 @@ import "proto/simple_wires_module.proto";
 import "proto/big_button_module.proto";
 import "proto/simon_says_module.proto";
 import "proto/password_module.proto";
+import "proto/keypad_module.proto";
 
 option go_package = "./proto";
 
@@ -22,6 +23,7 @@ message Module {
     PASSWORD = 3;
     BIG_BUTTON = 4;
     SIMON_SAYS = 5;
+    KEYPAD = 6;
   }
 
   string id = 1;
@@ -33,5 +35,6 @@ message Module {
     PasswordState password_state = 6;
     BigButtonState big_button_state = 7;
     SimonSaysState simon_says_state = 8;
+    KeypadState keypad_state = 9;
   }
 }

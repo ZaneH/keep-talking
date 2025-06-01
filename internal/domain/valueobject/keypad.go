@@ -1,0 +1,37 @@
+package valueobject
+
+type Symbol string
+
+const (
+	Copyright    Symbol = "Copyright"
+	FilledStar   Symbol = "FilledStar"
+	HollowStar   Symbol = "HollowStar"
+	SmileyFace   Symbol = "SmileyFace"
+	DoubleK      Symbol = "DoubleK"
+	Omega        Symbol = "Omega"
+	SquidKnife   Symbol = "SquidKnife"
+	Pumpkin      Symbol = "Pumpkin"
+	HookN        Symbol = "Hookn"
+	Teepee       Symbol = "Teepee"
+	Six          Symbol = "Six"
+	SquigglyN    Symbol = "SquigglyN"
+	At           Symbol = "At"
+	Ae           Symbol = "Ae"
+	MeltedThree  Symbol = "MeltedThree"
+	Euro         Symbol = "Euro"
+	Circle       Symbol = "Circle"
+	NWithHat     Symbol = "NWithHat"
+	Dragon       Symbol = "Dragon"
+	QuestionMark Symbol = "QuestionMark"
+	Paragraph    Symbol = "Paragraph"
+	RightC       Symbol = "RightC"
+	LeftC        Symbol = "LeftC"
+	Pitchfork    Symbol = "Pitchfork"
+	Tripod       Symbol = "Tripod"
+	Cursive      Symbol = "Cursive"
+	Tracks       Symbol = "Tracks"
+	Balloon      Symbol = "Balloon"
+	WeirdNose    Symbol = "WeirdNose"
+	Upsidedowny  Symbol = "Upsidedowny"
+	Bt           Symbol = "Bt"
+)

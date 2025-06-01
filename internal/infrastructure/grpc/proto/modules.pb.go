@@ -30,6 +30,7 @@ const (
 	Module_PASSWORD     Module_ModuleType = 3
 	Module_BIG_BUTTON   Module_ModuleType = 4
 	Module_SIMON_SAYS   Module_ModuleType = 5
+	Module_KEYPAD       Module_ModuleType = 6
 )
 
 // Enum value maps for Module_ModuleType.
@@ -41,6 +42,7 @@ var (
 		3: "PASSWORD",
 		4: "BIG_BUTTON",
 		5: "SIMON_SAYS",
+		6: "KEYPAD",
 	}
 	Module_ModuleType_value = map[string]int32{
 		"UNKNOWN":      0,
@@ -49,6 +51,7 @@ var (
 		"PASSWORD":     3,
 		"BIG_BUTTON":   4,
 		"SIMON_SAYS":   5,
+		"KEYPAD":       6,
 	}
 )
 
@@ -151,6 +154,7 @@ type Module struct {
 	//	*Module_PasswordState
 	//	*Module_BigButtonState
 	//	*Module_SimonSaysState
+	//	*Module_KeypadState
 	State         isModule_State `protobuf_oneof:"state"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -257,6 +261,15 @@ func (x *Module) GetSimonSaysState() *SimonSaysState {
 	return nil
 }
 
+func (x *Module) GetKeypadState() *KeypadState {
+	if x != nil {
+		if x, ok := x.State.(*Module_KeypadState); ok {
+			return x.KeypadState
+		}
+	}
+	return nil
+}
+
 type isModule_State interface {
 	isModule_State()
 }
@@ -277,6 +290,10 @@ type Module_SimonSaysState struct {
 	SimonSaysState *SimonSaysState `protobuf:"bytes,8,opt,name=simon_says_state,json=simonSaysState,proto3,oneof"`
 }
 
+type Module_KeypadState struct {
+	KeypadState *KeypadState `protobuf:"bytes,9,opt,name=keypad_state,json=keypadState,proto3,oneof"`
+}
+
 func (*Module_SimpleWiresState) isModule_State() {}
 
 func (*Module_PasswordState) isModule_State() {}
@@ -285,15 +302,17 @@ func (*Module_BigButtonState) isModule_State() {}
 
 func (*Module_SimonSaysState) isModule_State() {}
 
+func (*Module_KeypadState) isModule_State() {}
+
 var File_proto_modules_proto protoreflect.FileDescriptor
 
 const file_proto_modules_proto_rawDesc = "" +
 	"\n" +
-	"\x13proto/modules.proto\x12\amodules\x1a\x1fproto/simple_wires_module.proto\x1a\x1dproto/big_button_module.proto\x1a\x1dproto/simon_says_module.proto\x1a\x1bproto/password_module.proto\"H\n" +
+	"\x13proto/modules.proto\x12\amodules\x1a\x1fproto/simple_wires_module.proto\x1a\x1dproto/big_button_module.proto\x1a\x1dproto/simon_says_module.proto\x1a\x1bproto/password_module.proto\x1a\x19proto/keypad_module.proto\"H\n" +
 	"\x0eModulePosition\x12\x12\n" +
 	"\x04face\x18\x01 \x01(\x05R\x04face\x12\x10\n" +
 	"\x03row\x18\x02 \x01(\x05R\x03row\x12\x10\n" +
-	"\x03col\x18\x03 \x01(\x05R\x03col\"\x9a\x04\n" +
+	"\x03col\x18\x03 \x01(\x05R\x03col\"\xe1\x04\n" +
 	"\x06Module\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12.\n" +
 	"\x04type\x18\x02 \x01(\x0e2\x1a.modules.Module.ModuleTypeR\x04type\x123\n" +
@@ -302,7 +321,8 @@ const file_proto_modules_proto_rawDesc = "" +
 	"\x12simple_wires_state\x18\x05 \x01(\v2\x19.modules.SimpleWiresStateH\x00R\x10simpleWiresState\x12?\n" +
 	"\x0epassword_state\x18\x06 \x01(\v2\x16.modules.PasswordStateH\x00R\rpasswordState\x12C\n" +
 	"\x10big_button_state\x18\a \x01(\v2\x17.modules.BigButtonStateH\x00R\x0ebigButtonState\x12C\n" +
-	"\x10simon_says_state\x18\b \x01(\v2\x17.modules.SimonSaysStateH\x00R\x0esimonSaysState\"d\n" +
+	"\x10simon_says_state\x18\b \x01(\v2\x17.modules.SimonSaysStateH\x00R\x0esimonSaysState\x129\n" +
+	"\fkeypad_state\x18\t \x01(\v2\x14.modules.KeypadStateH\x00R\vkeypadState\"p\n" +
 	"\n" +
 	"ModuleType\x12\v\n" +
 	"\aUNKNOWN\x10\x00\x12\t\n" +
@@ -312,7 +332,9 @@ const file_proto_modules_proto_rawDesc = "" +
 	"\n" +
 	"BIG_BUTTON\x10\x04\x12\x0e\n" +
 	"\n" +
-	"SIMON_SAYS\x10\x05B\a\n" +
+	"SIMON_SAYS\x10\x05\x12\n" +
+	"\n" +
+	"\x06KEYPAD\x10\x06B\a\n" +
 	"\x05stateB\tZ\a./protob\x06proto3"
 
 var (
@@ -337,6 +359,7 @@ var file_proto_modules_proto_goTypes = []any{
 	(*PasswordState)(nil),    // 4: modules.PasswordState
 	(*BigButtonState)(nil),   // 5: modules.BigButtonState
 	(*SimonSaysState)(nil),   // 6: modules.SimonSaysState
+	(*KeypadState)(nil),      // 7: modules.KeypadState
 }
 var file_proto_modules_proto_depIdxs = []int32{
 	0, // 0: modules.Module.type:type_name -> modules.Module.ModuleType
@@ -345,11 +368,12 @@ var file_proto_modules_proto_depIdxs = []int32{
 	4, // 3: modules.Module.password_state:type_name -> modules.PasswordState
 	5, // 4: modules.Module.big_button_state:type_name -> modules.BigButtonState
 	6, // 5: modules.Module.simon_says_state:type_name -> modules.SimonSaysState
-	6, // [6:6] is the sub-list for method output_type
-	6, // [6:6] is the sub-list for method input_type
-	6, // [6:6] is the sub-list for extension type_name
-	6, // [6:6] is the sub-list for extension extendee
-	0, // [0:6] is the sub-list for field type_name
+	7, // 6: modules.Module.keypad_state:type_name -> modules.KeypadState
+	7, // [7:7] is the sub-list for method output_type
+	7, // [7:7] is the sub-list for method input_type
+	7, // [7:7] is the sub-list for extension type_name
+	7, // [7:7] is the sub-list for extension extendee
+	0, // [0:7] is the sub-list for field type_name
 }
 
 func init() { file_proto_modules_proto_init() }
@@ -361,11 +385,13 @@ func file_proto_modules_proto_init() {
 	file_proto_big_button_module_proto_init()
 	file_proto_simon_says_module_proto_init()
 	file_proto_password_module_proto_init()
+	file_proto_keypad_module_proto_init()
 	file_proto_modules_proto_msgTypes[1].OneofWrappers = []any{
 		(*Module_SimpleWiresState)(nil),
 		(*Module_PasswordState)(nil),
 		(*Module_BigButtonState)(nil),
 		(*Module_SimonSaysState)(nil),
+		(*Module_KeypadState)(nil),
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{

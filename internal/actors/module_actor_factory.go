@@ -18,6 +18,8 @@ func CreateModuleActor(bomb *entities.Bomb, module entities.Module) (ModuleActor
 		return NewBigButtonModuleActor(module), nil
 	case *entities.SimonSaysModule:
 		return NewSimonSaysModuleActor(module), nil
+	case *entities.KeypadModule:
+		return NewKeypadModuleActor(module), nil
 	default:
 		return nil, fmt.Errorf("unsupported module type: %v", module.GetType())
 	}

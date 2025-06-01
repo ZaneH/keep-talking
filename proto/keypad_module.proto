@@ -1,0 +1,53 @@
+syntax = "proto3";
+package modules;
+
+option go_package = "./proto";
+
+import "proto/common.proto";
+
+enum Symbol {
+	COPYRIGHT = 0;
+	FILLEDSTAR = 1;
+	HOLLOWSTAR = 2;
+	SMILEYFACE = 3;
+	DOUBLEK = 4;
+	OMEGA = 5;
+	SQUIDKNIFE = 6;
+	PUMPKIN = 7;
+	HOOKN = 8;
+	// TEEPEE = 9;
+	SIX = 10;
+	SQUIGGLYN = 11;
+	AT = 12;
+	AE = 13;
+	MELTEDTHREE = 14;
+	EURO = 15;
+	// CIRCLE = 16;
+	NWITHHAT = 17;
+	DRAGON = 18;
+	QUESTIONMARK = 19;
+	PARAGRAPH = 20;
+	RIGHTC = 21;
+	LEFTC = 22;
+	PITCHFORK = 23;
+	// TRIPOD = 24;
+	CURSIVE = 25;
+	TRACKS = 26;
+	BALLOON = 27;
+	// WEIRDNOSE = 28;
+	UPSIDEDOWNY = 29;
+	BT = 30;
+}
+
+message KeypadInput {
+  Symbol symbol = 1;
+}
+
+message KeypadInputResult {
+  KeypadState keypad_state = 1;
+}
+
+message KeypadState {
+  repeated Symbol displayed_symbols = 1;
+  repeated Symbol activated_symbols = 2;
+}

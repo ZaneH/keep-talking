@@ -39,7 +39,7 @@ func (a *PasswordModuleActor) handleModuleCommand(msg ModuleCommandMessage) {
 		passwordModule, ok := a.module.(*entities.PasswordModule)
 		if !ok {
 			msg.GetResponseChannel() <- ErrorResponse{
-				Err: errors.New("invalid module type"),
+				Err: ErrInvalidModuleType,
 			}
 			return
 		}
@@ -76,7 +76,7 @@ func (a *PasswordModuleActor) handleModuleCommand(msg ModuleCommandMessage) {
 		passwordModule, ok := a.module.(*entities.PasswordModule)
 		if !ok {
 			msg.GetResponseChannel() <- ErrorResponse{
-				Err: errors.New("invalid module type"),
+				Err: ErrInvalidModuleType,
 			}
 			return
 		}

@@ -32,3 +32,7 @@ func (f *ModuleFactory) CreateSimonSaysModule() *entities.SimonSaysModule {
 func (f *ModuleFactory) CreateBigButtonModule() *entities.BigButtonModule {
 	return entities.NewBigButtonModule(f.rng)
 }
+
+func (f *ModuleFactory) CreateKeypadModule() *entities.KeypadModule {
+	return entities.NewKeypadModule(f.rng)
+}

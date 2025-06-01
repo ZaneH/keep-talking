@@ -5,12 +5,12 @@ import (
 	"github.com/ZaneH/keep-talking/internal/domain/entities"
 )
 
-type BigButtonModuleActor struct {
+type KeypadModuleActor struct {
 	BaseModuleActor
 }
 
-func NewBigButtonModuleActor(module entities.Module) *BigButtonModuleActor {
-	actor := &BigButtonModuleActor{
+func NewKeypadModuleActor(module entities.Module) *KeypadModuleActor {
+	actor := &KeypadModuleActor{
 		BaseModuleActor: NewBaseModuleActor(module, 50),
 	}
 
@@ -19,7 +19,7 @@ func NewBigButtonModuleActor(module entities.Module) *BigButtonModuleActor {
 	return actor
 }
 
-func (a *BigButtonModuleActor) handleMessage(msg Message) {
+func (a *KeypadModuleActor) handleMessage(msg Message) {
 	switch m := msg.(type) {
 	case ModuleCommandMessage:
 		a.handleModuleCommand(m)
@@ -28,12 +28,12 @@ func (a *BigButtonModuleActor) handleMessage(msg Message) {
 	}
 }
 
-func (a *BigButtonModuleActor) handleModuleCommand(msg ModuleCommandMessage) {
+func (a *KeypadModuleActor) handleModuleCommand(msg ModuleCommandMessage) {
 	cmd := msg.Command
 
 	switch typedCmd := cmd.(type) {
-	case *command.BigButtonInputCommand:
-		buttonModule, ok := a.module.(*entities.BigButtonModule)
+	case *command.KeypadInputCommand:
+		keypadModule, ok := a.module.(*entities.KeypadModule)
 		if !ok {
 			msg.GetResponseChannel() <- ErrorResponse{
 				Err: ErrInvalidModuleType,
@@ -41,23 +41,17 @@ func (a *BigButtonModuleActor) handleModuleCommand(msg ModuleCommandMessage) {
 			return
 		}
 
-		stripColor, strike, err := buttonModule.PressButton(typedCmd.PressType, typedCmd.ReleaseTimestamp)
-		result := &command.BigButtonInputCommandResult{
+		active, strike, err := keypadModule.PressSymbol(typedCmd.Symbol)
+		result := &command.KeypadInputCommandResult{
 			BaseModuleInputCommandResult: command.BaseModuleInputCommandResult{
 				Solved: a.module.GetModuleState().IsSolved(),
-				Strike: err != nil,
+				Strike: strike,
 			},
+			DisplayedSymbols: keypadModule.State.DisplayedSymbols,
+			ActivatedSymbols: active,
 		}
 
-		if stripColor != nil {
-			result.StripColor = stripColor
-		}
-
-		if strike {
-			msg.ResponseChannel <- SuccessResponse{
-				Data: result,
-			}
-		} else if err != nil {
+		if err != nil {
 			msg.ResponseChannel <- ErrorResponse{
 				Err: err,
 			}

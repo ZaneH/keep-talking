@@ -88,6 +88,8 @@ func (f *BombFactoryImpl) createModule(bomb *entities.Bomb, moduleType valueobje
 		module = f.moduleFactory.CreateBigButtonModule()
 	case valueobject.SimonSays:
 		module = f.moduleFactory.CreateSimonSaysModule()
+	case valueobject.Keypad:
+		module = f.moduleFactory.CreateKeypadModule()
 	default:
 		log.Printf("unknown module type %v, skipping...", moduleType)
 		return nil
