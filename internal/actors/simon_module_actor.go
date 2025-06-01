@@ -5,12 +5,12 @@ import (
 	"github.com/ZaneH/keep-talking/internal/domain/entities"
 )
 
-type BigButtonModuleActor struct {
+type SimonModuleActor struct {
 	BaseModuleActor
 }
 
-func NewBigButtonModuleActor(module entities.Module) *BigButtonModuleActor {
-	actor := &BigButtonModuleActor{
+func NewSimonModuleActor(module entities.Module) *SimonModuleActor {
+	actor := &SimonModuleActor{
 		BaseModuleActor: NewBaseModuleActor(module, 50),
 	}
 
@@ -19,7 +19,7 @@ func NewBigButtonModuleActor(module entities.Module) *BigButtonModuleActor {
 	return actor
 }
 
-func (a *BigButtonModuleActor) handleMessage(msg Message) {
+func (a *SimonModuleActor) handleMessage(msg Message) {
 	switch m := msg.(type) {
 	case ModuleCommandMessage:
 		a.handleModuleCommand(m)
@@ -28,12 +28,12 @@ func (a *BigButtonModuleActor) handleMessage(msg Message) {
 	}
 }
 
-func (a *BigButtonModuleActor) handleModuleCommand(msg ModuleCommandMessage) {
+func (a *SimonModuleActor) handleModuleCommand(msg ModuleCommandMessage) {
 	cmd := msg.Command
 
 	switch typedCmd := cmd.(type) {
-	case *command.BigButtonInputCommand:
-		buttonModule, ok := a.module.(*entities.BigButtonModule)
+	case *command.SimonInputCommand:
+		simonSaysModule, ok := a.module.(*entities.SimonModule)
 		if !ok {
 			msg.GetResponseChannel() <- ErrorResponse{
 				Err: ErrInvalidModuleType,
@@ -41,24 +41,17 @@ func (a *BigButtonModuleActor) handleModuleCommand(msg ModuleCommandMessage) {
 			return
 		}
 
-		stripColor, strike, err := buttonModule.PressButton(typedCmd.PressType, typedCmd.ReleaseTimestamp)
-		result := &command.BigButtonInputCommandResult{
+		finishedSeq, nextSeq, strike, err := simonSaysModule.PressColor(typedCmd.Color)
+		result := &command.SimonInputCommandResult{
 			BaseModuleInputCommandResult: command.BaseModuleInputCommandResult{
 				Solved: a.module.GetModuleState().IsSolved(),
-				Strike: err != nil,
+				Strike: strike,
 			},
+			HasFinishedSeq:  finishedSeq,
+			DisplaySequence: nextSeq,
 		}
 
-		if stripColor != nil {
-			result.StripColor = stripColor
-		}
-
-		// TODO: Remove strike condition, err is being misused
-		if strike {
-			msg.ResponseChannel <- SuccessResponse{
-				Data: result,
-			}
-		} else if err != nil {
+		if err != nil {
 			msg.ResponseChannel <- ErrorResponse{
 				Err: err,
 			}

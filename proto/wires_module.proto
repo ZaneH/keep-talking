@@ -1,0 +1,20 @@
+syntax = "proto3";
+package modules;
+
+import "proto/common.proto";
+
+option go_package = "./proto";
+
+message WiresInput {
+  int32 wire_position = 1;
+}
+
+message WiresState {
+  repeated Wire wires = 1;
+}
+
+message Wire {
+  common.Color wire_color = 1;
+  bool is_cut = 2;
+  int32 position = 3;
+}

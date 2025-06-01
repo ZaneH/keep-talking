@@ -1,0 +1,20 @@
+syntax = "proto3";
+package modules;
+
+import "proto/common.proto";
+
+option go_package = "./proto";
+
+message WhosOnFirstInput {
+  string word = 1;
+}
+
+message WhosOnFirstInputResult {
+  WhosOnFirstState whos_on_first_state = 1;
+}
+
+message WhosOnFirstState {
+  string screen_word = 1;
+  repeated string button_words = 2;
+  int32 stage = 3;
+}

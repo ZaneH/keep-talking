@@ -1,16 +1,18 @@
 package actors
 
 import (
+	"errors"
+
 	"github.com/ZaneH/keep-talking/internal/application/command"
 	"github.com/ZaneH/keep-talking/internal/domain/entities"
 )
 
-type BigButtonModuleActor struct {
+type WhosOnFirstModuleActor struct {
 	BaseModuleActor
 }
 
-func NewBigButtonModuleActor(module entities.Module) *BigButtonModuleActor {
-	actor := &BigButtonModuleActor{
+func NewWhosOnFirstModuleActor(module entities.Module) *WhosOnFirstModuleActor {
+	actor := &WhosOnFirstModuleActor{
 		BaseModuleActor: NewBaseModuleActor(module, 50),
 	}
 
@@ -19,7 +21,7 @@ func NewBigButtonModuleActor(module entities.Module) *BigButtonModuleActor {
 	return actor
 }
 
-func (a *BigButtonModuleActor) handleMessage(msg Message) {
+func (a *WhosOnFirstModuleActor) handleMessage(msg Message) {
 	switch m := msg.(type) {
 	case ModuleCommandMessage:
 		a.handleModuleCommand(m)
@@ -28,12 +30,12 @@ func (a *BigButtonModuleActor) handleMessage(msg Message) {
 	}
 }
 
-func (a *BigButtonModuleActor) handleModuleCommand(msg ModuleCommandMessage) {
+func (a *WhosOnFirstModuleActor) handleModuleCommand(msg ModuleCommandMessage) {
 	cmd := msg.Command
 
 	switch typedCmd := cmd.(type) {
-	case *command.BigButtonInputCommand:
-		buttonModule, ok := a.module.(*entities.BigButtonModule)
+	case *command.WhosOnFirstInputCommand:
+		whosOnFirstModule, ok := a.module.(*entities.WhosOnFirstModule)
 		if !ok {
 			msg.GetResponseChannel() <- ErrorResponse{
 				Err: ErrInvalidModuleType,
@@ -41,24 +43,18 @@ func (a *BigButtonModuleActor) handleModuleCommand(msg ModuleCommandMessage) {
 			return
 		}
 
-		stripColor, strike, err := buttonModule.PressButton(typedCmd.PressType, typedCmd.ReleaseTimestamp)
-		result := &command.BigButtonInputCommandResult{
+		strike, err := whosOnFirstModule.PressWord(typedCmd.Word)
+		result := &command.WhosOnFirstInputCommandResult{
 			BaseModuleInputCommandResult: command.BaseModuleInputCommandResult{
 				Solved: a.module.GetModuleState().IsSolved(),
-				Strike: err != nil,
+				Strike: strike,
 			},
+			ScreenWord:  whosOnFirstModule.State.ScreenWord,
+			ButtonWords: whosOnFirstModule.State.ButtonWords,
+			Stage:       whosOnFirstModule.State.Stage,
 		}
 
-		if stripColor != nil {
-			result.StripColor = stripColor
-		}
-
-		// TODO: Remove strike condition, err is being misused
-		if strike {
-			msg.ResponseChannel <- SuccessResponse{
-				Data: result,
-			}
-		} else if err != nil {
+		if err != nil {
 			msg.ResponseChannel <- ErrorResponse{
 				Err: err,
 			}
@@ -69,7 +65,7 @@ func (a *BigButtonModuleActor) handleModuleCommand(msg ModuleCommandMessage) {
 		}
 	default:
 		msg.ResponseChannel <- ErrorResponse{
-			Err: ErrInvalidModuleCommand,
+			Err: errors.New("unsupported command type for simple wires module"),
 		}
 	}
 }

@@ -1,0 +1,19 @@
+syntax = "proto3";
+package modules;
+
+import "proto/common.proto";
+
+option go_package = "./proto";
+
+message SimonInput {
+  common.Color color = 1;
+}
+
+message SimonInputResult {
+  bool has_finished_seq = 1;
+  repeated common.Color display_sequence = 2;
+}
+
+message SimonState {
+  repeated common.Color current_sequence = 1;
+}
