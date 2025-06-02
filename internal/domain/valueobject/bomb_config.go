@@ -41,6 +41,7 @@ func NewDefaultBombConfig() BombConfig {
 			Simon:       0.05,
 			WhosOnFirst: 0.05,
 			Memory:      0.05,
+			Morse:       0.05,
 		},
 		MinBatteries:      1,
 		MaxBatteries:      4,

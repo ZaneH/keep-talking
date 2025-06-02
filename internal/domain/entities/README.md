@@ -10,8 +10,9 @@ and a full entity representation that is independent of the interface layers.
 - [ ] Knob
 - [ ] Maze
 - [x] Memory
-- [ ] Morse Code
+- [x] Morse Code
 - [x] Password
+  - TODO: Consolidate increment/decrement functions using valueobject.IncrementDecrement and update function name to "Press..."
 - [x] Simon Says
 - [x] The Button
 - [ ] Venting Gas

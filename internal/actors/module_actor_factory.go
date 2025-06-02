@@ -24,6 +24,8 @@ func CreateModuleActor(bomb *entities.Bomb, module entities.Module) (ModuleActor
 		return NewWhosOnFirstModuleActor(module), nil
 	case *entities.MemoryModule:
 		return NewMemoryModuleActor(module), nil
+	case *entities.MorseModule:
+		return NewMorseModuleActor(module), nil
 	default:
 		return nil, fmt.Errorf("unsupported module type: %v", module.GetType())
 	}

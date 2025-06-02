@@ -123,7 +123,8 @@
         "SIMON",
         "KEYPAD",
         "WHOS_ON_FIRST",
-        "MEMORY"
+        "MEMORY",
+        "MORSE"
       ],
       "default": "UNKNOWN"
     },
@@ -379,6 +380,9 @@
         },
         "memoryState": {
           "$ref": "#/definitions/modulesMemoryState"
+        },
+        "morseState": {
+          "$ref": "#/definitions/modulesMorseState"
         }
       }
     },
@@ -398,6 +402,46 @@
           "format": "int32"
         }
       }
+    },
+    "modulesMorseFrequencyChange": {
+      "type": "object",
+      "properties": {
+        "direction": {
+          "$ref": "#/definitions/commonIncrementDecrement"
+        }
+      }
+    },
+    "modulesMorseInput": {
+      "type": "object",
+      "properties": {
+        "frequencyChange": {
+          "$ref": "#/definitions/modulesMorseFrequencyChange"
+        },
+        "tx": {
+          "$ref": "#/definitions/modulesMorseTx"
+        }
+      }
+    },
+    "modulesMorseInputResult": {
+      "type": "object",
+      "properties": {
+        "morseState": {
+          "$ref": "#/definitions/modulesMorseState"
+        }
+      }
+    },
+    "modulesMorseState": {
+      "type": "object",
+      "properties": {
+        "displayedFrequency": {
+          "type": "number",
+          "format": "float",
+          "title": "The frequency that is currently selected"
+        }
+      }
+    },
+    "modulesMorseTx": {
+      "type": "object"
     },
     "modulesPasswordInput": {
       "type": "object",
@@ -610,6 +654,9 @@
         },
         "memoryInput": {
           "$ref": "#/definitions/modulesMemoryInput"
+        },
+        "morseInput": {
+          "$ref": "#/definitions/modulesMorseInput"
         }
       }
     },
@@ -642,6 +689,9 @@
         },
         "memoryInputResult": {
           "$ref": "#/definitions/modulesMemoryInputResult"
+        },
+        "morseInputResult": {
+          "$ref": "#/definitions/modulesMorseInputResult"
         }
       }
     },

@@ -94,6 +94,8 @@ func (f *BombFactoryImpl) createModule(bomb *entities.Bomb, moduleType valueobje
 		module = f.moduleFactory.CreateWhosOnFirstModule()
 	case valueobject.Memory:
 		module = f.moduleFactory.CreateMemoryModule()
+	case valueobject.Morse:
+		module = f.moduleFactory.CreateMorseModule()
 	default:
 		log.Printf("unknown module type %v, skipping...", moduleType)
 		return nil

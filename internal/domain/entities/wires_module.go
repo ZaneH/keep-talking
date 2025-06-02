@@ -16,7 +16,7 @@ const maxWires = 6
 
 type WiresState struct {
 	BaseModuleState
-	Wires []valueobject.SimpleWire
+	Wires []valueobject.Wire
 }
 
 func NewWiresState(rng ports.RandomGenerator) WiresState {
@@ -67,9 +67,9 @@ func (m *WiresModule) String() string {
 	return result
 }
 
-func generateRandomWires(rng ports.RandomGenerator) []valueobject.SimpleWire {
+func generateRandomWires(rng ports.RandomGenerator) []valueobject.Wire {
 	nWires := rng.GetIntInRange(minWires, maxWires)
-	wires := make([]valueobject.SimpleWire, nWires)
+	wires := make([]valueobject.Wire, nWires)
 
 	maxPossibleGaps := maxWires - nWires
 	extraPositions := 0
@@ -90,10 +90,10 @@ func generateRandomWires(rng ports.RandomGenerator) []valueobject.SimpleWire {
 	selectedIndices := possibleIndices[:nWires]
 
 	for i := 0; i < nWires; i++ {
-		colorIndex := rng.GetIntInRange(0, len(valueobject.SimpleWireColors)-1)
-		color := valueobject.SimpleWireColors[colorIndex]
+		colorIndex := rng.GetIntInRange(0, len(wireColors)-1)
+		color := wireColors[colorIndex]
 
-		wires[i] = valueobject.SimpleWire{
+		wires[i] = valueobject.Wire{
 			WireColor: color,
 			Position:  selectedIndices[i],
 		}
@@ -108,16 +108,16 @@ func (m *WiresModule) cutSucceed() (strike bool, err error) {
 }
 
 func (m *WiresModule) CutWire(wirePos int) (strike bool, err error) {
-	sorted := make([]valueobject.SimpleWire, len(m.State.Wires))
+	sorted := make([]valueobject.Wire, len(m.State.Wires))
 	copy(sorted, m.State.Wires)
 
 	// Create a sorted copy of the wires based on their positions
-	slices.SortFunc(sorted, func(a, b valueobject.SimpleWire) int {
+	slices.SortFunc(sorted, func(a, b valueobject.Wire) int {
 		return a.Position - b.Position
 	})
 
 	// Get the index, accounting for any gaps created by extra positions
-	wireIdx := slices.IndexFunc(sorted, func(w valueobject.SimpleWire) bool {
+	wireIdx := slices.IndexFunc(sorted, func(w valueobject.Wire) bool {
 		return w.Position == wirePos
 	})
 
@@ -280,7 +280,7 @@ func (m *WiresModule) CutWire(wirePos int) (strike bool, err error) {
 	return true, nil
 }
 
-func hasColor(wires []valueobject.SimpleWire, color valueobject.Color) bool {
+func hasColor(wires []valueobject.Wire, color valueobject.Color) bool {
 	for _, wire := range wires {
 		if wire.WireColor == color {
 			return true
@@ -289,7 +289,7 @@ func hasColor(wires []valueobject.SimpleWire, color valueobject.Color) bool {
 	return false
 }
 
-func colorIndecies(wires []valueobject.SimpleWire, color valueobject.Color) []int {
+func colorIndecies(wires []valueobject.Wire, color valueobject.Color) []int {
 	indecies := []int{}
 	for i, wire := range wires {
 		if wire.WireColor == color {
@@ -297,4 +297,12 @@ func colorIndecies(wires []valueobject.SimpleWire, color valueobject.Color) []in
 		}
 	}
 	return indecies
+}
+
+var wireColors = [...]valueobject.Color{
+	valueobject.Yellow,
+	valueobject.Red,
+	valueobject.Blue,
+	valueobject.Black,
+	valueobject.White,
 }

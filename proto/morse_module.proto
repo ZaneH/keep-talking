@@ -1,0 +1,28 @@
+syntax = "proto3";
+package modules;
+
+option go_package = "./proto";
+
+import "proto/common.proto";
+
+message MorseFrequencyChange {
+  common.IncrementDecrement direction = 1;
+}
+
+message MorseTx {}
+
+message MorseInput {
+  oneof input {
+    MorseFrequencyChange frequency_change = 1;
+    MorseTx tx = 2;
+  }
+}
+
+message MorseInputResult {
+  MorseState morse_state = 1;
+}
+
+message MorseState {
+  // The frequency that is currently selected
+  float displayed_frequency = 1;
+}

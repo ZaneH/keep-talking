@@ -28,6 +28,8 @@ func mapTypeToProto(moduleType valueobject.ModuleType) pb.Module_ModuleType {
 		return pb.Module_WHOS_ON_FIRST
 	case valueobject.Memory:
 		return pb.Module_MEMORY
+	case valueobject.Morse:
+		return pb.Module_MORSE
 	default:
 		log.Fatalf("Unknown module type: %v. Couldn't map type to proto.", moduleType)
 		return pb.Module_UNKNOWN
@@ -230,6 +232,18 @@ func mapModulesToProto(modules map[uuid.UUID]actors.ModuleActor) map[string]*pb.
 					ScreenNumber:     int32(memoryState.ScreenNumber),
 					DisplayedNumbers: displayedNumbers,
 					Stage:            int32(memoryState.Stage),
+				},
+			}
+		case valueobject.Morse:
+			morseState, ok := actor.GetModule().GetModuleState().(*entities.MorseState)
+			if !ok {
+				log.Printf("Expected *MorseState but got different type: %T", actor.GetModule().GetModuleState())
+				continue
+			}
+
+			protoModule.State = &pb.Module_MorseState{
+				MorseState: &pb.MorseState{
+					DisplayedFrequency: morseState.DisplayedFrequency,
 				},
 			}
 		default:

@@ -32,25 +32,25 @@ func TestWiresModuleActor_FourWiresMoreThanOneRedOddSerial(t *testing.T) {
 	}
 
 	testState := entities.WiresState{
-		Wires: []valueobject.SimpleWire{
+		Wires: []valueobject.Wire{
 			{
 				// Yellow
-				WireColor: valueobject.SimpleWireColors[0],
+				WireColor: valueobject.Yellow,
 				Position:  1,
 			},
 			{
 				// Red
-				WireColor: valueobject.SimpleWireColors[1],
+				WireColor: valueobject.Red,
 				Position:  2,
 			},
 			{
 				// Blue
-				WireColor: valueobject.SimpleWireColors[2],
+				WireColor: valueobject.Blue,
 				Position:  3,
 			},
 			{
 				// Red
-				WireColor: valueobject.SimpleWireColors[1],
+				WireColor: valueobject.Red,
 				Position:  4,
 			},
 		},
@@ -158,20 +158,20 @@ func TestWiresModuleActor_ThreeWiresNoRed(t *testing.T) {
 	}
 
 	testState := entities.WiresState{
-		Wires: []valueobject.SimpleWire{
+		Wires: []valueobject.Wire{
 			{
 				// Yellow
-				WireColor: valueobject.SimpleWireColors[0],
+				WireColor: valueobject.Yellow,
 				Position:  1,
 			},
 			{
 				// Blue
-				WireColor: valueobject.SimpleWireColors[2],
+				WireColor: valueobject.Blue,
 				Position:  2,
 			},
 			{
 				// Black
-				WireColor: valueobject.SimpleWireColors[3],
+				WireColor: valueobject.Black,
 				Position:  3,
 			},
 		},

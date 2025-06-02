@@ -131,6 +131,26 @@ func (s *GameServiceAdapter) SendInput(ctx context.Context, i *pb.PlayerInput) (
 			},
 			ButtonIndex: int(input.MemoryInput.ButtonIndex),
 		}
+	case *pb.PlayerInput_MorseInput:
+		switch mi := input.MorseInput.Input.(type) {
+		case *pb.MorseInput_FrequencyChange:
+			cmd = &command.MorseChangeFrequencyCommand{
+				BaseModuleInputCommand: command.BaseModuleInputCommand{
+					SessionID: sessionID,
+					BombID:    bombID,
+					ModuleID:  moduleID,
+				},
+				Direction: valueobject.IncrementDecrement(mi.FrequencyChange.Direction),
+			}
+		case *pb.MorseInput_Tx:
+			cmd = &command.MorseTxCommand{
+				BaseModuleInputCommand: command.BaseModuleInputCommand{
+					SessionID: sessionID,
+					BombID:    bombID,
+					ModuleID:  moduleID,
+				},
+			}
+		}
 	default:
 		return nil, fmt.Errorf("unknown input type: %T", input)
 	}
@@ -252,6 +272,19 @@ func (s *GameServiceAdapter) SendInput(ctx context.Context, i *pb.PlayerInput) (
 						ScreenNumber:     int32(cmdResult.ScreenNumber),
 						DisplayedNumbers: int32Slice,
 						Stage:            int32(cmdResult.Stage),
+					},
+				},
+			},
+		}, nil
+	case *command.MorseCommandResult:
+		return &pb.PlayerInputResult{
+			ModuleId: i.GetModuleId(),
+			Strike:   res != nil && cmdResult.Strike,
+			Solved:   res != nil && cmdResult.Solved,
+			Result: &pb.PlayerInputResult_MorseInputResult{
+				MorseInputResult: &pb.MorseInputResult{
+					MorseState: &pb.MorseState{
+						DisplayedFrequency: cmdResult.DisplayedFrequency,
 					},
 				},
 			},

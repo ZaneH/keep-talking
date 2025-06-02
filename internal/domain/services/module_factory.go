@@ -44,3 +44,7 @@ func (f *ModuleFactory) CreateWhosOnFirstModule() *entities.WhosOnFirstModule {
 func (f *ModuleFactory) CreateMemoryModule() *entities.MemoryModule {
 	return entities.NewMemoryModule(f.rng)
 }
+
+func (f *ModuleFactory) CreateMorseModule() *entities.MorseModule {
+	return entities.NewMorseModule(f.rng)
+}

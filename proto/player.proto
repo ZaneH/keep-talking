@@ -8,6 +8,7 @@ import "proto/simon_module.proto";
 import "proto/keypad_module.proto";
 import "proto/whos_on_first_module.proto";
 import "proto/memory_module.proto";
+import "proto/morse_module.proto";
 
 option go_package = "./proto";
 
@@ -30,6 +31,7 @@ message PlayerInput {
     modules.KeypadInput keypad_input = 14;
     modules.WhosOnFirstInput whos_on_first_input = 15;
     modules.MemoryInput memory_input = 16;
+    modules.MorseInput morse_input = 17;
   }
 }
 
@@ -44,5 +46,6 @@ message PlayerInputResult {
     modules.KeypadInputResult keypad_input_result = 13;
     modules.WhosOnFirstInputResult whos_on_first_input_result = 14;
     modules.MemoryInputResult memory_input_result = 15;
+    modules.MorseInputResult morse_input_result = 16;
   }
 }
