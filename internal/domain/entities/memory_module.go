@@ -261,7 +261,6 @@ func (m *MemoryModule) PressButton(btnIdx int) (strike bool, err error) {
 	m.State.Stage = 1
 	m.State.ScreenNumber = m.rng.GetIntInRange(1, 4)
 	m.State.DisplayedNumbers = generateMemoryDisplayedNumbers(m.rng)
-
 	return true, nil
 }
 

@@ -1,8 +1,7 @@
 # Entities
 
-In DDD, entities represent things that are identifiable. In this repo, each module on
-the bomb is identified with a UUID along with a full entity representation that is
-not dependant on the interface layers.
+In DDD, entities represent things that are identifiable. In this repo, each module has a UUID
+and a full entity representation that is independent of the interface layers.
 
 ## Progress
 
