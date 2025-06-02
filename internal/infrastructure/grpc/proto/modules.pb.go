@@ -32,6 +32,7 @@ const (
 	Module_SIMON         Module_ModuleType = 5
 	Module_KEYPAD        Module_ModuleType = 6
 	Module_WHOS_ON_FIRST Module_ModuleType = 7
+	Module_MEMORY        Module_ModuleType = 8
 )
 
 // Enum value maps for Module_ModuleType.
@@ -45,6 +46,7 @@ var (
 		5: "SIMON",
 		6: "KEYPAD",
 		7: "WHOS_ON_FIRST",
+		8: "MEMORY",
 	}
 	Module_ModuleType_value = map[string]int32{
 		"UNKNOWN":       0,
@@ -55,6 +57,7 @@ var (
 		"SIMON":         5,
 		"KEYPAD":        6,
 		"WHOS_ON_FIRST": 7,
+		"MEMORY":        8,
 	}
 )
 
@@ -159,6 +162,7 @@ type Module struct {
 	//	*Module_SimonState
 	//	*Module_KeypadState
 	//	*Module_WhosOnFirstState
+	//	*Module_MemoryState
 	State         isModule_State `protobuf_oneof:"state"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -283,6 +287,15 @@ func (x *Module) GetWhosOnFirstState() *WhosOnFirstState {
 	return nil
 }
 
+func (x *Module) GetMemoryState() *MemoryState {
+	if x != nil {
+		if x, ok := x.State.(*Module_MemoryState); ok {
+			return x.MemoryState
+		}
+	}
+	return nil
+}
+
 type isModule_State interface {
 	isModule_State()
 }
@@ -311,6 +324,10 @@ type Module_WhosOnFirstState struct {
 	WhosOnFirstState *WhosOnFirstState `protobuf:"bytes,10,opt,name=whos_on_first_state,json=whosOnFirstState,proto3,oneof"`
 }
 
+type Module_MemoryState struct {
+	MemoryState *MemoryState `protobuf:"bytes,11,opt,name=memory_state,json=memoryState,proto3,oneof"`
+}
+
 func (*Module_WiresState) isModule_State() {}
 
 func (*Module_PasswordState) isModule_State() {}
@@ -323,15 +340,17 @@ func (*Module_KeypadState) isModule_State() {}
 
 func (*Module_WhosOnFirstState) isModule_State() {}
 
+func (*Module_MemoryState) isModule_State() {}
+
 var File_proto_modules_proto protoreflect.FileDescriptor
 
 const file_proto_modules_proto_rawDesc = "" +
 	"\n" +
-	"\x13proto/modules.proto\x12\amodules\x1a\x18proto/wires_module.proto\x1a\x1dproto/big_button_module.proto\x1a\x18proto/simon_module.proto\x1a\x1bproto/password_module.proto\x1a\x19proto/keypad_module.proto\x1a proto/whos_on_first_module.proto\"H\n" +
+	"\x13proto/modules.proto\x12\amodules\x1a\x18proto/wires_module.proto\x1a\x1dproto/big_button_module.proto\x1a\x18proto/simon_module.proto\x1a\x1bproto/password_module.proto\x1a\x19proto/keypad_module.proto\x1a proto/whos_on_first_module.proto\x1a\x19proto/memory_module.proto\"H\n" +
 	"\x0eModulePosition\x12\x12\n" +
 	"\x04face\x18\x01 \x01(\x05R\x04face\x12\x10\n" +
 	"\x03row\x18\x02 \x01(\x05R\x03row\x12\x10\n" +
-	"\x03col\x18\x03 \x01(\x05R\x03col\"\x94\x05\n" +
+	"\x03col\x18\x03 \x01(\x05R\x03col\"\xdc\x05\n" +
 	"\x06Module\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12.\n" +
 	"\x04type\x18\x02 \x01(\x0e2\x1a.modules.Module.ModuleTypeR\x04type\x123\n" +
@@ -345,7 +364,8 @@ const file_proto_modules_proto_rawDesc = "" +
 	"simonState\x129\n" +
 	"\fkeypad_state\x18\t \x01(\v2\x14.modules.KeypadStateH\x00R\vkeypadState\x12J\n" +
 	"\x13whos_on_first_state\x18\n" +
-	" \x01(\v2\x19.modules.WhosOnFirstStateH\x00R\x10whosOnFirstState\"w\n" +
+	" \x01(\v2\x19.modules.WhosOnFirstStateH\x00R\x10whosOnFirstState\x129\n" +
+	"\fmemory_state\x18\v \x01(\v2\x14.modules.MemoryStateH\x00R\vmemoryState\"\x83\x01\n" +
 	"\n" +
 	"ModuleType\x12\v\n" +
 	"\aUNKNOWN\x10\x00\x12\t\n" +
@@ -357,7 +377,9 @@ const file_proto_modules_proto_rawDesc = "" +
 	"\x05SIMON\x10\x05\x12\n" +
 	"\n" +
 	"\x06KEYPAD\x10\x06\x12\x11\n" +
-	"\rWHOS_ON_FIRST\x10\aB\a\n" +
+	"\rWHOS_ON_FIRST\x10\a\x12\n" +
+	"\n" +
+	"\x06MEMORY\x10\bB\a\n" +
 	"\x05stateB\tZ\a./protob\x06proto3"
 
 var (
@@ -384,6 +406,7 @@ var file_proto_modules_proto_goTypes = []any{
 	(*SimonState)(nil),       // 6: modules.SimonState
 	(*KeypadState)(nil),      // 7: modules.KeypadState
 	(*WhosOnFirstState)(nil), // 8: modules.WhosOnFirstState
+	(*MemoryState)(nil),      // 9: modules.MemoryState
 }
 var file_proto_modules_proto_depIdxs = []int32{
 	0, // 0: modules.Module.type:type_name -> modules.Module.ModuleType
@@ -394,11 +417,12 @@ var file_proto_modules_proto_depIdxs = []int32{
 	6, // 5: modules.Module.simon_state:type_name -> modules.SimonState
 	7, // 6: modules.Module.keypad_state:type_name -> modules.KeypadState
 	8, // 7: modules.Module.whos_on_first_state:type_name -> modules.WhosOnFirstState
-	8, // [8:8] is the sub-list for method output_type
-	8, // [8:8] is the sub-list for method input_type
-	8, // [8:8] is the sub-list for extension type_name
-	8, // [8:8] is the sub-list for extension extendee
-	0, // [0:8] is the sub-list for field type_name
+	9, // 8: modules.Module.memory_state:type_name -> modules.MemoryState
+	9, // [9:9] is the sub-list for method output_type
+	9, // [9:9] is the sub-list for method input_type
+	9, // [9:9] is the sub-list for extension type_name
+	9, // [9:9] is the sub-list for extension extendee
+	0, // [0:9] is the sub-list for field type_name
 }
 
 func init() { file_proto_modules_proto_init() }
@@ -412,6 +436,7 @@ func file_proto_modules_proto_init() {
 	file_proto_password_module_proto_init()
 	file_proto_keypad_module_proto_init()
 	file_proto_whos_on_first_module_proto_init()
+	file_proto_memory_module_proto_init()
 	file_proto_modules_proto_msgTypes[1].OneofWrappers = []any{
 		(*Module_WiresState)(nil),
 		(*Module_PasswordState)(nil),
@@ -419,6 +444,7 @@ func file_proto_modules_proto_init() {
 		(*Module_SimonState)(nil),
 		(*Module_KeypadState)(nil),
 		(*Module_WhosOnFirstState)(nil),
+		(*Module_MemoryState)(nil),
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{

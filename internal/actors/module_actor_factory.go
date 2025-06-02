@@ -22,6 +22,8 @@ func CreateModuleActor(bomb *entities.Bomb, module entities.Module) (ModuleActor
 		return NewKeypadModuleActor(module), nil
 	case *entities.WhosOnFirstModule:
 		return NewWhosOnFirstModuleActor(module), nil
+	case *entities.MemoryModule:
+		return NewMemoryModuleActor(module), nil
 	default:
 		return nil, fmt.Errorf("unsupported module type: %v", module.GetType())
 	}

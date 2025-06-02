@@ -26,6 +26,8 @@ func mapTypeToProto(moduleType valueobject.ModuleType) pb.Module_ModuleType {
 		return pb.Module_KEYPAD
 	case valueobject.WhosOnFirst:
 		return pb.Module_WHOS_ON_FIRST
+	case valueobject.Memory:
+		return pb.Module_MEMORY
 	default:
 		log.Fatalf("Unknown module type: %v. Couldn't map type to proto.", moduleType)
 		return pb.Module_UNKNOWN
@@ -145,7 +147,7 @@ func mapModulesToProto(modules map[uuid.UUID]actors.ModuleActor) map[string]*pb.
 		case valueobject.Simon:
 			simonState, ok := actor.GetModule().GetModuleState().(*entities.SimonState)
 			if !ok {
-				log.Printf("Expected *SimonSaysState but got different type: %T", actor.GetModule().GetModuleState())
+				log.Printf("Expected *SimonState but got different type: %T", actor.GetModule().GetModuleState())
 				continue
 			}
 
@@ -209,6 +211,25 @@ func mapModulesToProto(modules map[uuid.UUID]actors.ModuleActor) map[string]*pb.
 					ScreenWord:  whosOnFirstState.ScreenWord,
 					ButtonWords: whosOnFirstState.ButtonWords,
 					Stage:       int32(whosOnFirstState.Stage),
+				},
+			}
+		case valueobject.Memory:
+			memoryState, ok := actor.GetModule().GetModuleState().(*entities.MemoryState)
+			if !ok {
+				log.Printf("Expected *MemoryState but got different type: %T", actor.GetModule().GetModuleState())
+				continue
+			}
+
+			displayedNumbers := make([]int32, len(memoryState.DisplayedNumbers))
+			for i, num := range memoryState.DisplayedNumbers {
+				displayedNumbers[i] = int32(num)
+			}
+
+			protoModule.State = &pb.Module_MemoryState{
+				MemoryState: &pb.MemoryState{
+					ScreenNumber:     int32(memoryState.ScreenNumber),
+					DisplayedNumbers: displayedNumbers,
+					Stage:            int32(memoryState.Stage),
 				},
 			}
 		default:

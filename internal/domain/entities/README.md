@@ -10,7 +10,7 @@ not dependant on the interface layers.
 - [x] Keypad
 - [ ] Knob
 - [ ] Maze
-- [ ] Memory
+- [x] Memory
 - [ ] Morse Code
 - [x] Password
 - [x] Simon Says

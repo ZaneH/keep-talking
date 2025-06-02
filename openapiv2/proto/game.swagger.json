@@ -122,7 +122,8 @@
         "BIG_BUTTON",
         "SIMON",
         "KEYPAD",
-        "WHOS_ON_FIRST"
+        "WHOS_ON_FIRST",
+        "MEMORY"
       ],
       "default": "UNKNOWN"
     },
@@ -306,6 +307,43 @@
         }
       }
     },
+    "modulesMemoryInput": {
+      "type": "object",
+      "properties": {
+        "buttonIndex": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "modulesMemoryInputResult": {
+      "type": "object",
+      "properties": {
+        "memoryState": {
+          "$ref": "#/definitions/modulesMemoryState"
+        }
+      }
+    },
+    "modulesMemoryState": {
+      "type": "object",
+      "properties": {
+        "screenNumber": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "displayedNumbers": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "stage": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
     "modulesModule": {
       "type": "object",
       "properties": {
@@ -338,6 +376,9 @@
         },
         "whosOnFirstState": {
           "$ref": "#/definitions/modulesWhosOnFirstState"
+        },
+        "memoryState": {
+          "$ref": "#/definitions/modulesMemoryState"
         }
       }
     },
@@ -566,6 +607,9 @@
         },
         "whosOnFirstInput": {
           "$ref": "#/definitions/modulesWhosOnFirstInput"
+        },
+        "memoryInput": {
+          "$ref": "#/definitions/modulesMemoryInput"
         }
       }
     },
@@ -595,6 +639,9 @@
         },
         "whosOnFirstInputResult": {
           "$ref": "#/definitions/modulesWhosOnFirstInputResult"
+        },
+        "memoryInputResult": {
+          "$ref": "#/definitions/modulesMemoryInputResult"
         }
       }
     },

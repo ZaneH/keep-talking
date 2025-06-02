@@ -40,6 +40,7 @@ func NewDefaultBombConfig() BombConfig {
 			Keypad:      0.05,
 			Simon:       0.05,
 			WhosOnFirst: 0.05,
+			Memory:      0.05,
 		},
 		MinBatteries:      1,
 		MaxBatteries:      4,

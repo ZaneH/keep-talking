@@ -1,0 +1,20 @@
+syntax = "proto3";
+package modules;
+
+option go_package = "./proto";
+
+import "proto/common.proto";
+
+message MemoryInput {
+  int32 button_index = 1;
+}
+
+message MemoryInputResult {
+  MemoryState memory_state = 1;
+}
+
+message MemoryState {
+  int32 screen_number = 1;
+  repeated int32 displayed_numbers = 2;
+  int32 stage = 3;
+}

@@ -25,7 +25,7 @@ func (f *ModuleFactory) CreatePasswordModule() *entities.PasswordModule {
 	return entities.NewPasswordModule(f.rng, nil)
 }
 
-func (f *ModuleFactory) CreateSimonSaysModule() *entities.SimonModule {
+func (f *ModuleFactory) CreateSimonModule() *entities.SimonModule {
 	return entities.NewSimonModule(f.rng, nil)
 }
 
@@ -39,4 +39,8 @@ func (f *ModuleFactory) CreateKeypadModule() *entities.KeypadModule {
 
 func (f *ModuleFactory) CreateWhosOnFirstModule() *entities.WhosOnFirstModule {
 	return entities.NewWhosOnFirstModule(f.rng)
+}
+
+func (f *ModuleFactory) CreateMemoryModule() *entities.MemoryModule {
+	return entities.NewMemoryModule(f.rng)
 }

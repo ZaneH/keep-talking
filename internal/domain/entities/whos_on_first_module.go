@@ -18,7 +18,7 @@ type WhosOnFirstState struct {
 	ScreenWord string
 	// 6 words displayed to the player.
 	ButtonWords []string
-	// Tracks the current stage", "[0", "3).
+	// Tracks the current stage, [1, 3].
 	Stage int
 }
 
@@ -27,7 +27,7 @@ func NewWhosOnFirstState(rng ports.RandomGenerator) WhosOnFirstState {
 		BaseModuleState: BaseModuleState{},
 		ScreenWord:      generateScreenWord(rng),
 		ButtonWords:     generateButtonWords(rng),
-		Stage:           0,
+		Stage:           1,
 	}
 }
 
@@ -102,7 +102,7 @@ func (m *WhosOnFirstModule) PressWord(word string) (strike bool, err error) {
 	if word != earliestWord {
 		m.State.ButtonWords = generateButtonWords(m.rng)
 		m.State.ScreenWord = generateScreenWord(m.rng)
-		m.State.Stage = 0
+		m.State.Stage = 1
 
 		return true, nil
 	}
@@ -110,7 +110,7 @@ func (m *WhosOnFirstModule) PressWord(word string) (strike bool, err error) {
 	m.State.ButtonWords = generateButtonWords(m.rng)
 	m.State.ScreenWord = generateScreenWord(m.rng)
 	m.State.Stage++
-	if m.State.Stage >= nWhosOnFirstStages {
+	if m.State.Stage >= nWhosOnFirstStages+1 {
 		m.State.MarkAsSolved()
 		return false, nil
 	}

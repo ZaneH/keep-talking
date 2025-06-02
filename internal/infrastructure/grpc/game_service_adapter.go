@@ -122,6 +122,15 @@ func (s *GameServiceAdapter) SendInput(ctx context.Context, i *pb.PlayerInput) (
 			},
 			Word: input.WhosOnFirstInput.Word,
 		}
+	case *pb.PlayerInput_MemoryInput:
+		cmd = &command.MemoryInputCommand{
+			BaseModuleInputCommand: command.BaseModuleInputCommand{
+				SessionID: sessionID,
+				BombID:    bombID,
+				ModuleID:  moduleID,
+			},
+			ButtonIndex: int(input.MemoryInput.ButtonIndex),
+		}
 	default:
 		return nil, fmt.Errorf("unknown input type: %T", input)
 	}
@@ -223,6 +232,26 @@ func (s *GameServiceAdapter) SendInput(ctx context.Context, i *pb.PlayerInput) (
 						ScreenWord:  cmdResult.ScreenWord,
 						ButtonWords: cmdResult.ButtonWords,
 						Stage:       int32(cmdResult.Stage),
+					},
+				},
+			},
+		}, nil
+	case *command.MemoryInputCommandResult:
+		int32Slice := make([]int32, len(cmdResult.DisplayedNumbers))
+		for i, num := range cmdResult.DisplayedNumbers {
+			int32Slice[i] = int32(num)
+		}
+
+		return &pb.PlayerInputResult{
+			ModuleId: i.GetModuleId(),
+			Strike:   res != nil && cmdResult.Strike,
+			Solved:   res != nil && cmdResult.Solved,
+			Result: &pb.PlayerInputResult_MemoryInputResult{
+				MemoryInputResult: &pb.MemoryInputResult{
+					MemoryState: &pb.MemoryState{
+						ScreenNumber:     int32(cmdResult.ScreenNumber),
+						DisplayedNumbers: int32Slice,
+						Stage:            int32(cmdResult.Stage),
 					},
 				},
 			},
