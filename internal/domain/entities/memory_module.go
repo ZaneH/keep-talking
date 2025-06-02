@@ -89,7 +89,8 @@ func (m *MemoryModule) PressButton(btnIdx int) (strike bool, err error) {
 	n := m.State.DisplayedNumbers[btnIdx]
 	p := btnIdx + 1
 
-	if m.State.Stage == 1 {
+	switch m.State.Stage {
+	case 1:
 		// If the display is 1, press the button in the second position.
 		if m.State.ScreenNumber == 1 {
 			if p == 2 {
@@ -122,7 +123,7 @@ func (m *MemoryModule) PressButton(btnIdx int) (strike bool, err error) {
 				return false, nil
 			}
 		}
-	} else if m.State.Stage == 2 {
+	case 2:
 		// If the display is 1, press the button labeled "4".
 		if m.State.ScreenNumber == 1 {
 			if n == 4 {
@@ -155,7 +156,7 @@ func (m *MemoryModule) PressButton(btnIdx int) (strike bool, err error) {
 				return false, nil
 			}
 		}
-	} else if m.State.Stage == 3 {
+	case 3:
 		// If the display is 1, press the button with the same label you pressed in stage 2.
 		if m.State.ScreenNumber == 1 {
 			if n == m.State.pastRounds[1].buttonNumber {
@@ -188,7 +189,7 @@ func (m *MemoryModule) PressButton(btnIdx int) (strike bool, err error) {
 				return false, nil
 			}
 		}
-	} else if m.State.Stage == 4 {
+	case 4:
 		// If the display is 1, press the button in the same position as you pressed in stage 1.
 		if m.State.ScreenNumber == 1 {
 			if p == m.State.pastRounds[0].buttonPosition {
@@ -221,7 +222,7 @@ func (m *MemoryModule) PressButton(btnIdx int) (strike bool, err error) {
 				return false, nil
 			}
 		}
-	} else if m.State.Stage == 5 {
+	case 5:
 		// If the display is 1, press the button with the same label you pressed in stage 1.
 		if m.State.ScreenNumber == 1 {
 			if n == m.State.pastRounds[0].buttonNumber {
@@ -254,6 +255,8 @@ func (m *MemoryModule) PressButton(btnIdx int) (strike bool, err error) {
 				return false, nil
 			}
 		}
+	default:
+		return false, fmt.Errorf("invalid stage: %d", m.State.Stage)
 	}
 
 	// Incorrect button press, strike the bomb and reset the stage.

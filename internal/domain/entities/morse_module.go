@@ -12,11 +12,13 @@ import (
 
 type MorseState struct {
 	BaseModuleState
-	// Index of the selected frequency chosen by the player.
+	// Index of the selected frequency chosen by the player
 	SelectedFrequencyIdx int
-	// The selected frequency as a float.
+	// Currently selected frequency as a float
 	DisplayedFrequency float32
-	// Frequency
+	// Pattern displayed to the player in dots and dashes
+	DisplayedPattern string
+	// Solution frequency that the player must match to solve the module
 	solution float32
 }
 
@@ -31,6 +33,7 @@ func NewMorseState(rng ports.RandomGenerator) MorseState {
 		BaseModuleState:      BaseModuleState{},
 		SelectedFrequencyIdx: startIdx,
 		DisplayedFrequency:   startFreq,
+		DisplayedPattern:     morseTranslations[solutionWord],
 		solution:             solutionFreq,
 	}
 }
@@ -55,6 +58,7 @@ func (m *MorseModule) String() string {
 	selectedWord := morseWords[m.State.SelectedFrequencyIdx]
 	var result strings.Builder
 	result.WriteString("\n")
+	result.WriteString(fmt.Sprintf("Pattern: %s", m.State.DisplayedPattern))
 	result.WriteString(fmt.Sprintf("%f MHz\n", morseWordToFrequency(selectedWord)))
 
 	return result.String()

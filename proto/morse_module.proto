@@ -23,6 +23,8 @@ message MorseInputResult {
 }
 
 message MorseState {
+  // The pattern of dots and dashes to display
+  string displayed_pattern = 1;
   // The frequency that is currently selected
-  float displayed_frequency = 1;
+  float displayed_frequency = 2;
 }

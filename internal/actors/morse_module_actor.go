@@ -72,6 +72,7 @@ func (a *MorseModuleActor) handleModuleCommand(msg ModuleCommandMessage) {
 				Solved: a.module.GetModuleState().IsSolved(),
 				Strike: strike,
 			},
+			DisplayedPattern:   morseModule.State.DisplayedPattern,
 			DisplayedFrequency: morseModule.GetCurrentFrequency(),
 		}
 

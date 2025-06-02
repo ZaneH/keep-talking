@@ -56,7 +56,7 @@ func (m *KeypadModule) String() string {
 		if m.State.ActivatedSymbols[sym] {
 			result.WriteString(fmt.Sprintf("[%s]", sym))
 		} else {
-			result.WriteString(fmt.Sprintf("%s", sym))
+			result.WriteString(string(sym))
 		}
 	}
 

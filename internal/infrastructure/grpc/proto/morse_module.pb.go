@@ -229,8 +229,10 @@ func (x *MorseInputResult) GetMorseState() *MorseState {
 
 type MorseState struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
+	// The pattern of dots and dashes to display
+	DisplayedPattern string `protobuf:"bytes,1,opt,name=displayed_pattern,json=displayedPattern,proto3" json:"displayed_pattern,omitempty"`
 	// The frequency that is currently selected
-	DisplayedFrequency float32 `protobuf:"fixed32,1,opt,name=displayed_frequency,json=displayedFrequency,proto3" json:"displayed_frequency,omitempty"`
+	DisplayedFrequency float32 `protobuf:"fixed32,2,opt,name=displayed_frequency,json=displayedFrequency,proto3" json:"displayed_frequency,omitempty"`
 	unknownFields      protoimpl.UnknownFields
 	sizeCache          protoimpl.SizeCache
 }
@@ -265,6 +267,13 @@ func (*MorseState) Descriptor() ([]byte, []int) {
 	return file_proto_morse_module_proto_rawDescGZIP(), []int{4}
 }
 
+func (x *MorseState) GetDisplayedPattern() string {
+	if x != nil {
+		return x.DisplayedPattern
+	}
+	return ""
+}
+
 func (x *MorseState) GetDisplayedFrequency() float32 {
 	if x != nil {
 		return x.DisplayedFrequency
@@ -287,10 +296,11 @@ const file_proto_morse_module_proto_rawDesc = "" +
 	"\x05input\"H\n" +
 	"\x10MorseInputResult\x124\n" +
 	"\vmorse_state\x18\x01 \x01(\v2\x13.modules.MorseStateR\n" +
-	"morseState\"=\n" +
+	"morseState\"j\n" +
 	"\n" +
-	"MorseState\x12/\n" +
-	"\x13displayed_frequency\x18\x01 \x01(\x02R\x12displayedFrequencyB\tZ\a./protob\x06proto3"
+	"MorseState\x12+\n" +
+	"\x11displayed_pattern\x18\x01 \x01(\tR\x10displayedPattern\x12/\n" +
+	"\x13displayed_frequency\x18\x02 \x01(\x02R\x12displayedFrequencyB\tZ\a./protob\x06proto3"
 
 var (
 	file_proto_morse_module_proto_rawDescOnce sync.Once

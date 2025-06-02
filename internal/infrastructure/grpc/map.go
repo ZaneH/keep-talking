@@ -243,6 +243,7 @@ func mapModulesToProto(modules map[uuid.UUID]actors.ModuleActor) map[string]*pb.
 
 			protoModule.State = &pb.Module_MorseState{
 				MorseState: &pb.MorseState{
+					DisplayedPattern:   morseState.DisplayedPattern,
 					DisplayedFrequency: morseState.DisplayedFrequency,
 				},
 			}

@@ -433,6 +433,10 @@
     "modulesMorseState": {
       "type": "object",
       "properties": {
+        "displayedPattern": {
+          "type": "string",
+          "title": "The pattern of dots and dashes to display"
+        },
         "displayedFrequency": {
           "type": "number",
           "format": "float",
