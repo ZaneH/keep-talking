@@ -441,6 +441,11 @@
           "type": "number",
           "format": "float",
           "title": "The frequency that is currently selected"
+        },
+        "selectedFrequencyIndex": {
+          "type": "integer",
+          "format": "int32",
+          "title": "Selected frequency index"
         }
       }
     },

@@ -233,8 +233,10 @@ type MorseState struct {
 	DisplayedPattern string `protobuf:"bytes,1,opt,name=displayed_pattern,json=displayedPattern,proto3" json:"displayed_pattern,omitempty"`
 	// The frequency that is currently selected
 	DisplayedFrequency float32 `protobuf:"fixed32,2,opt,name=displayed_frequency,json=displayedFrequency,proto3" json:"displayed_frequency,omitempty"`
-	unknownFields      protoimpl.UnknownFields
-	sizeCache          protoimpl.SizeCache
+	// Selected frequency index
+	SelectedFrequencyIndex int32 `protobuf:"varint,3,opt,name=selected_frequency_index,json=selectedFrequencyIndex,proto3" json:"selected_frequency_index,omitempty"`
+	unknownFields          protoimpl.UnknownFields
+	sizeCache              protoimpl.SizeCache
 }
 
 func (x *MorseState) Reset() {
@@ -281,6 +283,13 @@ func (x *MorseState) GetDisplayedFrequency() float32 {
 	return 0
 }
 
+func (x *MorseState) GetSelectedFrequencyIndex() int32 {
+	if x != nil {
+		return x.SelectedFrequencyIndex
+	}
+	return 0
+}
+
 var File_proto_morse_module_proto protoreflect.FileDescriptor
 
 const file_proto_morse_module_proto_rawDesc = "" +
@@ -296,11 +305,12 @@ const file_proto_morse_module_proto_rawDesc = "" +
 	"\x05input\"H\n" +
 	"\x10MorseInputResult\x124\n" +
 	"\vmorse_state\x18\x01 \x01(\v2\x13.modules.MorseStateR\n" +
-	"morseState\"j\n" +
+	"morseState\"\xa4\x01\n" +
 	"\n" +
 	"MorseState\x12+\n" +
 	"\x11displayed_pattern\x18\x01 \x01(\tR\x10displayedPattern\x12/\n" +
-	"\x13displayed_frequency\x18\x02 \x01(\x02R\x12displayedFrequencyB\tZ\a./protob\x06proto3"
+	"\x13displayed_frequency\x18\x02 \x01(\x02R\x12displayedFrequency\x128\n" +
+	"\x18selected_frequency_index\x18\x03 \x01(\x05R\x16selectedFrequencyIndexB\tZ\a./protob\x06proto3"
 
 var (
 	file_proto_morse_module_proto_rawDescOnce sync.Once

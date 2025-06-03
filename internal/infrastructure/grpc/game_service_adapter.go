@@ -284,8 +284,9 @@ func (s *GameServiceAdapter) SendInput(ctx context.Context, i *pb.PlayerInput) (
 			Result: &pb.PlayerInputResult_MorseInputResult{
 				MorseInputResult: &pb.MorseInputResult{
 					MorseState: &pb.MorseState{
-						DisplayedPattern:   cmdResult.DisplayedPattern,
-						DisplayedFrequency: cmdResult.DisplayedFrequency,
+						DisplayedPattern:       cmdResult.DisplayedPattern,
+						DisplayedFrequency:     cmdResult.DisplayedFrequency,
+						SelectedFrequencyIndex: int32(cmdResult.SelectedFrequencyIdx),
 					},
 				},
 			},

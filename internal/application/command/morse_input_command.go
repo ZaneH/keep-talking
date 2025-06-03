@@ -15,6 +15,7 @@ type MorseTxCommand struct {
 
 type MorseCommandResult struct {
 	BaseModuleInputCommandResult
-	DisplayedPattern   string
-	DisplayedFrequency float32
+	DisplayedPattern     string
+	DisplayedFrequency   float32
+	SelectedFrequencyIdx int
 }

@@ -50,7 +50,8 @@ func (a *MorseModuleActor) handleModuleCommand(msg ModuleCommandMessage) {
 				Solved: a.module.GetModuleState().IsSolved(),
 				Strike: false,
 			},
-			DisplayedFrequency: morseModule.GetCurrentFrequency(),
+			DisplayedFrequency:   morseModule.GetCurrentFrequency(),
+			SelectedFrequencyIdx: morseModule.State.SelectedFrequencyIdx,
 		}
 
 		msg.ResponseChannel <- SuccessResponse{
@@ -72,8 +73,8 @@ func (a *MorseModuleActor) handleModuleCommand(msg ModuleCommandMessage) {
 				Solved: a.module.GetModuleState().IsSolved(),
 				Strike: strike,
 			},
-			DisplayedPattern:   morseModule.State.DisplayedPattern,
-			DisplayedFrequency: morseModule.GetCurrentFrequency(),
+			DisplayedFrequency:   morseModule.GetCurrentFrequency(),
+			SelectedFrequencyIdx: morseModule.State.SelectedFrequencyIdx,
 		}
 
 		if err != nil {

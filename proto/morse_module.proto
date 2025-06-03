@@ -27,4 +27,6 @@ message MorseState {
   string displayed_pattern = 1;
   // The frequency that is currently selected
   float displayed_frequency = 2;
+  // Selected frequency index
+  int32 selected_frequency_index = 3;
 }
