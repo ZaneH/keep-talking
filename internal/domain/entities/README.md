@@ -15,7 +15,7 @@ and a full entity representation that is independent of the interface layers.
   - TODO: Consolidate increment/decrement functions using valueobject.IncrementDecrement and update function name to "Press..."
 - [x] Simon Says
 - [x] The Button
-- [ ] Venting Gas
+- [x] Venting Gas
 - [x] Who's on First
 - [ ] Wire Sequence
 - [x] Wires
