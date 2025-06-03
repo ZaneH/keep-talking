@@ -48,3 +48,7 @@ func (f *ModuleFactory) CreateMemoryModule() *entities.MemoryModule {
 func (f *ModuleFactory) CreateMorseModule() *entities.MorseModule {
 	return entities.NewMorseModule(f.rng)
 }
+
+func (f *ModuleFactory) CreateNeedyVentGasModule() *entities.NeedyVentGasModule {
+	return entities.NewNeedyVentGasModule(f.rng)
+}

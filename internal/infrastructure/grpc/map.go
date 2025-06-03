@@ -30,6 +30,8 @@ func mapTypeToProto(moduleType valueobject.ModuleType) pb.Module_ModuleType {
 		return pb.Module_MEMORY
 	case valueobject.Morse:
 		return pb.Module_MORSE
+	case valueobject.NeedyVentGas:
+		return pb.Module_NEEDY_VENT_GAS
 	default:
 		log.Fatalf("Unknown module type: %v. Couldn't map type to proto.", moduleType)
 		return pb.Module_UNKNOWN
@@ -246,6 +248,20 @@ func mapModulesToProto(modules map[uuid.UUID]actors.ModuleActor) map[string]*pb.
 					DisplayedPattern:       morseState.DisplayedPattern,
 					DisplayedFrequency:     morseState.DisplayedFrequency,
 					SelectedFrequencyIndex: int32(morseState.SelectedFrequencyIdx),
+				},
+			}
+		case valueobject.NeedyVentGas:
+			needyVentGasState, ok := actor.GetModule().GetModuleState().(*entities.NeedyVentGasState)
+			if !ok {
+				log.Printf("Expected *NeedyVentGasState but got different type: %T", actor.GetModule().GetModuleState())
+				continue
+			}
+
+			protoModule.State = &pb.Module_NeedyVentGasState{
+				NeedyVentGasState: &pb.NeedyVentGasState{
+					DisplayedQuestion:  needyVentGasState.DisplayedQuestion,
+					CountdownStartedAt: needyVentGasState.CountdownStartedAt,
+					CountdownDuration:  int32(needyVentGasState.CountdownDuration),
 				},
 			}
 		default:

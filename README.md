@@ -77,6 +77,9 @@ $ go test -v -run TestSimpleWires ./... # runs tests with a prefix
 - [x] Create a simple demo client ([In Progress](https://github.com/ZaneH/keep-talking-app))
 - [x] Add CI/CD pipeline
 
+### Bugs
+- [ ] Bombs should never be entirely needy modules
+
 ## Contributing
 
 Contributions are welcome. If you'd like to add a new module, fix a bug, or improve the codebase, feel free to open a pull request.

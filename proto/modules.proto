@@ -9,6 +9,7 @@ import "proto/keypad_module.proto";
 import "proto/whos_on_first_module.proto";
 import "proto/memory_module.proto";
 import "proto/morse_module.proto";
+import "proto/needy_vent_gas_module.proto";
 
 option go_package = "./proto";
 
@@ -30,6 +31,7 @@ message Module {
     WHOS_ON_FIRST = 7;
     MEMORY = 8;
     MORSE = 9;
+    NEEDY_VENT_GAS = 10;
   }
 
   string id = 1;
@@ -45,5 +47,6 @@ message Module {
     WhosOnFirstState whos_on_first_state = 10;
     MemoryState memory_state = 11;
     MorseState morse_state = 12;
+    NeedyVentGasState needy_vent_gas_state = 13;
   }
 }

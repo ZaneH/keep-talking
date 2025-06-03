@@ -124,7 +124,8 @@
         "KEYPAD",
         "WHOS_ON_FIRST",
         "MEMORY",
-        "MORSE"
+        "MORSE",
+        "NEEDY_VENT_GAS"
       ],
       "default": "UNKNOWN"
     },
@@ -383,6 +384,9 @@
         },
         "morseState": {
           "$ref": "#/definitions/modulesMorseState"
+        },
+        "needyVentGasState": {
+          "$ref": "#/definitions/modulesNeedyVentGasState"
         }
       }
     },
@@ -451,6 +455,38 @@
     },
     "modulesMorseTx": {
       "type": "object"
+    },
+    "modulesNeedyVentGasInput": {
+      "type": "object",
+      "properties": {
+        "input": {
+          "type": "boolean"
+        }
+      }
+    },
+    "modulesNeedyVentGasInputResult": {
+      "type": "object",
+      "properties": {
+        "needyVentGasState": {
+          "$ref": "#/definitions/modulesNeedyVentGasState"
+        }
+      }
+    },
+    "modulesNeedyVentGasState": {
+      "type": "object",
+      "properties": {
+        "displayedQuestion": {
+          "type": "string"
+        },
+        "countdownStartedAt": {
+          "type": "string",
+          "format": "int64"
+        },
+        "countdownDuration": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
     },
     "modulesPasswordInput": {
       "type": "object",
@@ -666,6 +702,9 @@
         },
         "morseInput": {
           "$ref": "#/definitions/modulesMorseInput"
+        },
+        "needyVentGasInput": {
+          "$ref": "#/definitions/modulesNeedyVentGasInput"
         }
       }
     },
@@ -701,6 +740,9 @@
         },
         "morseInputResult": {
           "$ref": "#/definitions/modulesMorseInputResult"
+        },
+        "needyVentGasInputResult": {
+          "$ref": "#/definitions/modulesNeedyVentGasInputResult"
         }
       }
     },

@@ -151,6 +151,15 @@ func (s *GameServiceAdapter) SendInput(ctx context.Context, i *pb.PlayerInput) (
 				},
 			}
 		}
+	case *pb.PlayerInput_NeedyVentGasInput:
+		cmd = &command.NeedyVentGasCommand{
+			BaseModuleInputCommand: command.BaseModuleInputCommand{
+				SessionID: sessionID,
+				BombID:    bombID,
+				ModuleID:  moduleID,
+			},
+			Input: input.NeedyVentGasInput.Input,
+		}
 	default:
 		return nil, fmt.Errorf("unknown input type: %T", input)
 	}
@@ -287,6 +296,21 @@ func (s *GameServiceAdapter) SendInput(ctx context.Context, i *pb.PlayerInput) (
 						DisplayedPattern:       cmdResult.DisplayedPattern,
 						DisplayedFrequency:     cmdResult.DisplayedFrequency,
 						SelectedFrequencyIndex: int32(cmdResult.SelectedFrequencyIdx),
+					},
+				},
+			},
+		}, nil
+	case *command.NeedyVentGasCommandResult:
+		return &pb.PlayerInputResult{
+			ModuleId: i.GetModuleId(),
+			Strike:   res != nil && cmdResult.Strike,
+			Solved:   res != nil && cmdResult.Solved,
+			Result: &pb.PlayerInputResult_NeedyVentGasInputResult{
+				NeedyVentGasInputResult: &pb.NeedyVentGasInputResult{
+					NeedyVentGasState: &pb.NeedyVentGasState{
+						DisplayedQuestion:  cmdResult.DisplayedQuestion,
+						CountdownStartedAt: cmdResult.CountdownStartedAt,
+						CountdownDuration:  int32(cmdResult.CountdownDuration),
 					},
 				},
 			},
