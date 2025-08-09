@@ -183,6 +183,58 @@ func (Color) EnumDescriptor() ([]byte, []int) {
 	return file_proto_common_proto_rawDescGZIP(), []int{2}
 }
 
+type CardinalDirection int32
+
+const (
+	CardinalDirection_UP    CardinalDirection = 0
+	CardinalDirection_DOWN  CardinalDirection = 1
+	CardinalDirection_LEFT  CardinalDirection = 2
+	CardinalDirection_RIGHT CardinalDirection = 3
+)
+
+// Enum value maps for CardinalDirection.
+var (
+	CardinalDirection_name = map[int32]string{
+		0: "UP",
+		1: "DOWN",
+		2: "LEFT",
+		3: "RIGHT",
+	}
+	CardinalDirection_value = map[string]int32{
+		"UP":    0,
+		"DOWN":  1,
+		"LEFT":  2,
+		"RIGHT": 3,
+	}
+)
+
+func (x CardinalDirection) Enum() *CardinalDirection {
+	p := new(CardinalDirection)
+	*p = x
+	return p
+}
+
+func (x CardinalDirection) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (CardinalDirection) Descriptor() protoreflect.EnumDescriptor {
+	return file_proto_common_proto_enumTypes[3].Descriptor()
+}
+
+func (CardinalDirection) Type() protoreflect.EnumType {
+	return &file_proto_common_proto_enumTypes[3]
+}
+
+func (x CardinalDirection) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use CardinalDirection.Descriptor instead.
+func (CardinalDirection) EnumDescriptor() ([]byte, []int) {
+	return file_proto_common_proto_rawDescGZIP(), []int{3}
+}
+
 var File_proto_common_proto protoreflect.FileDescriptor
 
 const file_proto_common_proto_rawDesc = "" +
@@ -206,7 +258,12 @@ const file_proto_common_proto_rawDesc = "" +
 	"\n" +
 	"\x06ORANGE\x10\x06\x12\b\n" +
 	"\x04PINK\x10\a\x12\v\n" +
-	"\aUNKNOWN\x10cB\tZ\a./protob\x06proto3"
+	"\aUNKNOWN\x10c*:\n" +
+	"\x11CardinalDirection\x12\x06\n" +
+	"\x02UP\x10\x00\x12\b\n" +
+	"\x04DOWN\x10\x01\x12\b\n" +
+	"\x04LEFT\x10\x02\x12\t\n" +
+	"\x05RIGHT\x10\x03B\tZ\a./protob\x06proto3"
 
 var (
 	file_proto_common_proto_rawDescOnce sync.Once
@@ -220,11 +277,12 @@ func file_proto_common_proto_rawDescGZIP() []byte {
 	return file_proto_common_proto_rawDescData
 }
 
-var file_proto_common_proto_enumTypes = make([]protoimpl.EnumInfo, 3)
+var file_proto_common_proto_enumTypes = make([]protoimpl.EnumInfo, 4)
 var file_proto_common_proto_goTypes = []any{
 	(IncrementDecrement)(0), // 0: common.IncrementDecrement
 	(PressType)(0),          // 1: common.PressType
 	(Color)(0),              // 2: common.Color
+	(CardinalDirection)(0),  // 3: common.CardinalDirection
 }
 var file_proto_common_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for method output_type
@@ -244,7 +302,7 @@ func file_proto_common_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_common_proto_rawDesc), len(file_proto_common_proto_rawDesc)),
-			NumEnums:      3,
+			NumEnums:      4,
 			NumMessages:   0,
 			NumExtensions: 0,
 			NumServices:   0,

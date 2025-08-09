@@ -24,7 +24,7 @@ The bomb defusal logic is implemented using the actor model, where different com
 The server exposes a gRPC API and an optional HTTP Proxy using [grpc-gateway](https://github.com/grpc-ecosystem/grpc-gateway), making it easy for clients to interact with the game. Protocol Buffers (protobuf) are used for efficient, language-agnostic data serialization.
 This design allows developers to build their own game clients in any language that supports gRPC.
 
-While this implementation focuses on gRPC/HTTP, the Domain-Driven Design approach means that alternative interfaces (like WebSockets or ) could be implemented without modifying the core game logic.
+While this implementation focuses on gRPC/HTTP, the Domain-Driven Design approach means that alternative interfaces (like WebSockets or) could be implemented without modifying the core game logic.
 
 ## Setup
 
@@ -48,6 +48,7 @@ $ go install tool
 ```
 
 ### Run the Server and REST Proxy
+
 ```bash
 $ go run cmd/server/main.go # starts gRPC server
 $ go run cmd/rest/main.go # starts gRPC REST proxy

@@ -52,3 +52,7 @@ func (f *ModuleFactory) CreateMorseModule() *entities.MorseModule {
 func (f *ModuleFactory) CreateNeedyVentGasModule() *entities.NeedyVentGasModule {
 	return entities.NewNeedyVentGasModule(f.rng)
 }
+
+func (f *ModuleFactory) CreateNeedyKnobModule() *entities.NeedyKnobModule {
+	return entities.NewNeedyKnobModule(f.rng)
+}

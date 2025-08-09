@@ -160,6 +160,14 @@ func (s *GameServiceAdapter) SendInput(ctx context.Context, i *pb.PlayerInput) (
 			},
 			Input: input.NeedyVentGasInput.Input,
 		}
+	case *pb.PlayerInput_NeedyKnobInput:
+		cmd = &command.NeedyKnobCommand{
+			BaseModuleInputCommand: command.BaseModuleInputCommand{
+				SessionID: sessionID,
+				BombID:    bombID,
+				ModuleID:  moduleID,
+			},
+		}
 	default:
 		return nil, fmt.Errorf("unknown input type: %T", input)
 	}
@@ -315,6 +323,24 @@ func (s *GameServiceAdapter) SendInput(ctx context.Context, i *pb.PlayerInput) (
 				},
 			},
 		}, nil
+	case *command.NeedyKnobCommandResult:
+		return &pb.PlayerInputResult{
+			ModuleId: i.GetModuleId(),
+			Strike:   res != nil && cmdResult.Strike,
+			Solved:   res != nil && cmdResult.Solved,
+			Result: &pb.PlayerInputResult_NeedyKnobInputResult{
+				NeedyKnobInputResult: &pb.NeedyKnobInputResult{
+					NeedyKnobState: &pb.NeedyKnobState{
+						DisplayedPatternFirstRow:  cmdResult.DisplayedPattern[0],
+						DisplayedPatternSecondRow: cmdResult.DisplayedPattern[1],
+						CountdownStartedAt:        cmdResult.CoundownStartedAt,
+						CountdownDuration:         int32(cmdResult.CountdownDuration),
+					},
+				},
+			},
+		}, nil
+	case nil:
+		return nil, nil
 	default:
 		return nil, fmt.Errorf("unknown result type: %T", res)
 	}
