@@ -333,6 +333,7 @@ func (s *GameServiceAdapter) SendInput(ctx context.Context, i *pb.PlayerInput) (
 					NeedyKnobState: &pb.NeedyKnobState{
 						DisplayedPatternFirstRow:  cmdResult.DisplayedPattern[0],
 						DisplayedPatternSecondRow: cmdResult.DisplayedPattern[1],
+						DialDirection:             pb.CardinalDirection(cmdResult.DialDirection),
 						CountdownStartedAt:        cmdResult.CoundownStartedAt,
 						CountdownDuration:         int32(cmdResult.CountdownDuration),
 					},
