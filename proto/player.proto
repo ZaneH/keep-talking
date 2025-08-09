@@ -10,15 +10,13 @@ import "proto/whos_on_first_module.proto";
 import "proto/memory_module.proto";
 import "proto/morse_module.proto";
 import "proto/needy_vent_gas_module.proto";
+import "proto/needy_knob_module.proto";
 
 option go_package = "./proto";
 
-message CreateGameRequest {
-}
+message CreateGameRequest {}
 
-message CreateGameResponse {
-  string session_id = 1;
-}
+message CreateGameResponse { string session_id = 1; }
 
 message PlayerInput {
   string session_id = 1;
@@ -34,6 +32,7 @@ message PlayerInput {
     modules.MemoryInput memory_input = 16;
     modules.MorseInput morse_input = 17;
     modules.NeedyVentGasInput needy_vent_gas_input = 18;
+    modules.NeedyKnobInput needy_knob_input = 19;
   }
 }
 
@@ -50,5 +49,6 @@ message PlayerInputResult {
     modules.MemoryInputResult memory_input_result = 15;
     modules.MorseInputResult morse_input_result = 16;
     modules.NeedyVentGasInputResult needy_vent_gas_input_result = 17;
+    modules.NeedyKnobInputResult needy_knob_input_result = 18;
   }
 }

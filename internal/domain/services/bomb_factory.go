@@ -47,9 +47,9 @@ func (f *BombFactoryImpl) CreateBomb(rng ports.RandomGenerator, config valueobje
 func (f *BombFactoryImpl) placeModulesOnBomb(rng ports.RandomGenerator, bomb *entities.Bomb, moduleTypes []valueobject.ModuleType, config valueobject.BombConfig) {
 	availablePositions := make([]valueobject.ModulePosition, 0)
 
-	for face := 0; face < config.NumFaces; face++ {
-		for row := 0; row < config.Rows; row++ {
-			for col := 0; col < config.Columns; col++ {
+	for face := range config.NumFaces {
+		for row := range config.Rows {
+			for col := range config.Columns {
 				position := valueobject.ModulePosition{Row: row, Column: col, Face: face}
 				availablePositions = append(availablePositions, position)
 			}
@@ -98,6 +98,8 @@ func (f *BombFactoryImpl) createModule(bomb *entities.Bomb, moduleType valueobje
 		module = f.moduleFactory.CreateMorseModule()
 	case valueobject.NeedyVentGas:
 		module = f.moduleFactory.CreateNeedyVentGasModule()
+	case valueobject.NeedyKnob:
+		module = f.moduleFactory.CreateNeedyKnobModule()
 	default:
 		log.Printf("unknown module type %v, skipping...", moduleType)
 		return nil

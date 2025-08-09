@@ -5,13 +5,9 @@ option go_package = "./proto";
 
 import "proto/common.proto";
 
-message NeedyVentGasInput {
-  bool input = 1;
-}
+message NeedyVentGasInput { bool input = 1; }
 
-message NeedyVentGasInputResult {
-  NeedyVentGasState needy_vent_gas_state = 1;
-}
+message NeedyVentGasInputResult { NeedyVentGasState needy_vent_gas_state = 1; }
 
 message NeedyVentGasState {
   string displayed_question = 1;

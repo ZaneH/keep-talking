@@ -125,7 +125,8 @@
         "WHOS_ON_FIRST",
         "MEMORY",
         "MORSE",
-        "NEEDY_VENT_GAS"
+        "NEEDY_VENT_GAS",
+        "NEEDY_KNOB"
       ],
       "default": "UNKNOWN"
     },
@@ -199,6 +200,16 @@
         "SERIAL"
       ],
       "default": "DVID"
+    },
+    "commonCardinalDirection": {
+      "type": "string",
+      "enum": [
+        "UP",
+        "DOWN",
+        "LEFT",
+        "RIGHT"
+      ],
+      "default": "UP"
     },
     "commonColor": {
       "type": "string",
@@ -387,6 +398,9 @@
         },
         "needyVentGasState": {
           "$ref": "#/definitions/modulesNeedyVentGasState"
+        },
+        "needyKnobState": {
+          "$ref": "#/definitions/modulesNeedyKnobState"
         }
       }
     },
@@ -455,6 +469,46 @@
     },
     "modulesMorseTx": {
       "type": "object"
+    },
+    "modulesNeedyKnobInput": {
+      "type": "object",
+      "description": "Doesn't need any fields. If input is received, rotate clockwise."
+    },
+    "modulesNeedyKnobInputResult": {
+      "type": "object",
+      "properties": {
+        "needyKnobState": {
+          "$ref": "#/definitions/modulesNeedyKnobState"
+        }
+      }
+    },
+    "modulesNeedyKnobState": {
+      "type": "object",
+      "properties": {
+        "displayedPatternFirstRow": {
+          "type": "array",
+          "items": {
+            "type": "boolean"
+          }
+        },
+        "displayedPatternSecondRow": {
+          "type": "array",
+          "items": {
+            "type": "boolean"
+          }
+        },
+        "dialDirection": {
+          "$ref": "#/definitions/commonCardinalDirection"
+        },
+        "countdownStartedAt": {
+          "type": "string",
+          "format": "int64"
+        },
+        "countdownDuration": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
     },
     "modulesNeedyVentGasInput": {
       "type": "object",
@@ -705,6 +759,9 @@
         },
         "needyVentGasInput": {
           "$ref": "#/definitions/modulesNeedyVentGasInput"
+        },
+        "needyKnobInput": {
+          "$ref": "#/definitions/modulesNeedyKnobInput"
         }
       }
     },
@@ -743,6 +800,9 @@
         },
         "needyVentGasInputResult": {
           "$ref": "#/definitions/modulesNeedyVentGasInputResult"
+        },
+        "needyKnobInputResult": {
+          "$ref": "#/definitions/modulesNeedyKnobInputResult"
         }
       }
     },
