@@ -50,6 +50,7 @@ func (a *NeedyKnobModuleActor) handleModuleCommand(msg ModuleCommandMessage) {
 				Strike: false,
 			},
 			DisplayedPattern:  needyKnobModule.State.DisplayedPattern,
+			DialDirection:     needyKnobModule.State.DialDirection,
 			CoundownStartedAt: needyKnobModule.State.CountdownStartedAt,
 			CountdownDuration: needyKnobModule.State.CountdownDuration,
 		}
