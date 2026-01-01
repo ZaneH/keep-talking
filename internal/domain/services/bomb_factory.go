@@ -100,6 +100,8 @@ func (f *BombFactoryImpl) createModule(bomb *entities.Bomb, moduleType valueobje
 		module = f.moduleFactory.CreateNeedyVentGasModule()
 	case valueobject.NeedyKnobModule:
 		module = f.moduleFactory.CreateNeedyKnobModule()
+	case valueobject.MazeModule:
+		module = f.moduleFactory.CreateMazeModule()
 	default:
 		log.Printf("unknown module type %v, skipping...", moduleType)
 		return nil
