@@ -6,9 +6,9 @@ gen-protobuf:
 swagger-ui:
 	@echo "Swagger UI starting at http://localhost:80"
 	@docker run -p 80:8080 \
-    -n swagger-ui \
+    --name swagger-ui \
     -e SWAGGER_JSON=/proto/game.swagger.json \
-    -v $(PWD)/openapiv2/proto:/proto \
+    -v $(pwd)/openapiv2/proto:/proto \
     swaggerapi/swagger-ui
 
 test:
