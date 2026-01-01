@@ -7,7 +7,7 @@ type MazeCommand struct {
 	Direction valueobject.CardinalDirection
 }
 
-type MazeCommandResult struct {
+type MazeInputCommandResult struct {
 	BaseModuleInputCommandResult
 	Maze valueobject.Maze
 }
