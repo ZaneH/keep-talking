@@ -126,7 +126,8 @@
         "MEMORY",
         "MORSE",
         "NEEDY_VENT_GAS",
-        "NEEDY_KNOB"
+        "NEEDY_KNOB",
+        "MAZE"
       ],
       "default": "UNKNOWN"
     },
@@ -234,6 +235,19 @@
       ],
       "default": "INCREMENT"
     },
+    "commonPoint2D": {
+      "type": "object",
+      "properties": {
+        "X": {
+          "type": "string",
+          "format": "int64"
+        },
+        "Y": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
     "commonPressType": {
       "type": "string",
       "enum": [
@@ -320,6 +334,72 @@
         }
       }
     },
+    "modulesMaze": {
+      "type": "object",
+      "properties": {
+        "marker1": {
+          "$ref": "#/definitions/commonPoint2D"
+        },
+        "marker2": {
+          "$ref": "#/definitions/commonPoint2D"
+        },
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/modulesMazeRow"
+          }
+        }
+      },
+      "title": "6x6"
+    },
+    "modulesMazeCell": {
+      "type": "object",
+      "properties": {
+        "right": {
+          "type": "boolean"
+        },
+        "botom": {
+          "type": "boolean"
+        }
+      }
+    },
+    "modulesMazeInput": {
+      "type": "object",
+      "properties": {
+        "direction": {
+          "$ref": "#/definitions/commonCardinalDirection"
+        }
+      }
+    },
+    "modulesMazeInputResult": {
+      "type": "object",
+      "properties": {
+        "mazeState": {
+          "$ref": "#/definitions/modulesMazeState"
+        }
+      }
+    },
+    "modulesMazeRow": {
+      "type": "object",
+      "properties": {
+        "cells": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/modulesMazeCell"
+          }
+        }
+      }
+    },
+    "modulesMazeState": {
+      "type": "object",
+      "properties": {
+        "maze": {
+          "$ref": "#/definitions/modulesMaze"
+        }
+      }
+    },
     "modulesMemoryInput": {
       "type": "object",
       "properties": {
@@ -401,6 +481,9 @@
         },
         "needyKnobState": {
           "$ref": "#/definitions/modulesNeedyKnobState"
+        },
+        "mazeState": {
+          "$ref": "#/definitions/modulesMazeState"
         }
       }
     },
@@ -762,6 +845,9 @@
         },
         "needyKnobInput": {
           "$ref": "#/definitions/modulesNeedyKnobInput"
+        },
+        "mazeInput": {
+          "$ref": "#/definitions/modulesMazeInput"
         }
       }
     },
@@ -803,6 +889,9 @@
         },
         "needyKnobInputResult": {
           "$ref": "#/definitions/modulesNeedyKnobInputResult"
+        },
+        "mazeInputResult": {
+          "$ref": "#/definitions/modulesMazeInputResult"
         }
       }
     },

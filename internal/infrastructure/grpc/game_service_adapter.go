@@ -168,6 +168,14 @@ func (s *GameServiceAdapter) SendInput(ctx context.Context, i *pb.PlayerInput) (
 				ModuleID:  moduleID,
 			},
 		}
+	case *pb.PlayerInput_MazeInput:
+		cmd = &command.MazeCommand{
+			BaseModuleInputCommand: command.BaseModuleInputCommand{
+				SessionID: sessionID,
+				BombID:    bombID,
+				ModuleID:  moduleID,
+			},
+		}
 	default:
 		return nil, fmt.Errorf("unknown input type: %T", input)
 	}
@@ -336,6 +344,19 @@ func (s *GameServiceAdapter) SendInput(ctx context.Context, i *pb.PlayerInput) (
 						DialDirection:             pb.CardinalDirection(cmdResult.DialDirection),
 						CountdownStartedAt:        cmdResult.CoundownStartedAt,
 						CountdownDuration:         int32(cmdResult.CountdownDuration),
+					},
+				},
+			},
+		}, nil
+	case *command.MazeCommandResult:
+		return &pb.PlayerInputResult{
+			ModuleId: i.GetModuleId(),
+			Strike:   res != nil && cmdResult.Strike,
+			Solved:   res != nil && cmdResult.Solved,
+			Result: &pb.PlayerInputResult_MazeInputResult{
+				MazeInputResult: &pb.MazeInputResult{
+					MazeState: &pb.MazeState{
+						Maze: mapMazeToProto(cmdResult.Maze),
 					},
 				},
 			},

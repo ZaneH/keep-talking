@@ -11,6 +11,7 @@ import "proto/memory_module.proto";
 import "proto/morse_module.proto";
 import "proto/needy_vent_gas_module.proto";
 import "proto/needy_knob_module.proto";
+import "proto/maze_module.proto";
 
 option go_package = "./proto";
 
@@ -33,6 +34,7 @@ message PlayerInput {
     modules.MorseInput morse_input = 17;
     modules.NeedyVentGasInput needy_vent_gas_input = 18;
     modules.NeedyKnobInput needy_knob_input = 19;
+    modules.MazeInput maze_input = 20;
   }
 }
 
@@ -50,5 +52,6 @@ message PlayerInputResult {
     modules.MorseInputResult morse_input_result = 16;
     modules.NeedyVentGasInputResult needy_vent_gas_input_result = 17;
     modules.NeedyKnobInputResult needy_knob_input_result = 18;
+    modules.MazeInputResult maze_input_result = 19;
   }
 }

@@ -9,7 +9,7 @@ import (
 	"github.com/google/uuid"
 )
 
-type MazeState struct {
+type MazeModuleState struct {
 	BaseModuleState
 	// (X, Y) coordinates of goal from [0, 5]
 	GoalPosition valueobject.Point2D
@@ -19,8 +19,8 @@ type MazeState struct {
 	Variant int
 }
 
-func NewMazeState(rng ports.RandomGenerator) MazeState {
-	return MazeState{
+func NewMazeState(rng ports.RandomGenerator) MazeModuleState {
+	return MazeModuleState{
 		BaseModuleState: BaseModuleState{},
 		GoalPosition:    generateRandomPosition(rng),
 		PlayerPosition:  generateRandomPosition(rng),
@@ -30,7 +30,7 @@ func NewMazeState(rng ports.RandomGenerator) MazeState {
 
 type MazeModule struct {
 	BaseModule
-	State MazeState
+	State MazeModuleState
 	rng   ports.RandomGenerator
 }
 
@@ -52,7 +52,7 @@ func (m *MazeModule) GetType() valueobject.ModuleType {
 	return valueobject.MazeModule
 }
 
-func (m *MazeModule) SetState(state MazeState) {
+func (m *MazeModule) SetState(state MazeModuleState) {
 	m.State = state
 }
 
@@ -69,7 +69,7 @@ func (m *MazeModule) String() string {
 	return result
 }
 
-func (m *MazeModule) PressDirection(dir valueobject.CardinalDirection) (mazeMap valueobject.MazeMap, strike bool, err error) {
+func (m *MazeModule) PressDirection(dir valueobject.CardinalDirection) (mazeMap valueobject.Maze, strike bool, err error) {
 	return mazeA, true, nil
 }
 
@@ -82,198 +82,234 @@ func generateRandomPosition(rng ports.RandomGenerator) valueobject.Point2D {
 	}
 }
 
-var mazeA = valueobject.MazeMap{
-	{
-		{}, {Bottom: true}, {Right: true}, {}, {Bottom: true}, {Bottom: true, Right: true},
-	},
-	{
-		{Right: true}, {}, {Bottom: true, Right: true}, {Bottom: true}, {Bottom: true}, {Right: true},
-	},
-	{
-		{Right: true}, {Bottom: true}, {Right: true}, {}, {Bottom: true}, {Right: true},
-	},
-	{
-		{Right: true}, {Bottom: true}, {Bottom: true}, {Bottom: true, Right: true}, {Bottom: true}, {Right: true},
-	},
-	{
-		{}, {Bottom: true}, {Right: true}, {}, {Bottom: true, Right: true}, {Right: true},
-	},
-	{
-		{Bottom: true}, {Bottom: true, Right: true}, {Bottom: true}, {Bottom: true, Right: true}, {Bottom: true}, {Bottom: true, Right: true},
-	},
-}
-
-var mazeB = valueobject.MazeMap{
-	{
-		{Bottom: true}, {}, {Bottom: true, Right: true}, {}, {}, {Bottom: true, Right: true},
-	},
-	{
-		{}, {Bottom: true, Right: true}, {}, {Bottom: true, Right: true}, {Bottom: true}, {Right: true},
-	},
-	{
-		{Right: true}, {}, {Bottom: true, Right: true}, {}, {Bottom: true}, {Right: true},
-	},
-	{
-		{}, {Bottom: true, Right: true}, {}, {Bottom: true, Right: true}, {Right: true}, {Right: true},
-	},
-	{
-		{Right: true}, {Right: true}, {Right: true}, {}, {Bottom: true, Right: true}, {Right: true},
-	},
-	{
-		{Bottom: true, Right: true}, {Bottom: true}, {Bottom: true, Right: true}, {Bottom: true}, {Bottom: true},
-		{Bottom: true, Right: true},
+var mazeA = valueobject.Maze{
+	Marker1: valueobject.Point2D{X: 0, Y: 1},
+	Marker2: valueobject.Point2D{X: 5, Y: 2},
+	Map: [6][6]valueobject.MazeCell{
+		{
+			{}, {Bottom: true}, {Right: true}, {}, {Bottom: true}, {Bottom: true, Right: true},
+		},
+		{
+			{Right: true}, {}, {Bottom: true, Right: true}, {Bottom: true}, {Bottom: true}, {Right: true},
+		},
+		{
+			{Right: true}, {Bottom: true}, {Right: true}, {}, {Bottom: true}, {Right: true},
+		},
+		{
+			{Right: true}, {Bottom: true}, {Bottom: true}, {Bottom: true, Right: true}, {Bottom: true}, {Right: true},
+		},
+		{
+			{}, {Bottom: true}, {Right: true}, {}, {Bottom: true, Right: true}, {Right: true},
+		},
+		{
+			{Bottom: true}, {Bottom: true, Right: true}, {Bottom: true}, {Bottom: true, Right: true}, {Bottom: true}, {Bottom: true, Right: true},
+		},
 	},
 }
 
-var mazeC = valueobject.MazeMap{
-	{
-		{}, {Bottom: true}, {Right: true}, {Right: true}, {}, {Right: true},
-	},
-	{
-		{Bottom: true, Right: true}, {Right: true}, {Right: true}, {Bottom: true}, {Bottom: true, Right: true}, {Right: true},
-	},
-	{
-		{}, {Right: true}, {Right: true}, {}, {Right: true}, {Right: true},
-	},
-	{
-		{Right: true}, {Right: true}, {Right: true}, {Right: true}, {Right: true}, {Right: true},
-	},
-	{
-		{Right: true}, {Bottom: true}, {Bottom: true, Right: true}, {Right: true}, {Right: true}, {Right: true},
-	},
-	{
-		{Bottom: true}, {Bottom: true}, {Bottom: true}, {Bottom: true, Right: true}, {Bottom: true},
-		{Bottom: true, Right: true},
-	},
-}
-
-var mazeD = valueobject.MazeMap{
-	{
-		{}, {Right: true}, {Bottom: true}, {Bottom: true}, {Bottom: true}, {Right: true},
-	},
-	{
-		{Right: true}, {Right: true}, {}, {Bottom: true}, {Bottom: true}, {Right: true},
-	},
-	{
-		{Right: true}, {Bottom: true}, {Bottom: true, Right: true}, {}, {Bottom: true, Right: true}, {Right: true},
-	},
-	{
-		{Right: true}, {Bottom: true}, {Bottom: true}, {Bottom: true}, {Bottom: true}, {Right: true},
-	},
-	{
-		{}, {Bottom: true}, {Bottom: true}, {Bottom: true}, {Right: true}, {Right: true},
-	},
-	{
-		{Bottom: true}, {Bottom: true}, {Bottom: true, Right: true}, {Bottom: true}, {Bottom: true, Right: true},
-		{Bottom: true, Right: true},
+var mazeB = valueobject.Maze{
+	Marker1: valueobject.Point2D{X: 1, Y: 3},
+	Marker2: valueobject.Point2D{X: 4, Y: 1},
+	Map: [6][6]valueobject.MazeCell{
+		{
+			{Bottom: true}, {}, {Bottom: true, Right: true}, {}, {}, {Bottom: true, Right: true},
+		},
+		{
+			{}, {Bottom: true, Right: true}, {}, {Bottom: true, Right: true}, {Bottom: true}, {Right: true},
+		},
+		{
+			{Right: true}, {}, {Bottom: true, Right: true}, {}, {Bottom: true}, {Right: true},
+		},
+		{
+			{}, {Bottom: true, Right: true}, {}, {Bottom: true, Right: true}, {Right: true}, {Right: true},
+		},
+		{
+			{Right: true}, {Right: true}, {Right: true}, {}, {Bottom: true, Right: true}, {Right: true},
+		},
+		{
+			{Bottom: true, Right: true}, {Bottom: true}, {Bottom: true, Right: true}, {Bottom: true}, {Bottom: true},
+			{Bottom: true, Right: true},
+		},
 	},
 }
 
-var mazeE = valueobject.MazeMap{
-	{
-		{Bottom: true}, {Bottom: true}, {Bottom: true}, {Bottom: true}, {}, {Right: true},
-	},
-	{
-		{}, {Bottom: true}, {Bottom: true}, {}, {Bottom: true, Right: true}, {Bottom: true, Right: true},
-	},
-	{
-		{}, {Right: true}, {Bottom: true}, {Bottom: true, Right: true}, {}, {Right: true},
-	},
-	{
-		{Right: true}, {Bottom: true}, {Bottom: true}, {Right: true}, {Bottom: true, Right: true}, {Right: true},
-	},
-	{
-		{Right: true}, {}, {Bottom: true}, {Bottom: true}, {Bottom: true, Right: true}, {Right: true},
-	},
-	{
-		{Bottom: true, Right: true}, {Bottom: true}, {Bottom: true}, {Bottom: true}, {Bottom: true},
-		{Bottom: true, Right: true},
-	},
-}
-
-var mazeF = valueobject.MazeMap{
-	{
-		{Right: true}, {}, {Right: true}, {Bottom: true}, {}, {Right: true},
-	},
-	{
-		{Right: true}, {Right: true}, {Right: true}, {}, {Bottom: true, Right: true}, {Right: true},
-	},
-	{
-		{}, {Bottom: true, Right: true}, {Bottom: true, Right: true}, {Right: true}, {}, {Bottom: true, Right: true},
-	},
-	{
-		{Bottom: true}, {Right: true}, {}, {Right: true}, {Right: true}, {Right: true},
-	},
-	{
-		{}, {Bottom: true, Right: true}, {Bottom: true, Right: true}, {Right: true}, {Bottom: true}, {Right: true},
-	},
-	{
-		{Bottom: true}, {Bottom: true}, {Bottom: true}, {Bottom: true, Right: true}, {Bottom: true},
-		{Bottom: true, Right: true},
+var mazeC = valueobject.Maze{
+	Marker1: valueobject.Point2D{X: 3, Y: 3},
+	Marker2: valueobject.Point2D{X: 5, Y: 3},
+	Map: [6][6]valueobject.MazeCell{
+		{
+			{}, {Bottom: true}, {Right: true}, {Right: true}, {}, {Right: true},
+		},
+		{
+			{Bottom: true, Right: true}, {Right: true}, {Right: true}, {Bottom: true}, {Bottom: true, Right: true}, {Right: true},
+		},
+		{
+			{}, {Right: true}, {Right: true}, {}, {Right: true}, {Right: true},
+		},
+		{
+			{Right: true}, {Right: true}, {Right: true}, {Right: true}, {Right: true}, {Right: true},
+		},
+		{
+			{Right: true}, {Bottom: true}, {Bottom: true, Right: true}, {Right: true}, {Right: true}, {Right: true},
+		},
+		{
+			{Bottom: true}, {Bottom: true}, {Bottom: true}, {Bottom: true, Right: true}, {Bottom: true},
+			{Bottom: true, Right: true},
+		},
 	},
 }
 
-var mazeG = valueobject.MazeMap{
-	{
-		{}, {Bottom: true}, {Bottom: true}, {Right: true}, {}, {Right: true},
-	},
-	{
-		{Right: true}, {}, {Bottom: true, Right: true}, {Bottom: true}, {Bottom: true, Right: true}, {Right: true},
-	},
-	{
-		{Bottom: true}, {Bottom: true, Right: true}, {}, {Bottom: true, Right: true}, {}, {Bottom: true, Right: true},
-	},
-	{
-		{}, {Right: true}, {}, {Bottom: true}, {Bottom: true, Right: true}, {Right: true},
-	},
-	{
-		{Right: true}, {Bottom: true, Right: true}, {Bottom: true}, {Bottom: true}, {Right: true}, {Right: true},
-	},
-	{
-		{Bottom: true}, {Bottom: true}, {Bottom: true}, {Bottom: true}, {Bottom: true}, {Bottom: true, Right: true},
-	},
-}
-
-var mazeH = valueobject.MazeMap{
-	{
-		{Right: true}, {}, {Bottom: true}, {Right: true}, {}, {Right: true},
-	},
-	{
-		{}, {Bottom: true}, {Bottom: true, Right: true}, {Bottom: true}, {Bottom: true, Right: true}, {Right: true},
-	},
-	{
-		{Right: true}, {}, {Bottom: true}, {Bottom: true}, {Right: true}, {Right: true},
-	},
-	{
-		{Right: true}, {Bottom: true}, {Right: true}, {Bottom: true}, {Bottom: true}, {Bottom: true, Right: true},
-	},
-	{
-		{Right: true}, {Right: true}, {Bottom: true}, {Bottom: true}, {Bottom: true}, {Bottom: true, Right: true},
-	},
-	{
-		{Bottom: true}, {Bottom: true}, {Bottom: true}, {Bottom: true}, {Bottom: true}, {Bottom: true, Right: true},
+var mazeD = valueobject.Maze{
+	Marker1: valueobject.Point2D{X: 0, Y: 0},
+	Marker2: valueobject.Point2D{X: 0, Y: 3},
+	Map: [6][6]valueobject.MazeCell{
+		{
+			{}, {Right: true}, {Bottom: true}, {Bottom: true}, {Bottom: true}, {Right: true},
+		},
+		{
+			{Right: true}, {Right: true}, {}, {Bottom: true}, {Bottom: true}, {Right: true},
+		},
+		{
+			{Right: true}, {Bottom: true}, {Bottom: true, Right: true}, {}, {Bottom: true, Right: true}, {Right: true},
+		},
+		{
+			{Right: true}, {Bottom: true}, {Bottom: true}, {Bottom: true}, {Bottom: true}, {Right: true},
+		},
+		{
+			{}, {Bottom: true}, {Bottom: true}, {Bottom: true}, {Right: true}, {Right: true},
+		},
+		{
+			{Bottom: true}, {Bottom: true}, {Bottom: true, Right: true}, {Bottom: true}, {Bottom: true, Right: true},
+			{Bottom: true, Right: true},
+		},
 	},
 }
 
-var mazeI = valueobject.MazeMap{
-	{
-		{Right: true}, {}, {Bottom: true}, {Bottom: true}, {}, {Right: true},
+var mazeE = valueobject.Maze{
+	Marker1: valueobject.Point2D{X: 4, Y: 2},
+	Marker2: valueobject.Point2D{X: 3, Y: 5},
+	Map: [6][6]valueobject.MazeCell{
+		{
+			{Bottom: true}, {Bottom: true}, {Bottom: true}, {Bottom: true}, {}, {Right: true},
+		},
+		{
+			{}, {Bottom: true}, {Bottom: true}, {}, {Bottom: true, Right: true}, {Bottom: true, Right: true},
+		},
+		{
+			{}, {Right: true}, {Bottom: true}, {Bottom: true, Right: true}, {}, {Right: true},
+		},
+		{
+			{Right: true}, {Bottom: true}, {Bottom: true}, {Right: true}, {Bottom: true, Right: true}, {Right: true},
+		},
+		{
+			{Right: true}, {}, {Bottom: true}, {Bottom: true}, {Bottom: true, Right: true}, {Right: true},
+		},
+		{
+			{Bottom: true, Right: true}, {Bottom: true}, {Bottom: true}, {Bottom: true}, {Bottom: true},
+			{Bottom: true, Right: true},
+		},
 	},
-	{
-		{Right: true}, {Right: true}, {}, {Bottom: true, Right: true}, {Right: true}, {Right: true},
+}
+
+var mazeF = valueobject.Maze{
+	Marker1: valueobject.Point2D{X: 2, Y: 4},
+	Marker2: valueobject.Point2D{X: 4, Y: 0},
+	Map: [6][6]valueobject.MazeCell{
+		{
+			{Right: true}, {}, {Right: true}, {Bottom: true}, {}, {Right: true},
+		},
+		{
+			{Right: true}, {Right: true}, {Right: true}, {}, {Bottom: true, Right: true}, {Right: true},
+		},
+		{
+			{}, {Bottom: true, Right: true}, {Bottom: true, Right: true}, {Right: true}, {}, {Bottom: true, Right: true},
+		},
+		{
+			{Bottom: true}, {Right: true}, {}, {Right: true}, {Right: true}, {Right: true},
+		},
+		{
+			{}, {Bottom: true, Right: true}, {Bottom: true, Right: true}, {Right: true}, {Bottom: true}, {Right: true},
+		},
+		{
+			{Bottom: true}, {Bottom: true}, {Bottom: true}, {Bottom: true, Right: true}, {Bottom: true},
+			{Bottom: true, Right: true},
+		},
 	},
-	{
-		{}, {Bottom: true}, {Bottom: true, Right: true}, {}, {Bottom: true, Right: true}, {Right: true},
+}
+
+var mazeG = valueobject.Maze{
+	Marker1: valueobject.Point2D{X: 1, Y: 0},
+	Marker2: valueobject.Point2D{X: 1, Y: 5},
+	Map: [6][6]valueobject.MazeCell{
+		{
+			{}, {Bottom: true}, {Bottom: true}, {Right: true}, {}, {Right: true},
+		},
+		{
+			{Right: true}, {}, {Bottom: true, Right: true}, {Bottom: true}, {Bottom: true, Right: true}, {Right: true},
+		},
+		{
+			{Bottom: true}, {Bottom: true, Right: true}, {}, {Bottom: true, Right: true}, {}, {Bottom: true, Right: true},
+		},
+		{
+			{}, {Right: true}, {}, {Bottom: true}, {Bottom: true, Right: true}, {Right: true},
+		},
+		{
+			{Right: true}, {Bottom: true, Right: true}, {Bottom: true}, {Bottom: true}, {Right: true}, {Right: true},
+		},
+		{
+			{Bottom: true}, {Bottom: true}, {Bottom: true}, {Bottom: true}, {Bottom: true}, {Bottom: true, Right: true},
+		},
 	},
-	{
-		{Right: true}, {Right: true}, {}, {Bottom: true, Right: true}, {Bottom: true}, {Right: true},
+}
+
+var mazeH = valueobject.Maze{
+	Marker1: valueobject.Point2D{X: 3, Y: 0},
+	Marker2: valueobject.Point2D{X: 2, Y: 3},
+	Map: [6][6]valueobject.MazeCell{
+		{
+			{Right: true}, {}, {Bottom: true}, {Right: true}, {}, {Right: true},
+		},
+		{
+			{}, {Bottom: true}, {Bottom: true, Right: true}, {Bottom: true}, {Bottom: true, Right: true}, {Right: true},
+		},
+		{
+			{Right: true}, {}, {Bottom: true}, {Bottom: true}, {Right: true}, {Right: true},
+		},
+		{
+			{Right: true}, {Bottom: true}, {Right: true}, {Bottom: true}, {Bottom: true}, {Bottom: true, Right: true},
+		},
+		{
+			{Right: true}, {Right: true}, {Bottom: true}, {Bottom: true}, {Bottom: true}, {Bottom: true, Right: true},
+		},
+		{
+			{Bottom: true}, {Bottom: true}, {Bottom: true}, {Bottom: true}, {Bottom: true}, {Bottom: true, Right: true},
+		},
 	},
-	{
-		{Right: true}, {Right: true}, {Right: true}, {}, {Right: true}, {Bottom: true, Right: true},
-	},
-	{
-		{Bottom: true}, {Bottom: true, Right: true}, {Bottom: true}, {Bottom: true, Right: true}, {Bottom: true},
-		{Bottom: true, Right: true},
+}
+
+var mazeI = valueobject.Maze{
+	Marker1: valueobject.Point2D{X: 2, Y: 1},
+	Marker2: valueobject.Point2D{X: 0, Y: 4},
+	Map: [6][6]valueobject.MazeCell{
+		{
+			{Right: true}, {}, {Bottom: true}, {Bottom: true}, {}, {Right: true},
+		},
+		{
+			{Right: true}, {Right: true}, {}, {Bottom: true, Right: true}, {Right: true}, {Right: true},
+		},
+		{
+			{}, {Bottom: true}, {Bottom: true, Right: true}, {}, {Bottom: true, Right: true}, {Right: true},
+		},
+		{
+			{Right: true}, {Right: true}, {}, {Bottom: true, Right: true}, {Bottom: true}, {Right: true},
+		},
+		{
+			{Right: true}, {Right: true}, {Right: true}, {}, {Right: true}, {Bottom: true, Right: true},
+		},
+		{
+			{Bottom: true}, {Bottom: true, Right: true}, {Bottom: true}, {Bottom: true, Right: true}, {Bottom: true},
+			{Bottom: true, Right: true},
+		},
 	},
 }
 
@@ -304,7 +340,7 @@ func (m *MazeModule) mazeToString() string {
 			}
 
 			// Right wall of this cell
-			if maze[y][x].Right {
+			if maze.Map[y][x].Right {
 				sb.WriteString("|")
 			} else {
 				sb.WriteString(" ")
@@ -315,7 +351,7 @@ func (m *MazeModule) mazeToString() string {
 		// Bottom walls
 		sb.WriteString("+")
 		for x := range 6 {
-			if maze[y][x].Bottom {
+			if maze.Map[y][x].Bottom {
 				sb.WriteString("---+")
 			} else {
 				sb.WriteString("   +")

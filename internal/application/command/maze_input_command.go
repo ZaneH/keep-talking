@@ -9,5 +9,5 @@ type MazeCommand struct {
 
 type MazeCommandResult struct {
 	BaseModuleInputCommandResult
-	MazeMap valueobject.MazeMap
+	Maze valueobject.Maze
 }

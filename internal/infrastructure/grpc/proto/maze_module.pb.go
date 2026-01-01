@@ -156,7 +156,9 @@ func (x *MazeState) GetMaze() *Maze {
 // 6x6
 type Maze struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Rows          []*MazeRow             `protobuf:"bytes,1,rep,name=rows,proto3" json:"rows,omitempty"`
+	Marker_1      *Point2D               `protobuf:"bytes,1,opt,name=marker_1,json=marker1,proto3" json:"marker_1,omitempty"`
+	Marker_2      *Point2D               `protobuf:"bytes,2,opt,name=marker_2,json=marker2,proto3" json:"marker_2,omitempty"`
+	Rows          []*MazeRow             `protobuf:"bytes,3,rep,name=rows,proto3" json:"rows,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -189,6 +191,20 @@ func (x *Maze) ProtoReflect() protoreflect.Message {
 // Deprecated: Use Maze.ProtoReflect.Descriptor instead.
 func (*Maze) Descriptor() ([]byte, []int) {
 	return file_proto_maze_module_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *Maze) GetMarker_1() *Point2D {
+	if x != nil {
+		return x.Marker_1
+	}
+	return nil
+}
+
+func (x *Maze) GetMarker_2() *Point2D {
+	if x != nil {
+		return x.Marker_2
+	}
+	return nil
 }
 
 func (x *Maze) GetRows() []*MazeRow {
@@ -305,9 +321,11 @@ const file_proto_maze_module_proto_rawDesc = "" +
 	"\n" +
 	"maze_state\x18\x01 \x01(\v2\x12.modules.MazeStateR\tmazeState\".\n" +
 	"\tMazeState\x12!\n" +
-	"\x04maze\x18\x01 \x01(\v2\r.modules.MazeR\x04maze\",\n" +
-	"\x04Maze\x12$\n" +
-	"\x04rows\x18\x01 \x03(\v2\x10.modules.MazeRowR\x04rows\"2\n" +
+	"\x04maze\x18\x01 \x01(\v2\r.modules.MazeR\x04maze\"\x84\x01\n" +
+	"\x04Maze\x12*\n" +
+	"\bmarker_1\x18\x01 \x01(\v2\x0f.common.Point2DR\amarker1\x12*\n" +
+	"\bmarker_2\x18\x02 \x01(\v2\x0f.common.Point2DR\amarker2\x12$\n" +
+	"\x04rows\x18\x03 \x03(\v2\x10.modules.MazeRowR\x04rows\"2\n" +
 	"\aMazeRow\x12'\n" +
 	"\x05cells\x18\x01 \x03(\v2\x11.modules.MazeCellR\x05cells\"6\n" +
 	"\bMazeCell\x12\x14\n" +
@@ -335,18 +353,21 @@ var file_proto_maze_module_proto_goTypes = []any{
 	(*MazeRow)(nil),         // 4: modules.MazeRow
 	(*MazeCell)(nil),        // 5: modules.MazeCell
 	(CardinalDirection)(0),  // 6: common.CardinalDirection
+	(*Point2D)(nil),         // 7: common.Point2D
 }
 var file_proto_maze_module_proto_depIdxs = []int32{
 	6, // 0: modules.MazeInput.direction:type_name -> common.CardinalDirection
 	2, // 1: modules.MazeInputResult.maze_state:type_name -> modules.MazeState
 	3, // 2: modules.MazeState.maze:type_name -> modules.Maze
-	4, // 3: modules.Maze.rows:type_name -> modules.MazeRow
-	5, // 4: modules.MazeRow.cells:type_name -> modules.MazeCell
-	5, // [5:5] is the sub-list for method output_type
-	5, // [5:5] is the sub-list for method input_type
-	5, // [5:5] is the sub-list for extension type_name
-	5, // [5:5] is the sub-list for extension extendee
-	0, // [0:5] is the sub-list for field type_name
+	7, // 3: modules.Maze.marker_1:type_name -> common.Point2D
+	7, // 4: modules.Maze.marker_2:type_name -> common.Point2D
+	4, // 5: modules.Maze.rows:type_name -> modules.MazeRow
+	5, // 6: modules.MazeRow.cells:type_name -> modules.MazeCell
+	7, // [7:7] is the sub-list for method output_type
+	7, // [7:7] is the sub-list for method input_type
+	7, // [7:7] is the sub-list for extension type_name
+	7, // [7:7] is the sub-list for extension extendee
+	0, // [0:7] is the sub-list for field type_name
 }
 
 func init() { file_proto_maze_module_proto_init() }

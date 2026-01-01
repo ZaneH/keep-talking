@@ -36,6 +36,7 @@ const (
 	Module_MORSE          Module_ModuleType = 9
 	Module_NEEDY_VENT_GAS Module_ModuleType = 10
 	Module_NEEDY_KNOB     Module_ModuleType = 11
+	Module_MAZE           Module_ModuleType = 12
 )
 
 // Enum value maps for Module_ModuleType.
@@ -53,6 +54,7 @@ var (
 		9:  "MORSE",
 		10: "NEEDY_VENT_GAS",
 		11: "NEEDY_KNOB",
+		12: "MAZE",
 	}
 	Module_ModuleType_value = map[string]int32{
 		"UNKNOWN":        0,
@@ -67,6 +69,7 @@ var (
 		"MORSE":          9,
 		"NEEDY_VENT_GAS": 10,
 		"NEEDY_KNOB":     11,
+		"MAZE":           12,
 	}
 )
 
@@ -175,6 +178,7 @@ type Module struct {
 	//	*Module_MorseState
 	//	*Module_NeedyVentGasState
 	//	*Module_NeedyKnobState
+	//	*Module_MazeState
 	State         isModule_State `protobuf_oneof:"state"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -335,6 +339,15 @@ func (x *Module) GetNeedyKnobState() *NeedyKnobState {
 	return nil
 }
 
+func (x *Module) GetMazeState() *MazeState {
+	if x != nil {
+		if x, ok := x.State.(*Module_MazeState); ok {
+			return x.MazeState
+		}
+	}
+	return nil
+}
+
 type isModule_State interface {
 	isModule_State()
 }
@@ -379,6 +392,10 @@ type Module_NeedyKnobState struct {
 	NeedyKnobState *NeedyKnobState `protobuf:"bytes,14,opt,name=needy_knob_state,json=needyKnobState,proto3,oneof"`
 }
 
+type Module_MazeState struct {
+	MazeState *MazeState `protobuf:"bytes,15,opt,name=maze_state,json=mazeState,proto3,oneof"`
+}
+
 func (*Module_WiresState) isModule_State() {}
 
 func (*Module_PasswordState) isModule_State() {}
@@ -399,15 +416,17 @@ func (*Module_NeedyVentGasState) isModule_State() {}
 
 func (*Module_NeedyKnobState) isModule_State() {}
 
+func (*Module_MazeState) isModule_State() {}
+
 var File_proto_modules_proto protoreflect.FileDescriptor
 
 const file_proto_modules_proto_rawDesc = "" +
 	"\n" +
-	"\x13proto/modules.proto\x12\amodules\x1a\x18proto/wires_module.proto\x1a\x1dproto/big_button_module.proto\x1a\x18proto/simon_module.proto\x1a\x1bproto/password_module.proto\x1a\x19proto/keypad_module.proto\x1a proto/whos_on_first_module.proto\x1a\x19proto/memory_module.proto\x1a\x18proto/morse_module.proto\x1a!proto/needy_vent_gas_module.proto\x1a\x1dproto/needy_knob_module.proto\"H\n" +
+	"\x13proto/modules.proto\x12\amodules\x1a\x18proto/wires_module.proto\x1a\x1dproto/big_button_module.proto\x1a\x18proto/simon_module.proto\x1a\x1bproto/password_module.proto\x1a\x19proto/keypad_module.proto\x1a proto/whos_on_first_module.proto\x1a\x19proto/memory_module.proto\x1a\x18proto/morse_module.proto\x1a!proto/needy_vent_gas_module.proto\x1a\x1dproto/needy_knob_module.proto\x1a\x17proto/maze_module.proto\"H\n" +
 	"\x0eModulePosition\x12\x12\n" +
 	"\x04face\x18\x01 \x01(\x05R\x04face\x12\x10\n" +
 	"\x03row\x18\x02 \x01(\x05R\x03row\x12\x10\n" +
-	"\x03col\x18\x03 \x01(\x05R\x03col\"\xd7\a\n" +
+	"\x03col\x18\x03 \x01(\x05R\x03col\"\x96\b\n" +
 	"\x06Module\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12.\n" +
 	"\x04type\x18\x02 \x01(\x0e2\x1a.modules.Module.ModuleTypeR\x04type\x123\n" +
@@ -426,7 +445,9 @@ const file_proto_modules_proto_rawDesc = "" +
 	"\vmorse_state\x18\f \x01(\v2\x13.modules.MorseStateH\x00R\n" +
 	"morseState\x12M\n" +
 	"\x14needy_vent_gas_state\x18\r \x01(\v2\x1a.modules.NeedyVentGasStateH\x00R\x11needyVentGasState\x12C\n" +
-	"\x10needy_knob_state\x18\x0e \x01(\v2\x17.modules.NeedyKnobStateH\x00R\x0eneedyKnobState\"\xb2\x01\n" +
+	"\x10needy_knob_state\x18\x0e \x01(\v2\x17.modules.NeedyKnobStateH\x00R\x0eneedyKnobState\x123\n" +
+	"\n" +
+	"maze_state\x18\x0f \x01(\v2\x12.modules.MazeStateH\x00R\tmazeState\"\xbc\x01\n" +
 	"\n" +
 	"ModuleType\x12\v\n" +
 	"\aUNKNOWN\x10\x00\x12\t\n" +
@@ -445,7 +466,8 @@ const file_proto_modules_proto_rawDesc = "" +
 	"\x0eNEEDY_VENT_GAS\x10\n" +
 	"\x12\x0e\n" +
 	"\n" +
-	"NEEDY_KNOB\x10\vB\a\n" +
+	"NEEDY_KNOB\x10\v\x12\b\n" +
+	"\x04MAZE\x10\fB\a\n" +
 	"\x05stateB\tZ\a./protob\x06proto3"
 
 var (
@@ -476,6 +498,7 @@ var file_proto_modules_proto_goTypes = []any{
 	(*MorseState)(nil),        // 10: modules.MorseState
 	(*NeedyVentGasState)(nil), // 11: modules.NeedyVentGasState
 	(*NeedyKnobState)(nil),    // 12: modules.NeedyKnobState
+	(*MazeState)(nil),         // 13: modules.MazeState
 }
 var file_proto_modules_proto_depIdxs = []int32{
 	0,  // 0: modules.Module.type:type_name -> modules.Module.ModuleType
@@ -490,11 +513,12 @@ var file_proto_modules_proto_depIdxs = []int32{
 	10, // 9: modules.Module.morse_state:type_name -> modules.MorseState
 	11, // 10: modules.Module.needy_vent_gas_state:type_name -> modules.NeedyVentGasState
 	12, // 11: modules.Module.needy_knob_state:type_name -> modules.NeedyKnobState
-	12, // [12:12] is the sub-list for method output_type
-	12, // [12:12] is the sub-list for method input_type
-	12, // [12:12] is the sub-list for extension type_name
-	12, // [12:12] is the sub-list for extension extendee
-	0,  // [0:12] is the sub-list for field type_name
+	13, // 12: modules.Module.maze_state:type_name -> modules.MazeState
+	13, // [13:13] is the sub-list for method output_type
+	13, // [13:13] is the sub-list for method input_type
+	13, // [13:13] is the sub-list for extension type_name
+	13, // [13:13] is the sub-list for extension extendee
+	0,  // [0:13] is the sub-list for field type_name
 }
 
 func init() { file_proto_modules_proto_init() }
@@ -512,6 +536,7 @@ func file_proto_modules_proto_init() {
 	file_proto_morse_module_proto_init()
 	file_proto_needy_vent_gas_module_proto_init()
 	file_proto_needy_knob_module_proto_init()
+	file_proto_maze_module_proto_init()
 	file_proto_modules_proto_msgTypes[1].OneofWrappers = []any{
 		(*Module_WiresState)(nil),
 		(*Module_PasswordState)(nil),
@@ -523,6 +548,7 @@ func file_proto_modules_proto_init() {
 		(*Module_MorseState)(nil),
 		(*Module_NeedyVentGasState)(nil),
 		(*Module_NeedyKnobState)(nil),
+		(*Module_MazeState)(nil),
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
