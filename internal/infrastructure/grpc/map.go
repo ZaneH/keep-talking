@@ -34,6 +34,8 @@ func mapTypeToProto(moduleType valueobject.ModuleType) pb.Module_ModuleType {
 		return pb.Module_NEEDY_VENT_GAS
 	case valueobject.NeedyKnobModule:
 		return pb.Module_NEEDY_KNOB
+	case valueobject.MazeModule:
+		return pb.Module_MAZE
 	default:
 		log.Fatalf("Unknown module type: %v. Couldn't map type to proto.", moduleType)
 		return pb.Module_UNKNOWN
@@ -279,6 +281,22 @@ func mapModulesToProto(modules map[uuid.UUID]actors.ModuleActor) map[string]*pb.
 					DisplayedPatternSecondRow: needyKnobState.DisplayedPattern[1],
 					CountdownStartedAt:        needyKnobState.CountdownStartedAt,
 					CountdownDuration:         int32(needyKnobState.CountdownDuration),
+				},
+			}
+		case valueobject.MazeModule:
+			mazeState, ok := actor.GetModule().GetModuleState().(*entities.MazeModuleState)
+			if !ok {
+				log.Printf("Expected *MazeModuleState but got different type: %T", actor.GetModule().GetModuleState())
+				continue
+			}
+
+			protoModule.State = &pb.Module_MazeState{
+				MazeState: &pb.MazeState{
+					Maze: mapMazeToProto(mazeState.VariantToMaze()),
+					PlayerPosition: &pb.Point2D{
+						X: int64(mazeState.PlayerPosition.X),
+						Y: int64(mazeState.PlayerPosition.Y),
+					},
 				},
 			}
 		default:

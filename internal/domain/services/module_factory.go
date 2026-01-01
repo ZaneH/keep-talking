@@ -56,3 +56,7 @@ func (f *ModuleFactory) CreateNeedyVentGasModule() *entities.NeedyVentGasModule 
 func (f *ModuleFactory) CreateNeedyKnobModule() *entities.NeedyKnobModule {
 	return entities.NewNeedyKnobModule(f.rng)
 }
+
+func (f *ModuleFactory) CreateMazeModule() *entities.MazeModule {
+	return entities.NewMazeModule(f.rng)
+}
