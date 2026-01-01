@@ -65,7 +65,7 @@ func (m *MorseModule) String() string {
 }
 
 func (m *MorseModule) GetType() valueobject.ModuleType {
-	return valueobject.Morse
+	return valueobject.MorseModule
 }
 
 func (m *MorseModule) SetState(state MorseState) {

@@ -68,7 +68,7 @@ func (m *SimonModule) String() string {
 }
 
 func (m *SimonModule) GetType() valueobject.ModuleType {
-	return valueobject.Simon
+	return valueobject.SimonModule
 }
 
 func (m *SimonModule) SetState(state SimonState) {

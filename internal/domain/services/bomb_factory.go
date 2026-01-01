@@ -33,7 +33,7 @@ func (f *BombFactoryImpl) CreateBomb(rng ports.RandomGenerator, config valueobje
 	}
 
 	modulesToAdd := make([]valueobject.ModuleType, totalModules)
-	modulesToAdd[0] = valueobject.Clock
+	modulesToAdd[0] = valueobject.ClockModule
 
 	for i := 1; i < totalModules; i++ {
 		modulesToAdd[i] = selectWeightedModuleType(f.moduleFactory.rng, moduleTypes, weights)
@@ -78,27 +78,27 @@ func (f *BombFactoryImpl) placeModulesOnBomb(rng ports.RandomGenerator, bomb *en
 func (f *BombFactoryImpl) createModule(bomb *entities.Bomb, moduleType valueobject.ModuleType, position valueobject.ModulePosition) entities.Module {
 	var module entities.Module
 	switch moduleType {
-	case valueobject.Clock:
+	case valueobject.ClockModule:
 		module = f.moduleFactory.CreateClockModule()
-	case valueobject.Wires:
+	case valueobject.WiresModule:
 		module = f.moduleFactory.CreateWiresModule()
-	case valueobject.Password:
+	case valueobject.PasswordModule:
 		module = f.moduleFactory.CreatePasswordModule()
-	case valueobject.BigButton:
+	case valueobject.BigButtonModule:
 		module = f.moduleFactory.CreateBigButtonModule()
-	case valueobject.Simon:
+	case valueobject.SimonModule:
 		module = f.moduleFactory.CreateSimonModule()
-	case valueobject.Keypad:
+	case valueobject.KeypadModule:
 		module = f.moduleFactory.CreateKeypadModule()
-	case valueobject.WhosOnFirst:
+	case valueobject.WhosOnFirstModule:
 		module = f.moduleFactory.CreateWhosOnFirstModule()
-	case valueobject.Memory:
+	case valueobject.MemoryModule:
 		module = f.moduleFactory.CreateMemoryModule()
-	case valueobject.Morse:
+	case valueobject.MorseModule:
 		module = f.moduleFactory.CreateMorseModule()
-	case valueobject.NeedyVentGas:
+	case valueobject.NeedyVentGasModule:
 		module = f.moduleFactory.CreateNeedyVentGasModule()
-	case valueobject.NeedyKnob:
+	case valueobject.NeedyKnobModule:
 		module = f.moduleFactory.CreateNeedyKnobModule()
 	default:
 		log.Printf("unknown module type %v, skipping...", moduleType)

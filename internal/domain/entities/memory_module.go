@@ -59,7 +59,7 @@ func (m *MemoryModule) GetModuleState() ModuleState {
 }
 
 func (m *MemoryModule) GetType() valueobject.ModuleType {
-	return valueobject.Memory
+	return valueobject.MemoryModule
 }
 
 func (m *MemoryModule) SetState(state MemoryState) {

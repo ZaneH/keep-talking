@@ -21,7 +21,7 @@ func NewClockModule() *ClockModule {
 }
 
 func (m *ClockModule) GetType() valueobject.ModuleType {
-	return valueobject.Clock
+	return valueobject.ClockModule
 }
 
 func (m *ClockModule) GetModuleState() ModuleState {

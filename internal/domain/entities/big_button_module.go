@@ -50,7 +50,7 @@ func NewBigButtonModule(rng ports.RandomGenerator) *BigButtonModule {
 }
 
 func (m *BigButtonModule) GetType() valueobject.ModuleType {
-	return valueobject.BigButton
+	return valueobject.BigButtonModule
 }
 
 func (m *BigButtonModule) GetModuleState() ModuleState {

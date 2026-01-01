@@ -12,27 +12,27 @@ import (
 
 func mapTypeToProto(moduleType valueobject.ModuleType) pb.Module_ModuleType {
 	switch moduleType {
-	case valueobject.Wires:
+	case valueobject.WiresModule:
 		return pb.Module_WIRES
-	case valueobject.Password:
+	case valueobject.PasswordModule:
 		return pb.Module_PASSWORD
-	case valueobject.BigButton:
+	case valueobject.BigButtonModule:
 		return pb.Module_BIG_BUTTON
-	case valueobject.Clock:
+	case valueobject.ClockModule:
 		return pb.Module_CLOCK
-	case valueobject.Simon:
+	case valueobject.SimonModule:
 		return pb.Module_SIMON
-	case valueobject.Keypad:
+	case valueobject.KeypadModule:
 		return pb.Module_KEYPAD
-	case valueobject.WhosOnFirst:
+	case valueobject.WhosOnFirstModule:
 		return pb.Module_WHOS_ON_FIRST
-	case valueobject.Memory:
+	case valueobject.MemoryModule:
 		return pb.Module_MEMORY
-	case valueobject.Morse:
+	case valueobject.MorseModule:
 		return pb.Module_MORSE
-	case valueobject.NeedyVentGas:
+	case valueobject.NeedyVentGasModule:
 		return pb.Module_NEEDY_VENT_GAS
-	case valueobject.NeedyKnob:
+	case valueobject.NeedyKnobModule:
 		return pb.Module_NEEDY_KNOB
 	default:
 		log.Fatalf("Unknown module type: %v. Couldn't map type to proto.", moduleType)
@@ -115,7 +115,7 @@ func mapModulesToProto(modules map[uuid.UUID]actors.ModuleActor) map[string]*pb.
 		}
 
 		switch actor.GetModule().GetType() {
-		case valueobject.Wires:
+		case valueobject.WiresModule:
 			wiresState, ok := actor.GetModule().GetModuleState().(*entities.WiresState)
 			if !ok {
 				log.Printf("Expected *WiresState but got different type: %T", actor.GetModule().GetModuleState())
@@ -136,7 +136,7 @@ func mapModulesToProto(modules map[uuid.UUID]actors.ModuleActor) map[string]*pb.
 					Wires: wires,
 				},
 			}
-		case valueobject.BigButton:
+		case valueobject.BigButtonModule:
 			bigButtonState, ok := actor.GetModule().GetModuleState().(*entities.BigButtonState)
 			if !ok {
 				log.Printf("Expected *BigButtonState but got different type: %T", actor.GetModule().GetModuleState())
@@ -149,8 +149,8 @@ func mapModulesToProto(modules map[uuid.UUID]actors.ModuleActor) map[string]*pb.
 					Label:       bigButtonState.Label,
 				},
 			}
-		case valueobject.Clock:
-		case valueobject.Simon:
+		case valueobject.ClockModule:
+		case valueobject.SimonModule:
 			simonState, ok := actor.GetModule().GetModuleState().(*entities.SimonState)
 			if !ok {
 				log.Printf("Expected *SimonState but got different type: %T", actor.GetModule().GetModuleState())
@@ -168,7 +168,7 @@ func mapModulesToProto(modules map[uuid.UUID]actors.ModuleActor) map[string]*pb.
 					CurrentSequence: seqProto,
 				},
 			}
-		case valueobject.Password:
+		case valueobject.PasswordModule:
 			passwordModule, ok := actor.GetModule().(*entities.PasswordModule)
 			if !ok {
 				log.Printf("Expected *PasswordModule but got different type: %T", actor.GetModule().GetModuleState())
@@ -180,7 +180,7 @@ func mapModulesToProto(modules map[uuid.UUID]actors.ModuleActor) map[string]*pb.
 					Letters: passwordModule.GetCurrentGuess(),
 				},
 			}
-		case valueobject.Keypad:
+		case valueobject.KeypadModule:
 			keypadState, ok := actor.GetModule().GetModuleState().(*entities.KeypadState)
 			if !ok {
 				log.Printf("Expected *KeypadState but got different type: %T", actor.GetModule().GetModuleState())
@@ -205,7 +205,7 @@ func mapModulesToProto(modules map[uuid.UUID]actors.ModuleActor) map[string]*pb.
 					ActivatedSymbols: activated_symbols,
 				},
 			}
-		case valueobject.WhosOnFirst:
+		case valueobject.WhosOnFirstModule:
 			whosOnFirstState, ok := actor.GetModule().GetModuleState().(*entities.WhosOnFirstState)
 			if !ok {
 				log.Printf("Expected *WhosOnFirstState but got different type: %T", actor.GetModule().GetModuleState())
@@ -219,7 +219,7 @@ func mapModulesToProto(modules map[uuid.UUID]actors.ModuleActor) map[string]*pb.
 					Stage:       int32(whosOnFirstState.Stage),
 				},
 			}
-		case valueobject.Memory:
+		case valueobject.MemoryModule:
 			memoryState, ok := actor.GetModule().GetModuleState().(*entities.MemoryState)
 			if !ok {
 				log.Printf("Expected *MemoryState but got different type: %T", actor.GetModule().GetModuleState())
@@ -238,7 +238,7 @@ func mapModulesToProto(modules map[uuid.UUID]actors.ModuleActor) map[string]*pb.
 					Stage:            int32(memoryState.Stage),
 				},
 			}
-		case valueobject.Morse:
+		case valueobject.MorseModule:
 			morseState, ok := actor.GetModule().GetModuleState().(*entities.MorseState)
 			if !ok {
 				log.Printf("Expected *MorseState but got different type: %T", actor.GetModule().GetModuleState())
@@ -252,7 +252,7 @@ func mapModulesToProto(modules map[uuid.UUID]actors.ModuleActor) map[string]*pb.
 					SelectedFrequencyIndex: int32(morseState.SelectedFrequencyIdx),
 				},
 			}
-		case valueobject.NeedyVentGas:
+		case valueobject.NeedyVentGasModule:
 			needyVentGasState, ok := actor.GetModule().GetModuleState().(*entities.NeedyVentGasState)
 			if !ok {
 				log.Printf("Expected *NeedyVentGasState but got different type: %T", actor.GetModule().GetModuleState())
@@ -266,7 +266,7 @@ func mapModulesToProto(modules map[uuid.UUID]actors.ModuleActor) map[string]*pb.
 					CountdownDuration:  int32(needyVentGasState.CountdownDuration),
 				},
 			}
-		case valueobject.NeedyKnob:
+		case valueobject.NeedyKnobModule:
 			needyKnobState, ok := actor.GetModule().GetModuleState().(*entities.NeedyKnobState)
 			if !ok {
 				log.Printf("Expected *NeedyKnobState but got different type: %T", actor.GetModule().GetModuleState())

@@ -91,7 +91,7 @@ func (m *PasswordModule) String() string {
 }
 
 func (m *PasswordModule) GetType() valueobject.ModuleType {
-	return valueobject.Password
+	return valueobject.PasswordModule
 }
 
 func (m *PasswordModule) GetModuleState() ModuleState {

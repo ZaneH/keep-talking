@@ -64,7 +64,7 @@ func (m *KeypadModule) String() string {
 }
 
 func (m *KeypadModule) GetType() valueobject.ModuleType {
-	return valueobject.Keypad
+	return valueobject.KeypadModule
 }
 
 func (m *KeypadModule) SetState(state KeypadState) {

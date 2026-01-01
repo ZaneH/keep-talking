@@ -47,7 +47,7 @@ func (m *WiresModule) GetModuleState() ModuleState {
 }
 
 func (m *WiresModule) GetType() valueobject.ModuleType {
-	return valueobject.Wires
+	return valueobject.WiresModule
 }
 
 func (m *WiresModule) SetState(state WiresState) {

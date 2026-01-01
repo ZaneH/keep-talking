@@ -19,8 +19,8 @@ func TestBombFactory_CreateBomb(t *testing.T) {
 		NumFaces:          1,
 		MaxModulesPerFace: 1,
 		ModuleTypes: map[valueobject.ModuleType]float32{
-			valueobject.Wires:    0.5,
-			valueobject.Password: 0.5,
+			valueobject.WiresModule:    0.5,
+			valueobject.PasswordModule: 0.5,
 		},
 		MinBatteries:      0,
 		MaxBatteries:      0,
