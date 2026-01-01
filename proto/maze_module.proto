@@ -19,7 +19,9 @@ message MazeState {
 
 // 6x6
 message Maze {
-  repeated MazeRow rows = 1;
+  common.Point2D marker_1 = 1;
+  common.Point2D marker_2 = 2;
+  repeated MazeRow rows = 3;
 }
 
 message MazeRow {

@@ -43,13 +43,13 @@ func (a *MazeModuleActor) handleModuleCommand(msg ModuleCommandMessage) {
 			return
 		}
 
-		newMap, strike, err := mazeModule.PressDirection(typedCmd.Direction)
+		mazeMap, strike, err := mazeModule.PressDirection(typedCmd.Direction)
 		result := &command.MazeCommandResult{
 			BaseModuleInputCommandResult: command.BaseModuleInputCommandResult{
 				Solved: a.module.GetModuleState().IsSolved(),
 				Strike: strike,
 			},
-			MazeMap: newMap,
+			Maze: mazeMap,
 		}
 
 		if err != nil {

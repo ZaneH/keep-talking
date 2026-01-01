@@ -492,3 +492,25 @@ func mapProtoToSymbol(symbol pb.Symbol) valueobject.Symbol {
 
 	return valueobject.Copyright
 }
+
+func mapMazeToProto(maze valueobject.Maze) *pb.Maze {
+	rows := make([]*pb.MazeRow, 6)
+	for y := range 6 {
+		cells := make([]*pb.MazeCell, 6)
+		for x := range 6 {
+			cells[x] = &pb.MazeCell{
+				Right: maze.Map[y][x].Right,
+				Botom: maze.Map[y][x].Bottom,
+			}
+		}
+		rows[y] = &pb.MazeRow{
+			Cells: cells,
+		}
+	}
+
+	return &pb.Maze{
+		Marker_1: &pb.Point2D{X: int64(maze.Marker1.X), Y: int64(maze.Marker1.Y)},
+		Marker_2: &pb.Point2D{X: int64(maze.Marker2.X), Y: int64(maze.Marker2.Y)},
+		Rows:     rows,
+	}
+}

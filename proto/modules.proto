@@ -11,6 +11,7 @@ import "proto/memory_module.proto";
 import "proto/morse_module.proto";
 import "proto/needy_vent_gas_module.proto";
 import "proto/needy_knob_module.proto";
+import "proto/maze_module.proto";
 
 option go_package = "./proto";
 
@@ -34,6 +35,7 @@ message Module {
     MORSE = 9;
     NEEDY_VENT_GAS = 10;
     NEEDY_KNOB = 11;
+    MAZE = 12;
   }
 
   string id = 1;
@@ -51,5 +53,6 @@ message Module {
     MorseState morse_state = 12;
     NeedyVentGasState needy_vent_gas_state = 13;
     NeedyKnobState needy_knob_state = 14;
+    MazeState maze_state = 15;
   }
 }

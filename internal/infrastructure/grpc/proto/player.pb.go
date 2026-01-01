@@ -118,6 +118,7 @@ type PlayerInput struct {
 	//	*PlayerInput_MorseInput
 	//	*PlayerInput_NeedyVentGasInput
 	//	*PlayerInput_NeedyKnobInput
+	//	*PlayerInput_MazeInput
 	Input         isPlayerInput_Input `protobuf_oneof:"input"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -271,6 +272,15 @@ func (x *PlayerInput) GetNeedyKnobInput() *NeedyKnobInput {
 	return nil
 }
 
+func (x *PlayerInput) GetMazeInput() *MazeInput {
+	if x != nil {
+		if x, ok := x.Input.(*PlayerInput_MazeInput); ok {
+			return x.MazeInput
+		}
+	}
+	return nil
+}
+
 type isPlayerInput_Input interface {
 	isPlayerInput_Input()
 }
@@ -315,6 +325,10 @@ type PlayerInput_NeedyKnobInput struct {
 	NeedyKnobInput *NeedyKnobInput `protobuf:"bytes,19,opt,name=needy_knob_input,json=needyKnobInput,proto3,oneof"`
 }
 
+type PlayerInput_MazeInput struct {
+	MazeInput *MazeInput `protobuf:"bytes,20,opt,name=maze_input,json=mazeInput,proto3,oneof"`
+}
+
 func (*PlayerInput_WiresInput) isPlayerInput_Input() {}
 
 func (*PlayerInput_PasswordInput) isPlayerInput_Input() {}
@@ -335,6 +349,8 @@ func (*PlayerInput_NeedyVentGasInput) isPlayerInput_Input() {}
 
 func (*PlayerInput_NeedyKnobInput) isPlayerInput_Input() {}
 
+func (*PlayerInput_MazeInput) isPlayerInput_Input() {}
+
 type PlayerInputResult struct {
 	state    protoimpl.MessageState `protogen:"open.v1"`
 	ModuleId string                 `protobuf:"bytes,1,opt,name=module_id,json=moduleId,proto3" json:"module_id,omitempty"`
@@ -351,6 +367,7 @@ type PlayerInputResult struct {
 	//	*PlayerInputResult_MorseInputResult
 	//	*PlayerInputResult_NeedyVentGasInputResult
 	//	*PlayerInputResult_NeedyKnobInputResult
+	//	*PlayerInputResult_MazeInputResult
 	Result        isPlayerInputResult_Result `protobuf_oneof:"result"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -495,6 +512,15 @@ func (x *PlayerInputResult) GetNeedyKnobInputResult() *NeedyKnobInputResult {
 	return nil
 }
 
+func (x *PlayerInputResult) GetMazeInputResult() *MazeInputResult {
+	if x != nil {
+		if x, ok := x.Result.(*PlayerInputResult_MazeInputResult); ok {
+			return x.MazeInputResult
+		}
+	}
+	return nil
+}
+
 type isPlayerInputResult_Result interface {
 	isPlayerInputResult_Result()
 }
@@ -535,6 +561,10 @@ type PlayerInputResult_NeedyKnobInputResult struct {
 	NeedyKnobInputResult *NeedyKnobInputResult `protobuf:"bytes,18,opt,name=needy_knob_input_result,json=needyKnobInputResult,proto3,oneof"`
 }
 
+type PlayerInputResult_MazeInputResult struct {
+	MazeInputResult *MazeInputResult `protobuf:"bytes,19,opt,name=maze_input_result,json=mazeInputResult,proto3,oneof"`
+}
+
 func (*PlayerInputResult_BigButtonInputResult) isPlayerInputResult_Result() {}
 
 func (*PlayerInputResult_SimonInputResult) isPlayerInputResult_Result() {}
@@ -553,15 +583,17 @@ func (*PlayerInputResult_NeedyVentGasInputResult) isPlayerInputResult_Result() {
 
 func (*PlayerInputResult_NeedyKnobInputResult) isPlayerInputResult_Result() {}
 
+func (*PlayerInputResult_MazeInputResult) isPlayerInputResult_Result() {}
+
 var File_proto_player_proto protoreflect.FileDescriptor
 
 const file_proto_player_proto_rawDesc = "" +
 	"\n" +
-	"\x12proto/player.proto\x12\x06player\x1a\x18proto/wires_module.proto\x1a\x1bproto/password_module.proto\x1a\x1dproto/big_button_module.proto\x1a\x18proto/simon_module.proto\x1a\x19proto/keypad_module.proto\x1a proto/whos_on_first_module.proto\x1a\x19proto/memory_module.proto\x1a\x18proto/morse_module.proto\x1a!proto/needy_vent_gas_module.proto\x1a\x1dproto/needy_knob_module.proto\"\x13\n" +
+	"\x12proto/player.proto\x12\x06player\x1a\x18proto/wires_module.proto\x1a\x1bproto/password_module.proto\x1a\x1dproto/big_button_module.proto\x1a\x18proto/simon_module.proto\x1a\x19proto/keypad_module.proto\x1a proto/whos_on_first_module.proto\x1a\x19proto/memory_module.proto\x1a\x18proto/morse_module.proto\x1a!proto/needy_vent_gas_module.proto\x1a\x1dproto/needy_knob_module.proto\x1a\x17proto/maze_module.proto\"\x13\n" +
 	"\x11CreateGameRequest\"3\n" +
 	"\x12CreateGameResponse\x12\x1d\n" +
 	"\n" +
-	"session_id\x18\x01 \x01(\tR\tsessionId\"\xef\x05\n" +
+	"session_id\x18\x01 \x01(\tR\tsessionId\"\xa4\x06\n" +
 	"\vPlayerInput\x12\x1d\n" +
 	"\n" +
 	"session_id\x18\x01 \x01(\tR\tsessionId\x12\x17\n" +
@@ -580,8 +612,10 @@ const file_proto_player_proto_rawDesc = "" +
 	"\vmorse_input\x18\x11 \x01(\v2\x13.modules.MorseInputH\x00R\n" +
 	"morseInput\x12M\n" +
 	"\x14needy_vent_gas_input\x18\x12 \x01(\v2\x1a.modules.NeedyVentGasInputH\x00R\x11needyVentGasInput\x12C\n" +
-	"\x10needy_knob_input\x18\x13 \x01(\v2\x17.modules.NeedyKnobInputH\x00R\x0eneedyKnobInputB\a\n" +
-	"\x05input\"\xe1\x06\n" +
+	"\x10needy_knob_input\x18\x13 \x01(\v2\x17.modules.NeedyKnobInputH\x00R\x0eneedyKnobInput\x123\n" +
+	"\n" +
+	"maze_input\x18\x14 \x01(\v2\x12.modules.MazeInputH\x00R\tmazeInputB\a\n" +
+	"\x05input\"\xa9\a\n" +
 	"\x11PlayerInputResult\x12\x1b\n" +
 	"\tmodule_id\x18\x01 \x01(\tR\bmoduleId\x12\x16\n" +
 	"\x06strike\x18\x02 \x01(\bR\x06strike\x12\x16\n" +
@@ -595,7 +629,8 @@ const file_proto_player_proto_rawDesc = "" +
 	"\x13memory_input_result\x18\x0f \x01(\v2\x1a.modules.MemoryInputResultH\x00R\x11memoryInputResult\x12I\n" +
 	"\x12morse_input_result\x18\x10 \x01(\v2\x19.modules.MorseInputResultH\x00R\x10morseInputResult\x12`\n" +
 	"\x1bneedy_vent_gas_input_result\x18\x11 \x01(\v2 .modules.NeedyVentGasInputResultH\x00R\x17needyVentGasInputResult\x12V\n" +
-	"\x17needy_knob_input_result\x18\x12 \x01(\v2\x1d.modules.NeedyKnobInputResultH\x00R\x14needyKnobInputResultB\b\n" +
+	"\x17needy_knob_input_result\x18\x12 \x01(\v2\x1d.modules.NeedyKnobInputResultH\x00R\x14needyKnobInputResult\x12F\n" +
+	"\x11maze_input_result\x18\x13 \x01(\v2\x18.modules.MazeInputResultH\x00R\x0fmazeInputResultB\b\n" +
 	"\x06resultB\tZ\a./protob\x06proto3"
 
 var (
@@ -626,15 +661,17 @@ var file_proto_player_proto_goTypes = []any{
 	(*MorseInput)(nil),              // 11: modules.MorseInput
 	(*NeedyVentGasInput)(nil),       // 12: modules.NeedyVentGasInput
 	(*NeedyKnobInput)(nil),          // 13: modules.NeedyKnobInput
-	(*BigButtonInputResult)(nil),    // 14: modules.BigButtonInputResult
-	(*SimonInputResult)(nil),        // 15: modules.SimonInputResult
-	(*PasswordInputResult)(nil),     // 16: modules.PasswordInputResult
-	(*KeypadInputResult)(nil),       // 17: modules.KeypadInputResult
-	(*WhosOnFirstInputResult)(nil),  // 18: modules.WhosOnFirstInputResult
-	(*MemoryInputResult)(nil),       // 19: modules.MemoryInputResult
-	(*MorseInputResult)(nil),        // 20: modules.MorseInputResult
-	(*NeedyVentGasInputResult)(nil), // 21: modules.NeedyVentGasInputResult
-	(*NeedyKnobInputResult)(nil),    // 22: modules.NeedyKnobInputResult
+	(*MazeInput)(nil),               // 14: modules.MazeInput
+	(*BigButtonInputResult)(nil),    // 15: modules.BigButtonInputResult
+	(*SimonInputResult)(nil),        // 16: modules.SimonInputResult
+	(*PasswordInputResult)(nil),     // 17: modules.PasswordInputResult
+	(*KeypadInputResult)(nil),       // 18: modules.KeypadInputResult
+	(*WhosOnFirstInputResult)(nil),  // 19: modules.WhosOnFirstInputResult
+	(*MemoryInputResult)(nil),       // 20: modules.MemoryInputResult
+	(*MorseInputResult)(nil),        // 21: modules.MorseInputResult
+	(*NeedyVentGasInputResult)(nil), // 22: modules.NeedyVentGasInputResult
+	(*NeedyKnobInputResult)(nil),    // 23: modules.NeedyKnobInputResult
+	(*MazeInputResult)(nil),         // 24: modules.MazeInputResult
 }
 var file_proto_player_proto_depIdxs = []int32{
 	4,  // 0: player.PlayerInput.wires_input:type_name -> modules.WiresInput
@@ -647,20 +684,22 @@ var file_proto_player_proto_depIdxs = []int32{
 	11, // 7: player.PlayerInput.morse_input:type_name -> modules.MorseInput
 	12, // 8: player.PlayerInput.needy_vent_gas_input:type_name -> modules.NeedyVentGasInput
 	13, // 9: player.PlayerInput.needy_knob_input:type_name -> modules.NeedyKnobInput
-	14, // 10: player.PlayerInputResult.big_button_input_result:type_name -> modules.BigButtonInputResult
-	15, // 11: player.PlayerInputResult.simon_input_result:type_name -> modules.SimonInputResult
-	16, // 12: player.PlayerInputResult.password_input_result:type_name -> modules.PasswordInputResult
-	17, // 13: player.PlayerInputResult.keypad_input_result:type_name -> modules.KeypadInputResult
-	18, // 14: player.PlayerInputResult.whos_on_first_input_result:type_name -> modules.WhosOnFirstInputResult
-	19, // 15: player.PlayerInputResult.memory_input_result:type_name -> modules.MemoryInputResult
-	20, // 16: player.PlayerInputResult.morse_input_result:type_name -> modules.MorseInputResult
-	21, // 17: player.PlayerInputResult.needy_vent_gas_input_result:type_name -> modules.NeedyVentGasInputResult
-	22, // 18: player.PlayerInputResult.needy_knob_input_result:type_name -> modules.NeedyKnobInputResult
-	19, // [19:19] is the sub-list for method output_type
-	19, // [19:19] is the sub-list for method input_type
-	19, // [19:19] is the sub-list for extension type_name
-	19, // [19:19] is the sub-list for extension extendee
-	0,  // [0:19] is the sub-list for field type_name
+	14, // 10: player.PlayerInput.maze_input:type_name -> modules.MazeInput
+	15, // 11: player.PlayerInputResult.big_button_input_result:type_name -> modules.BigButtonInputResult
+	16, // 12: player.PlayerInputResult.simon_input_result:type_name -> modules.SimonInputResult
+	17, // 13: player.PlayerInputResult.password_input_result:type_name -> modules.PasswordInputResult
+	18, // 14: player.PlayerInputResult.keypad_input_result:type_name -> modules.KeypadInputResult
+	19, // 15: player.PlayerInputResult.whos_on_first_input_result:type_name -> modules.WhosOnFirstInputResult
+	20, // 16: player.PlayerInputResult.memory_input_result:type_name -> modules.MemoryInputResult
+	21, // 17: player.PlayerInputResult.morse_input_result:type_name -> modules.MorseInputResult
+	22, // 18: player.PlayerInputResult.needy_vent_gas_input_result:type_name -> modules.NeedyVentGasInputResult
+	23, // 19: player.PlayerInputResult.needy_knob_input_result:type_name -> modules.NeedyKnobInputResult
+	24, // 20: player.PlayerInputResult.maze_input_result:type_name -> modules.MazeInputResult
+	21, // [21:21] is the sub-list for method output_type
+	21, // [21:21] is the sub-list for method input_type
+	21, // [21:21] is the sub-list for extension type_name
+	21, // [21:21] is the sub-list for extension extendee
+	0,  // [0:21] is the sub-list for field type_name
 }
 
 func init() { file_proto_player_proto_init() }
@@ -678,6 +717,7 @@ func file_proto_player_proto_init() {
 	file_proto_morse_module_proto_init()
 	file_proto_needy_vent_gas_module_proto_init()
 	file_proto_needy_knob_module_proto_init()
+	file_proto_maze_module_proto_init()
 	file_proto_player_proto_msgTypes[2].OneofWrappers = []any{
 		(*PlayerInput_WiresInput)(nil),
 		(*PlayerInput_PasswordInput)(nil),
@@ -689,6 +729,7 @@ func file_proto_player_proto_init() {
 		(*PlayerInput_MorseInput)(nil),
 		(*PlayerInput_NeedyVentGasInput)(nil),
 		(*PlayerInput_NeedyKnobInput)(nil),
+		(*PlayerInput_MazeInput)(nil),
 	}
 	file_proto_player_proto_msgTypes[3].OneofWrappers = []any{
 		(*PlayerInputResult_BigButtonInputResult)(nil),
@@ -700,6 +741,7 @@ func file_proto_player_proto_init() {
 		(*PlayerInputResult_MorseInputResult)(nil),
 		(*PlayerInputResult_NeedyVentGasInputResult)(nil),
 		(*PlayerInputResult_NeedyKnobInputResult)(nil),
+		(*PlayerInputResult_MazeInputResult)(nil),
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{

@@ -5,4 +5,8 @@ type MazeCell struct {
 	Bottom bool
 }
 
-type MazeMap [6][6]MazeCell
+type Maze struct {
+	Marker1 Point2D
+	Marker2 Point2D
+	Map     [6][6]MazeCell
+}
