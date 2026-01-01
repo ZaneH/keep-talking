@@ -89,8 +89,9 @@ func (m *MazeModule) PressDirection(dir valueobject.CardinalDirection) (mazeMap 
 		newX--
 	}
 
+	// Clamp position to maze bounds
 	if newX < 0 || newX > 5 || newY < 0 || newY > 5 {
-		return mazeMap, valueobject.Point2D{X: currentX, Y: currentY}, true, nil
+		return mazeMap, valueobject.Point2D{X: currentX, Y: currentY}, false, nil
 	}
 
 	hasWall := false
@@ -99,29 +100,18 @@ func (m *MazeModule) PressDirection(dir valueobject.CardinalDirection) (mazeMap 
 	case valueobject.North:
 		if currentY > 0 {
 			hasWall = mazeMap.Map[newY][currentX].Bottom
-		} else {
-			hasWall = true // Top edge is always a wall
 		}
-
 	case valueobject.South:
 		if currentY < 5 {
 			hasWall = mazeMap.Map[currentY][currentX].Bottom
-		} else {
-			hasWall = true // Bottom edge is always a wall
 		}
-
 	case valueobject.East:
 		if currentX < 5 {
 			hasWall = mazeMap.Map[currentY][currentX].Right
-		} else {
-			hasWall = true // Right edge is always a wall
 		}
-
 	case valueobject.West:
 		if currentX > 0 {
 			hasWall = mazeMap.Map[currentY][newX].Right
-		} else {
-			hasWall = true // Left edge is always a wall
 		}
 	}
 
