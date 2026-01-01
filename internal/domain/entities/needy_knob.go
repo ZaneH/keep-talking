@@ -85,15 +85,16 @@ func (m *NeedyKnobModule) GetModuleState() ModuleState {
 }
 
 func (m *NeedyKnobModule) RotateDial() (err error) {
-	if m.State.DialDirection == valueobject.Up {
+	switch m.State.DialDirection {
+	case valueobject.Up:
 		m.State.DialDirection = valueobject.Right
-	} else if m.State.DialDirection == valueobject.Right {
+	case valueobject.Right:
 		m.State.DialDirection = valueobject.Down
-	} else if m.State.DialDirection == valueobject.Down {
+	case valueobject.Down:
 		m.State.DialDirection = valueobject.Left
-	} else if m.State.DialDirection == valueobject.Left {
+	case valueobject.Left:
 		m.State.DialDirection = valueobject.Up
-	} else {
+	default:
 		return fmt.Errorf("unknown direction %v", m.State.DialDirection)
 	}
 
