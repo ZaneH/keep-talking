@@ -132,6 +132,11 @@ func (m *MazeModule) PressDirection(dir valueobject.CardinalDirection) (mazeMap 
 	m.State.PlayerPosition.X = newX
 	m.State.PlayerPosition.Y = newY
 
+	if m.State.PlayerPosition.X == m.State.GoalPosition.X &&
+		m.State.PlayerPosition.Y == m.State.GoalPosition.Y {
+		m.State.MarkAsSolved()
+	}
+
 	return mazeMap, false, nil
 }
 
@@ -384,7 +389,7 @@ var mazeI = valueobject.Maze{
 func (m *MazeModule) mazeToString() string {
 	var sb strings.Builder
 
-	maze := mazeI
+	maze := variantToMaze(m.State.Variant)
 
 	// Top wall (always solid)
 	sb.WriteString("+")
