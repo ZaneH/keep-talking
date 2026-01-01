@@ -81,7 +81,6 @@ func TestPasswordModuleActor_LetterChange(t *testing.T) {
 				ResponseChannel: respChan,
 			})
 
-			// Assert
 			var resp actors.Response
 			select {
 			case resp = <-respChan:
@@ -89,6 +88,7 @@ func TestPasswordModuleActor_LetterChange(t *testing.T) {
 				t.Fatalf("Step %d: timeout waiting for response", i+1)
 			}
 
+			// Assert
 			if action.expectErr {
 				assert.False(t, resp.IsSuccess(), "Step %d: expected error response", i+1)
 			} else {

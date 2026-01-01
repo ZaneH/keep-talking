@@ -348,7 +348,7 @@ func (s *GameServiceAdapter) SendInput(ctx context.Context, i *pb.PlayerInput) (
 				},
 			},
 		}, nil
-	case *command.MazeCommandResult:
+	case *command.MazeInputCommandResult:
 		return &pb.PlayerInputResult{
 			ModuleId: i.GetModuleId(),
 			Strike:   res != nil && cmdResult.Strike,

@@ -30,6 +30,8 @@ func CreateModuleActor(bomb *entities.Bomb, module entities.Module) (ModuleActor
 		return NewNeedyVentGasModuleActor(module), nil
 	case *entities.NeedyKnobModule:
 		return NewNeedyKnobModuleActor(module), nil
+	case *entities.MazeModule:
+		return NewMazeModuleActor(module), nil
 	default:
 		return nil, fmt.Errorf("unsupported module type: %v", module.GetType())
 	}
