@@ -161,7 +161,7 @@ func (x *NeedyKnobState) GetDialDirection() CardinalDirection {
 	if x != nil {
 		return x.DialDirection
 	}
-	return CardinalDirection_UP
+	return CardinalDirection_NORTH
 }
 
 func (x *NeedyKnobState) GetCountdownStartedAt() int64 {
