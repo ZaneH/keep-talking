@@ -70,7 +70,69 @@ func (m *MazeModule) String() string {
 }
 
 func (m *MazeModule) PressDirection(dir valueobject.CardinalDirection) (mazeMap valueobject.Maze, strike bool, err error) {
-	return mazeA, true, nil
+	mazeMap = variantToMaze(m.State.Variant)
+
+	currentX := m.State.PlayerPosition.X
+	currentY := m.State.PlayerPosition.Y
+
+	newX := currentX
+	newY := currentY
+
+	switch dir {
+	case valueobject.North:
+		newY--
+	case valueobject.South:
+		newY++
+	case valueobject.East:
+		newX++
+	case valueobject.West:
+		newX--
+	}
+
+	if newX < 0 || newX > 5 || newY < 0 || newY > 5 {
+		return mazeMap, true, nil
+	}
+
+	hasWall := false
+
+	switch dir {
+	case valueobject.North:
+		if currentY > 0 {
+			hasWall = mazeMap.Map[newY][currentX].Bottom
+		} else {
+			hasWall = true // Top edge is always a wall
+		}
+
+	case valueobject.South:
+		if currentY < 5 {
+			hasWall = mazeMap.Map[currentY][currentX].Bottom
+		} else {
+			hasWall = true // Bottom edge is always a wall
+		}
+
+	case valueobject.East:
+		if currentX < 5 {
+			hasWall = mazeMap.Map[currentY][currentX].Right
+		} else {
+			hasWall = true // Right edge is always a wall
+		}
+
+	case valueobject.West:
+		if currentX > 0 {
+			hasWall = mazeMap.Map[currentY][newX].Right
+		} else {
+			hasWall = true // Left edge is always a wall
+		}
+	}
+
+	if hasWall {
+		return mazeMap, true, nil
+	}
+
+	m.State.PlayerPosition.X = newX
+	m.State.PlayerPosition.Y = newY
+
+	return mazeMap, false, nil
 }
 
 func generateRandomPosition(rng ports.RandomGenerator) valueobject.Point2D {
@@ -81,6 +143,12 @@ func generateRandomPosition(rng ports.RandomGenerator) valueobject.Point2D {
 		Y: y,
 	}
 }
+
+func variantToMaze(v int) valueobject.Maze {
+	return mazes[v]
+}
+
+var mazes = []valueobject.Maze{mazeA, mazeB, mazeC, mazeD, mazeE, mazeF, mazeG, mazeH, mazeI}
 
 var mazeA = valueobject.Maze{
 	Marker1: valueobject.Point2D{X: 0, Y: 1},

@@ -3,8 +3,8 @@ package valueobject
 type CardinalDirection int8
 
 const (
-	Up CardinalDirection = iota
-	Down
-	Left
-	Right
+	North CardinalDirection = iota
+	South
+	East
+	West
 )
