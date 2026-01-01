@@ -1,0 +1,32 @@
+syntax = "proto3";
+package modules;
+
+option go_package = "./proto";
+
+import "proto/common.proto";
+
+message MazeInput {
+  common.CardinalDirection direction = 1;
+}
+
+message MazeInputResult {
+  MazeState maze_state = 1;
+}
+
+message MazeState {
+  Maze maze = 1;
+}
+
+// 6x6
+message Maze {
+  repeated MazeRow rows = 1;
+}
+
+message MazeRow {
+  repeated MazeCell cells = 1;
+}
+
+message MazeCell {
+  bool right = 1;
+  bool botom = 2;
+}
