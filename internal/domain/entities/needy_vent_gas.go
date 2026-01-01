@@ -58,7 +58,7 @@ func (m *NeedyVentGasModule) String() string {
 }
 
 func (m *NeedyVentGasModule) GetType() valueobject.ModuleType {
-	return valueobject.NeedyVentGas
+	return valueobject.NeedyVentGasModule
 }
 
 func (m *NeedyVentGasModule) SetState(state NeedyVentGasState) {

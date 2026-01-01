@@ -49,7 +49,7 @@ func (m *MazeModule) GetModuleState() ModuleState {
 }
 
 func (m *MazeModule) GetType() valueobject.ModuleType {
-	return valueobject.Maze
+	return valueobject.MazeModule
 }
 
 func (m *MazeModule) SetState(state MazeState) {
@@ -69,7 +69,7 @@ func (m *MazeModule) String() string {
 	return result
 }
 
-func (m *MazeModule) PressButton(dir valueobject.CardinalDirection) (mazeMap valueobject.MazeMap, strike bool, err error) {
+func (m *MazeModule) PressDirection(dir valueobject.CardinalDirection) (mazeMap valueobject.MazeMap, strike bool, err error) {
 	return mazeA, true, nil
 }
 

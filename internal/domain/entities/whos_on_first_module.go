@@ -52,7 +52,7 @@ func (m *WhosOnFirstModule) GetModuleState() ModuleState {
 }
 
 func (m *WhosOnFirstModule) GetType() valueobject.ModuleType {
-	return valueobject.WhosOnFirst
+	return valueobject.WhosOnFirstModule
 }
 
 func (m *WhosOnFirstModule) SetState(state WhosOnFirstState) {

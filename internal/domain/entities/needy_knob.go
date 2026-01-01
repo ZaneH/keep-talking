@@ -73,7 +73,7 @@ func (m *NeedyKnobModule) String() string {
 }
 
 func (m *NeedyKnobModule) GetType() valueobject.ModuleType {
-	return valueobject.NeedyKnob
+	return valueobject.NeedyKnobModule
 }
 
 func (m *NeedyKnobModule) SetState(state NeedyKnobState) {
