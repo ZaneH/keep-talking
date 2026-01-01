@@ -342,25 +342,6 @@
         },
         "marker2": {
           "$ref": "#/definitions/commonPoint2D"
-        },
-        "rows": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/modulesMazeRow"
-          }
-        }
-      },
-      "title": "6x6"
-    },
-    "modulesMazeCell": {
-      "type": "object",
-      "properties": {
-        "right": {
-          "type": "boolean"
-        },
-        "botom": {
-          "type": "boolean"
         }
       }
     },
@@ -377,18 +358,6 @@
       "properties": {
         "mazeState": {
           "$ref": "#/definitions/modulesMazeState"
-        }
-      }
-    },
-    "modulesMazeRow": {
-      "type": "object",
-      "properties": {
-        "cells": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/modulesMazeCell"
-          }
         }
       }
     },

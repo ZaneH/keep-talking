@@ -18,18 +18,7 @@ message MazeState {
   common.Point2D player_position = 2;
 }
 
-// 6x6
 message Maze {
   common.Point2D marker_1 = 1;
   common.Point2D marker_2 = 2;
-  repeated MazeRow rows = 3;
-}
-
-message MazeRow {
-  repeated MazeCell cells = 1;
-}
-
-message MazeCell {
-  bool right = 1;
-  bool botom = 2;
 }
