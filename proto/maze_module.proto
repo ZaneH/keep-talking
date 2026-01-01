@@ -15,6 +15,7 @@ message MazeInputResult {
 
 message MazeState {
   Maze maze = 1;
+  common.Point2D player_position = 2;
 }
 
 // 6x6

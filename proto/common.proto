@@ -28,10 +28,10 @@ enum Color {
 }
 
 enum CardinalDirection {
-  UP = 0;
-  DOWN = 1;
-  LEFT = 2;
-  RIGHT = 3;
+  NORTH = 0;
+  SOUTH = 1;
+  EAST = 2;
+  WEST = 3;
 }
 
 message Point2D {

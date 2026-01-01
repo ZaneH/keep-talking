@@ -2,6 +2,7 @@ package entities
 
 import (
 	"errors"
+	"strings"
 
 	"github.com/ZaneH/keep-talking/internal/domain/valueobject"
 	"github.com/google/uuid"
@@ -27,9 +28,9 @@ func (f *BombFace) AddModuleAt(module Module, position valueobject.ModulePositio
 }
 
 func (f *BombFace) String() string {
-	var result string
+	var result strings.Builder
 	for position, moduleID := range f.ModulesByPosition {
-		result += position.String() + ": " + moduleID.String() + "\n"
+		result.WriteString(position.String() + ": " + moduleID.String() + "\n")
 	}
-	return result
+	return result.String()
 }

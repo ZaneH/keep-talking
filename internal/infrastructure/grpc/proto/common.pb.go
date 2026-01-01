@@ -186,25 +186,25 @@ func (Color) EnumDescriptor() ([]byte, []int) {
 type CardinalDirection int32
 
 const (
-	CardinalDirection_UP    CardinalDirection = 0
-	CardinalDirection_DOWN  CardinalDirection = 1
-	CardinalDirection_LEFT  CardinalDirection = 2
-	CardinalDirection_RIGHT CardinalDirection = 3
+	CardinalDirection_NORTH CardinalDirection = 0
+	CardinalDirection_SOUTH CardinalDirection = 1
+	CardinalDirection_EAST  CardinalDirection = 2
+	CardinalDirection_WEST  CardinalDirection = 3
 )
 
 // Enum value maps for CardinalDirection.
 var (
 	CardinalDirection_name = map[int32]string{
-		0: "UP",
-		1: "DOWN",
-		2: "LEFT",
-		3: "RIGHT",
+		0: "NORTH",
+		1: "SOUTH",
+		2: "EAST",
+		3: "WEST",
 	}
 	CardinalDirection_value = map[string]int32{
-		"UP":    0,
-		"DOWN":  1,
-		"LEFT":  2,
-		"RIGHT": 3,
+		"NORTH": 0,
+		"SOUTH": 1,
+		"EAST":  2,
+		"WEST":  3,
 	}
 )
 
@@ -313,12 +313,12 @@ const file_proto_common_proto_rawDesc = "" +
 	"\n" +
 	"\x06ORANGE\x10\x06\x12\b\n" +
 	"\x04PINK\x10\a\x12\v\n" +
-	"\aUNKNOWN\x10c*:\n" +
-	"\x11CardinalDirection\x12\x06\n" +
-	"\x02UP\x10\x00\x12\b\n" +
-	"\x04DOWN\x10\x01\x12\b\n" +
-	"\x04LEFT\x10\x02\x12\t\n" +
-	"\x05RIGHT\x10\x03B\tZ\a./protob\x06proto3"
+	"\aUNKNOWN\x10c*=\n" +
+	"\x11CardinalDirection\x12\t\n" +
+	"\x05NORTH\x10\x00\x12\t\n" +
+	"\x05SOUTH\x10\x01\x12\b\n" +
+	"\x04EAST\x10\x02\x12\b\n" +
+	"\x04WEST\x10\x03B\tZ\a./protob\x06proto3"
 
 var (
 	file_proto_common_proto_rawDescOnce sync.Once

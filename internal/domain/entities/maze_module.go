@@ -69,8 +69,8 @@ func (m *MazeModule) String() string {
 	return result
 }
 
-func (m *MazeModule) PressDirection(dir valueobject.CardinalDirection) (mazeMap valueobject.Maze, strike bool, err error) {
-	mazeMap = variantToMaze(m.State.Variant)
+func (m *MazeModule) PressDirection(dir valueobject.CardinalDirection) (mazeMap valueobject.Maze, playerPos valueobject.Point2D, strike bool, err error) {
+	mazeMap = m.State.VariantToMaze()
 
 	currentX := m.State.PlayerPosition.X
 	currentY := m.State.PlayerPosition.Y
@@ -90,7 +90,7 @@ func (m *MazeModule) PressDirection(dir valueobject.CardinalDirection) (mazeMap 
 	}
 
 	if newX < 0 || newX > 5 || newY < 0 || newY > 5 {
-		return mazeMap, true, nil
+		return mazeMap, valueobject.Point2D{X: currentX, Y: currentY}, true, nil
 	}
 
 	hasWall := false
@@ -126,7 +126,7 @@ func (m *MazeModule) PressDirection(dir valueobject.CardinalDirection) (mazeMap 
 	}
 
 	if hasWall {
-		return mazeMap, true, nil
+		return mazeMap, playerPos, true, nil
 	}
 
 	m.State.PlayerPosition.X = newX
@@ -137,7 +137,7 @@ func (m *MazeModule) PressDirection(dir valueobject.CardinalDirection) (mazeMap 
 		m.State.MarkAsSolved()
 	}
 
-	return mazeMap, false, nil
+	return mazeMap, valueobject.Point2D{X: newX, Y: newY}, false, nil
 }
 
 func generateRandomPosition(rng ports.RandomGenerator) valueobject.Point2D {
@@ -149,8 +149,8 @@ func generateRandomPosition(rng ports.RandomGenerator) valueobject.Point2D {
 	}
 }
 
-func variantToMaze(v int) valueobject.Maze {
-	return mazes[v]
+func (ms *MazeModuleState) VariantToMaze() valueobject.Maze {
+	return mazes[ms.Variant]
 }
 
 var mazes = []valueobject.Maze{mazeA, mazeB, mazeC, mazeD, mazeE, mazeF, mazeG, mazeH, mazeI}
@@ -389,7 +389,7 @@ var mazeI = valueobject.Maze{
 func (m *MazeModule) mazeToString() string {
 	var sb strings.Builder
 
-	maze := variantToMaze(m.State.Variant)
+	maze := m.State.VariantToMaze()
 
 	// Top wall (always solid)
 	sb.WriteString("+")

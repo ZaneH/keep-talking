@@ -205,12 +205,12 @@
     "commonCardinalDirection": {
       "type": "string",
       "enum": [
-        "UP",
-        "DOWN",
-        "LEFT",
-        "RIGHT"
+        "NORTH",
+        "SOUTH",
+        "EAST",
+        "WEST"
       ],
-      "default": "UP"
+      "default": "NORTH"
     },
     "commonColor": {
       "type": "string",
@@ -397,6 +397,9 @@
       "properties": {
         "maze": {
           "$ref": "#/definitions/modulesMaze"
+        },
+        "playerPosition": {
+          "$ref": "#/definitions/commonPoint2D"
         }
       }
     },
