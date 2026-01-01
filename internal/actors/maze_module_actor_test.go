@@ -42,17 +42,17 @@ func TestMazeModuleActor_NavigationNoWall(t *testing.T) {
 	}{
 		{
 			desc:      "Move right",
-			direction: valueobject.Right,
+			direction: valueobject.East,
 			expectErr: false,
 		},
 		{
 			desc:      "Move down",
-			direction: valueobject.Down,
+			direction: valueobject.South,
 			expectErr: false,
 		},
 		{
 			desc:      "Move up",
-			direction: valueobject.Up,
+			direction: valueobject.North,
 			expectErr: false,
 		},
 	}

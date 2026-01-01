@@ -86,14 +86,14 @@ func (m *NeedyKnobModule) GetModuleState() ModuleState {
 
 func (m *NeedyKnobModule) RotateDial() (err error) {
 	switch m.State.DialDirection {
-	case valueobject.Up:
-		m.State.DialDirection = valueobject.Right
-	case valueobject.Right:
-		m.State.DialDirection = valueobject.Down
-	case valueobject.Down:
-		m.State.DialDirection = valueobject.Left
-	case valueobject.Left:
-		m.State.DialDirection = valueobject.Up
+	case valueobject.North:
+		m.State.DialDirection = valueobject.East
+	case valueobject.East:
+		m.State.DialDirection = valueobject.South
+	case valueobject.South:
+		m.State.DialDirection = valueobject.West
+	case valueobject.West:
+		m.State.DialDirection = valueobject.North
 	default:
 		return fmt.Errorf("unknown direction %v", m.State.DialDirection)
 	}
@@ -110,7 +110,7 @@ type KnobLightState struct {
 var knobLightStates = []KnobLightState{
 	// Up
 	{
-		solution: valueobject.Up,
+		solution: valueobject.North,
 		firstRow: []bool{
 			false, false, true, false, true, true,
 		},
@@ -119,7 +119,7 @@ var knobLightStates = []KnobLightState{
 		},
 	},
 	{
-		solution: valueobject.Up,
+		solution: valueobject.North,
 		firstRow: []bool{
 			true, false, true, false, true, false,
 		},
@@ -130,7 +130,7 @@ var knobLightStates = []KnobLightState{
 
 	// Down
 	{
-		solution: valueobject.Down,
+		solution: valueobject.South,
 		firstRow: []bool{
 			false, true, true, false, false, true,
 		},
@@ -139,7 +139,7 @@ var knobLightStates = []KnobLightState{
 		},
 	},
 	{
-		solution: valueobject.Down,
+		solution: valueobject.South,
 		firstRow: []bool{
 			true, false, true, false, true, false,
 		},
@@ -150,7 +150,7 @@ var knobLightStates = []KnobLightState{
 
 	// Left
 	{
-		solution: valueobject.Left,
+		solution: valueobject.West,
 		firstRow: []bool{
 			false, false, false, false, true, false,
 		},
@@ -159,7 +159,7 @@ var knobLightStates = []KnobLightState{
 		},
 	},
 	{
-		solution: valueobject.Left,
+		solution: valueobject.West,
 		firstRow: []bool{
 			false, false, false, false, true, false,
 		},
@@ -170,7 +170,7 @@ var knobLightStates = []KnobLightState{
 
 	// Right
 	{
-		solution: valueobject.Right,
+		solution: valueobject.East,
 		firstRow: []bool{
 			true, false, true, true, true, true,
 		},
@@ -179,7 +179,7 @@ var knobLightStates = []KnobLightState{
 		},
 	},
 	{
-		solution: valueobject.Right,
+		solution: valueobject.East,
 		firstRow: []bool{
 			true, false, true, true, false, false,
 		},
