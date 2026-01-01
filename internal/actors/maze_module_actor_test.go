@@ -152,6 +152,22 @@ func TestMazeModuleActor_NavigationHitWall(t *testing.T) {
 			direction: valueobject.East,
 			solved:    false,
 		},
+		{
+			desc:      "Move right",
+			direction: valueobject.East,
+			solved:    false,
+		},
+		{
+			desc:      "Move right",
+			direction: valueobject.East,
+			solved:    false,
+		},
+		{
+			desc:      "Move right (hit edge)",
+			direction: valueobject.East,
+			strike:    true,
+			solved:    false,
+		},
 	}
 
 	for i, action := range actions {
