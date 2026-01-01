@@ -211,6 +211,7 @@ func TestWiresModuleActor_ThreeWiresNoRed(t *testing.T) {
 
 	for i, action := range actions {
 		t.Run(action.desc, func(t *testing.T) {
+			// Act
 			cmd := &command.WiresInputCommand{
 				BaseModuleInputCommand: command.BaseModuleInputCommand{
 					SessionID: sessionID,
@@ -234,6 +235,7 @@ func TestWiresModuleActor_ThreeWiresNoRed(t *testing.T) {
 				t.Fatalf("Step %d: timeout waiting for response", i+1)
 			}
 
+			// Assert
 			if action.strike {
 				assert.True(t, resp.IsSuccess(), "Step %d: expected success response for correct wire", i+1)
 			}
