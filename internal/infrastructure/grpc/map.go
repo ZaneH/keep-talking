@@ -297,6 +297,10 @@ func mapModulesToProto(modules map[uuid.UUID]actors.ModuleActor) map[string]*pb.
 						X: int64(mazeState.PlayerPosition.X),
 						Y: int64(mazeState.PlayerPosition.Y),
 					},
+					GoalPosition: &pb.Point2D{
+						X: int64(mazeState.GoalPosition.X),
+						Y: int64(mazeState.GoalPosition.Y),
+					},
 				},
 			}
 		default:
@@ -515,5 +519,12 @@ func mapMazeToProto(maze valueobject.Maze) *pb.Maze {
 	return &pb.Maze{
 		Marker_1: &pb.Point2D{X: int64(maze.Marker1.X), Y: int64(maze.Marker1.Y)},
 		Marker_2: &pb.Point2D{X: int64(maze.Marker2.X), Y: int64(maze.Marker2.Y)},
+	}
+}
+
+func mapPoint2DToProto(p valueobject.Point2D) *pb.Point2D {
+	return &pb.Point2D{
+		X: int64(p.X),
+		Y: int64(p.Y),
 	}
 }

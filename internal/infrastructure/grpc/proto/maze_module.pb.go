@@ -113,6 +113,7 @@ type MazeState struct {
 	state          protoimpl.MessageState `protogen:"open.v1"`
 	Maze           *Maze                  `protobuf:"bytes,1,opt,name=maze,proto3" json:"maze,omitempty"`
 	PlayerPosition *Point2D               `protobuf:"bytes,2,opt,name=player_position,json=playerPosition,proto3" json:"player_position,omitempty"`
+	GoalPosition   *Point2D               `protobuf:"bytes,3,opt,name=goal_position,json=goalPosition,proto3" json:"goal_position,omitempty"`
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
 }
@@ -157,6 +158,13 @@ func (x *MazeState) GetMaze() *Maze {
 func (x *MazeState) GetPlayerPosition() *Point2D {
 	if x != nil {
 		return x.PlayerPosition
+	}
+	return nil
+}
+
+func (x *MazeState) GetGoalPosition() *Point2D {
+	if x != nil {
+		return x.GoalPosition
 	}
 	return nil
 }
@@ -222,10 +230,11 @@ const file_proto_maze_module_proto_rawDesc = "" +
 	"\tdirection\x18\x01 \x01(\x0e2\x19.common.CardinalDirectionR\tdirection\"D\n" +
 	"\x0fMazeInputResult\x121\n" +
 	"\n" +
-	"maze_state\x18\x01 \x01(\v2\x12.modules.MazeStateR\tmazeState\"h\n" +
+	"maze_state\x18\x01 \x01(\v2\x12.modules.MazeStateR\tmazeState\"\x9e\x01\n" +
 	"\tMazeState\x12!\n" +
 	"\x04maze\x18\x01 \x01(\v2\r.modules.MazeR\x04maze\x128\n" +
-	"\x0fplayer_position\x18\x02 \x01(\v2\x0f.common.Point2DR\x0eplayerPosition\"^\n" +
+	"\x0fplayer_position\x18\x02 \x01(\v2\x0f.common.Point2DR\x0eplayerPosition\x124\n" +
+	"\rgoal_position\x18\x03 \x01(\v2\x0f.common.Point2DR\fgoalPosition\"^\n" +
 	"\x04Maze\x12*\n" +
 	"\bmarker_1\x18\x01 \x01(\v2\x0f.common.Point2DR\amarker1\x12*\n" +
 	"\bmarker_2\x18\x02 \x01(\v2\x0f.common.Point2DR\amarker2B\tZ\a./protob\x06proto3"
@@ -256,13 +265,14 @@ var file_proto_maze_module_proto_depIdxs = []int32{
 	2, // 1: modules.MazeInputResult.maze_state:type_name -> modules.MazeState
 	3, // 2: modules.MazeState.maze:type_name -> modules.Maze
 	5, // 3: modules.MazeState.player_position:type_name -> common.Point2D
-	5, // 4: modules.Maze.marker_1:type_name -> common.Point2D
-	5, // 5: modules.Maze.marker_2:type_name -> common.Point2D
-	6, // [6:6] is the sub-list for method output_type
-	6, // [6:6] is the sub-list for method input_type
-	6, // [6:6] is the sub-list for extension type_name
-	6, // [6:6] is the sub-list for extension extendee
-	0, // [0:6] is the sub-list for field type_name
+	5, // 4: modules.MazeState.goal_position:type_name -> common.Point2D
+	5, // 5: modules.Maze.marker_1:type_name -> common.Point2D
+	5, // 6: modules.Maze.marker_2:type_name -> common.Point2D
+	7, // [7:7] is the sub-list for method output_type
+	7, // [7:7] is the sub-list for method input_type
+	7, // [7:7] is the sub-list for extension type_name
+	7, // [7:7] is the sub-list for extension extendee
+	0, // [0:7] is the sub-list for field type_name
 }
 
 func init() { file_proto_maze_module_proto_init() }
