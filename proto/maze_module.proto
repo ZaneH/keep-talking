@@ -16,6 +16,7 @@ message MazeInputResult {
 message MazeState {
   Maze maze = 1;
   common.Point2D player_position = 2;
+  common.Point2D goal_position = 3;
 }
 
 message Maze {

@@ -356,7 +356,8 @@ func (s *GameServiceAdapter) SendInput(ctx context.Context, i *pb.PlayerInput) (
 			Result: &pb.PlayerInputResult_MazeInputResult{
 				MazeInputResult: &pb.MazeInputResult{
 					MazeState: &pb.MazeState{
-						Maze: mapMazeToProto(cmdResult.Maze),
+						PlayerPosition: mapPoint2DToProto(cmdResult.PlayerPosition),
+						GoalPosition:   mapPoint2DToProto(cmdResult.GoalPosition),
 					},
 				},
 			},

@@ -9,6 +9,6 @@ type MazeCommand struct {
 
 type MazeInputCommandResult struct {
 	BaseModuleInputCommandResult
-	Maze           valueobject.Maze
 	PlayerPosition valueobject.Point2D
+	GoalPosition   valueobject.Point2D
 }
