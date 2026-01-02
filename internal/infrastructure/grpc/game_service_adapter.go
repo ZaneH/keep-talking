@@ -175,6 +175,7 @@ func (s *GameServiceAdapter) SendInput(ctx context.Context, i *pb.PlayerInput) (
 				BombID:    bombID,
 				ModuleID:  moduleID,
 			},
+			Direction: valueobject.CardinalDirection(input.MazeInput.Direction),
 		}
 	default:
 		return nil, fmt.Errorf("unknown input type: %T", input)
@@ -356,6 +357,8 @@ func (s *GameServiceAdapter) SendInput(ctx context.Context, i *pb.PlayerInput) (
 			Result: &pb.PlayerInputResult_MazeInputResult{
 				MazeInputResult: &pb.MazeInputResult{
 					MazeState: &pb.MazeState{
+						// Marker_1: *pb.Point2D,
+						// Marker_2: *pb.Point2D,
 						PlayerPosition: mapPoint2DToProto(cmdResult.PlayerPosition),
 						GoalPosition:   mapPoint2DToProto(cmdResult.GoalPosition),
 					},

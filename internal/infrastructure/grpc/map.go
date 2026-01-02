@@ -290,17 +290,13 @@ func mapModulesToProto(modules map[uuid.UUID]actors.ModuleActor) map[string]*pb.
 				continue
 			}
 
+			maze := mazeState.VariantToMaze()
 			protoModule.State = &pb.Module_MazeState{
 				MazeState: &pb.MazeState{
-					Maze: mapMazeToProto(mazeState.VariantToMaze()),
-					PlayerPosition: &pb.Point2D{
-						X: int64(mazeState.PlayerPosition.X),
-						Y: int64(mazeState.PlayerPosition.Y),
-					},
-					GoalPosition: &pb.Point2D{
-						X: int64(mazeState.GoalPosition.X),
-						Y: int64(mazeState.GoalPosition.Y),
-					},
+					Marker_1:       mapPoint2DToProto(maze.Marker1),
+					Marker_2:       mapPoint2DToProto(maze.Marker2),
+					PlayerPosition: mapPoint2DToProto(mazeState.PlayerPosition),
+					GoalPosition:   mapPoint2DToProto(mazeState.GoalPosition),
 				},
 			}
 		default:
@@ -513,13 +509,6 @@ func mapProtoToSymbol(symbol pb.Symbol) valueobject.Symbol {
 	}
 
 	return valueobject.Copyright
-}
-
-func mapMazeToProto(maze valueobject.Maze) *pb.Maze {
-	return &pb.Maze{
-		Marker_1: &pb.Point2D{X: int64(maze.Marker1.X), Y: int64(maze.Marker1.Y)},
-		Marker_2: &pb.Point2D{X: int64(maze.Marker2.X), Y: int64(maze.Marker2.Y)},
-	}
 }
 
 func mapPoint2DToProto(p valueobject.Point2D) *pb.Point2D {

@@ -70,7 +70,7 @@ func (m *MazeModule) String() string {
 }
 
 func (m *MazeModule) PressDirection(dir valueobject.CardinalDirection) (playerPos valueobject.Point2D, strike bool, err error) {
-	mazeMap := m.State.VariantToMaze()
+	maze := m.State.VariantToMaze()
 
 	currentX := m.State.PlayerPosition.X
 	currentY := m.State.PlayerPosition.Y
@@ -99,24 +99,24 @@ func (m *MazeModule) PressDirection(dir valueobject.CardinalDirection) (playerPo
 	switch dir {
 	case valueobject.North:
 		if currentY > 0 {
-			hasWall = mazeMap.Map[newY][currentX].Bottom
+			hasWall = maze.Map[newY][currentX].Bottom
 		}
 	case valueobject.South:
 		if currentY < 5 {
-			hasWall = mazeMap.Map[currentY][currentX].Bottom
+			hasWall = maze.Map[currentY][currentX].Bottom
 		}
 	case valueobject.East:
 		if currentX < 5 {
-			hasWall = mazeMap.Map[currentY][currentX].Right
+			hasWall = maze.Map[currentY][currentX].Right
 		}
 	case valueobject.West:
 		if currentX > 0 {
-			hasWall = mazeMap.Map[currentY][newX].Right
+			hasWall = maze.Map[currentY][newX].Right
 		}
 	}
 
 	if hasWall {
-		return playerPos, true, nil
+		return valueobject.Point2D{X: currentX, Y: currentY}, true, nil
 	}
 
 	m.State.PlayerPosition.X = newX

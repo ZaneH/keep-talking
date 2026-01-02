@@ -334,17 +334,6 @@
         }
       }
     },
-    "modulesMaze": {
-      "type": "object",
-      "properties": {
-        "marker1": {
-          "$ref": "#/definitions/commonPoint2D"
-        },
-        "marker2": {
-          "$ref": "#/definitions/commonPoint2D"
-        }
-      }
-    },
     "modulesMazeInput": {
       "type": "object",
       "properties": {
@@ -364,8 +353,11 @@
     "modulesMazeState": {
       "type": "object",
       "properties": {
-        "maze": {
-          "$ref": "#/definitions/modulesMaze"
+        "marker1": {
+          "$ref": "#/definitions/commonPoint2D"
+        },
+        "marker2": {
+          "$ref": "#/definitions/commonPoint2D"
         },
         "playerPosition": {
           "$ref": "#/definitions/commonPoint2D"
