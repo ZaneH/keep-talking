@@ -188,12 +188,32 @@ func (s *GameServiceAdapter) SendInput(ctx context.Context, i *pb.PlayerInput) (
 
 	fmt.Printf("Processed input for session %s: %v\n", sessionID, res)
 
+	// Get the current bomb state to include in the response
+	session, err := s.gameService.GetGameSession(ctx, sessionID)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get game session after input: %v", err)
+	}
+
+	bombActors := session.GetBombActors()
+	bombActor, exists := bombActors[bombID]
+	if !exists {
+		return nil, fmt.Errorf("bomb not found in session")
+	}
+
+	bomb := bombActor.GetBomb()
+	bombStatus := &pb.BombStatus{
+		StrikeCount: int32(bomb.StrikeCount),
+		MaxStrikes:  int32(bomb.MaxStrikes),
+		Exploded:    bomb.StrikeCount >= bomb.MaxStrikes,
+	}
+
 	switch cmdResult := res.(type) {
 	case *command.WiresInputCommandResult:
 		return &pb.PlayerInputResult{
-			ModuleId: i.GetModuleId(),
-			Strike:   res != nil && cmdResult.Strike,
-			Solved:   res != nil && cmdResult.Solved,
+			ModuleId:   i.GetModuleId(),
+			Strike:     res != nil && cmdResult.Strike,
+			Solved:     res != nil && cmdResult.Solved,
+			BombStatus: bombStatus,
 		}, nil
 	case *command.BigButtonInputCommandResult:
 		var color pb.Color
@@ -202,9 +222,10 @@ func (s *GameServiceAdapter) SendInput(ctx context.Context, i *pb.PlayerInput) (
 		}
 
 		return &pb.PlayerInputResult{
-			ModuleId: i.GetModuleId(),
-			Strike:   res != nil && cmdResult.Strike,
-			Solved:   res != nil && cmdResult.Solved,
+			ModuleId:   i.GetModuleId(),
+			Strike:     res != nil && cmdResult.Strike,
+			Solved:     res != nil && cmdResult.Solved,
+			BombStatus: bombStatus,
 			Result: &pb.PlayerInputResult_BigButtonInputResult{
 				BigButtonInputResult: &pb.BigButtonInputResult{
 					StripColor: color,
@@ -218,9 +239,10 @@ func (s *GameServiceAdapter) SendInput(ctx context.Context, i *pb.PlayerInput) (
 		}
 
 		return &pb.PlayerInputResult{
-			ModuleId: i.GetModuleId(),
-			Strike:   res != nil && cmdResult.Strike,
-			Solved:   res != nil && cmdResult.Solved,
+			ModuleId:   i.GetModuleId(),
+			Strike:     res != nil && cmdResult.Strike,
+			Solved:     res != nil && cmdResult.Solved,
+			BombStatus: bombStatus,
 			Result: &pb.PlayerInputResult_SimonInputResult{
 				SimonInputResult: &pb.SimonInputResult{
 					DisplaySequence: sequence,
@@ -230,9 +252,10 @@ func (s *GameServiceAdapter) SendInput(ctx context.Context, i *pb.PlayerInput) (
 		}, nil
 	case *command.PasswordCommandResult:
 		return &pb.PlayerInputResult{
-			ModuleId: i.GetModuleId(),
-			Strike:   res != nil && cmdResult.Strike,
-			Solved:   res != nil && cmdResult.Solved,
+			ModuleId:   i.GetModuleId(),
+			BombStatus: bombStatus,
+			Strike:     res != nil && cmdResult.Strike,
+			Solved:     res != nil && cmdResult.Solved,
 			Result: &pb.PlayerInputResult_PasswordInputResult{
 				PasswordInputResult: &pb.PasswordInputResult{
 					PasswordState: &pb.PasswordState{
@@ -255,9 +278,10 @@ func (s *GameServiceAdapter) SendInput(ctx context.Context, i *pb.PlayerInput) (
 		}
 
 		return &pb.PlayerInputResult{
-			ModuleId: i.GetModuleId(),
-			Strike:   res != nil && cmdResult.Strike,
-			Solved:   res != nil && cmdResult.Solved,
+			ModuleId:   i.GetModuleId(),
+			BombStatus: bombStatus,
+			Strike:     res != nil && cmdResult.Strike,
+			Solved:     res != nil && cmdResult.Solved,
 			Result: &pb.PlayerInputResult_KeypadInputResult{
 				KeypadInputResult: &pb.KeypadInputResult{
 					KeypadState: &pb.KeypadState{
@@ -269,9 +293,10 @@ func (s *GameServiceAdapter) SendInput(ctx context.Context, i *pb.PlayerInput) (
 		}, nil
 	case *command.WhosOnFirstInputCommandResult:
 		return &pb.PlayerInputResult{
-			ModuleId: i.GetModuleId(),
-			Strike:   res != nil && cmdResult.Strike,
-			Solved:   res != nil && cmdResult.Solved,
+			ModuleId:   i.GetModuleId(),
+			BombStatus: bombStatus,
+			Strike:     res != nil && cmdResult.Strike,
+			Solved:     res != nil && cmdResult.Solved,
 			Result: &pb.PlayerInputResult_WhosOnFirstInputResult{
 				WhosOnFirstInputResult: &pb.WhosOnFirstInputResult{
 					WhosOnFirstState: &pb.WhosOnFirstState{
@@ -289,9 +314,10 @@ func (s *GameServiceAdapter) SendInput(ctx context.Context, i *pb.PlayerInput) (
 		}
 
 		return &pb.PlayerInputResult{
-			ModuleId: i.GetModuleId(),
-			Strike:   res != nil && cmdResult.Strike,
-			Solved:   res != nil && cmdResult.Solved,
+			ModuleId:   i.GetModuleId(),
+			BombStatus: bombStatus,
+			Strike:     res != nil && cmdResult.Strike,
+			Solved:     res != nil && cmdResult.Solved,
 			Result: &pb.PlayerInputResult_MemoryInputResult{
 				MemoryInputResult: &pb.MemoryInputResult{
 					MemoryState: &pb.MemoryState{
@@ -304,9 +330,10 @@ func (s *GameServiceAdapter) SendInput(ctx context.Context, i *pb.PlayerInput) (
 		}, nil
 	case *command.MorseCommandResult:
 		return &pb.PlayerInputResult{
-			ModuleId: i.GetModuleId(),
-			Strike:   res != nil && cmdResult.Strike,
-			Solved:   res != nil && cmdResult.Solved,
+			ModuleId:   i.GetModuleId(),
+			BombStatus: bombStatus,
+			Strike:     res != nil && cmdResult.Strike,
+			Solved:     res != nil && cmdResult.Solved,
 			Result: &pb.PlayerInputResult_MorseInputResult{
 				MorseInputResult: &pb.MorseInputResult{
 					MorseState: &pb.MorseState{
@@ -319,9 +346,10 @@ func (s *GameServiceAdapter) SendInput(ctx context.Context, i *pb.PlayerInput) (
 		}, nil
 	case *command.NeedyVentGasCommandResult:
 		return &pb.PlayerInputResult{
-			ModuleId: i.GetModuleId(),
-			Strike:   res != nil && cmdResult.Strike,
-			Solved:   res != nil && cmdResult.Solved,
+			ModuleId:   i.GetModuleId(),
+			BombStatus: bombStatus,
+			Strike:     res != nil && cmdResult.Strike,
+			Solved:     res != nil && cmdResult.Solved,
 			Result: &pb.PlayerInputResult_NeedyVentGasInputResult{
 				NeedyVentGasInputResult: &pb.NeedyVentGasInputResult{
 					NeedyVentGasState: &pb.NeedyVentGasState{
@@ -334,9 +362,10 @@ func (s *GameServiceAdapter) SendInput(ctx context.Context, i *pb.PlayerInput) (
 		}, nil
 	case *command.NeedyKnobCommandResult:
 		return &pb.PlayerInputResult{
-			ModuleId: i.GetModuleId(),
-			Strike:   res != nil && cmdResult.Strike,
-			Solved:   res != nil && cmdResult.Solved,
+			ModuleId:   i.GetModuleId(),
+			BombStatus: bombStatus,
+			Strike:     res != nil && cmdResult.Strike,
+			Solved:     res != nil && cmdResult.Solved,
 			Result: &pb.PlayerInputResult_NeedyKnobInputResult{
 				NeedyKnobInputResult: &pb.NeedyKnobInputResult{
 					NeedyKnobState: &pb.NeedyKnobState{
@@ -351,9 +380,10 @@ func (s *GameServiceAdapter) SendInput(ctx context.Context, i *pb.PlayerInput) (
 		}, nil
 	case *command.MazeInputCommandResult:
 		return &pb.PlayerInputResult{
-			ModuleId: i.GetModuleId(),
-			Strike:   res != nil && cmdResult.Strike,
-			Solved:   res != nil && cmdResult.Solved,
+			ModuleId:   i.GetModuleId(),
+			BombStatus: bombStatus,
+			Strike:     res != nil && cmdResult.Strike,
+			Solved:     res != nil && cmdResult.Solved,
 			Result: &pb.PlayerInputResult_MazeInputResult{
 				MazeInputResult: &pb.MazeInputResult{
 					MazeState: &pb.MazeState{

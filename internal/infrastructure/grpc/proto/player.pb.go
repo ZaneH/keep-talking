@@ -351,11 +351,72 @@ func (*PlayerInput_NeedyKnobInput) isPlayerInput_Input() {}
 
 func (*PlayerInput_MazeInput) isPlayerInput_Input() {}
 
+type BombStatus struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	StrikeCount   int32                  `protobuf:"varint,1,opt,name=strike_count,json=strikeCount,proto3" json:"strike_count,omitempty"`
+	MaxStrikes    int32                  `protobuf:"varint,2,opt,name=max_strikes,json=maxStrikes,proto3" json:"max_strikes,omitempty"`
+	Exploded      bool                   `protobuf:"varint,3,opt,name=exploded,proto3" json:"exploded,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *BombStatus) Reset() {
+	*x = BombStatus{}
+	mi := &file_proto_player_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *BombStatus) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*BombStatus) ProtoMessage() {}
+
+func (x *BombStatus) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_player_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use BombStatus.ProtoReflect.Descriptor instead.
+func (*BombStatus) Descriptor() ([]byte, []int) {
+	return file_proto_player_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *BombStatus) GetStrikeCount() int32 {
+	if x != nil {
+		return x.StrikeCount
+	}
+	return 0
+}
+
+func (x *BombStatus) GetMaxStrikes() int32 {
+	if x != nil {
+		return x.MaxStrikes
+	}
+	return 0
+}
+
+func (x *BombStatus) GetExploded() bool {
+	if x != nil {
+		return x.Exploded
+	}
+	return false
+}
+
 type PlayerInputResult struct {
-	state    protoimpl.MessageState `protogen:"open.v1"`
-	ModuleId string                 `protobuf:"bytes,1,opt,name=module_id,json=moduleId,proto3" json:"module_id,omitempty"`
-	Strike   bool                   `protobuf:"varint,2,opt,name=strike,proto3" json:"strike,omitempty"`
-	Solved   bool                   `protobuf:"varint,3,opt,name=solved,proto3" json:"solved,omitempty"`
+	state      protoimpl.MessageState `protogen:"open.v1"`
+	ModuleId   string                 `protobuf:"bytes,1,opt,name=module_id,json=moduleId,proto3" json:"module_id,omitempty"`
+	Strike     bool                   `protobuf:"varint,2,opt,name=strike,proto3" json:"strike,omitempty"`
+	Solved     bool                   `protobuf:"varint,3,opt,name=solved,proto3" json:"solved,omitempty"`
+	BombStatus *BombStatus            `protobuf:"bytes,4,opt,name=bomb_status,json=bombStatus,proto3" json:"bomb_status,omitempty"`
 	// Types that are valid to be assigned to Result:
 	//
 	//	*PlayerInputResult_BigButtonInputResult
@@ -375,7 +436,7 @@ type PlayerInputResult struct {
 
 func (x *PlayerInputResult) Reset() {
 	*x = PlayerInputResult{}
-	mi := &file_proto_player_proto_msgTypes[3]
+	mi := &file_proto_player_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -387,7 +448,7 @@ func (x *PlayerInputResult) String() string {
 func (*PlayerInputResult) ProtoMessage() {}
 
 func (x *PlayerInputResult) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_player_proto_msgTypes[3]
+	mi := &file_proto_player_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -400,7 +461,7 @@ func (x *PlayerInputResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PlayerInputResult.ProtoReflect.Descriptor instead.
 func (*PlayerInputResult) Descriptor() ([]byte, []int) {
-	return file_proto_player_proto_rawDescGZIP(), []int{3}
+	return file_proto_player_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *PlayerInputResult) GetModuleId() string {
@@ -422,6 +483,13 @@ func (x *PlayerInputResult) GetSolved() bool {
 		return x.Solved
 	}
 	return false
+}
+
+func (x *PlayerInputResult) GetBombStatus() *BombStatus {
+	if x != nil {
+		return x.BombStatus
+	}
+	return nil
 }
 
 func (x *PlayerInputResult) GetResult() isPlayerInputResult_Result {
@@ -615,11 +683,19 @@ const file_proto_player_proto_rawDesc = "" +
 	"\x10needy_knob_input\x18\x13 \x01(\v2\x17.modules.NeedyKnobInputH\x00R\x0eneedyKnobInput\x123\n" +
 	"\n" +
 	"maze_input\x18\x14 \x01(\v2\x12.modules.MazeInputH\x00R\tmazeInputB\a\n" +
-	"\x05input\"\xa9\a\n" +
+	"\x05input\"l\n" +
+	"\n" +
+	"BombStatus\x12!\n" +
+	"\fstrike_count\x18\x01 \x01(\x05R\vstrikeCount\x12\x1f\n" +
+	"\vmax_strikes\x18\x02 \x01(\x05R\n" +
+	"maxStrikes\x12\x1a\n" +
+	"\bexploded\x18\x03 \x01(\bR\bexploded\"\xde\a\n" +
 	"\x11PlayerInputResult\x12\x1b\n" +
 	"\tmodule_id\x18\x01 \x01(\tR\bmoduleId\x12\x16\n" +
 	"\x06strike\x18\x02 \x01(\bR\x06strike\x12\x16\n" +
-	"\x06solved\x18\x03 \x01(\bR\x06solved\x12V\n" +
+	"\x06solved\x18\x03 \x01(\bR\x06solved\x123\n" +
+	"\vbomb_status\x18\x04 \x01(\v2\x12.player.BombStatusR\n" +
+	"bombStatus\x12V\n" +
 	"\x17big_button_input_result\x18\n" +
 	" \x01(\v2\x1d.modules.BigButtonInputResultH\x00R\x14bigButtonInputResult\x12I\n" +
 	"\x12simon_input_result\x18\v \x01(\v2\x19.modules.SimonInputResultH\x00R\x10simonInputResult\x12R\n" +
@@ -645,61 +721,63 @@ func file_proto_player_proto_rawDescGZIP() []byte {
 	return file_proto_player_proto_rawDescData
 }
 
-var file_proto_player_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
+var file_proto_player_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
 var file_proto_player_proto_goTypes = []any{
 	(*CreateGameRequest)(nil),       // 0: player.CreateGameRequest
 	(*CreateGameResponse)(nil),      // 1: player.CreateGameResponse
 	(*PlayerInput)(nil),             // 2: player.PlayerInput
-	(*PlayerInputResult)(nil),       // 3: player.PlayerInputResult
-	(*WiresInput)(nil),              // 4: modules.WiresInput
-	(*PasswordInput)(nil),           // 5: modules.PasswordInput
-	(*BigButtonInput)(nil),          // 6: modules.BigButtonInput
-	(*SimonInput)(nil),              // 7: modules.SimonInput
-	(*KeypadInput)(nil),             // 8: modules.KeypadInput
-	(*WhosOnFirstInput)(nil),        // 9: modules.WhosOnFirstInput
-	(*MemoryInput)(nil),             // 10: modules.MemoryInput
-	(*MorseInput)(nil),              // 11: modules.MorseInput
-	(*NeedyVentGasInput)(nil),       // 12: modules.NeedyVentGasInput
-	(*NeedyKnobInput)(nil),          // 13: modules.NeedyKnobInput
-	(*MazeInput)(nil),               // 14: modules.MazeInput
-	(*BigButtonInputResult)(nil),    // 15: modules.BigButtonInputResult
-	(*SimonInputResult)(nil),        // 16: modules.SimonInputResult
-	(*PasswordInputResult)(nil),     // 17: modules.PasswordInputResult
-	(*KeypadInputResult)(nil),       // 18: modules.KeypadInputResult
-	(*WhosOnFirstInputResult)(nil),  // 19: modules.WhosOnFirstInputResult
-	(*MemoryInputResult)(nil),       // 20: modules.MemoryInputResult
-	(*MorseInputResult)(nil),        // 21: modules.MorseInputResult
-	(*NeedyVentGasInputResult)(nil), // 22: modules.NeedyVentGasInputResult
-	(*NeedyKnobInputResult)(nil),    // 23: modules.NeedyKnobInputResult
-	(*MazeInputResult)(nil),         // 24: modules.MazeInputResult
+	(*BombStatus)(nil),              // 3: player.BombStatus
+	(*PlayerInputResult)(nil),       // 4: player.PlayerInputResult
+	(*WiresInput)(nil),              // 5: modules.WiresInput
+	(*PasswordInput)(nil),           // 6: modules.PasswordInput
+	(*BigButtonInput)(nil),          // 7: modules.BigButtonInput
+	(*SimonInput)(nil),              // 8: modules.SimonInput
+	(*KeypadInput)(nil),             // 9: modules.KeypadInput
+	(*WhosOnFirstInput)(nil),        // 10: modules.WhosOnFirstInput
+	(*MemoryInput)(nil),             // 11: modules.MemoryInput
+	(*MorseInput)(nil),              // 12: modules.MorseInput
+	(*NeedyVentGasInput)(nil),       // 13: modules.NeedyVentGasInput
+	(*NeedyKnobInput)(nil),          // 14: modules.NeedyKnobInput
+	(*MazeInput)(nil),               // 15: modules.MazeInput
+	(*BigButtonInputResult)(nil),    // 16: modules.BigButtonInputResult
+	(*SimonInputResult)(nil),        // 17: modules.SimonInputResult
+	(*PasswordInputResult)(nil),     // 18: modules.PasswordInputResult
+	(*KeypadInputResult)(nil),       // 19: modules.KeypadInputResult
+	(*WhosOnFirstInputResult)(nil),  // 20: modules.WhosOnFirstInputResult
+	(*MemoryInputResult)(nil),       // 21: modules.MemoryInputResult
+	(*MorseInputResult)(nil),        // 22: modules.MorseInputResult
+	(*NeedyVentGasInputResult)(nil), // 23: modules.NeedyVentGasInputResult
+	(*NeedyKnobInputResult)(nil),    // 24: modules.NeedyKnobInputResult
+	(*MazeInputResult)(nil),         // 25: modules.MazeInputResult
 }
 var file_proto_player_proto_depIdxs = []int32{
-	4,  // 0: player.PlayerInput.wires_input:type_name -> modules.WiresInput
-	5,  // 1: player.PlayerInput.password_input:type_name -> modules.PasswordInput
-	6,  // 2: player.PlayerInput.big_button_input:type_name -> modules.BigButtonInput
-	7,  // 3: player.PlayerInput.simon_input:type_name -> modules.SimonInput
-	8,  // 4: player.PlayerInput.keypad_input:type_name -> modules.KeypadInput
-	9,  // 5: player.PlayerInput.whos_on_first_input:type_name -> modules.WhosOnFirstInput
-	10, // 6: player.PlayerInput.memory_input:type_name -> modules.MemoryInput
-	11, // 7: player.PlayerInput.morse_input:type_name -> modules.MorseInput
-	12, // 8: player.PlayerInput.needy_vent_gas_input:type_name -> modules.NeedyVentGasInput
-	13, // 9: player.PlayerInput.needy_knob_input:type_name -> modules.NeedyKnobInput
-	14, // 10: player.PlayerInput.maze_input:type_name -> modules.MazeInput
-	15, // 11: player.PlayerInputResult.big_button_input_result:type_name -> modules.BigButtonInputResult
-	16, // 12: player.PlayerInputResult.simon_input_result:type_name -> modules.SimonInputResult
-	17, // 13: player.PlayerInputResult.password_input_result:type_name -> modules.PasswordInputResult
-	18, // 14: player.PlayerInputResult.keypad_input_result:type_name -> modules.KeypadInputResult
-	19, // 15: player.PlayerInputResult.whos_on_first_input_result:type_name -> modules.WhosOnFirstInputResult
-	20, // 16: player.PlayerInputResult.memory_input_result:type_name -> modules.MemoryInputResult
-	21, // 17: player.PlayerInputResult.morse_input_result:type_name -> modules.MorseInputResult
-	22, // 18: player.PlayerInputResult.needy_vent_gas_input_result:type_name -> modules.NeedyVentGasInputResult
-	23, // 19: player.PlayerInputResult.needy_knob_input_result:type_name -> modules.NeedyKnobInputResult
-	24, // 20: player.PlayerInputResult.maze_input_result:type_name -> modules.MazeInputResult
-	21, // [21:21] is the sub-list for method output_type
-	21, // [21:21] is the sub-list for method input_type
-	21, // [21:21] is the sub-list for extension type_name
-	21, // [21:21] is the sub-list for extension extendee
-	0,  // [0:21] is the sub-list for field type_name
+	5,  // 0: player.PlayerInput.wires_input:type_name -> modules.WiresInput
+	6,  // 1: player.PlayerInput.password_input:type_name -> modules.PasswordInput
+	7,  // 2: player.PlayerInput.big_button_input:type_name -> modules.BigButtonInput
+	8,  // 3: player.PlayerInput.simon_input:type_name -> modules.SimonInput
+	9,  // 4: player.PlayerInput.keypad_input:type_name -> modules.KeypadInput
+	10, // 5: player.PlayerInput.whos_on_first_input:type_name -> modules.WhosOnFirstInput
+	11, // 6: player.PlayerInput.memory_input:type_name -> modules.MemoryInput
+	12, // 7: player.PlayerInput.morse_input:type_name -> modules.MorseInput
+	13, // 8: player.PlayerInput.needy_vent_gas_input:type_name -> modules.NeedyVentGasInput
+	14, // 9: player.PlayerInput.needy_knob_input:type_name -> modules.NeedyKnobInput
+	15, // 10: player.PlayerInput.maze_input:type_name -> modules.MazeInput
+	3,  // 11: player.PlayerInputResult.bomb_status:type_name -> player.BombStatus
+	16, // 12: player.PlayerInputResult.big_button_input_result:type_name -> modules.BigButtonInputResult
+	17, // 13: player.PlayerInputResult.simon_input_result:type_name -> modules.SimonInputResult
+	18, // 14: player.PlayerInputResult.password_input_result:type_name -> modules.PasswordInputResult
+	19, // 15: player.PlayerInputResult.keypad_input_result:type_name -> modules.KeypadInputResult
+	20, // 16: player.PlayerInputResult.whos_on_first_input_result:type_name -> modules.WhosOnFirstInputResult
+	21, // 17: player.PlayerInputResult.memory_input_result:type_name -> modules.MemoryInputResult
+	22, // 18: player.PlayerInputResult.morse_input_result:type_name -> modules.MorseInputResult
+	23, // 19: player.PlayerInputResult.needy_vent_gas_input_result:type_name -> modules.NeedyVentGasInputResult
+	24, // 20: player.PlayerInputResult.needy_knob_input_result:type_name -> modules.NeedyKnobInputResult
+	25, // 21: player.PlayerInputResult.maze_input_result:type_name -> modules.MazeInputResult
+	22, // [22:22] is the sub-list for method output_type
+	22, // [22:22] is the sub-list for method input_type
+	22, // [22:22] is the sub-list for extension type_name
+	22, // [22:22] is the sub-list for extension extendee
+	0,  // [0:22] is the sub-list for field type_name
 }
 
 func init() { file_proto_player_proto_init() }
@@ -731,7 +809,7 @@ func file_proto_player_proto_init() {
 		(*PlayerInput_NeedyKnobInput)(nil),
 		(*PlayerInput_MazeInput)(nil),
 	}
-	file_proto_player_proto_msgTypes[3].OneofWrappers = []any{
+	file_proto_player_proto_msgTypes[4].OneofWrappers = []any{
 		(*PlayerInputResult_BigButtonInputResult)(nil),
 		(*PlayerInputResult_SimonInputResult)(nil),
 		(*PlayerInputResult_PasswordInputResult)(nil),
@@ -749,7 +827,7 @@ func file_proto_player_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_player_proto_rawDesc), len(file_proto_player_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   4,
+			NumMessages:   5,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
