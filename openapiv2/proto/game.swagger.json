@@ -760,6 +760,22 @@
         }
       }
     },
+    "playerBombStatus": {
+      "type": "object",
+      "properties": {
+        "strikeCount": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "maxStrikes": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "exploded": {
+          "type": "boolean"
+        }
+      }
+    },
     "playerCreateGameRequest": {
       "type": "object"
     },
@@ -829,6 +845,9 @@
         },
         "solved": {
           "type": "boolean"
+        },
+        "bombStatus": {
+          "$ref": "#/definitions/playerBombStatus"
         },
         "bigButtonInputResult": {
           "$ref": "#/definitions/modulesBigButtonInputResult"

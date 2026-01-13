@@ -38,10 +38,17 @@ message PlayerInput {
   }
 }
 
+message BombStatus {
+  int32 strike_count = 1;
+  int32 max_strikes = 2;
+  bool exploded = 3;
+}
+
 message PlayerInputResult {
   string module_id = 1;
   bool strike = 2;
   bool solved = 3;
+  BombStatus bomb_status = 4;
   oneof result {
     modules.BigButtonInputResult big_button_input_result = 10;
     modules.SimonInputResult simon_input_result = 11;
