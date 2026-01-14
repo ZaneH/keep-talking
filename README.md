@@ -79,7 +79,10 @@ $ go test -v -run TestSimpleWires ./... # runs tests with a prefix
 - [x] Add CI/CD pipeline
 
 ### Bugs
+
 - [ ] Bombs should never be entirely needy modules
+- [ ] Maze Module: Player should never spawn on goal
+- [ ] Wires can throw when index is OOB
 
 ## Contributing
 

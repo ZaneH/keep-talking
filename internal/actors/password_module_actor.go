@@ -81,23 +81,17 @@ func (a *PasswordModuleActor) handleModuleCommand(msg ModuleCommandMessage) {
 			return
 		}
 
-		err := passwordModule.CheckPassword()
+		strike := passwordModule.CheckPassword()
 		result := &command.PasswordCommandResult{
 			BaseModuleInputCommandResult: command.BaseModuleInputCommandResult{
 				Solved: a.module.GetModuleState().IsSolved(),
-				Strike: err != nil,
+				Strike: strike,
 			},
 			Letters: passwordModule.GetCurrentGuess(),
 		}
 
-		if err != nil {
-			msg.ResponseChannel <- ErrorResponse{
-				Err: err,
-			}
-		} else {
-			msg.ResponseChannel <- SuccessResponse{
-				Data: result,
-			}
+		msg.ResponseChannel <- SuccessResponse{
+			Data: result,
 		}
 
 	default:

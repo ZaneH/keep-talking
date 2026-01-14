@@ -8,7 +8,7 @@ and a full entity representation that is independent of the interface layers.
 - [ ] Complicated Wires
 - [x] Keypad
 - [x] Knob
-- [ ] Maze
+- [x] Maze
 - [x] Memory
 - [x] Morse Code
 - [x] Password

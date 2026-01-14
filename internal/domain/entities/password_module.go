@@ -1,7 +1,7 @@
 package entities
 
 import (
-	"errors"
+	"strings"
 
 	"github.com/ZaneH/keep-talking/internal/application/common"
 	"github.com/ZaneH/keep-talking/internal/domain/ports"
@@ -44,20 +44,20 @@ func NewPasswordModule(rng ports.RandomGenerator, providedSolution *string) *Pas
 }
 
 func (m *PasswordModule) GetCurrentGuess() string {
-	guess := ""
+	var guess strings.Builder
 	for i, pos := range m.state.Positions {
-		guess += string(m.state.Letters[i][pos])
+		guess.WriteString(string(m.state.Letters[i][pos]))
 	}
-	return guess
+	return guess.String()
 }
 
-func (m *PasswordModule) CheckPassword() error {
+func (m *PasswordModule) CheckPassword() (strike bool) {
 	if m.state.solution == m.GetCurrentGuess() {
 		m.state.MarkAsSolved()
-		return nil
+		return false
 	}
 
-	return errors.New("incorrect password")
+	return true
 }
 
 func (m *PasswordModule) IncrementLetterOption(letterIndex int) {
@@ -75,19 +75,20 @@ func (m *PasswordModule) DecrementLetterOption(letterIndex int) {
 }
 
 func (m *PasswordModule) String() string {
-	var result = "\n"
+	var result strings.Builder
+	result.WriteString("\n")
 	for i := range len(m.state.Letters) {
-		result += "Letter " + string(rune('A'+i)) + ": "
+		result.WriteString("Letter " + string(rune('A'+i)) + ": ")
 		for j := range len(m.state.Letters[i]) {
 			if j == m.state.Positions[i] {
-				result += "[" + m.state.Letters[i][j] + "] "
+				result.WriteString("[" + m.state.Letters[i][j] + "] ")
 			} else {
-				result += m.state.Letters[i][j] + " "
+				result.WriteString(m.state.Letters[i][j] + " ")
 			}
 		}
-		result += "\n"
+		result.WriteString("\n")
 	}
-	return result
+	return result.String()
 }
 
 func (m *PasswordModule) GetType() valueobject.ModuleType {
