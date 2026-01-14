@@ -20,10 +20,18 @@ type MazeModuleState struct {
 }
 
 func NewMazeState(rng ports.RandomGenerator) MazeModuleState {
+	gp := generateRandomPosition(rng)
+	pp := generateRandomPosition(rng)
+
+	// Ensure goal and player positions are not the same
+	for gp.X == pp.X && gp.Y == pp.Y {
+		pp = generateRandomPosition(rng)
+	}
+
 	return MazeModuleState{
 		BaseModuleState: BaseModuleState{},
-		GoalPosition:    generateRandomPosition(rng),
-		PlayerPosition:  generateRandomPosition(rng),
+		GoalPosition:    gp,
+		PlayerPosition:  pp,
 		Variant:         rng.GetIntInRange(0, 8),
 	}
 }
