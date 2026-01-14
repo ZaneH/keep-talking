@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"slices"
+	"strings"
 
 	"github.com/ZaneH/keep-talking/internal/application/helpers"
 	"github.com/ZaneH/keep-talking/internal/domain/ports"
@@ -55,16 +56,17 @@ func (m *WiresModule) SetState(state WiresState) {
 }
 
 func (m *WiresModule) String() string {
-	var result = "\n"
+	var result strings.Builder
+	result.WriteString("\n")
 	for i, wire := range m.State.Wires {
 		if wire.IsCut {
-			result += fmt.Sprintf("Wire %d: %s (cut)\n", i, wire.WireColor)
+			fmt.Fprintf(&result, "Wire %d: %s (cut)\n", i, wire.WireColor)
 		} else {
-			result += fmt.Sprintf("Wire %d: %s\n", i, wire.WireColor)
+			fmt.Fprintf(&result, "Wire %d: %s\n", i, wire.WireColor)
 		}
 	}
 
-	return result
+	return result.String()
 }
 
 func generateRandomWires(rng ports.RandomGenerator) []valueobject.Wire {
@@ -79,7 +81,7 @@ func generateRandomWires(rng ports.RandomGenerator) []valueobject.Wire {
 
 	totalPositions := nWires + extraPositions
 	possibleIndices := make([]int, totalPositions)
-	for i := 0; i < totalPositions; i++ {
+	for i := range totalPositions {
 		possibleIndices[i] = i
 	}
 
@@ -89,7 +91,7 @@ func generateRandomWires(rng ports.RandomGenerator) []valueobject.Wire {
 
 	selectedIndices := possibleIndices[:nWires]
 
-	for i := 0; i < nWires; i++ {
+	for i := range nWires {
 		colorIndex := rng.GetIntInRange(0, len(wireColors)-1)
 		color := wireColors[colorIndex]
 
@@ -121,6 +123,11 @@ func (m *WiresModule) CutWire(wirePos int) (strike bool, err error) {
 		return w.Position == wirePos
 	})
 
+	// If the wire position is invalid
+	if wireIdx == -1 {
+		return false, errors.New("invalid wire position")
+	}
+
 	wire := sorted[wireIdx]
 
 	if wire.IsCut {
@@ -149,7 +156,7 @@ func (m *WiresModule) CutWire(wirePos int) (strike bool, err error) {
 		}
 
 		// If there is more than one blue wire, cut the last blue wire.
-		blueIdxs := colorIndecies(sorted, valueobject.Blue)
+		blueIdxs := colorIndices(sorted, valueobject.Blue)
 		if len(blueIdxs) > 1 {
 			if wireIdx == blueIdxs[len(blueIdxs)-1] {
 				return m.cutSucceed()
@@ -167,7 +174,7 @@ func (m *WiresModule) CutWire(wirePos int) (strike bool, err error) {
 	} else if len(sorted) == 4 {
 		// If there is more than one red wire and the last digit of the serial number is odd,
 		// cut the last red wire.
-		redIdxs := colorIndecies(sorted, valueobject.Red)
+		redIdxs := colorIndices(sorted, valueobject.Red)
 		if len(redIdxs) > 1 && helpers.SerialNumbersEndsWithOddDigit(m.bomb.SerialNumber) {
 			if wireIdx == redIdxs[len(redIdxs)-1] {
 				return m.cutSucceed()
@@ -186,7 +193,7 @@ func (m *WiresModule) CutWire(wirePos int) (strike bool, err error) {
 		}
 
 		// If there is exactly one blue wire, cut the first wire.
-		if len(colorIndecies(sorted, valueobject.Blue)) == 1 {
+		if len(colorIndices(sorted, valueobject.Blue)) == 1 {
 			if wireIdx == 0 {
 				return m.cutSucceed()
 			} else {
@@ -195,7 +202,7 @@ func (m *WiresModule) CutWire(wirePos int) (strike bool, err error) {
 		}
 
 		// If there is more than one yellow wire, cut the last wire.
-		yellowIdxs := colorIndecies(sorted, valueobject.Yellow)
+		yellowIdxs := colorIndices(sorted, valueobject.Yellow)
 		if len(yellowIdxs) > 1 {
 			if wireIdx == yellowIdxs[len(yellowIdxs)-1] {
 				return m.cutSucceed()
@@ -220,7 +227,7 @@ func (m *WiresModule) CutWire(wirePos int) (strike bool, err error) {
 		}
 
 		// If there is exactly one red wire and there are no yellow wires, cut the first wire.
-		if len(colorIndecies(sorted, valueobject.Red)) == 1 && !hasColor(sorted, valueobject.Yellow) {
+		if len(colorIndices(sorted, valueobject.Red)) == 1 && !hasColor(sorted, valueobject.Yellow) {
 			if wireIdx == 0 {
 				return m.cutSucceed()
 			} else {
@@ -254,7 +261,7 @@ func (m *WiresModule) CutWire(wirePos int) (strike bool, err error) {
 
 		// If there is exactly one yellow wire and there is more than one white wire,
 		// cut the fourth wire.
-		if len(colorIndecies(sorted, valueobject.Yellow)) == 1 && len(colorIndecies(sorted, valueobject.White)) > 1 {
+		if len(colorIndices(sorted, valueobject.Yellow)) == 1 && len(colorIndices(sorted, valueobject.White)) > 1 {
 			if wireIdx == 3 {
 				return m.cutSucceed()
 			} else {
@@ -289,7 +296,7 @@ func hasColor(wires []valueobject.Wire, color valueobject.Color) bool {
 	return false
 }
 
-func colorIndecies(wires []valueobject.Wire, color valueobject.Color) []int {
+func colorIndices(wires []valueobject.Wire, color valueobject.Color) []int {
 	indecies := []int{}
 	for i, wire := range wires {
 		if wire.WireColor == color {
