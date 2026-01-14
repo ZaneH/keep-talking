@@ -8,7 +8,7 @@ import (
 	"github.com/ZaneH/keep-talking/internal/application/command"
 	"github.com/ZaneH/keep-talking/internal/application/services"
 	"github.com/ZaneH/keep-talking/internal/domain/valueobject"
-	pb "github.com/ZaneH/keep-talking/internal/infrastructure/grpc/proto"
+	pb "github.com/ZaneH/keep-talking/pkg/proto"
 	"github.com/google/uuid"
 )
 

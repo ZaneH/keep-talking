@@ -1,15 +1,15 @@
 version: v2
 plugins:
   - local: protoc-gen-go
-    out: internal/infrastructure/grpc
+    out: pkg
     opt:
       - paths=source_relative
   - local: protoc-gen-go-grpc
-    out: internal/infrastructure/grpc
+    out: pkg
     opt:
       - paths=source_relative
   - local: protoc-gen-grpc-gateway
-    out: internal/infrastructure/grpc
+    out: pkg
     opt:
       - paths=source_relative
       - generate_unbound_methods=true

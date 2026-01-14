@@ -11,7 +11,7 @@ import (
 	appServices "github.com/ZaneH/keep-talking/internal/application/services"
 	"github.com/ZaneH/keep-talking/internal/infrastructure/adapters"
 	grpcServer "github.com/ZaneH/keep-talking/internal/infrastructure/grpc"
-	pb "github.com/ZaneH/keep-talking/internal/infrastructure/grpc/proto"
+	pb "github.com/ZaneH/keep-talking/pkg/proto"
 )
 
 func main() {

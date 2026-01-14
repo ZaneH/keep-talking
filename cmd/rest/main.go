@@ -12,7 +12,7 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/grpclog"
 
-	gw "github.com/ZaneH/keep-talking/internal/infrastructure/grpc/proto"
+	gw "github.com/ZaneH/keep-talking/pkg/proto"
 )
 
 var (
