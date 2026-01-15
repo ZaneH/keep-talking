@@ -68,20 +68,19 @@ $ go test -v -run TestSimpleWires ./... # runs tests with a prefix
 
 ## TODO List
 
-- [ ] Implement more bomb modules (Keypads, Button, Morse Code, etc.)
-- [ ] Add config for game settings
-  - [ ] Difficulty levels
-  - [ ] Seeds for module generation
+- [x] Implement more bomb modules (Keypads, Button, Morse Code, etc.)
+- [x] Add config for game settings
+  - [x] Difficulty levels
+  - [x] Seeds for module generation
 - [ ] Implement bomb timer and strike system
-- [ ] Create comprehensive test suite
+- [x] Create comprehensive test suite
 - [ ] Document gRPC API for client developers
-- [x] Create a simple demo client ([In Progress](https://github.com/ZaneH/defuse.party-go-app))
+- [x] Create a simple demo client ([In Progress](https://github.com/ZaneH/defuse.party-go))
 - [x] Add CI/CD pipeline
 
 ### Bugs
 
-- [ ] Bombs should never be entirely needy modules
-- [ ] Wires can throw when index is OOB
+- Pending
 
 ## Contributing
 

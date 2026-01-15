@@ -16,8 +16,8 @@ plugins:
   - local: protoc-gen-openapiv2
     out: openapiv2
   - local: protoc-gen-grpc-gateway-ts
-    # ensure the web client is located at ../keep-talking-app
-    out: ../keep-talking-app/src/generated
+    # ensure the web client is located at ../defuse.party-web
+    out: ../defuse.party-web/src/generated
     opt:
       - paths=source_relative
       - grpc-gateway-ts_out=import_style=commonjs,binary
