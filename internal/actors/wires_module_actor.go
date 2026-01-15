@@ -3,8 +3,8 @@ package actors
 import (
 	"errors"
 
-	"github.com/ZaneH/keep-talking/internal/application/command"
-	"github.com/ZaneH/keep-talking/internal/domain/entities"
+	"github.com/ZaneH/defuse.party-go/internal/application/command"
+	"github.com/ZaneH/defuse.party-go/internal/domain/entities"
 )
 
 type WiresModuleActor struct {

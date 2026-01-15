@@ -1,4 +1,4 @@
-module github.com/ZaneH/keep-talking
+module github.com/ZaneH/defuse.party-go
 
 go 1.23.4
 

@@ -3,10 +3,10 @@ package grpc
 import (
 	"log"
 
-	"github.com/ZaneH/keep-talking/internal/actors"
-	"github.com/ZaneH/keep-talking/internal/domain/entities"
-	"github.com/ZaneH/keep-talking/internal/domain/valueobject"
-	pb "github.com/ZaneH/keep-talking/pkg/proto"
+	"github.com/ZaneH/defuse.party-go/internal/actors"
+	"github.com/ZaneH/defuse.party-go/internal/domain/entities"
+	"github.com/ZaneH/defuse.party-go/internal/domain/valueobject"
+	pb "github.com/ZaneH/defuse.party-go/pkg/proto"
 	"github.com/google/uuid"
 )
 

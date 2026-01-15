@@ -3,9 +3,9 @@ package entities
 import (
 	"strings"
 
-	"github.com/ZaneH/keep-talking/internal/application/common"
-	"github.com/ZaneH/keep-talking/internal/domain/ports"
-	"github.com/ZaneH/keep-talking/internal/domain/valueobject"
+	"github.com/ZaneH/defuse.party-go/internal/application/common"
+	"github.com/ZaneH/defuse.party-go/internal/domain/ports"
+	"github.com/ZaneH/defuse.party-go/internal/domain/valueobject"
 	"github.com/google/uuid"
 )
 

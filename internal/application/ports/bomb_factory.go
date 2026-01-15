@@ -1,8 +1,8 @@
 package ports
 
 import (
-	"github.com/ZaneH/keep-talking/internal/domain/entities"
-	"github.com/ZaneH/keep-talking/internal/domain/valueobject"
+	"github.com/ZaneH/defuse.party-go/internal/domain/entities"
+	"github.com/ZaneH/defuse.party-go/internal/domain/valueobject"
 )
 
 type BombFactory interface {

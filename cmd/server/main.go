@@ -7,11 +7,11 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 
-	"github.com/ZaneH/keep-talking/internal/actors"
-	appServices "github.com/ZaneH/keep-talking/internal/application/services"
-	"github.com/ZaneH/keep-talking/internal/infrastructure/adapters"
-	grpcServer "github.com/ZaneH/keep-talking/internal/infrastructure/grpc"
-	pb "github.com/ZaneH/keep-talking/pkg/proto"
+	"github.com/ZaneH/defuse.party-go/internal/actors"
+	appServices "github.com/ZaneH/defuse.party-go/internal/application/services"
+	"github.com/ZaneH/defuse.party-go/internal/infrastructure/adapters"
+	grpcServer "github.com/ZaneH/defuse.party-go/internal/infrastructure/grpc"
+	pb "github.com/ZaneH/defuse.party-go/pkg/proto"
 )
 
 func main() {

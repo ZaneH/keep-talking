@@ -1,6 +1,6 @@
 package command
 
-import "github.com/ZaneH/keep-talking/internal/domain/valueobject"
+import "github.com/ZaneH/defuse.party-go/internal/domain/valueobject"
 
 type MazeCommand struct {
 	BaseModuleInputCommand

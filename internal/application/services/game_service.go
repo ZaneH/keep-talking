@@ -6,10 +6,10 @@ import (
 	"log"
 	"time"
 
-	"github.com/ZaneH/keep-talking/internal/actors"
-	"github.com/ZaneH/keep-talking/internal/application/command"
-	"github.com/ZaneH/keep-talking/internal/domain/services"
-	"github.com/ZaneH/keep-talking/internal/domain/valueobject"
+	"github.com/ZaneH/defuse.party-go/internal/actors"
+	"github.com/ZaneH/defuse.party-go/internal/application/command"
+	"github.com/ZaneH/defuse.party-go/internal/domain/services"
+	"github.com/ZaneH/defuse.party-go/internal/domain/valueobject"
 	"github.com/google/uuid"
 )
 

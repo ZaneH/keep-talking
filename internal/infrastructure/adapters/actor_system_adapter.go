@@ -4,9 +4,9 @@ import (
 	"errors"
 	"time"
 
-	"github.com/ZaneH/keep-talking/internal/actors"
-	"github.com/ZaneH/keep-talking/internal/application/ports"
-	"github.com/ZaneH/keep-talking/internal/domain/entities"
+	"github.com/ZaneH/defuse.party-go/internal/actors"
+	"github.com/ZaneH/defuse.party-go/internal/application/ports"
+	"github.com/ZaneH/defuse.party-go/internal/domain/entities"
 	"github.com/google/uuid"
 )
 

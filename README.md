@@ -1,6 +1,6 @@
 # defuse.party: backend
 
-![CI status](https://github.com/zaneh/keep-talking/actions/workflows/ci.yml/badge.svg)
+![CI status](https://github.com/ZaneH/defuse.party-go/actions/workflows/ci.yml/badge.svg)
 
 defuse.party is an open-source re-implementation of one of my favorite games: "Keep Talking and Nobody Explodes".
 
@@ -33,7 +33,7 @@ To run the game, you need Go installed on your machine. You can download it from
 ### Clone the Repository
 
 ```bash
-$ git clone https://github.com/ZaneH/keep-talking.git
+$ git clone https://github.com/ZaneH/defuse.party-go.git
 $ cd keep-talking
 ```
 
@@ -75,7 +75,7 @@ $ go test -v -run TestSimpleWires ./... # runs tests with a prefix
 - [ ] Implement bomb timer and strike system
 - [ ] Create comprehensive test suite
 - [ ] Document gRPC API for client developers
-- [x] Create a simple demo client ([In Progress](https://github.com/ZaneH/keep-talking-app))
+- [x] Create a simple demo client ([In Progress](https://github.com/ZaneH/defuse.party-go-app))
 - [x] Add CI/CD pipeline
 
 ### Bugs

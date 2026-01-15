@@ -3,7 +3,7 @@ package actors
 import (
 	"fmt"
 
-	"github.com/ZaneH/keep-talking/internal/domain/entities"
+	"github.com/ZaneH/defuse.party-go/internal/domain/entities"
 )
 
 func CreateModuleActor(bomb *entities.Bomb, module entities.Module) (ModuleActor, error) {

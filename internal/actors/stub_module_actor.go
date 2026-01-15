@@ -1,6 +1,6 @@
 package actors
 
-import "github.com/ZaneH/keep-talking/internal/domain/entities"
+import "github.com/ZaneH/defuse.party-go/internal/domain/entities"
 
 type StubModuleActor struct {
 	BaseModuleActor
