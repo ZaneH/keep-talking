@@ -257,6 +257,195 @@
       ],
       "default": "TAP"
     },
+    "game_configCustomBombConfig": {
+      "type": "object",
+      "properties": {
+        "timerSeconds": {
+          "type": "integer",
+          "format": "int32",
+          "title": "Time limit in seconds (min: 5, max: 3600)"
+        },
+        "maxStrikes": {
+          "type": "integer",
+          "format": "int32",
+          "title": "Strike configuration (min: 1, max: 10)"
+        },
+        "numFaces": {
+          "type": "integer",
+          "format": "int32",
+          "title": "Face configuration (min: 1, max: 10)"
+        },
+        "rows": {
+          "type": "integer",
+          "format": "int32",
+          "title": "Grid layout (rows: 1-4, columns: 1-5)"
+        },
+        "columns": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "modules": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/game_configModuleSpec"
+          },
+          "title": "Module specification - explicit list of modules\nIf empty, uses weighted random selection"
+        },
+        "minModules": {
+          "type": "integer",
+          "format": "int32",
+          "description": "min: 1, max: 60",
+          "title": "Alternative: weighted random selection\nOnly used if modules list is empty"
+        },
+        "maxModulesPerFace": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "minBatteries": {
+          "type": "integer",
+          "format": "int32",
+          "title": "0-6"
+        },
+        "maxBatteries": {
+          "type": "integer",
+          "format": "int32",
+          "title": "0-6"
+        },
+        "maxIndicatorCount": {
+          "type": "integer",
+          "format": "int32",
+          "title": "0-5"
+        },
+        "portCount": {
+          "type": "integer",
+          "format": "int32",
+          "title": "0-6"
+        }
+      }
+    },
+    "game_configGameConfig": {
+      "type": "object",
+      "properties": {
+        "level": {
+          "$ref": "#/definitions/game_configLevelConfig"
+        },
+        "preset": {
+          "$ref": "#/definitions/game_configPresetMissionConfig"
+        },
+        "custom": {
+          "$ref": "#/definitions/game_configCustomBombConfig"
+        },
+        "seed": {
+          "type": "string",
+          "title": "Optional seed"
+        }
+      }
+    },
+    "game_configGeneratedConfigInfo": {
+      "type": "object",
+      "properties": {
+        "timerSeconds": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "maxStrikes": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "numFaces": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "totalModules": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "moduleTypes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ModuleModuleType"
+          }
+        }
+      },
+      "title": "Information about the generated configuration"
+    },
+    "game_configLevelConfig": {
+      "type": "object",
+      "properties": {
+        "level": {
+          "type": "integer",
+          "format": "int32"
+        }
+      },
+      "title": "Level configuration (1-10 difficulty)"
+    },
+    "game_configMission": {
+      "type": "string",
+      "enum": [
+        "MISSION_UNSPECIFIED",
+        "THE_FIRST_BOMB",
+        "SOMETHING_OLD_SOMETHING_NEW",
+        "DOUBLE_YOUR_MONEY",
+        "ONE_STEP_UP",
+        "PICK_UP_THE_PACE",
+        "A_HIDDEN_MESSAGE",
+        "SOMETHINGS_DIFFERENT",
+        "ONE_GIANT_LEAP",
+        "FAIR_GAME",
+        "PICK_UP_THE_PACE_II",
+        "NO_ROOM_FOR_ERROR",
+        "EIGHT_MINUTES",
+        "A_SMALL_WRINKLE",
+        "PAY_ATTENTION",
+        "THE_KNOB",
+        "MULTI_TASKER",
+        "WIRES_WIRES_EVERYWHERE",
+        "COMPUTER_HACKING",
+        "WHOS_ON_FIRST_CHALLENGE",
+        "FIENDISH",
+        "PICK_UP_THE_PACE_III",
+        "ONE_WITH_EVERYTHING",
+        "PICK_UP_THE_PACE_IV",
+        "JUGGLER",
+        "DOUBLE_TROUBLE",
+        "I_AM_HARDCORE",
+        "BLINKENLIGHTS",
+        "APPLIED_THEORY",
+        "A_MAZE_ING",
+        "SNIP_SNAP",
+        "RAINBOW_TABLE",
+        "BLINKENLIGHTS_II"
+      ],
+      "default": "MISSION_UNSPECIFIED",
+      "title": "- THE_FIRST_BOMB: Section 1: Introduction\n - SOMETHING_OLD_SOMETHING_NEW: Section 2: The Basics\n - A_HIDDEN_MESSAGE: Section 3: Moderate\n - A_SMALL_WRINKLE: Section 4: Needy Modules\n - WIRES_WIRES_EVERYWHERE: Section 5: Challenging\n - PICK_UP_THE_PACE_IV: Section 6: Extreme\n - BLINKENLIGHTS: Section 7: Exotic"
+    },
+    "game_configModuleSpec": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "$ref": "#/definitions/ModuleModuleType"
+        },
+        "possibleTypes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ModuleModuleType"
+          }
+        },
+        "count": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "game_configPresetMissionConfig": {
+      "type": "object",
+      "properties": {
+        "mission": {
+          "$ref": "#/definitions/game_configMission"
+        }
+      }
+    },
     "modulesBigButtonInput": {
       "type": "object",
       "properties": {
@@ -777,13 +966,22 @@
       }
     },
     "playerCreateGameRequest": {
-      "type": "object"
+      "type": "object",
+      "properties": {
+        "config": {
+          "$ref": "#/definitions/game_configGameConfig",
+          "title": "Optional configuration - if empty, defaults to easy (level 1)"
+        }
+      }
     },
     "playerCreateGameResponse": {
       "type": "object",
       "properties": {
         "sessionId": {
           "type": "string"
+        },
+        "configInfo": {
+          "$ref": "#/definitions/game_configGeneratedConfigInfo"
         }
       }
     },

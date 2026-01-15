@@ -27,6 +27,12 @@ type BombConfig struct {
 	Columns int
 	// Max number of rows for modules
 	Rows int
+	// ExplicitModules - if set, uses exact module counts instead of weighted random
+	// This is used for preset missions that require specific module compositions
+	ExplicitModules []ModuleSpec
+	// MissionSection - if set, indicates which mission section this is from
+	// Used for determining the random module pool
+	MissionSection int
 }
 
 func NewDefaultBombConfig() BombConfig {

@@ -21,6 +21,62 @@ func NewBombFactory(moduleFactory *ModuleFactory) *BombFactoryImpl {
 func (f *BombFactoryImpl) CreateBomb(rng ports.RandomGenerator, config valueobject.BombConfig) *entities.Bomb {
 	bomb := entities.NewBomb(rng, config)
 
+	var modulesToAdd []valueobject.ModuleType
+
+	// Check if we have explicit modules (from missions)
+	if len(config.ExplicitModules) > 0 {
+		modulesToAdd = f.expandExplicitModules(rng, config.ExplicitModules, config.MissionSection)
+	} else {
+		modulesToAdd = f.generateWeightedModules(rng, config)
+	}
+
+	// Always prepend clock
+	modulesToAdd = append([]valueobject.ModuleType{valueobject.ClockModule}, modulesToAdd...)
+
+	f.placeModulesOnBomb(rng, bomb, modulesToAdd, config)
+
+	return bomb
+}
+
+func (f *BombFactoryImpl) expandExplicitModules(rng ports.RandomGenerator, specs []valueobject.ModuleSpec, section int) []valueobject.ModuleType {
+	var modules []valueobject.ModuleType
+	for _, spec := range specs {
+		if len(spec.PossibleTypes) > 0 {
+			idx := rng.GetIntInRange(0, len(spec.PossibleTypes)-1)
+			chosenType := spec.PossibleTypes[idx]
+			for i := 0; i < spec.Count; i++ {
+				modules = append(modules, chosenType)
+			}
+		} else if spec.Type == valueobject.RandomModule {
+			pool := valueobject.SectionModulePools[section]
+			if len(pool) == 0 {
+				pool = []valueobject.ModuleType{
+					valueobject.WiresModule,
+					valueobject.PasswordModule,
+					valueobject.BigButtonModule,
+					valueobject.KeypadModule,
+					valueobject.SimonModule,
+					valueobject.WhosOnFirstModule,
+					valueobject.MemoryModule,
+					valueobject.MorseModule,
+					valueobject.MazeModule,
+				}
+			}
+			for i := 0; i < spec.Count; i++ {
+				idx := rng.GetIntInRange(0, len(pool)-1)
+				randomType := pool[idx]
+				modules = append(modules, randomType)
+			}
+		} else {
+			for i := 0; i < spec.Count; i++ {
+				modules = append(modules, spec.Type)
+			}
+		}
+	}
+	return modules
+}
+
+func (f *BombFactoryImpl) generateWeightedModules(rng ports.RandomGenerator, config valueobject.BombConfig) []valueobject.ModuleType {
 	totalModules := config.NumFaces * config.MaxModulesPerFace
 	totalModules = max(totalModules, config.MinModules)
 
@@ -28,20 +84,18 @@ func (f *BombFactoryImpl) CreateBomb(rng ports.RandomGenerator, config valueobje
 	weights := make([]float32, 0)
 
 	for moduleType, probability := range config.ModuleTypes {
-		moduleTypes = append(moduleTypes, moduleType)
-		weights = append(weights, probability)
+		if moduleType != valueobject.ClockModule { // Skip clock, it's added separately
+			moduleTypes = append(moduleTypes, moduleType)
+			weights = append(weights, probability)
+		}
 	}
 
-	modulesToAdd := make([]valueobject.ModuleType, totalModules)
-	modulesToAdd[0] = valueobject.ClockModule
-
-	for i := 1; i < totalModules; i++ {
-		modulesToAdd[i] = selectWeightedModuleType(f.moduleFactory.rng, moduleTypes, weights)
+	modules := make([]valueobject.ModuleType, totalModules-1) // -1 for clock
+	for i := range modules {
+		modules[i] = selectWeightedModuleType(f.moduleFactory.rng, moduleTypes, weights)
 	}
 
-	f.placeModulesOnBomb(rng, bomb, modulesToAdd, config)
-
-	return bomb
+	return modules
 }
 
 func (f *BombFactoryImpl) placeModulesOnBomb(rng ports.RandomGenerator, bomb *entities.Bomb, moduleTypes []valueobject.ModuleType, config valueobject.BombConfig) {

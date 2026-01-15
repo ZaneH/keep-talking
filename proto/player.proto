@@ -12,12 +12,18 @@ import "proto/morse_module.proto";
 import "proto/needy_vent_gas_module.proto";
 import "proto/needy_knob_module.proto";
 import "proto/maze_module.proto";
+import "proto/game_config.proto";
 
 option go_package = "./proto";
 
-message CreateGameRequest {}
+message CreateGameRequest {
+  // Optional configuration - if empty, defaults to easy (level 1)
+  optional game_config.GameConfig config = 1;
+}
 
-message CreateGameResponse { string session_id = 1; }
+message CreateGameResponse {
+  string session_id = 1;
+}
 
 message PlayerInput {
   string session_id = 1;
