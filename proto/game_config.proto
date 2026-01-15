@@ -1,0 +1,110 @@
+syntax = "proto3";
+package game_config;
+
+import "proto/modules.proto";
+
+option go_package = "./proto";
+
+enum Mission {
+  MISSION_UNSPECIFIED = 0;
+
+  // Section 1: Introduction
+  THE_FIRST_BOMB = 1;
+
+  // Section 2: The Basics
+  SOMETHING_OLD_SOMETHING_NEW = 2;
+  DOUBLE_YOUR_MONEY = 3;
+  ONE_STEP_UP = 4;
+  PICK_UP_THE_PACE = 5;
+
+  // Section 3: Moderate
+  A_HIDDEN_MESSAGE = 6;
+  SOMETHINGS_DIFFERENT = 7;
+  ONE_GIANT_LEAP = 8;
+  FAIR_GAME = 9;
+  PICK_UP_THE_PACE_II = 10;
+  NO_ROOM_FOR_ERROR = 11;
+  EIGHT_MINUTES = 12;
+
+  // Section 4: Needy Modules
+  A_SMALL_WRINKLE = 13;
+  PAY_ATTENTION = 14;
+  THE_KNOB = 15;
+  MULTI_TASKER = 16;
+
+  // Section 5: Challenging
+  WIRES_WIRES_EVERYWHERE = 17;
+  COMPUTER_HACKING = 18;
+  WHOS_ON_FIRST_CHALLENGE = 19;
+  FIENDISH = 20;
+  PICK_UP_THE_PACE_III = 21;
+  ONE_WITH_EVERYTHING = 22;
+
+  // Section 6: Extreme
+  PICK_UP_THE_PACE_IV = 23;
+  JUGGLER = 24;
+  DOUBLE_TROUBLE = 25;
+  I_AM_HARDCORE = 26;
+
+  // Section 7: Exotic
+  BLINKENLIGHTS = 27;
+  APPLIED_THEORY = 28;
+  A_MAZE_ING = 29;
+  SNIP_SNAP = 30;
+  RAINBOW_TABLE = 31;
+  BLINKENLIGHTS_II = 32;
+}
+
+// Level configuration (1-10 difficulty)
+message LevelConfig {
+  int32 level = 1;
+}
+
+message PresetMissionConfig {
+  Mission mission = 1;
+}
+
+message ModuleSpec {
+  modules.Module.ModuleType type = 1;
+  repeated modules.Module.ModuleType possible_types = 2;
+  int32 count = 3;
+}
+
+message CustomBombConfig {
+  // Time limit in seconds (min: 5, max: 3600)
+  int32 timer_seconds = 1;
+
+  // Strike configuration (min: 1, max: 10)
+  int32 max_strikes = 2;
+
+  // Face configuration (min: 1, max: 10)
+  int32 num_faces = 3;
+
+  // Grid layout (rows: 1-4, columns: 1-5)
+  int32 rows = 4;
+  int32 columns = 5;
+
+  // Module specification - explicit list of modules
+  // If empty, uses weighted random selection
+  repeated ModuleSpec modules = 6;
+
+  // Alternative: weighted random selection
+  // Only used if modules list is empty
+  int32 min_modules = 7;  // min: 1, max: 60
+  int32 max_modules_per_face = 8;
+
+  int32 min_batteries = 10;  // 0-6
+  int32 max_batteries = 11;  // 0-6
+  int32 max_indicator_count = 12;  // 0-5
+  int32 port_count = 13;  // 0-6
+}
+
+message GameConfig {
+  oneof config_type {
+    LevelConfig level = 1;
+    PresetMissionConfig preset = 2;
+    CustomBombConfig custom = 3;
+  }
+
+  string seed = 10;
+}

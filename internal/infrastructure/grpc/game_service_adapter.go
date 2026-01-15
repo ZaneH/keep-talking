@@ -2,14 +2,18 @@ package grpc
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"log"
+	"time"
 
 	"github.com/ZaneH/keep-talking/internal/application/command"
 	"github.com/ZaneH/keep-talking/internal/application/services"
 	"github.com/ZaneH/keep-talking/internal/domain/valueobject"
 	pb "github.com/ZaneH/keep-talking/pkg/proto"
 	"github.com/google/uuid"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 type GameServiceAdapter struct {
@@ -22,10 +26,17 @@ func NewGameServiceAdapter(gameService *services.GameService) *GameServiceAdapte
 }
 
 func (s *GameServiceAdapter) CreateGame(ctx context.Context, req *pb.CreateGameRequest) (*pb.CreateGameResponse, error) {
-	createGameCmd := &command.CreateGameCommand{}
-
-	session, err := s.gameService.CreateGameSession(createGameCmd)
+	cmd, err := s.protoToCreateGameCommand(req)
 	if err != nil {
+		return nil, status.Errorf(codes.InvalidArgument, "invalid config: %v", err)
+	}
+
+	session, _, err := s.gameService.CreateGameSession(cmd)
+	if err != nil {
+		var validationErrs valueobject.ValidationErrors
+		if errors.As(err, &validationErrs) {
+			return nil, status.Errorf(codes.InvalidArgument, "%v", err)
+		}
 		return nil, fmt.Errorf("failed to create game: %v", err)
 	}
 
@@ -34,6 +45,213 @@ func (s *GameServiceAdapter) CreateGame(ctx context.Context, req *pb.CreateGameR
 	return &pb.CreateGameResponse{
 		SessionId: session.GetSessionID().String(),
 	}, nil
+}
+
+func (s *GameServiceAdapter) protoToCreateGameCommand(req *pb.CreateGameRequest) (*command.CreateGameCommand, error) {
+	cmd := &command.CreateGameCommand{}
+
+	cfg := req.GetConfig()
+	if cfg == nil {
+		cmd.ConfigType = command.ConfigTypeDefault
+		return cmd, nil
+	}
+
+	cmd.Seed = cfg.GetSeed()
+
+	switch c := cfg.GetConfigType().(type) {
+	case *pb.GameConfig_Level:
+		cmd.ConfigType = command.ConfigTypeLevel
+		cmd.Level = int(c.Level.GetLevel())
+
+	case *pb.GameConfig_Preset:
+		cmd.ConfigType = command.ConfigTypeMission
+		cmd.Mission = protoMissionToDomain(c.Preset.GetMission())
+
+	case *pb.GameConfig_Custom:
+		cmd.ConfigType = command.ConfigTypeCustom
+		bombConfig, err := protoCustomToBombConfig(c.Custom)
+		if err != nil {
+			return nil, err
+		}
+		cmd.CustomConfig = &bombConfig
+
+	default:
+		cmd.ConfigType = command.ConfigTypeDefault
+	}
+
+	return cmd, nil
+}
+
+func protoMissionToDomain(m pb.Mission) valueobject.Mission {
+	switch m {
+	case pb.Mission_THE_FIRST_BOMB:
+		return valueobject.MissionTheFirstBomb
+	case pb.Mission_SOMETHING_OLD_SOMETHING_NEW:
+		return valueobject.MissionSomethingOldSomethingNew
+	case pb.Mission_DOUBLE_YOUR_MONEY:
+		return valueobject.MissionDoubleYourMoney
+	case pb.Mission_ONE_STEP_UP:
+		return valueobject.MissionOneStepUp
+	case pb.Mission_PICK_UP_THE_PACE:
+		return valueobject.MissionPickUpThePace
+	case pb.Mission_A_HIDDEN_MESSAGE:
+		return valueobject.MissionAHiddenMessage
+	case pb.Mission_SOMETHINGS_DIFFERENT:
+		return valueobject.MissionSomethingsDifferent
+	case pb.Mission_ONE_GIANT_LEAP:
+		return valueobject.MissionOneGiantLeap
+	case pb.Mission_FAIR_GAME:
+		return valueobject.MissionFairGame
+	case pb.Mission_PICK_UP_THE_PACE_II:
+		return valueobject.MissionPickUpThePaceII
+	case pb.Mission_NO_ROOM_FOR_ERROR:
+		return valueobject.MissionNoRoomForError
+	case pb.Mission_EIGHT_MINUTES:
+		return valueobject.MissionEightMinutes
+	case pb.Mission_A_SMALL_WRINKLE:
+		return valueobject.MissionASmallWrinkle
+	case pb.Mission_PAY_ATTENTION:
+		return valueobject.MissionPayAttention
+	case pb.Mission_THE_KNOB:
+		return valueobject.MissionTheKnob
+	case pb.Mission_MULTI_TASKER:
+		return valueobject.MissionMultiTasker
+	case pb.Mission_WIRES_WIRES_EVERYWHERE:
+		return valueobject.MissionWiresWiresEverywhere
+	case pb.Mission_COMPUTER_HACKING:
+		return valueobject.MissionComputerHacking
+	case pb.Mission_WHOS_ON_FIRST_CHALLENGE:
+		return valueobject.MissionWhosOnFirstChallenge
+	case pb.Mission_FIENDISH:
+		return valueobject.MissionFiendish
+	case pb.Mission_PICK_UP_THE_PACE_III:
+		return valueobject.MissionPickUpThePaceIII
+	case pb.Mission_ONE_WITH_EVERYTHING:
+		return valueobject.MissionOneWithEverything
+	case pb.Mission_PICK_UP_THE_PACE_IV:
+		return valueobject.MissionPickUpThePaceIV
+	case pb.Mission_JUGGLER:
+		return valueobject.MissionJuggler
+	case pb.Mission_DOUBLE_TROUBLE:
+		return valueobject.MissionDoubleTrouble
+	case pb.Mission_I_AM_HARDCORE:
+		return valueobject.MissionIAmHardcore
+	case pb.Mission_BLINKENLIGHTS:
+		return valueobject.MissionBlinkenlights
+	case pb.Mission_APPLIED_THEORY:
+		return valueobject.MissionAppliedTheory
+	case pb.Mission_A_MAZE_ING:
+		return valueobject.MissionAMazeIng
+	case pb.Mission_SNIP_SNAP:
+		return valueobject.MissionSnipSnap
+	case pb.Mission_RAINBOW_TABLE:
+		return valueobject.MissionRainbowTable
+	case pb.Mission_BLINKENLIGHTS_II:
+		return valueobject.MissionBlinkenlightsII
+	default:
+		return valueobject.MissionUnspecified
+	}
+}
+
+func protoCustomToBombConfig(custom *pb.CustomBombConfig) (valueobject.BombConfig, error) {
+	config := valueobject.BombConfig{
+		Timer:             time.Duration(custom.GetTimerSeconds()) * time.Second,
+		MaxStrikes:        int(custom.GetMaxStrikes()),
+		NumFaces:          int(custom.GetNumFaces()),
+		Rows:              int(custom.GetRows()),
+		Columns:           int(custom.GetColumns()),
+		MinModules:        int(custom.GetMinModules()),
+		MaxModulesPerFace: int(custom.GetMaxModulesPerFace()),
+		MinBatteries:      int(custom.GetMinBatteries()),
+		MaxBatteries:      int(custom.GetMaxBatteries()),
+		MaxIndicatorCount: int(custom.GetMaxIndicatorCount()),
+		PortCount:         int(custom.GetPortCount()),
+	}
+
+	// Handle explicit module list
+	if len(custom.GetModules()) > 0 {
+		config.ExplicitModules = make([]valueobject.ModuleSpec, len(custom.GetModules()))
+		for i, spec := range custom.GetModules() {
+			moduleSpec := valueobject.ModuleSpec{
+				Count: int(spec.GetCount()),
+			}
+
+			if len(spec.GetPossibleTypes()) > 0 {
+				moduleSpec.PossibleTypes = make([]valueobject.ModuleType, len(spec.GetPossibleTypes()))
+				for j, mt := range spec.GetPossibleTypes() {
+					moduleSpec.PossibleTypes[j] = protoModuleTypeToDomain(mt)
+				}
+			} else {
+				moduleSpec.Type = protoModuleTypeToDomain(spec.GetType())
+			}
+
+			config.ExplicitModules[i] = moduleSpec
+		}
+	} else {
+		config.ModuleTypes = valueobject.DefaultModuleWeights()
+	}
+
+	return config, nil
+}
+
+func protoModuleTypeToDomain(mt pb.Module_ModuleType) valueobject.ModuleType {
+	switch mt {
+	case pb.Module_WIRES:
+		return valueobject.WiresModule
+	case pb.Module_PASSWORD:
+		return valueobject.PasswordModule
+	case pb.Module_BIG_BUTTON:
+		return valueobject.BigButtonModule
+	case pb.Module_SIMON:
+		return valueobject.SimonModule
+	case pb.Module_KEYPAD:
+		return valueobject.KeypadModule
+	case pb.Module_WHOS_ON_FIRST:
+		return valueobject.WhosOnFirstModule
+	case pb.Module_MEMORY:
+		return valueobject.MemoryModule
+	case pb.Module_MORSE:
+		return valueobject.MorseModule
+	case pb.Module_NEEDY_VENT_GAS:
+		return valueobject.NeedyVentGasModule
+	case pb.Module_NEEDY_KNOB:
+		return valueobject.NeedyKnobModule
+	case pb.Module_MAZE:
+		return valueobject.MazeModule
+	default:
+		return valueobject.WiresModule // fallback
+	}
+}
+
+func domainModuleTypeToProto(mt valueobject.ModuleType) pb.Module_ModuleType {
+	switch mt {
+	case valueobject.ClockModule:
+		return pb.Module_CLOCK
+	case valueobject.WiresModule:
+		return pb.Module_WIRES
+	case valueobject.PasswordModule:
+		return pb.Module_PASSWORD
+	case valueobject.BigButtonModule:
+		return pb.Module_BIG_BUTTON
+	case valueobject.SimonModule:
+		return pb.Module_SIMON
+	case valueobject.KeypadModule:
+		return pb.Module_KEYPAD
+	case valueobject.WhosOnFirstModule:
+		return pb.Module_WHOS_ON_FIRST
+	case valueobject.MemoryModule:
+		return pb.Module_MEMORY
+	case valueobject.MorseModule:
+		return pb.Module_MORSE
+	case valueobject.NeedyVentGasModule:
+		return pb.Module_NEEDY_VENT_GAS
+	case valueobject.NeedyKnobModule:
+		return pb.Module_NEEDY_KNOB
+	case valueobject.MazeModule:
+		return pb.Module_MAZE
+	default:
+		return pb.Module_UNKNOWN
+	}
 }
 
 func (s *GameServiceAdapter) SendInput(ctx context.Context, i *pb.PlayerInput) (*pb.PlayerInputResult, error) {
