@@ -121,6 +121,10 @@ func (f *BombFactoryImpl) placeModulesOnBomb(rng ports.RandomGenerator, bomb *en
 
 		position := availablePositions[i]
 		module := f.createModule(bomb, moduleType, position)
+		if module == nil {
+			log.Printf("TODO: implement missing module type %v (currently skipping)", moduleType)
+			continue
+		}
 		err := bomb.AddModule(module, position)
 		if err != nil {
 			log.Printf("error adding module to bomb: %v. skipping...", err)
