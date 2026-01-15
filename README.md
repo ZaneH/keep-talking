@@ -1,8 +1,8 @@
-# Keep Talking
+# defuse.party: backend
 
 ![CI status](https://github.com/zaneh/keep-talking/actions/workflows/ci.yml/badge.svg)
 
-Keep Talking is an open-source re-implementation of one of my favorite games: "Keep Talking and Nobody Explodes".
+defuse.party is an open-source re-implementation of one of my favorite games: "Keep Talking and Nobody Explodes".
 
 The game is designed for two or more players, where one player (the "Defuser") is tasked with defusing a bomb while the other players (the "Experts") provide instructions from a bomb defusal manual.
 The catch is that the Defuser cannot see the manual, and the Experts cannot see the bomb.

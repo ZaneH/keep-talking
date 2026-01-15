@@ -463,9 +463,8 @@ type GameConfig struct {
 	//	*GameConfig_Level
 	//	*GameConfig_Preset
 	//	*GameConfig_Custom
-	ConfigType isGameConfig_ConfigType `protobuf_oneof:"config_type"`
-	// Optional seed
-	Seed          string `protobuf:"bytes,10,opt,name=seed,proto3" json:"seed,omitempty"`
+	ConfigType    isGameConfig_ConfigType `protobuf_oneof:"config_type"`
+	Seed          string                  `protobuf:"bytes,10,opt,name=seed,proto3" json:"seed,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -563,83 +562,6 @@ func (*GameConfig_Preset) isGameConfig_ConfigType() {}
 
 func (*GameConfig_Custom) isGameConfig_ConfigType() {}
 
-// Information about the generated configuration
-type GeneratedConfigInfo struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	TimerSeconds  int32                  `protobuf:"varint,1,opt,name=timer_seconds,json=timerSeconds,proto3" json:"timer_seconds,omitempty"`
-	MaxStrikes    int32                  `protobuf:"varint,2,opt,name=max_strikes,json=maxStrikes,proto3" json:"max_strikes,omitempty"`
-	NumFaces      int32                  `protobuf:"varint,3,opt,name=num_faces,json=numFaces,proto3" json:"num_faces,omitempty"`
-	TotalModules  int32                  `protobuf:"varint,4,opt,name=total_modules,json=totalModules,proto3" json:"total_modules,omitempty"`
-	ModuleTypes   []Module_ModuleType    `protobuf:"varint,5,rep,packed,name=module_types,json=moduleTypes,proto3,enum=modules.Module_ModuleType" json:"module_types,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *GeneratedConfigInfo) Reset() {
-	*x = GeneratedConfigInfo{}
-	mi := &file_proto_game_config_proto_msgTypes[5]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *GeneratedConfigInfo) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*GeneratedConfigInfo) ProtoMessage() {}
-
-func (x *GeneratedConfigInfo) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_game_config_proto_msgTypes[5]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use GeneratedConfigInfo.ProtoReflect.Descriptor instead.
-func (*GeneratedConfigInfo) Descriptor() ([]byte, []int) {
-	return file_proto_game_config_proto_rawDescGZIP(), []int{5}
-}
-
-func (x *GeneratedConfigInfo) GetTimerSeconds() int32 {
-	if x != nil {
-		return x.TimerSeconds
-	}
-	return 0
-}
-
-func (x *GeneratedConfigInfo) GetMaxStrikes() int32 {
-	if x != nil {
-		return x.MaxStrikes
-	}
-	return 0
-}
-
-func (x *GeneratedConfigInfo) GetNumFaces() int32 {
-	if x != nil {
-		return x.NumFaces
-	}
-	return 0
-}
-
-func (x *GeneratedConfigInfo) GetTotalModules() int32 {
-	if x != nil {
-		return x.TotalModules
-	}
-	return 0
-}
-
-func (x *GeneratedConfigInfo) GetModuleTypes() []Module_ModuleType {
-	if x != nil {
-		return x.ModuleTypes
-	}
-	return nil
-}
-
 var File_proto_game_config_proto protoreflect.FileDescriptor
 
 const file_proto_game_config_proto_rawDesc = "" +
@@ -678,14 +600,7 @@ const file_proto_game_config_proto_rawDesc = "" +
 	"\x06custom\x18\x03 \x01(\v2\x1d.game_config.CustomBombConfigH\x00R\x06custom\x12\x12\n" +
 	"\x04seed\x18\n" +
 	" \x01(\tR\x04seedB\r\n" +
-	"\vconfig_type\"\xdc\x01\n" +
-	"\x13GeneratedConfigInfo\x12#\n" +
-	"\rtimer_seconds\x18\x01 \x01(\x05R\ftimerSeconds\x12\x1f\n" +
-	"\vmax_strikes\x18\x02 \x01(\x05R\n" +
-	"maxStrikes\x12\x1b\n" +
-	"\tnum_faces\x18\x03 \x01(\x05R\bnumFaces\x12#\n" +
-	"\rtotal_modules\x18\x04 \x01(\x05R\ftotalModules\x12=\n" +
-	"\fmodule_types\x18\x05 \x03(\x0e2\x1a.modules.Module.ModuleTypeR\vmoduleTypes*\xbf\x05\n" +
+	"\vconfig_type*\xbf\x05\n" +
 	"\aMission\x12\x17\n" +
 	"\x13MISSION_UNSPECIFIED\x10\x00\x12\x12\n" +
 	"\x0eTHE_FIRST_BOMB\x10\x01\x12\x1f\n" +
@@ -736,7 +651,7 @@ func file_proto_game_config_proto_rawDescGZIP() []byte {
 }
 
 var file_proto_game_config_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_proto_game_config_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
+var file_proto_game_config_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
 var file_proto_game_config_proto_goTypes = []any{
 	(Mission)(0),                // 0: game_config.Mission
 	(*LevelConfig)(nil),         // 1: game_config.LevelConfig
@@ -744,23 +659,21 @@ var file_proto_game_config_proto_goTypes = []any{
 	(*ModuleSpec)(nil),          // 3: game_config.ModuleSpec
 	(*CustomBombConfig)(nil),    // 4: game_config.CustomBombConfig
 	(*GameConfig)(nil),          // 5: game_config.GameConfig
-	(*GeneratedConfigInfo)(nil), // 6: game_config.GeneratedConfigInfo
-	(Module_ModuleType)(0),      // 7: modules.Module.ModuleType
+	(Module_ModuleType)(0),      // 6: modules.Module.ModuleType
 }
 var file_proto_game_config_proto_depIdxs = []int32{
 	0, // 0: game_config.PresetMissionConfig.mission:type_name -> game_config.Mission
-	7, // 1: game_config.ModuleSpec.type:type_name -> modules.Module.ModuleType
-	7, // 2: game_config.ModuleSpec.possible_types:type_name -> modules.Module.ModuleType
+	6, // 1: game_config.ModuleSpec.type:type_name -> modules.Module.ModuleType
+	6, // 2: game_config.ModuleSpec.possible_types:type_name -> modules.Module.ModuleType
 	3, // 3: game_config.CustomBombConfig.modules:type_name -> game_config.ModuleSpec
 	1, // 4: game_config.GameConfig.level:type_name -> game_config.LevelConfig
 	2, // 5: game_config.GameConfig.preset:type_name -> game_config.PresetMissionConfig
 	4, // 6: game_config.GameConfig.custom:type_name -> game_config.CustomBombConfig
-	7, // 7: game_config.GeneratedConfigInfo.module_types:type_name -> modules.Module.ModuleType
-	8, // [8:8] is the sub-list for method output_type
-	8, // [8:8] is the sub-list for method input_type
-	8, // [8:8] is the sub-list for extension type_name
-	8, // [8:8] is the sub-list for extension extendee
-	0, // [0:8] is the sub-list for field type_name
+	7, // [7:7] is the sub-list for method output_type
+	7, // [7:7] is the sub-list for method input_type
+	7, // [7:7] is the sub-list for extension type_name
+	7, // [7:7] is the sub-list for extension extendee
+	0, // [0:7] is the sub-list for field type_name
 }
 
 func init() { file_proto_game_config_proto_init() }
@@ -780,7 +693,7 @@ func file_proto_game_config_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_game_config_proto_rawDesc), len(file_proto_game_config_proto_rawDesc)),
 			NumEnums:      1,
-			NumMessages:   6,
+			NumMessages:   5,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

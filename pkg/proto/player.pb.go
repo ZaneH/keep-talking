@@ -69,7 +69,6 @@ func (x *CreateGameRequest) GetConfig() *GameConfig {
 type CreateGameResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	SessionId     string                 `protobuf:"bytes,1,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
-	ConfigInfo    *GeneratedConfigInfo   `protobuf:"bytes,2,opt,name=config_info,json=configInfo,proto3" json:"config_info,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -109,13 +108,6 @@ func (x *CreateGameResponse) GetSessionId() string {
 		return x.SessionId
 	}
 	return ""
-}
-
-func (x *CreateGameResponse) GetConfigInfo() *GeneratedConfigInfo {
-	if x != nil {
-		return x.ConfigInfo
-	}
-	return nil
 }
 
 type PlayerInput struct {
@@ -677,12 +669,10 @@ const file_proto_player_proto_rawDesc = "" +
 	"\x12proto/player.proto\x12\x06player\x1a\x18proto/wires_module.proto\x1a\x1bproto/password_module.proto\x1a\x1dproto/big_button_module.proto\x1a\x18proto/simon_module.proto\x1a\x19proto/keypad_module.proto\x1a proto/whos_on_first_module.proto\x1a\x19proto/memory_module.proto\x1a\x18proto/morse_module.proto\x1a!proto/needy_vent_gas_module.proto\x1a\x1dproto/needy_knob_module.proto\x1a\x17proto/maze_module.proto\x1a\x17proto/game_config.proto\"T\n" +
 	"\x11CreateGameRequest\x124\n" +
 	"\x06config\x18\x01 \x01(\v2\x17.game_config.GameConfigH\x00R\x06config\x88\x01\x01B\t\n" +
-	"\a_config\"v\n" +
+	"\a_config\"3\n" +
 	"\x12CreateGameResponse\x12\x1d\n" +
 	"\n" +
-	"session_id\x18\x01 \x01(\tR\tsessionId\x12A\n" +
-	"\vconfig_info\x18\x02 \x01(\v2 .game_config.GeneratedConfigInfoR\n" +
-	"configInfo\"\xa4\x06\n" +
+	"session_id\x18\x01 \x01(\tR\tsessionId\"\xa4\x06\n" +
 	"\vPlayerInput\x12\x1d\n" +
 	"\n" +
 	"session_id\x18\x01 \x01(\tR\tsessionId\x12\x17\n" +
@@ -750,59 +740,57 @@ var file_proto_player_proto_goTypes = []any{
 	(*BombStatus)(nil),              // 3: player.BombStatus
 	(*PlayerInputResult)(nil),       // 4: player.PlayerInputResult
 	(*GameConfig)(nil),              // 5: game_config.GameConfig
-	(*GeneratedConfigInfo)(nil),     // 6: game_config.GeneratedConfigInfo
-	(*WiresInput)(nil),              // 7: modules.WiresInput
-	(*PasswordInput)(nil),           // 8: modules.PasswordInput
-	(*BigButtonInput)(nil),          // 9: modules.BigButtonInput
-	(*SimonInput)(nil),              // 10: modules.SimonInput
-	(*KeypadInput)(nil),             // 11: modules.KeypadInput
-	(*WhosOnFirstInput)(nil),        // 12: modules.WhosOnFirstInput
-	(*MemoryInput)(nil),             // 13: modules.MemoryInput
-	(*MorseInput)(nil),              // 14: modules.MorseInput
-	(*NeedyVentGasInput)(nil),       // 15: modules.NeedyVentGasInput
-	(*NeedyKnobInput)(nil),          // 16: modules.NeedyKnobInput
-	(*MazeInput)(nil),               // 17: modules.MazeInput
-	(*BigButtonInputResult)(nil),    // 18: modules.BigButtonInputResult
-	(*SimonInputResult)(nil),        // 19: modules.SimonInputResult
-	(*PasswordInputResult)(nil),     // 20: modules.PasswordInputResult
-	(*KeypadInputResult)(nil),       // 21: modules.KeypadInputResult
-	(*WhosOnFirstInputResult)(nil),  // 22: modules.WhosOnFirstInputResult
-	(*MemoryInputResult)(nil),       // 23: modules.MemoryInputResult
-	(*MorseInputResult)(nil),        // 24: modules.MorseInputResult
-	(*NeedyVentGasInputResult)(nil), // 25: modules.NeedyVentGasInputResult
-	(*NeedyKnobInputResult)(nil),    // 26: modules.NeedyKnobInputResult
-	(*MazeInputResult)(nil),         // 27: modules.MazeInputResult
+	(*WiresInput)(nil),              // 6: modules.WiresInput
+	(*PasswordInput)(nil),           // 7: modules.PasswordInput
+	(*BigButtonInput)(nil),          // 8: modules.BigButtonInput
+	(*SimonInput)(nil),              // 9: modules.SimonInput
+	(*KeypadInput)(nil),             // 10: modules.KeypadInput
+	(*WhosOnFirstInput)(nil),        // 11: modules.WhosOnFirstInput
+	(*MemoryInput)(nil),             // 12: modules.MemoryInput
+	(*MorseInput)(nil),              // 13: modules.MorseInput
+	(*NeedyVentGasInput)(nil),       // 14: modules.NeedyVentGasInput
+	(*NeedyKnobInput)(nil),          // 15: modules.NeedyKnobInput
+	(*MazeInput)(nil),               // 16: modules.MazeInput
+	(*BigButtonInputResult)(nil),    // 17: modules.BigButtonInputResult
+	(*SimonInputResult)(nil),        // 18: modules.SimonInputResult
+	(*PasswordInputResult)(nil),     // 19: modules.PasswordInputResult
+	(*KeypadInputResult)(nil),       // 20: modules.KeypadInputResult
+	(*WhosOnFirstInputResult)(nil),  // 21: modules.WhosOnFirstInputResult
+	(*MemoryInputResult)(nil),       // 22: modules.MemoryInputResult
+	(*MorseInputResult)(nil),        // 23: modules.MorseInputResult
+	(*NeedyVentGasInputResult)(nil), // 24: modules.NeedyVentGasInputResult
+	(*NeedyKnobInputResult)(nil),    // 25: modules.NeedyKnobInputResult
+	(*MazeInputResult)(nil),         // 26: modules.MazeInputResult
 }
 var file_proto_player_proto_depIdxs = []int32{
 	5,  // 0: player.CreateGameRequest.config:type_name -> game_config.GameConfig
-	6,  // 1: player.CreateGameResponse.config_info:type_name -> game_config.GeneratedConfigInfo
-	7,  // 2: player.PlayerInput.wires_input:type_name -> modules.WiresInput
-	8,  // 3: player.PlayerInput.password_input:type_name -> modules.PasswordInput
-	9,  // 4: player.PlayerInput.big_button_input:type_name -> modules.BigButtonInput
-	10, // 5: player.PlayerInput.simon_input:type_name -> modules.SimonInput
-	11, // 6: player.PlayerInput.keypad_input:type_name -> modules.KeypadInput
-	12, // 7: player.PlayerInput.whos_on_first_input:type_name -> modules.WhosOnFirstInput
-	13, // 8: player.PlayerInput.memory_input:type_name -> modules.MemoryInput
-	14, // 9: player.PlayerInput.morse_input:type_name -> modules.MorseInput
-	15, // 10: player.PlayerInput.needy_vent_gas_input:type_name -> modules.NeedyVentGasInput
-	16, // 11: player.PlayerInput.needy_knob_input:type_name -> modules.NeedyKnobInput
-	17, // 12: player.PlayerInput.maze_input:type_name -> modules.MazeInput
-	3,  // 13: player.PlayerInputResult.bomb_status:type_name -> player.BombStatus
-	18, // 14: player.PlayerInputResult.big_button_input_result:type_name -> modules.BigButtonInputResult
-	19, // 15: player.PlayerInputResult.simon_input_result:type_name -> modules.SimonInputResult
-	20, // 16: player.PlayerInputResult.password_input_result:type_name -> modules.PasswordInputResult
-	21, // 17: player.PlayerInputResult.keypad_input_result:type_name -> modules.KeypadInputResult
-	22, // 18: player.PlayerInputResult.whos_on_first_input_result:type_name -> modules.WhosOnFirstInputResult
-	23, // 19: player.PlayerInputResult.memory_input_result:type_name -> modules.MemoryInputResult
-	24, // 20: player.PlayerInputResult.morse_input_result:type_name -> modules.MorseInputResult
-	25, // 21: player.PlayerInputResult.needy_vent_gas_input_result:type_name -> modules.NeedyVentGasInputResult
-	26, // 22: player.PlayerInputResult.needy_knob_input_result:type_name -> modules.NeedyKnobInputResult
-	27, // 23: player.PlayerInputResult.maze_input_result:type_name -> modules.MazeInputResult
-	24, // [24:24] is the sub-list for method output_type
-	24, // [24:24] is the sub-list for method input_type
-	24, // [24:24] is the sub-list for extension type_name
-	24, // [24:24] is the sub-list for extension extendee
-	0,  // [0:24] is the sub-list for field type_name
+	6,  // 1: player.PlayerInput.wires_input:type_name -> modules.WiresInput
+	7,  // 2: player.PlayerInput.password_input:type_name -> modules.PasswordInput
+	8,  // 3: player.PlayerInput.big_button_input:type_name -> modules.BigButtonInput
+	9,  // 4: player.PlayerInput.simon_input:type_name -> modules.SimonInput
+	10, // 5: player.PlayerInput.keypad_input:type_name -> modules.KeypadInput
+	11, // 6: player.PlayerInput.whos_on_first_input:type_name -> modules.WhosOnFirstInput
+	12, // 7: player.PlayerInput.memory_input:type_name -> modules.MemoryInput
+	13, // 8: player.PlayerInput.morse_input:type_name -> modules.MorseInput
+	14, // 9: player.PlayerInput.needy_vent_gas_input:type_name -> modules.NeedyVentGasInput
+	15, // 10: player.PlayerInput.needy_knob_input:type_name -> modules.NeedyKnobInput
+	16, // 11: player.PlayerInput.maze_input:type_name -> modules.MazeInput
+	3,  // 12: player.PlayerInputResult.bomb_status:type_name -> player.BombStatus
+	17, // 13: player.PlayerInputResult.big_button_input_result:type_name -> modules.BigButtonInputResult
+	18, // 14: player.PlayerInputResult.simon_input_result:type_name -> modules.SimonInputResult
+	19, // 15: player.PlayerInputResult.password_input_result:type_name -> modules.PasswordInputResult
+	20, // 16: player.PlayerInputResult.keypad_input_result:type_name -> modules.KeypadInputResult
+	21, // 17: player.PlayerInputResult.whos_on_first_input_result:type_name -> modules.WhosOnFirstInputResult
+	22, // 18: player.PlayerInputResult.memory_input_result:type_name -> modules.MemoryInputResult
+	23, // 19: player.PlayerInputResult.morse_input_result:type_name -> modules.MorseInputResult
+	24, // 20: player.PlayerInputResult.needy_vent_gas_input_result:type_name -> modules.NeedyVentGasInputResult
+	25, // 21: player.PlayerInputResult.needy_knob_input_result:type_name -> modules.NeedyKnobInputResult
+	26, // 22: player.PlayerInputResult.maze_input_result:type_name -> modules.MazeInputResult
+	23, // [23:23] is the sub-list for method output_type
+	23, // [23:23] is the sub-list for method input_type
+	23, // [23:23] is the sub-list for extension type_name
+	23, // [23:23] is the sub-list for extension extendee
+	0,  // [0:23] is the sub-list for field type_name
 }
 
 func init() { file_proto_player_proto_init() }

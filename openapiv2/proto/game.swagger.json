@@ -337,38 +337,9 @@
           "$ref": "#/definitions/game_configCustomBombConfig"
         },
         "seed": {
-          "type": "string",
-          "title": "Optional seed"
+          "type": "string"
         }
       }
-    },
-    "game_configGeneratedConfigInfo": {
-      "type": "object",
-      "properties": {
-        "timerSeconds": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "maxStrikes": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "numFaces": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "totalModules": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "moduleTypes": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/ModuleModuleType"
-          }
-        }
-      },
-      "title": "Information about the generated configuration"
     },
     "game_configLevelConfig": {
       "type": "object",
@@ -979,9 +950,6 @@
       "properties": {
         "sessionId": {
           "type": "string"
-        },
-        "configInfo": {
-          "$ref": "#/definitions/game_configGeneratedConfigInfo"
         }
       }
     },
